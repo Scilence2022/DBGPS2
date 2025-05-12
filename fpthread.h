@@ -1,5 +1,5 @@
-#ifndef KTHREAD_H
-#define KTHREAD_H
+#ifndef FPTHREAD_H
+#define FPTHREAD_H
 
 #ifdef __cplusplus
 extern "C" {

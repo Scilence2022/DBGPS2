@@ -40,20 +40,14 @@ static inline long steal_work(fp_for_t *t)
 static void *ktf_worker(void *data)
 {
 	ktf_worker_t *w = (ktf_worker_t*)data;
-	w->t->func(w->t->data, w->i, w - w->t->w);
-	/*
-
 	long i;
 	for (;;) {
 		i = __sync_fetch_and_add(&w->i, w->t->n_threads);
 		if (i >= w->t->n) break;
-		// To be modified
 		w->t->func(w->t->data, i, w - w->t->w);
 	}
 	while ((i = steal_work(w->t)) >= 0)
-        // To be modified
 		w->t->func(w->t->data, i, w - w->t->w);
-    */
 	pthread_exit(0);
 }
 
@@ -68,13 +62,13 @@ void fp_for(int n_threads, void (*func)(void*,long,int), void *data, long m, lon
 		t.w = (ktf_worker_t*)calloc(n_threads, sizeof(ktf_worker_t));
 		tid = (pthread_t*)calloc(n_threads, sizeof(pthread_t));
 		for (i = 0; i < n_threads; ++i)
-			t.w[i].t = &t, t.w[i].i = i;
+			t.w[i].t = &t, t.w[i].i = m + i;
 		for (i = 0; i < n_threads; ++i) pthread_create(&tid[i], 0, ktf_worker, &t.w[i]);
 		for (i = 0; i < n_threads; ++i) pthread_join(tid[i], 0);
 		free(tid); free(t.w);
 	} else {
 		long j;
-		for (j = 0; j < n; ++j) func(data, j, 0);
+		for (j = m; j < n; ++j) func(data, j, 0);
 	}
 }
 

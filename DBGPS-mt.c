@@ -10,6 +10,7 @@
 
 #include "ketopt.h" // command-line argument parser
 #include "kthread.h" // multi-threading models: pipeline and multi-threaded for loop
+#include "fpthread.h" // for fp_for function
 
 
 #include "kseq.h" // FASTA/Q parser
@@ -563,11 +564,11 @@ unsigned short kmer_cov(uint64_t kmer, uint64_t mask, kc_c4x_t *h){
     return cov;
 }
 
-typedef struct {
+typedef struct path_node {
     struct path_node* pre_node;
     uint64_t kmer;
     unsigned int cov;
-}path_node;
+} path_node;
 
 const uint64_t BI_MASK = 3ULL;
 
@@ -589,10 +590,7 @@ unsigned char* nodes_path(path_node *term_node, unsigned char *path_seq, int pat
     uint64_t kms[4];
     kms[nd_p] = p_node->kmer;
 
-    int node_num=0;
-
     while(p_node->pre_node && path_seq_p >= index_byte_num){
-        node_num++;
         p_node = p_node->pre_node;
         kms[nd_p] = p_node->kmer;
 
@@ -816,55 +814,46 @@ typedef struct{
 static void find_path_for(void *data, long i, int tid) // callback for fp_for()
 {
     find_path_for_t *f = (find_path_for_t *)data;
-	kc_c4x_t *h = f->pct->h;
+    kc_c4x_t *h = f->pct->h;
+    int index_len = f->pct->index_byte_num * 4;
 
-    fprintf(stderr, "i %d\t", i);
-    fprintf(stderr, "tid %d\t", tid);
-
-	int index_len = f->pct->index_byte_num * 4;
-
-    unsigned int min_index, max_index;
-
-    fprintf(stderr, "m %d\t", f->m);
-    fprintf(stderr, "n %d\t", f->n);
-
-    int block_size = (f->n - f->m + 1)/f->thread_num;
-    if(i < f->thread_num - 1){
-        min_index = block_size * tid + f->m;
-        max_index = block_size * (tid+1) + f->m - 1;
-    }else{
-        min_index = block_size * tid + f->m;
-        max_index = f->n;
+    // Each thread processes a single index value (i)
+    // We don't need to manually partition the work anymore
+    unsigned int id = (unsigned int)i;
+    
+    // Skip if outside our range
+    if (id < f->m || id > f->n) {
+        return;
     }
-    fprintf(stderr, "min_index %d\t", min_index);
-    fprintf(stderr, "max_index %d\t", max_index);
-    fprintf(stderr, "block_size %d\n", block_size);
 
+    unsigned char *path[Max_Path_Num];
+    unsigned long eid = index_encode(id, index_len);
 
-    int id;
-    for(id=min_index; id<=max_index; id++){
+    int c_index;
+    c_index = find_paths(h, path, f->pct->pr_uint64 | (uint64_t)eid, f->pct->mask, f->min_cov, f->pct->path_len, f->pct->k, f->pct->index_byte_num);
 
-        //fprintf(stderr, "id %d\t", id);
+    if (c_index > -1) {
+        __sync_fetch_and_add(&f->dec_strand_num, 1);
+        unsigned char DNA_seq[Max_Path_Len];
 
-        unsigned char *path[Max_Path_Num];
-        unsigned long eid = index_encode(id, index_len);
-
-        int c_index;
-        c_index = find_paths(h, path, f->pct->pr_uint64 | (uint64_t)eid, f->pct->mask, f->min_cov, f->pct->path_len, f->pct->k, f->pct->index_byte_num);
-
-
-
-        if( c_index > -1){
-            __sync_fetch_and_add(&f->dec_strand_num, 1);
-            unsigned char DNA_seq[Max_Path_Len];
-
-            DNA_seq[f->pct->path_len + f->pct->index_byte_num*4] = '\0';
-            intseq_actg(path[c_index], DNA_seq, (f->pct->path_len>>2) + f->pct->index_byte_num);
+        DNA_seq[f->pct->path_len + f->pct->index_byte_num*4] = '\0';
+        intseq_actg(path[c_index], DNA_seq, (f->pct->path_len>>2) + f->pct->index_byte_num);
+        
+        // Use thread-safe printing to avoid garbled output
+        #pragma omp critical
+        {
             printf("%d", id);
             fprintf(stdout, "\t%s\n", DNA_seq);
         }
     }
-
+    
+    // Free all allocated paths to prevent memory leaks
+    int j;
+    for(j = 0; j < Max_Path_Num; j++) {
+        if(path[j] != NULL) {
+            free(path[j]);
+        }
+    }
 }
 
 
@@ -969,17 +958,17 @@ int main(int argc, char *argv[])
     fprintf(stderr, "Decoding strands from index %d to ",min_index);
     fprintf(stderr, "%d ......\n",max_index);
 
-    unsigned int id, eid;
-
+    // Variable declaration for cov_cut
     unsigned int cov_cut;
-    int c_index;
-    int dec_strand_num=0;
+    
     for(cov_cut=min_cov;cov_cut<=max_cov;cov_cut++){
 
         fp_t.dec_strand_num = 0;
         fp_t.min_cov = cov_cut;
         start = clock();
-        fprintf(stderr, "\nThreats starting: %d ", fp_t.thread_num);
+        fprintf(stderr, "\nThreads starting: %d\n", fp_t.thread_num);
+        
+        // Call the multi-threaded find_path function, which now properly distributes work
         fp_for(fp_t.thread_num, find_path_for, &fp_t, fp_t.m, fp_t.n);
 
         dec_dur = clock() - start;

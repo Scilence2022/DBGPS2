@@ -44,7 +44,6 @@ const unsigned char seq_nt4_table[256] = { // translate ACGT to 0123
         4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
         4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
         4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
-        4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
         4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4
 };
 
@@ -440,7 +439,92 @@ static kc_c4x_t *count_file2(const char *fn, void *hh, int k, int p, int block_s
     return pl.h;
 }
 
+// Add a structure to store ratio range information
+typedef struct {
+    int max_positions;    // Maximum number of positions tracked
+    int positions;        // Current number of positions tracked
+    double *min_ratios;   // Array of minimum ratios for each position
+    double *max_ratios;   // Array of maximum ratios for each position
+    int initialized;      // Flag to indicate if min/max values are initialized
+} ratio_range_t;
 
+// Function to initialize ratio range data structure
+ratio_range_t* init_ratio_range() {
+    ratio_range_t *range;
+    CALLOC(range, 1);
+    range->max_positions = 1000; // Start with space for 1000 positions
+    range->positions = 0;
+    MALLOC(range->min_ratios, range->max_positions);
+    MALLOC(range->max_ratios, range->max_positions);
+    range->initialized = 0;
+    return range;
+}
+
+// Function to update ratio range with a new set of ratios
+void update_ratio_range(ratio_range_t *range, double *ratios, int count) {
+    if (count <= 0) return;
+    
+    // Resize arrays if needed
+    if (count > range->max_positions) {
+        range->max_positions = count * 2; // Double the size
+        REALLOC(range->min_ratios, range->max_positions);
+        REALLOC(range->max_ratios, range->max_positions);
+    }
+    
+    // Update positions count if this sequence has more positions
+    if (count > range->positions) {
+        range->positions = count;
+    }
+    
+    // Initialize or update min/max values
+    if (!range->initialized) {
+        // First sequence, just copy the values
+        for (int i = 0; i < count; i++) {
+            range->min_ratios[i] = ratios[i];
+            range->max_ratios[i] = ratios[i];
+        }
+        range->initialized = 1;
+    } else {
+        // Update min/max values
+        for (int i = 0; i < count; i++) {
+            if (i < range->positions) {
+                if (ratios[i] < range->min_ratios[i]) {
+                    range->min_ratios[i] = ratios[i];
+                }
+                if (ratios[i] > range->max_ratios[i]) {
+                    range->max_ratios[i] = ratios[i];
+                }
+            }
+        }
+    }
+}
+
+// Function to write ratio range to file
+void write_ratio_range(FILE *fp, ratio_range_t *range) {
+    if (!range || !range->initialized) return;
+    
+    // Write min values
+    for (int i = 0; i < range->positions; i++) {
+        fprintf(fp, "%.3f ", range->min_ratios[i]);
+    }
+    fprintf(fp, "\n");
+    
+    // Write max values
+    for (int i = 0; i < range->positions; i++) {
+        fprintf(fp, "%.3f ", range->max_ratios[i]);
+    }
+    fprintf(fp, "\n");
+}
+
+// Function to free ratio range data
+void free_ratio_range(ratio_range_t *range) {
+    if (!range) return;
+    free(range->min_ratios);
+    free(range->max_ratios);
+    free(range);
+}
+
+// Modify the evaluation_t structure to include ratio range data
 typedef struct { // data structure for file evaluation
     kc_c4x_t *h;
     int cov_cut;
@@ -448,9 +532,9 @@ typedef struct { // data structure for file evaluation
     int strand_num, exist_strand_num;
     int lose_km_num, exist_km_num;
     int noise_km_num;
+    ratio_range_t *ratio_range; // Added for ratio range tracking
 
-} evaluation_t; //={NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-
+} evaluation_t;
 
 unsigned short kmer_cov(uint64_t kmer, uint64_t mask, kc_c4x_t *h){
 
@@ -558,8 +642,56 @@ void output_kmer_coverages(FILE *fp, char *seq_name, uint64_t *kms, int km_num, 
     fprintf(fp, "\n");
 }
 
-// Modify the eva_pipeline function to output coverage details
-static void eva_pipeline(void *data, evaluation_t *eva, FILE *cov_details_fp) // callback for kt_pipeline()
+// Modify the output_coverage_ratios function to return the ratios
+double* output_coverage_ratios(FILE *fp, char *seq_name, uint64_t *kms, int km_num, uint64_t mask, kc_c4x_t *h, int *ratio_count) {
+    fprintf(fp, "%s\t", seq_name);
+    
+    if (km_num < 2) {
+        fprintf(fp, "\n");
+        *ratio_count = 0;
+        return NULL;
+    }
+    
+    int *coverages;
+    MALLOC(coverages, km_num);
+    
+    // First get all coverage values
+    for (int i = 0; i < km_num; i++) {
+        coverages[i] = kmer_cov(*(kms+i), mask, h);
+    }
+    
+    // Allocate memory for ratios
+    double *ratios;
+    *ratio_count = km_num - 1; // Number of ratios is km_num - 1
+    MALLOC(ratios, *ratio_count);
+    
+    // Then calculate and output ratios
+    for (int i = 0; i < *ratio_count; i++) {
+        int a = coverages[i];
+        int b = coverages[i+1];
+        
+        // Always larger number / smaller number
+        if (a >= b && b > 0) {
+            ratios[i] = (double)a / b;
+        } else if (b > a && a > 0) {
+            ratios[i] = (double)b / a;
+        } else if (a == 0 && b == 0) {
+            ratios[i] = 1.0; // Both zero, ratio is 1
+        } else {
+            ratios[i] = 0.0; // One is zero, can't calculate ratio
+        }
+        
+        fprintf(fp, "%.3f ", ratios[i]);
+    }
+    
+    fprintf(fp, "\n");
+    free(coverages);
+    
+    return ratios;
+}
+
+// Modify the eva_pipeline function to track ratio ranges
+static void eva_pipeline(void *data, evaluation_t *eva, FILE *cov_details_fp, FILE *cov_ratios_fp) // callback for kt_pipeline()
 {
     pldat_t *p = (pldat_t*)data;
     uint64_t mask = (1ULL<<p->k*2) - 1;
@@ -584,6 +716,18 @@ static void eva_pipeline(void *data, evaluation_t *eva, FILE *cov_details_fp) //
         if (cov_details_fp != NULL) {
             output_kmer_coverages(cov_details_fp, p->ks->name.s, kms, km_num, mask, eva->h);
         }
+        
+        // Output coverage ratios if file pointer is provided
+        if (cov_ratios_fp != NULL) {
+            int ratio_count = 0;
+            double *ratios = output_coverage_ratios(cov_ratios_fp, p->ks->name.s, kms, km_num, mask, eva->h, &ratio_count);
+            
+            // Update ratio range if we have valid ratios
+            if (ratios && ratio_count > 0 && eva->ratio_range) {
+                update_ratio_range(eva->ratio_range, ratios, ratio_count);
+                free(ratios);
+            }
+        }
 
         if(kms_cov > eva->cov_cut){ //Complete path
             eva->exist_strand_num++;
@@ -607,7 +751,7 @@ static void eva_pipeline(void *data, evaluation_t *eva, FILE *cov_details_fp) //
 }
 
 // Modify the evaluate_seq_file function to support coverage details output
-static evaluation_t *evaluate_seq_file(evaluation_t *eva, const char *fn, int k, int p, int block_size, int n_thread, FILE *cov_details_fp)
+static evaluation_t *evaluate_seq_file(evaluation_t *eva, const char *fn, int k, int p, int block_size, int n_thread, FILE *cov_details_fp, FILE *cov_ratios_fp)
 {
     pldat_t pl;
 
@@ -619,7 +763,7 @@ static evaluation_t *evaluate_seq_file(evaluation_t *eva, const char *fn, int k,
     pl.h = c4x_init(p);
     pl.block_len = block_size;
 
-    eva_pipeline(&pl, eva, cov_details_fp);
+    eva_pipeline(&pl, eva, cov_details_fp, cov_ratios_fp);
     kseq_destroy(pl.ks);
     gzclose(fp);
     return eva;
@@ -734,22 +878,50 @@ int main(int argc, char *argv[])
 
     // Open coverage details file if output prefix is provided
     FILE *cov_details_fp = NULL;
+    FILE *cov_ratios_fp = NULL;
+    FILE *ratio_ranges_fp = NULL;
     if (output_prefix != NULL) {
-        char *cov_details_filename;
-        MALLOC(cov_details_filename, strlen(output_prefix) + 15);
-        sprintf(cov_details_filename, "%s.cov_details", output_prefix);
-        cov_details_fp = fopen(cov_details_filename, "w");
+        char *filename;
+        MALLOC(filename, strlen(output_prefix) + 15);
+        
+        // Open coverage details file
+        sprintf(filename, "%s.cov_details", output_prefix);
+        cov_details_fp = fopen(filename, "w");
         if (cov_details_fp == NULL) {
-            fprintf(stderr, "Error: Could not open file %s for writing\n", cov_details_filename);
+            fprintf(stderr, "Error: Could not open file %s for writing\n", filename);
         } else {
-            fprintf(stderr, "Writing coverage details to %s\n", cov_details_filename);
+            fprintf(stderr, "Writing coverage details to %s\n", filename);
         }
-        free(cov_details_filename);
+        
+        // Open coverage ratios file
+        sprintf(filename, "%s.cov_ratios", output_prefix);
+        cov_ratios_fp = fopen(filename, "w");
+        if (cov_ratios_fp == NULL) {
+            fprintf(stderr, "Error: Could not open file %s for writing\n", filename);
+        } else {
+            fprintf(stderr, "Writing coverage ratios to %s\n", filename);
+        }
+        
+        // Open ratio ranges file
+        sprintf(filename, "%s.ratio_ranges", output_prefix);
+        ratio_ranges_fp = fopen(filename, "w");
+        if (ratio_ranges_fp == NULL) {
+            fprintf(stderr, "Error: Could not open file %s for writing\n", filename);
+        } else {
+            fprintf(stderr, "Writing ratio ranges to %s\n", filename);
+        }
+        
+        free(filename);
     }
 
     evaluation_t eva;
     eva.h = h;
-
+    // Initialize ratio range tracker
+    if (output_prefix != NULL) {
+        eva.ratio_range = init_ratio_range();
+    } else {
+        eva.ratio_range = NULL;
+    }
 
     fprintf(stderr, "Estimating Sm Kn Kd values ...\n");
     fprintf(stdout, "Coverage\tTotal\tPaths\tSm\tKd\tKn\n");
@@ -765,7 +937,9 @@ int main(int argc, char *argv[])
         eva.cov_cut = cov;
 
         fprintf(stdout, "%d\t", cov);
-        evaluate_seq_file(&eva, argv[o.ind], k, p, block_size, n_thread, cov == min_cov_cut ? cov_details_fp : NULL);
+        evaluate_seq_file(&eva, argv[o.ind], k, p, block_size, n_thread, 
+                          cov == min_cov_cut ? cov_details_fp : NULL, 
+                          cov == min_cov_cut ? cov_ratios_fp : NULL);
 
         fprintf(stdout, "%d\t",eva.strand_num);
         fprintf(stdout, "%d\t", eva.exist_strand_num);
@@ -786,9 +960,21 @@ int main(int argc, char *argv[])
         fprintf(stdout, "%f\n",eva.kn);
     }
 
-    // Close coverage details file if it was opened
+    // Write ratio ranges to file and close files
+    if (eva.ratio_range && ratio_ranges_fp) {
+        write_ratio_range(ratio_ranges_fp, eva.ratio_range);
+        free_ratio_range(eva.ratio_range);
+    }
+
+    // Close files if they were opened
     if (cov_details_fp != NULL) {
         fclose(cov_details_fp);
+    }
+    if (cov_ratios_fp != NULL) {
+        fclose(cov_ratios_fp);
+    }
+    if (ratio_ranges_fp != NULL) {
+        fclose(ratio_ranges_fp);
     }
 
     for(i = 0; i < 1<<p; ++i) {

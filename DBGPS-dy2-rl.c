@@ -15,7 +15,7 @@
 KSEQ_INIT(gzFile, gzread)
 
 #include "khashl.h" // hash table
-#define KC_BITS 10
+#define KC_BITS 14
 #define KC_MAX ((1<<KC_BITS) - 1)
 #define kc_c4_eq(a, b) ((a)>>KC_BITS == (b)>>KC_BITS) // lower 10 bits for counts; higher bits for k-mer
 #define kc_c4_hash(a) ((a)>>KC_BITS)
@@ -864,7 +864,7 @@ int main(int argc, char *argv[])
     if (argc - o.ind < 1) {
         fprintf(stderr, "\n************************************************************************\n");
         fprintf(stderr, "**                                                                    **\n");
-        fprintf(stderr, "**  DBGPS - De Bruijn Graph based inner decoder for DNA data storage  **\n");
+        fprintf(stderr, "**  DBGPS - De Bruijn Graph based strand assembller for DNA data storage  **\n");
         fprintf(stderr, "**     Version 20220116  Author: Lifu Song lifu.song@outlook.com      **\n");
         fprintf(stderr, "**                                                                    **\n");
         fprintf(stderr, "************************************************************************\n\n");

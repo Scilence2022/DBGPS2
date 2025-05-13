@@ -524,11 +524,12 @@ void free_ratio_range(ratio_range_t *range) {
     free(range);
 }
 
-// Modify the evaluation_t structure to include ratio range data
+// Modify the evaluation_t structure to include skip_ratios
 typedef struct { // data structure for file evaluation
     kc_c4x_t *h;
     int cov_cut;
     double max_cov_ratio; // Added to store the max coverage ratio
+    int skip_ratios;      // Number of initial ratios to skip
     double kn, kd, sm;
     int strand_num, exist_strand_num;
     int lose_km_num, exist_km_num;
@@ -690,15 +691,16 @@ double* output_coverage_ratios(FILE *fp, char *seq_name, uint64_t *kms, int km_n
     return ratios;
 }
 
-// Function prototype for kms_max_ratio
-double kms_max_ratio(uint64_t *kms, int km_num, uint64_t mask, kc_c4x_t *h);
+// Update the function prototype for kms_max_ratio to include skip_ratios parameter
+double kms_max_ratio(uint64_t *kms, int km_num, uint64_t mask, kc_c4x_t *h, int skip_ratios);
 
-// Change the function implementation to calculate maximum ratio
-double kms_max_ratio(uint64_t *kms, int km_num, uint64_t mask, kc_c4x_t *h) {
+// Modify the kms_max_ratio function to skip initial ratio values
+double kms_max_ratio(uint64_t *kms, int km_num, uint64_t mask, kc_c4x_t *h, int skip_ratios) {
     if (km_num < 2) return 0.0;
     
     double max_ratio = 0.0; // Start with a very low initial value
     int prev_cov = kmer_cov(kms[0], mask, h);
+    int ratios_counted = 0;
     
     for (int i = 1; i < km_num; i++) {
         int curr_cov = kmer_cov(kms[i], mask, h);
@@ -717,6 +719,13 @@ double kms_max_ratio(uint64_t *kms, int km_num, uint64_t mask, kc_c4x_t *h) {
             ratio = (double)curr_cov / prev_cov;
         }
         
+        // Skip the first skip_ratios valid ratios
+        ratios_counted++;
+        if (ratios_counted <= skip_ratios) {
+            prev_cov = curr_cov;
+            continue;
+        }
+        
         // Update maximum ratio if this one is larger
         if (ratio > max_ratio) {
             max_ratio = ratio;
@@ -728,7 +737,7 @@ double kms_max_ratio(uint64_t *kms, int km_num, uint64_t mask, kc_c4x_t *h) {
     return max_ratio;
 }
 
-// Update the eva_pipeline function to use max_ratio correctly
+// Update the eva_pipeline function to pass skip_ratios to kms_max_ratio
 static void eva_pipeline(void *data, evaluation_t *eva, FILE *cov_details_fp, FILE *cov_ratios_fp) {
     pldat_t *p = (pldat_t*)data;
     uint64_t mask = (1ULL<<p->k*2) - 1;
@@ -750,7 +759,7 @@ static void eva_pipeline(void *data, evaluation_t *eva, FILE *cov_details_fp, FI
         MALLOC(kms, l-p->k + 1); //
         km_num = seq_kmers(kms, p->k, l, p->ks->seq.s);
         kms_cov = kms_min_cov(kms, km_num, mask, eva->h);
-        max_ratio = kms_max_ratio(kms, km_num, mask, eva->h);
+        max_ratio = kms_max_ratio(kms, km_num, mask, eva->h, eva->skip_ratios);
 
         // Output coverage details if file pointer is provided
         if (cov_details_fp != NULL) {
@@ -872,11 +881,12 @@ int main(int argc, char *argv[])
 
     int i, c, k = 31, p = KC_BITS, block_size = 10000000, n_thread = 3, min_cov_cut = 0, max_cov_cut=0;
     int read_len = 200;
-    double max_cov_ratio = 0.0; // Changed default to 0.0, meaning no limitation
+    double max_cov_ratio = 0.0; // No limitation on ratio by default
+    int skip_ratios = 6; // Default: skip the first 6 ratio values
     char *output_prefix = NULL;
 
     ketopt_t o = KETOPT_INIT;
-    while ((c = ketopt(&o, argc, argv, 1, "k:c:d:l:o:r:", 0)) >= 0) {
+    while ((c = ketopt(&o, argc, argv, 1, "k:c:d:l:o:r:a:", 0)) >= 0) {
         if (c == 'k') k = atoi(o.arg);
         //else if (c == 'p') p = atoi(o.arg);
         else if (c == 't') n_thread = atoi(o.arg);
@@ -884,7 +894,8 @@ int main(int argc, char *argv[])
         else if (c == 'd') max_cov_cut = atoi(o.arg);
         else if (c == 'l') read_len = atoi(o.arg);
         else if (c == 'o') output_prefix = o.arg;
-        else if (c == 'r') max_cov_ratio = atof(o.arg); // New option for Max_Cov_Ratio
+        else if (c == 'r') max_cov_ratio = atof(o.arg);
+        else if (c == 'a') skip_ratios = atoi(o.arg);
     }
     if (argc - o.ind < 1) {
         fprintf(stderr, "\n************************************************************************\n");
@@ -904,6 +915,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "  -c INT     min_cov_cut [%d]\n", min_cov_cut);
         fprintf(stderr, "  -d INT     max_cov_cut [%d]\n", max_cov_cut);
         fprintf(stderr, "  -o STR     output prefix for additional files [none]\n");
+        fprintf(stderr, "  -a INT     Number of initial ratio values to skip [%d]\n", skip_ratios);
         fprintf(stderr, "\n");
         return 1;
     }
@@ -914,6 +926,7 @@ int main(int argc, char *argv[])
     fprintf(stdout, ">> Settings:\nk-mer size = %d\n", k);
     fprintf(stdout, "Read length = %d\n", read_len);
     fprintf(stdout, "Maximum coverage ratio = %.1f\n", max_cov_ratio);
+    fprintf(stdout, "Skip initial ratios = %d\n", skip_ratios);
    
     fprintf(stderr, "Counting NGS file 1 ......\n");
     h = count_file(argv[o.ind + 1], k, p, block_size, n_thread, read_len);
@@ -965,7 +978,8 @@ int main(int argc, char *argv[])
 
     evaluation_t eva;
     eva.h = h;
-    eva.max_cov_ratio = max_cov_ratio; // Initialize with the command-line value
+    eva.max_cov_ratio = max_cov_ratio;
+    eva.skip_ratios = skip_ratios;
     
     // Initialize ratio range tracker
     if (output_prefix != NULL) {

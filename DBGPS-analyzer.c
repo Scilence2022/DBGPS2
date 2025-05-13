@@ -13,7 +13,7 @@
 KSEQ_INIT(gzFile, gzread)
 
 #include "khashl.h" // hash table
-#define KC_BITS 10
+#define KC_BITS 14
 #define KC_MAX ((1<<KC_BITS) - 1)
 #define kc_c4_eq(a, b) ((a)>>KC_BITS == (b)>>KC_BITS) // lower 10 bits for counts; higher bits for k-mer
 #define kc_c4_hash(a) ((a)>>KC_BITS)
@@ -548,24 +548,27 @@ int seq_kmers(uint64_t *kms, int k, int len, const char *seq) // insert k-mers i
     return km_num;
 }
 
+// Add a function to output k-mer coverages for a sequence
+void output_kmer_coverages(FILE *fp, char *seq_name, uint64_t *kms, int km_num, uint64_t mask, kc_c4x_t *h) {
+    fprintf(fp, "%s\t", seq_name);
+    for (int i = 0; i < km_num; i++) {
+        int cov = kmer_cov(*(kms+i), mask, h);
+        fprintf(fp, "%d ", cov);
+    }
+    fprintf(fp, "\n");
+}
 
-
-
-
-
-//static void worker_pipeline(void *data, int step, void *in) // callback for kt_pipeline()
-static void eva_pipeline(void *data, evaluation_t *eva) // callback for kt_pipeline()
+// Modify the eva_pipeline function to output coverage details
+static void eva_pipeline(void *data, evaluation_t *eva, FILE *cov_details_fp) // callback for kt_pipeline()
 {
     pldat_t *p = (pldat_t*)data;
-   // evaluation_t *eva = (evaluation_t *)eva_data;
-
     uint64_t mask = (1ULL<<p->k*2) - 1;
-    //if (step == 0) { // step 1: read a block of sequences
-    int ret;
+    
     stepdat_t *s;
     CALLOC(s, 1);
     s->p = p;
     int i = 0;
+    int ret;
 
     while ((ret = kseq_read(p->ks)) >= 0) {// Reading seqs
         eva->strand_num++;
@@ -576,6 +579,11 @@ static void eva_pipeline(void *data, evaluation_t *eva) // callback for kt_pipel
         MALLOC(kms, l-p->k + 1); //
         km_num = seq_kmers(kms, p->k, l, p->ks->seq.s);
         kms_cov = kms_min_cov(kms, km_num, mask, eva->h);
+
+        // Output coverage details if file pointer is provided
+        if (cov_details_fp != NULL) {
+            output_kmer_coverages(cov_details_fp, p->ks->name.s, kms, km_num, mask, eva->h);
+        }
 
         if(kms_cov > eva->cov_cut){ //Complete path
             eva->exist_strand_num++;
@@ -591,13 +599,15 @@ static void eva_pipeline(void *data, evaluation_t *eva) // callback for kt_pipel
                 }
             }
         }
+        
+        free(kms);
     }
+    
+    free(s);
 }
 
-
-
-
-static evaluation_t *evaluate_seq_file(evaluation_t *eva, const char *fn, int k, int p, int block_size, int n_thread)
+// Modify the evaluate_seq_file function to support coverage details output
+static evaluation_t *evaluate_seq_file(evaluation_t *eva, const char *fn, int k, int p, int block_size, int n_thread, FILE *cov_details_fp)
 {
     pldat_t pl;
 
@@ -609,15 +619,11 @@ static evaluation_t *evaluate_seq_file(evaluation_t *eva, const char *fn, int k,
     pl.h = c4x_init(p);
     pl.block_len = block_size;
 
-    eva_pipeline(&pl, eva);
-    //worker_pipeline(&pl, max_cov);
-    //kt_pipeline(3, worker_pipeline, &pl, 3);
+    eva_pipeline(&pl, eva, cov_details_fp);
     kseq_destroy(pl.ks);
     gzclose(fp);
     return eva;
 }
-
-
 
 void print_uint64_kmer(uint64_t km, int km_len){
     fprintf(stdout, "uint64: %"PRIu64, km);
@@ -677,16 +683,17 @@ int main(int argc, char *argv[])
 
     int i, c, k = 31, p = KC_BITS, block_size = 10000000, n_thread = 3, min_cov_cut = 0, max_cov_cut=0;
     int read_len = 200;
+    char *output_prefix = NULL;
 
     ketopt_t o = KETOPT_INIT;
-    while ((c = ketopt(&o, argc, argv, 1, "k:c:d:r:", 0)) >= 0) {
+    while ((c = ketopt(&o, argc, argv, 1, "k:c:d:r:o:", 0)) >= 0) {
         if (c == 'k') k = atoi(o.arg);
         //else if (c == 'p') p = atoi(o.arg);
         else if (c == 't') n_thread = atoi(o.arg);
         else if (c == 'c') min_cov_cut = atoi(o.arg);
         else if (c == 'd') max_cov_cut = atoi(o.arg);
         else if (c == 'r') read_len = atoi(o.arg);
-
+        else if (c == 'o') output_prefix = o.arg;
     }
     if (argc - o.ind < 1) {
         fprintf(stderr, "\n************************************************************************\n");
@@ -704,6 +711,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "  -r INT     Maximal read length for k-mer counting [%d]\n", read_len);
         fprintf(stderr, "  -c INT     min_cov_cut [%d]\n", min_cov_cut);
         fprintf(stderr, "  -d INT     max_cov_cut [%d]\n", max_cov_cut);
+        fprintf(stderr, "  -o STR     output prefix for additional files [none]\n");
         fprintf(stderr, "\n");
         return 1;
     }
@@ -724,6 +732,20 @@ int main(int argc, char *argv[])
         c_f_n = c_f_n + 1;
     }
 
+    // Open coverage details file if output prefix is provided
+    FILE *cov_details_fp = NULL;
+    if (output_prefix != NULL) {
+        char *cov_details_filename;
+        MALLOC(cov_details_filename, strlen(output_prefix) + 15);
+        sprintf(cov_details_filename, "%s.cov_details", output_prefix);
+        cov_details_fp = fopen(cov_details_filename, "w");
+        if (cov_details_fp == NULL) {
+            fprintf(stderr, "Error: Could not open file %s for writing\n", cov_details_filename);
+        } else {
+            fprintf(stderr, "Writing coverage details to %s\n", cov_details_filename);
+        }
+        free(cov_details_filename);
+    }
 
     evaluation_t eva;
     eva.h = h;
@@ -741,11 +763,9 @@ int main(int argc, char *argv[])
         eva.lose_km_num = 0;
         eva.exist_km_num = 0;
         eva.cov_cut = cov;
-        //eva.correct_km_num = 0;
-
 
         fprintf(stdout, "%d\t", cov);
-        evaluate_seq_file(&eva, argv[o.ind],  k, p, block_size, n_thread);
+        evaluate_seq_file(&eva, argv[o.ind], k, p, block_size, n_thread, cov == min_cov_cut ? cov_details_fp : NULL);
 
         fprintf(stdout, "%d\t",eva.strand_num);
         fprintf(stdout, "%d\t", eva.exist_strand_num);
@@ -764,19 +784,18 @@ int main(int argc, char *argv[])
         fprintf(stdout, "%f\t",eva.sm);
         fprintf(stdout, "%f\t",eva.kd);
         fprintf(stdout, "%f\n",eva.kn);
+    }
 
-
-
-
+    // Close coverage details file if it was opened
+    if (cov_details_fp != NULL) {
+        fclose(cov_details_fp);
     }
 
     for(i = 0; i < 1<<p; ++i) {
         kc_c4_destroy(h->h[i]);
-        //kc_c4_destroy(eva.h->h[i]);
     }
 
     free(h->h); free(h);
-    //free(eva->h->h); free(eva->h);free(eva);
     return 0;
 }
 

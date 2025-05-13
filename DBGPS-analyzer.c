@@ -528,6 +528,7 @@ void free_ratio_range(ratio_range_t *range) {
 typedef struct { // data structure for file evaluation
     kc_c4x_t *h;
     int cov_cut;
+    double max_cov_ratio; // Added to store the max coverage ratio
     double kn, kd, sm;
     int strand_num, exist_strand_num;
     int lose_km_num, exist_km_num;
@@ -612,7 +613,6 @@ int kms_min_cov(uint64_t *kms, int km_num, uint64_t mask, kc_c4x_t *h){
     return min_cov;
 }
 
-
 int seq_kmers(uint64_t *kms, int k, int len, const char *seq) // insert k-mers in $seq to linear buffer $buf
 {
     int i, l, km_num=0;
@@ -690,9 +690,46 @@ double* output_coverage_ratios(FILE *fp, char *seq_name, uint64_t *kms, int km_n
     return ratios;
 }
 
-// Modify the eva_pipeline function to track ratio ranges
-static void eva_pipeline(void *data, evaluation_t *eva, FILE *cov_details_fp, FILE *cov_ratios_fp) // callback for kt_pipeline()
-{
+// Function prototype for kms_max_ratio
+double kms_max_ratio(uint64_t *kms, int km_num, uint64_t mask, kc_c4x_t *h);
+
+// Change the function implementation to calculate maximum ratio
+double kms_max_ratio(uint64_t *kms, int km_num, uint64_t mask, kc_c4x_t *h) {
+    if (km_num < 2) return 0.0;
+    
+    double max_ratio = 0.0; // Start with a very low initial value
+    int prev_cov = kmer_cov(kms[0], mask, h);
+    
+    for (int i = 1; i < km_num; i++) {
+        int curr_cov = kmer_cov(kms[i], mask, h);
+        
+        // Skip if either coverage is zero
+        if (prev_cov == 0 || curr_cov == 0) {
+            prev_cov = curr_cov;
+            continue;
+        }
+        
+        // Calculate ratio (always larger / smaller)
+        double ratio;
+        if (prev_cov >= curr_cov) {
+            ratio = (double)prev_cov / curr_cov;
+        } else {
+            ratio = (double)curr_cov / prev_cov;
+        }
+        
+        // Update maximum ratio if this one is larger
+        if (ratio > max_ratio) {
+            max_ratio = ratio;
+        }
+        
+        prev_cov = curr_cov;
+    }
+    
+    return max_ratio;
+}
+
+// Update the eva_pipeline function to use max_ratio correctly
+static void eva_pipeline(void *data, evaluation_t *eva, FILE *cov_details_fp, FILE *cov_ratios_fp) {
     pldat_t *p = (pldat_t*)data;
     uint64_t mask = (1ULL<<p->k*2) - 1;
     
@@ -707,10 +744,13 @@ static void eva_pipeline(void *data, evaluation_t *eva, FILE *cov_details_fp, FI
         i = i + 1;
         uint64_t *kms;
         int l = p->ks->seq.l, km_num = 0, kms_cov=0;
+        double max_ratio = 0.0;
+        
         if (l < p->k) continue;
         MALLOC(kms, l-p->k + 1); //
         km_num = seq_kmers(kms, p->k, l, p->ks->seq.s);
         kms_cov = kms_min_cov(kms, km_num, mask, eva->h);
+        max_ratio = kms_max_ratio(kms, km_num, mask, eva->h);
 
         // Output coverage details if file pointer is provided
         if (cov_details_fp != NULL) {
@@ -729,9 +769,14 @@ static void eva_pipeline(void *data, evaluation_t *eva, FILE *cov_details_fp, FI
             }
         }
 
-        if(kms_cov > eva->cov_cut){ //Complete path
+        // Modified condition: Check both coverage and ratio for path existence
+        // A path exists if minimum coverage is above cov_cut AND:
+        // - If max_cov_ratio is 0, no ratio limitation is applied
+        // - If max_cov_ratio > 0, the maximum ratio must be below max_cov_ratio
+        if (kms_cov > eva->cov_cut && (eva->max_cov_ratio == 0.0 || max_ratio == 0.0 || max_ratio <= eva->max_cov_ratio)) {
             eva->exist_strand_num++;
         }
+        
         int j;
         for(j=0;j<km_num;j++){
             if( kmer_cov(*(kms+j), mask, p->h) <1) {//New k-mer found
@@ -827,7 +872,7 @@ int main(int argc, char *argv[])
 
     int i, c, k = 31, p = KC_BITS, block_size = 10000000, n_thread = 3, min_cov_cut = 0, max_cov_cut=0;
     int read_len = 200;
-    double max_cov_ratio = 4.0; // Default value for Max_Cov_Ratio, now a variable
+    double max_cov_ratio = 0.0; // Changed default to 0.0, meaning no limitation
     char *output_prefix = NULL;
 
     ketopt_t o = KETOPT_INIT;
@@ -837,7 +882,7 @@ int main(int argc, char *argv[])
         else if (c == 't') n_thread = atoi(o.arg);
         else if (c == 'c') min_cov_cut = atoi(o.arg);
         else if (c == 'd') max_cov_cut = atoi(o.arg);
-        else if (c == 'l') read_len = atoi(o.arg); // Changed from 'r' to 'l'
+        else if (c == 'l') read_len = atoi(o.arg);
         else if (c == 'o') output_prefix = o.arg;
         else if (c == 'r') max_cov_ratio = atof(o.arg); // New option for Max_Cov_Ratio
     }
@@ -854,8 +899,8 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Options:\n");
         fprintf(stderr, "  -k INT     k-mer size [%d]\n", k);
         fprintf(stderr, "  -t INT     number of threads [%d]\n", n_thread);
-        fprintf(stderr, "  -l INT     Maximal read length for k-mer counting [%d]\n", read_len); // Changed from 'r' to 'l'
-        fprintf(stderr, "  -r FLOAT   Maximum coverage ratio [%.1f]\n", max_cov_ratio); // New option for Max_Cov_Ratio
+        fprintf(stderr, "  -l INT     Maximal read length for k-mer counting [%d]\n", read_len);
+        fprintf(stderr, "  -r FLOAT   Maximum coverage ratio [%.1f] (0 = no limitation)\n", max_cov_ratio);
         fprintf(stderr, "  -c INT     min_cov_cut [%d]\n", min_cov_cut);
         fprintf(stderr, "  -d INT     max_cov_cut [%d]\n", max_cov_cut);
         fprintf(stderr, "  -o STR     output prefix for additional files [none]\n");
@@ -920,6 +965,8 @@ int main(int argc, char *argv[])
 
     evaluation_t eva;
     eva.h = h;
+    eva.max_cov_ratio = max_cov_ratio; // Initialize with the command-line value
+    
     // Initialize ratio range tracker
     if (output_prefix != NULL) {
         eva.ratio_range = init_ratio_range();

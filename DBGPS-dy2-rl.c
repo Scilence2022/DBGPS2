@@ -920,9 +920,11 @@ int main(int argc, char *argv[])
     clock_t start,end;
     double kc_dur, dec_dur;
     
-    // Output all input parameters to both stdout and log file if output_prefix is provided
+    // Files for output if output_prefix is provided
     FILE *log_file = NULL;
+    FILE *strands_file = NULL;
     if (output_prefix != NULL) {
+        // Open log file
         char log_filename[1024];
         sprintf(log_filename, "%s.log", output_prefix);
         log_file = fopen(log_filename, "w");
@@ -930,6 +932,16 @@ int main(int argc, char *argv[])
             fprintf(stderr, "Warning: Could not open log file %s for writing\n", log_filename);
         } else {
             fprintf(stderr, "Writing parameters to log file: %s\n", log_filename);
+        }
+        
+        // Open strands file
+        char strands_filename[1024];
+        sprintf(strands_filename, "%s.strands", output_prefix);
+        strands_file = fopen(strands_filename, "w");
+        if (strands_file == NULL) {
+            fprintf(stderr, "Warning: Could not open strands file %s for writing\n", strands_filename);
+        } else {
+            fprintf(stderr, "Will write assembled strands to: %s\n", strands_filename);
         }
     }
     
@@ -1007,9 +1019,14 @@ int main(int argc, char *argv[])
 
                     DNA_seq[path_len + index_byte_num*4] = '\0';
                     intseq_actg(path[c_index], DNA_seq, (path_len>>2) + index_byte_num);
-                    printf("%d", id);
-
-                    fprintf(stdout, "\t%s\n", DNA_seq);
+                    
+                    if (output_prefix != NULL && strands_file != NULL) {
+                        // Output to strands file if -o is specified
+                        fprintf(strands_file, "%d\t%s\n", id, DNA_seq);
+                    } else {
+                        // Output to stdout if no output file is specified
+                        printf("%d\t%s\n", id, DNA_seq);
+                    }
                 }
             }
 
@@ -1038,9 +1055,14 @@ int main(int argc, char *argv[])
 
                         DNA_seq[path_len + index_byte_num*4] = '\0';
                         intseq_actg(path[c_index], DNA_seq, (path_len>>2) + index_byte_num);
-                        printf("%d", id);
-
-                        fprintf(stdout, "\t%s\n", DNA_seq);
+                        
+                        if (output_prefix != NULL && strands_file != NULL) {
+                            // Output to strands file if -o is specified
+                            fprintf(strands_file, "%d\t%s\n", id, DNA_seq);
+                        } else {
+                            // Output to stdout if no output file is specified
+                            printf("%d\t%s\n", id, DNA_seq);
+                        }
                     }
                 }
 
@@ -1057,9 +1079,13 @@ int main(int argc, char *argv[])
     for (i = 0; i < 1<<p; ++i) kc_c4_destroy(h->h[i]);
     free(h->h); free(h);
     
-    // Close log file if it was opened
+    // Close output files if they were opened
     if (log_file != NULL) {
         fclose(log_file);
+    }
+    
+    if (strands_file != NULL) {
+        fclose(strands_file);
     }
     
     #undef PRINT_BOTH

@@ -882,11 +882,12 @@ int main(int argc, char *argv[])
     int i, c, k = 31, p = KC_BITS, block_size = 10000000, n_thread = 3, min_cov_cut = 0, max_cov_cut=0;
     int read_len = 200;
     double max_cov_ratio = 0.0; // No limitation on ratio by default
+    double max_R = 0.0; // Upper bound for ratio range iteration
     int skip_ratios = 6; // Default: skip the first 6 ratio values
     char *output_prefix = NULL;
 
     ketopt_t o = KETOPT_INIT;
-    while ((c = ketopt(&o, argc, argv, 1, "k:c:C:L:o:r:s:", 0)) >= 0) {
+    while ((c = ketopt(&o, argc, argv, 1, "k:c:C:L:o:r:s:R:", 0)) >= 0) {
         if (c == 'k') k = atoi(o.arg);
         //else if (c == 'p') p = atoi(o.arg);
         else if (c == 't') n_thread = atoi(o.arg);
@@ -896,6 +897,7 @@ int main(int argc, char *argv[])
         else if (c == 'o') output_prefix = o.arg;
         else if (c == 'r') max_cov_ratio = atof(o.arg);
         else if (c == 's') skip_ratios = atoi(o.arg);
+        else if (c == 'R') max_R = atof(o.arg);
     }
     if (argc - o.ind < 1) {
         fprintf(stderr, "\n************************************************************************\n");
@@ -916,6 +918,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "  -C INT     max_cov_cut [%d]\n", max_cov_cut);
         fprintf(stderr, "  -o STR     output prefix for additional files [none]\n");
         fprintf(stderr, "  -s INT     Number of initial ratio values to skip [%d]\n", skip_ratios);
+        fprintf(stderr, "  -R FLOAT   Upper bound for ratio range iteration [%.1f]\n", max_R);
         fprintf(stderr, "\n");
         return 1;
     }
@@ -927,6 +930,7 @@ int main(int argc, char *argv[])
     fprintf(stdout, "Read length = %d\n", read_len);
     fprintf(stdout, "Maximum coverage ratio = %.1f\n", max_cov_ratio);
     fprintf(stdout, "Skip initial ratios = %d\n", skip_ratios);
+    fprintf(stdout, "Upper bound for ratio range iteration = %.1f\n", max_R);
    
     fprintf(stderr, "Counting NGS file 1 ......\n");
     h = count_file(argv[o.ind + 1], k, p, block_size, n_thread, read_len);
@@ -989,40 +993,50 @@ int main(int argc, char *argv[])
     }
 
     fprintf(stderr, "Estimating Sm Kn Kd values ...\n");
-    fprintf(stdout, "Coverage\tTotal\tPaths\tSm\tKd\tKn\n");
+    
+    // If max_R is not specified or less than max_cov_ratio, only use max_cov_ratio
+    if (max_R <= 0 || max_R < max_cov_ratio) {
+        max_R = max_cov_ratio;
+    }
+    
+    fprintf(stdout, "Ratio\tCoverage\tTotal\tPaths\tNoise\tExist\tLost\tSm\tKd\tKn\n");
 
-    int cov;
-    for(cov=min_cov_cut; cov<=max_cov_cut; cov++){
-
-        eva.strand_num = 0;
-        eva.exist_strand_num = 0;
-        eva.noise_km_num = 0;
-        eva.lose_km_num = 0;
-        eva.exist_km_num = 0;
-        eva.cov_cut = cov;
-
-        fprintf(stdout, "%d\t", cov);
-        evaluate_seq_file(&eva, argv[o.ind], k, p, block_size, n_thread, 
-                          cov == min_cov_cut ? cov_details_fp : NULL, 
-                          cov == min_cov_cut ? cov_ratios_fp : NULL);
-
-        fprintf(stdout, "%d\t",eva.strand_num);
-        fprintf(stdout, "%d\t", eva.exist_strand_num);
-
-
-        eva.noise_km_num = kc_c4x_t_kmers(h,p,cov) - eva.exist_km_num;
-        eva.sm = (double)eva.exist_strand_num/eva.strand_num;
-        eva.kd = (double)eva.lose_km_num/(eva.lose_km_num + eva.exist_km_num);
-        eva.kn = (double)eva.noise_km_num/eva.exist_km_num;
-
-        fprintf(stdout, "%d\t",eva.noise_km_num);
-        fprintf(stdout, "%d\t",eva.exist_km_num);
-        fprintf(stdout, "%d\t",eva.lose_km_num);
-
-
-        fprintf(stdout, "%f\t",eva.sm);
-        fprintf(stdout, "%f\t",eva.kd);
-        fprintf(stdout, "%f\n",eva.kn);
+    // Iterate through different coverage ratio values
+    double ratio;
+    for (ratio = max_cov_ratio; ratio <= max_R + 0.001; ratio += 0.05) { // Add small epsilon to include max_R
+        // For each ratio, iterate through different coverage cutoffs
+        int cov;
+        for (cov = min_cov_cut; cov <= max_cov_cut; cov++) {
+            eva.strand_num = 0;
+            eva.exist_strand_num = 0;
+            eva.noise_km_num = 0;
+            eva.lose_km_num = 0;
+            eva.exist_km_num = 0;
+            eva.cov_cut = cov;
+            eva.max_cov_ratio = ratio; // Set current ratio
+            
+            fprintf(stdout, "%.2f\t%d\t", ratio, cov);
+            
+            evaluate_seq_file(&eva, argv[o.ind], k, p, block_size, n_thread, 
+                             (cov == min_cov_cut && ratio == max_cov_ratio) ? cov_details_fp : NULL, 
+                             (cov == min_cov_cut && ratio == max_cov_ratio) ? cov_ratios_fp : NULL);
+            
+            fprintf(stdout, "%d\t", eva.strand_num);
+            fprintf(stdout, "%d\t", eva.exist_strand_num);
+            
+            eva.noise_km_num = kc_c4x_t_kmers(h, p, cov) - eva.exist_km_num;
+            eva.sm = (double)eva.exist_strand_num / eva.strand_num;
+            eva.kd = (double)eva.lose_km_num / (eva.lose_km_num + eva.exist_km_num);
+            eva.kn = (double)eva.noise_km_num / eva.exist_km_num;
+            
+            fprintf(stdout, "%d\t", eva.noise_km_num);
+            fprintf(stdout, "%d\t", eva.exist_km_num);
+            fprintf(stdout, "%d\t", eva.lose_km_num);
+            
+            fprintf(stdout, "%f\t", eva.sm);
+            fprintf(stdout, "%f\t", eva.kd);
+            fprintf(stdout, "%f\n", eva.kn);
+        }
     }
 
     // Write ratio ranges to file and close files

@@ -666,7 +666,7 @@ path_node all_nodes[Max_Path_Num * Max_Path_Len];
 path_node *term_nodes[Max_Path_Num+1];
 
 
-int find_paths(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer, uint64_t mask, int cut_cov, int path_len, int k, int index_byte_num, double max_cov_ratio){
+int find_paths(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer, uint64_t mask, int cut_cov, int path_len, int k, int index_byte_num, double max_cov_ratio, int skip_ratios){
 
     all_nodes[0].kmer = kmer;
     all_nodes[0].cov = kmer_cov(min_hash_key(kmer, k),mask,h);
@@ -712,19 +712,32 @@ int find_paths(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer, uint64_t mask
             next_nodes[2].cov = kmer_cov(min_hash_key(next_nodes[2].kmer, k),mask,h);
             next_nodes[3].cov = kmer_cov(min_hash_key(next_nodes[3].kmer, k),mask,h);
 
-            int i;
+            // Reuse the same i from the outer loop
             for(i=0;i<4;i++){
-               // if(next_nodes[i].cov >= min_cov && next_nodes[i].cov >=a_cov && next_nodes[i].cov <= b_cov){
-                if(next_nodes[i].cov >=a_cov && next_nodes[i].cov <= b_cov){
+                // Check if we're still in the skipping phase (skip ratio checks for first skip_ratios nodes)
+                if (p < skip_ratios) {
+                    // During skipping phase, only check minimum coverage
+                    if(next_nodes[i].cov >= cut_cov + 1) {
+                        all_nodes[all_node_num].pre_node = p_node;
+                        all_nodes[all_node_num].kmer = next_nodes[i].kmer;
+                        all_nodes[all_node_num].cov = next_nodes[i].cov;
+                        term_nodes[new_term_node_num] = &all_nodes[all_node_num];
+                        new_term_node_num++;
+                        all_node_num++;
+                    }
+                } else {
+                    // Normal phase: check ratio bounds as before
+                    if(next_nodes[i].cov >=a_cov && next_nodes[i].cov <= b_cov) {
 
-                    all_nodes[all_node_num].pre_node = p_node;
-                    all_nodes[all_node_num].kmer = next_nodes[i].kmer;
-                    all_nodes[all_node_num].cov = next_nodes[i].cov;
+                        all_nodes[all_node_num].pre_node = p_node;
+                        all_nodes[all_node_num].kmer = next_nodes[i].kmer;
+                        all_nodes[all_node_num].cov = next_nodes[i].cov;
 
-                    term_nodes[new_term_node_num] = &all_nodes[all_node_num];
+                        term_nodes[new_term_node_num] = &all_nodes[all_node_num];
 
-                    new_term_node_num++;
-                    all_node_num++;
+                        new_term_node_num++;
+                        all_node_num++;
+                    }
                 }
             }
 
@@ -835,6 +848,7 @@ int main(int argc, char *argv[])
     double max_r = 0.0; // Maximum r value for ratio range iteration, default 0 (disabled)
     int mem_test = 0;
     int read_len = 200;
+    int skip_ratios = 0; // Number of initial ratio values to skip, default 0
 
     unsigned int min_index = 101010102, max_index=101295684, index_byte_num, max_cov=0;
     uint64_t mask, pr_uint64;
@@ -844,7 +858,7 @@ int main(int argc, char *argv[])
 
 
     ketopt_t o = KETOPT_INIT;
-    while ((c = ketopt(&o, argc, argv, 1, "k:p:b:t:c:l:a:b:i:C:r:R:m:", 0)) >= 0) {
+    while ((c = ketopt(&o, argc, argv, 1, "k:p:b:t:c:l:a:b:i:C:r:R:m:s:", 0)) >= 0) {
         if (c == 'k') k = atoi(o.arg);
         else if (c == 'p') p = atoi(o.arg);
         else if (c == 't') n_thread = atoi(o.arg);
@@ -858,6 +872,7 @@ int main(int argc, char *argv[])
         else if (c == 'r') max_cov_ratio = atof(o.arg); // Changed this to use max_cov_ratio
         else if (c == 'R') max_r = atof(o.arg); // Maximum r value for ratio range iteration
         else if (c == 'm') mem_test = 1;
+        else if (c == 's') skip_ratios = atoi(o.arg); // Number of initial ratio values to skip
     }
 
     if (argc - o.ind < 1) {
@@ -883,6 +898,7 @@ int main(int argc, char *argv[])
 
         fprintf(stderr, "  -r FLOAT   Maximum coverage ratio [%.1f]\n", max_cov_ratio);
         fprintf(stderr, "  -R FLOAT   Upper bound for ratio range iteration (0 = disabled) [%.1f]\n", max_r);
+        fprintf(stderr, "  -s INT     Number of initial positions to skip ratio checks for [%d]\n", skip_ratios);
 
         fprintf(stderr, "\n");
         return 1;
@@ -902,10 +918,28 @@ int main(int argc, char *argv[])
 
     clock_t start,end;
     double kc_dur, dec_dur;
-    fprintf(stdout, "k-mers size: %d\n", k);
+    
+    // Output all input parameters
+    fprintf(stdout, "========== DBGPS Parameters ==========\n");
+    fprintf(stdout, "k-mer size (-k): %d\n", k);
+    fprintf(stdout, "Prefix length (-p): %d\n", p);
+    fprintf(stdout, "Number of threads (-t): %d\n", n_thread);
+    fprintf(stdout, "Minimum coverage cutoff (-c): %d\n", min_cov);
+    fprintf(stdout, "Maximum coverage for testing (-C): %d\n", max_cov);
+    fprintf(stdout, "Index length (-i): %d bp\n", index_len);
+    fprintf(stdout, "Data encoding length (-l): %d bp\n", payload_len);
+    fprintf(stdout, "Read length for k-mer counting: %d\n", read_len);
+    fprintf(stdout, "Skip ratio checks for first (-s): %d positions\n", skip_ratios);
+    fprintf(stdout, "Initial index (-a): %d\n", min_index);
+    fprintf(stdout, "End index (-b): %d\n", max_index);
+    fprintf(stdout, "Maximum coverage ratio (-r): %.2f\n", max_cov_ratio);
+    fprintf(stdout, "Ratio range upper bound (-R): %.2f\n", max_r);
+    fprintf(stdout, "Memory test mode: %s\n", mem_test ? "enabled" : "disabled");
+    fprintf(stdout, "Path length (payload + CRC): %d\n", path_len);
+    fprintf(stdout, "Index byte number: %d\n", index_byte_num);
+    fprintf(stdout, "======================================\n");
+    
     fprintf(stderr, "Counting k-mers ......\n");
-    fprintf(stderr, "Read length ......%d\n", read_len);
-    fprintf(stderr, "Maximum coverage ratio ......%.1f\n", max_cov_ratio);
 
 
     start = clock();
@@ -946,7 +980,7 @@ int main(int argc, char *argv[])
                 unsigned char *path[Max_Path_Num];
                 eid = index_encode(id, index_len);
 
-                c_index = find_paths(h, path, pr_uint64 | (uint64_t)eid, mask, cov_cut, path_len, k, index_byte_num, max_cov_ratio);
+                c_index = find_paths(h, path, pr_uint64 | (uint64_t)eid, mask, cov_cut, path_len, k, index_byte_num, max_cov_ratio, skip_ratios);
                 if(c_index > -1) {
                     dec_strand_num++;
                     unsigned char DNA_seq[Max_Path_Len];
@@ -976,7 +1010,7 @@ int main(int argc, char *argv[])
                     unsigned char *path[Max_Path_Num];
                     eid = index_encode(id, index_len);
 
-                    c_index = find_paths(h, path, pr_uint64 | (uint64_t)eid, mask, cov_cut, path_len, k, index_byte_num, r);
+                    c_index = find_paths(h, path, pr_uint64 | (uint64_t)eid, mask, cov_cut, path_len, k, index_byte_num, r, skip_ratios);
                     if(c_index > -1) {
                         dec_strand_num++;
                         unsigned char DNA_seq[Max_Path_Len];

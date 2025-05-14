@@ -22,7 +22,6 @@ KSEQ_INIT(gzFile, gzread)
 
 #define Max_Path_Num 1050
 #define Max_Path_Len 300
-#define Max_Cov_Ratio 4
 
 
 KHASHL_SET_INIT(, kc_c4_t, kc_c4, uint64_t, kc_c4_hash, kc_c4_eq)
@@ -40,7 +39,6 @@ const unsigned char seq_nt4_table[256] = { // translate ACGT to 0123
         4, 4, 4, 4,  3, 3, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
         4, 0, 4, 1,  4, 4, 4, 2,  4, 4, 4, 4,  4, 4, 4, 4,
         4, 4, 4, 4,  3, 3, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
-        4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
         4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
         4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
         4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
@@ -669,11 +667,11 @@ path_node all_nodes[Max_Path_Num * Max_Path_Len];
 path_node *term_nodes[Max_Path_Num+1];
 
 
-int find_paths(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer, uint64_t mask, int cut_cov, int path_len, int k, int index_byte_num){
+int find_paths(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer, uint64_t mask, int cut_cov, int path_len, int k, int index_byte_num, double max_cov_ratio){
 
     all_nodes[0].kmer = kmer;
     all_nodes[0].cov = kmer_cov(min_hash_key(kmer, k),mask,h);
-    int a_cov = all_nodes[0].cov/Max_Cov_Ratio, b_cov = all_nodes[0].cov * Max_Cov_Ratio ;
+    int a_cov = all_nodes[0].cov/max_cov_ratio, b_cov = all_nodes[0].cov * max_cov_ratio;
     if(a_cov < cut_cov + 1){a_cov = cut_cov + 1;}
 
     term_nodes[0] = &all_nodes[0];
@@ -702,7 +700,7 @@ int find_paths(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer, uint64_t mask
 
             p_node = term_nodes[n_p];
 
-            a_cov = p_node->cov/Max_Cov_Ratio, b_cov = p_node->cov * Max_Cov_Ratio  ;
+            a_cov = p_node->cov/max_cov_ratio, b_cov = p_node->cov * max_cov_ratio;
             if(a_cov < cut_cov + 1){a_cov = cut_cov + 1;}
 
             next_nodes[0].kmer = ((*p_node).kmer<<2) & mask;
@@ -834,7 +832,7 @@ int main(int argc, char *argv[])
 {
     kc_c4x_t *h;
     int i, c=1, k = 31, p = KC_BITS, block_size = 10000000, n_thread = 3, min_cov = 0, index_len = 16, payload_len=140, crc_len=8, path_len;
-    // int max_ratio = 4;
+    double max_cov_ratio = 4.0; // Default value for Max_Cov_Ratio
     int mem_test = 0;
     int read_len = 200;
 
@@ -857,7 +855,7 @@ int main(int argc, char *argv[])
         else if (c == 'b') max_index = atoi(o.arg);
         else if (c == 'i') index_len = atoi(o.arg);
         else if (c == 'l') payload_len = atoi(o.arg);
-        else if (c == 'r') read_len = atoi(o.arg);
+        else if (c == 'r') max_cov_ratio = atof(o.arg); // Changed this to use max_cov_ratio
         else if (c == 'm') mem_test = 1;
     }
 
@@ -883,6 +881,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "  -b INT     End index [%d]\n", max_index);
 
         //fprintf(stderr, "  -r INT     Maximal ratio of k-mer coverage changes [%d]\n", max_ratio);
+        fprintf(stderr, "  -r FLOAT   Maximum coverage ratio [%.1f]\n", max_cov_ratio);
 
         fprintf(stderr, "\n");
         return 1;
@@ -905,6 +904,7 @@ int main(int argc, char *argv[])
     fprintf(stdout, "k-mers size: %d\n", k);
     fprintf(stderr, "Counting k-mers ......\n");
     fprintf(stderr, "Read length ......%d\n", read_len);
+    fprintf(stderr, "Maximum coverage ratio ......%.1f\n", max_cov_ratio);
 
 
     start = clock();
@@ -942,7 +942,7 @@ int main(int argc, char *argv[])
             unsigned char *path[Max_Path_Num];
             eid = index_encode(id, index_len);
 
-            c_index = find_paths(h, path, pr_uint64 | (uint64_t)eid, mask, cov_cut, path_len, k, index_byte_num);
+            c_index = find_paths(h, path, pr_uint64 | (uint64_t)eid, mask, cov_cut, path_len, k, index_byte_num, max_cov_ratio);
             if( c_index > -1){
                 dec_strand_num++;
                 unsigned char DNA_seq[Max_Path_Len];

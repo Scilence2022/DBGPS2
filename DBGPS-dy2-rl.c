@@ -590,11 +590,14 @@ unsigned short kmer_cov(uint64_t kmer, uint64_t mask, kc_c4x_t *h){
     return cov;
 }
 
-typedef struct {
-    struct path_node* pre_node;
+// Forward declaration to resolve circular reference
+typedef struct path_node path_node;
+
+struct path_node {
+    path_node* pre_node;
     uint64_t kmer;
     unsigned int cov;
-}path_node;
+};
 
 const uint64_t BI_MASK = 3ULL;
 
@@ -682,15 +685,10 @@ int find_paths(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer, uint64_t mask
     path_node next_nodes[4];
     next_nodes[0].cov = 0; next_nodes[1].cov = 0; next_nodes[2].cov = 0; next_nodes[3].cov = 0;
 
-
-    path_node *p_term_nodes[Max_Path_Num+1];
     int new_term_node_num;
 
     while(p <= path_len && term_node_num > 0 && term_node_num <= Max_Path_Num){
         int i;
-        //Copying old term nodes pointer
-        for(i=0; i < Max_Path_Num; i++){
-            p_term_nodes[i] = term_nodes[i]; }
 
         new_term_node_num = 0;
 

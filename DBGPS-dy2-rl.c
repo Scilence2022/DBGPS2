@@ -844,12 +844,12 @@ int main(int argc, char *argv[])
 
 
     ketopt_t o = KETOPT_INIT;
-    while ((c = ketopt(&o, argc, argv, 1, "k:p:b:t:c:l:a:b:i:d:r:m:", 0)) >= 0) {
+    while ((c = ketopt(&o, argc, argv, 1, "k:p:b:t:c:l:a:b:i:C:r:m:", 0)) >= 0) {
         if (c == 'k') k = atoi(o.arg);
         else if (c == 'p') p = atoi(o.arg);
         else if (c == 't') n_thread = atoi(o.arg);
         else if (c == 'c') min_cov = atoi(o.arg);
-        else if (c == 'd') max_cov = atoi(o.arg);
+        else if (c == 'C') max_cov = atoi(o.arg);
 
         else if (c == 'a') min_index = atoi(o.arg);
         else if (c == 'b') max_index = atoi(o.arg);
@@ -875,7 +875,7 @@ int main(int argc, char *argv[])
         //fprintf(stderr, "  -p INT     prefix length [%d]\n", p);
         fprintf(stderr, "  -t INT     number of threads [%d]\n", n_thread);
         fprintf(stderr, "  -c INT     k-mer coverage cut-off for exclusion of noise k-mers [%d]\n", min_cov);
-        fprintf(stderr, "  -d INT     Switch on k-mer coverage testing mode.  [%d]\n", max_cov);
+        fprintf(stderr, "  -C INT     Switch on k-mer coverage testing mode.  [%d]\n", max_cov);
 
         fprintf(stderr, "  -a INT     Initial index [%d]\n", min_index);
         fprintf(stderr, "  -b INT     End index [%d]\n", max_index);

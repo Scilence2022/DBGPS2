@@ -883,7 +883,7 @@ int main(int argc, char *argv[])
     int read_len = 200;
     double max_cov_ratio = 0.0; // No limitation on ratio by default
     double max_R = 0.0; // Upper bound for ratio range iteration
-    int skip_ratios = 6; // Default: skip the first 6 ratio values
+    int skip_ratios = 0; // Default: skip the first N ratio values
     char *output_prefix = NULL;
 
     ketopt_t o = KETOPT_INIT;

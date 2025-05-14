@@ -843,12 +843,13 @@ void print_cov(unsigned char* seq, int k, kc_c4x_t *h){ //Debugging function
 int main(int argc, char *argv[])
 {
     kc_c4x_t *h;
-    int i, c=1, k = 31, p = KC_BITS, block_size = 10000000, n_thread = 3, min_cov = 0, index_len = 16, payload_len=140, crc_len=8, path_len;
+    int i, c=1, k = 31, p = KC_BITS, block_size = 10000000, n_thread = 3, min_cov = 1, index_len = 16, payload_len=140, crc_len=8, path_len;
     double max_cov_ratio = 4.0; // Default value for Max_Cov_Ratio
     double max_r = 0.0; // Maximum r value for ratio range iteration, default 0 (disabled)
     int mem_test = 0;
     int read_len = 200;
     int skip_ratios = 0; // Number of initial ratio values to skip, default 0
+    char *output_prefix = NULL; // Output prefix for log file
 
     unsigned int min_index = 101010102, max_index=101295684, index_byte_num, max_cov=0;
     uint64_t mask, pr_uint64;
@@ -858,7 +859,7 @@ int main(int argc, char *argv[])
 
 
     ketopt_t o = KETOPT_INIT;
-    while ((c = ketopt(&o, argc, argv, 1, "k:p:b:t:c:l:a:b:i:C:r:R:m:s:", 0)) >= 0) {
+    while ((c = ketopt(&o, argc, argv, 1, "k:p:b:t:c:l:a:b:i:C:r:R:m:s:o:", 0)) >= 0) {
         if (c == 'k') k = atoi(o.arg);
         else if (c == 'p') p = atoi(o.arg);
         else if (c == 't') n_thread = atoi(o.arg);
@@ -873,6 +874,7 @@ int main(int argc, char *argv[])
         else if (c == 'R') max_r = atof(o.arg); // Maximum r value for ratio range iteration
         else if (c == 'm') mem_test = 1;
         else if (c == 's') skip_ratios = atoi(o.arg); // Number of initial ratio values to skip
+        else if (c == 'o') output_prefix = o.arg; // Output prefix for log file
     }
 
     if (argc - o.ind < 1) {
@@ -899,6 +901,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "  -r FLOAT   Maximum coverage ratio [%.1f]\n", max_cov_ratio);
         fprintf(stderr, "  -R FLOAT   Upper bound for ratio range iteration (0 = disabled) [%.1f]\n", max_r);
         fprintf(stderr, "  -s INT     Number of initial positions to skip ratio checks for [%d]\n", skip_ratios);
+        fprintf(stderr, "  -o STR     Output prefix for log file [none]\n");
 
         fprintf(stderr, "\n");
         return 1;
@@ -919,25 +922,44 @@ int main(int argc, char *argv[])
     clock_t start,end;
     double kc_dur, dec_dur;
     
-    // Output all input parameters
-    fprintf(stdout, "========== DBGPS Parameters ==========\n");
-    fprintf(stdout, "k-mer size (-k): %d\n", k);
-    fprintf(stdout, "Prefix length (-p): %d\n", p);
-    fprintf(stdout, "Number of threads (-t): %d\n", n_thread);
-    fprintf(stdout, "Minimum coverage cutoff (-c): %d\n", min_cov);
-    fprintf(stdout, "Maximum coverage for testing (-C): %d\n", max_cov);
-    fprintf(stdout, "Index length (-i): %d bp\n", index_len);
-    fprintf(stdout, "Data encoding length (-l): %d bp\n", payload_len);
-    fprintf(stdout, "Read length for k-mer counting: %d\n", read_len);
-    fprintf(stdout, "Skip ratio checks for first (-s): %d positions\n", skip_ratios);
-    fprintf(stdout, "Initial index (-a): %d\n", min_index);
-    fprintf(stdout, "End index (-b): %d\n", max_index);
-    fprintf(stdout, "Maximum coverage ratio (-r): %.2f\n", max_cov_ratio);
-    fprintf(stdout, "Ratio range upper bound (-R): %.2f\n", max_r);
-    fprintf(stdout, "Memory test mode: %s\n", mem_test ? "enabled" : "disabled");
-    fprintf(stdout, "Path length (payload + CRC): %d\n", path_len);
-    fprintf(stdout, "Index byte number: %d\n", index_byte_num);
-    fprintf(stdout, "======================================\n");
+    // Output all input parameters to both stdout and log file if output_prefix is provided
+    FILE *log_file = NULL;
+    if (output_prefix != NULL) {
+        char log_filename[1024];
+        sprintf(log_filename, "%s.log", output_prefix);
+        log_file = fopen(log_filename, "w");
+        if (log_file == NULL) {
+            fprintf(stderr, "Warning: Could not open log file %s for writing\n", log_filename);
+        } else {
+            fprintf(stderr, "Writing parameters to log file: %s\n", log_filename);
+        }
+    }
+    
+    // Function to print to both stdout and log file
+    #define PRINT_BOTH(format, ...) do { \
+        fprintf(stdout, format, ##__VA_ARGS__); \
+        if (log_file != NULL) fprintf(log_file, format, ##__VA_ARGS__); \
+    } while(0)
+    
+    PRINT_BOTH("========== DBGPS Parameters ==========\n");
+    PRINT_BOTH("k-mer size (-k): %d\n", k);
+    PRINT_BOTH("Prefix length (-p): %d\n", p);
+    PRINT_BOTH("Number of threads (-t): %d\n", n_thread);
+    PRINT_BOTH("Minimum coverage cutoff (-c): %d\n", min_cov);
+    PRINT_BOTH("Maximum coverage for testing (-C): %d\n", max_cov);
+    PRINT_BOTH("Index length (-i): %d bp\n", index_len);
+    PRINT_BOTH("Data encoding length (-l): %d bp\n", payload_len);
+    PRINT_BOTH("Read length for k-mer counting: %d\n", read_len);
+    PRINT_BOTH("Skip ratio checks for first (-s): %d positions\n", skip_ratios);
+    PRINT_BOTH("Initial index (-a): %d\n", min_index);
+    PRINT_BOTH("End index (-b): %d\n", max_index);
+    PRINT_BOTH("Maximum coverage ratio (-r): %.2f\n", max_cov_ratio);
+    PRINT_BOTH("Ratio range upper bound (-R): %.2f\n", max_r);
+    PRINT_BOTH("Memory test mode: %s\n", mem_test ? "enabled" : "disabled");
+    PRINT_BOTH("Path length (payload + CRC): %d\n", path_len);
+    PRINT_BOTH("Index byte number: %d\n", index_byte_num);
+    PRINT_BOTH("Output prefix: %s\n", output_prefix ? output_prefix : "none");
+    PRINT_BOTH("======================================\n");
     
     fprintf(stderr, "Counting k-mers ......\n");
 
@@ -957,7 +979,7 @@ int main(int argc, char *argv[])
     end = clock();
     kc_dur = (double)(end - start);
 
-    fprintf(stderr, "\nK-mer counting time: %f seconds\n",(kc_dur/CLOCKS_PER_SEC));
+    PRINT_BOTH("\nK-mer counting time: %f seconds\n",(kc_dur/CLOCKS_PER_SEC));
     if(mem_test){
             fprintf(stderr, "Memory test mode activated! Press ENTER to continue...\n");
             getchar();}
@@ -995,9 +1017,10 @@ int main(int argc, char *argv[])
 
             end = clock();
             dec_dur = (double)(end - start);
-            fprintf(stderr, "\nCoverage cutoff: %d, Ratio: %.2f", cov_cut, max_cov_ratio);
-            fprintf(stderr, "\nStrands decoded: %d ", dec_strand_num);
-            fprintf(stderr, "\nStrand decoding time: %f seconds\n",(dec_dur/CLOCKS_PER_SEC));
+            // Update to use PRINT_BOTH
+            PRINT_BOTH("\nCoverage cutoff: %d, Ratio: %.2f", cov_cut, max_cov_ratio);
+            PRINT_BOTH("\nStrands decoded: %d ", dec_strand_num);
+            PRINT_BOTH("\nStrand decoding time: %f seconds\n",(dec_dur/CLOCKS_PER_SEC));
         }
     } else {
         // New behavior - iterate through different r values
@@ -1025,15 +1048,23 @@ int main(int argc, char *argv[])
 
                 end = clock();
                 dec_dur = (double)(end - start);
-                fprintf(stderr, "\nCoverage cutoff: %d, Ratio: %.2f", cov_cut, r);
-                fprintf(stderr, "\nStrands decoded: %d ", dec_strand_num);
-                fprintf(stderr, "\nStrand decoding time: %f seconds\n",(dec_dur/CLOCKS_PER_SEC));
+                // Update to use PRINT_BOTH
+                PRINT_BOTH("\nCoverage cutoff: %d, Ratio: %.2f", cov_cut, r);
+                PRINT_BOTH("\nStrands decoded: %d ", dec_strand_num);
+                PRINT_BOTH("\nStrand decoding time: %f seconds\n",(dec_dur/CLOCKS_PER_SEC));
             }
         }
     }
 
     for (i = 0; i < 1<<p; ++i) kc_c4_destroy(h->h[i]);
     free(h->h); free(h);
+    
+    // Close log file if it was opened
+    if (log_file != NULL) {
+        fclose(log_file);
+    }
+    
+    #undef PRINT_BOTH
     return 0;
 }
 

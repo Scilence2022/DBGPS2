@@ -44,7 +44,6 @@ const unsigned char seq_nt4_table[256] = { // translate ACGT to 0123
         4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
         4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
         4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
-        4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
         4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4
 };
 
@@ -833,6 +832,7 @@ int main(int argc, char *argv[])
     kc_c4x_t *h;
     int i, c=1, k = 31, p = KC_BITS, block_size = 10000000, n_thread = 3, min_cov = 0, index_len = 16, payload_len=140, crc_len=8, path_len;
     double max_cov_ratio = 4.0; // Default value for Max_Cov_Ratio
+    double max_r = 0.0; // Maximum r value for ratio range iteration, default 0 (disabled)
     int mem_test = 0;
     int read_len = 200;
 
@@ -844,7 +844,7 @@ int main(int argc, char *argv[])
 
 
     ketopt_t o = KETOPT_INIT;
-    while ((c = ketopt(&o, argc, argv, 1, "k:p:b:t:c:l:a:b:i:C:r:m:", 0)) >= 0) {
+    while ((c = ketopt(&o, argc, argv, 1, "k:p:b:t:c:l:a:b:i:C:r:R:m:", 0)) >= 0) {
         if (c == 'k') k = atoi(o.arg);
         else if (c == 'p') p = atoi(o.arg);
         else if (c == 't') n_thread = atoi(o.arg);
@@ -856,6 +856,7 @@ int main(int argc, char *argv[])
         else if (c == 'i') index_len = atoi(o.arg);
         else if (c == 'l') payload_len = atoi(o.arg);
         else if (c == 'r') max_cov_ratio = atof(o.arg); // Changed this to use max_cov_ratio
+        else if (c == 'R') max_r = atof(o.arg); // Maximum r value for ratio range iteration
         else if (c == 'm') mem_test = 1;
     }
 
@@ -880,8 +881,8 @@ int main(int argc, char *argv[])
         fprintf(stderr, "  -a INT     Initial index [%d]\n", min_index);
         fprintf(stderr, "  -b INT     End index [%d]\n", max_index);
 
-        //fprintf(stderr, "  -r INT     Maximal ratio of k-mer coverage changes [%d]\n", max_ratio);
         fprintf(stderr, "  -r FLOAT   Maximum coverage ratio [%.1f]\n", max_cov_ratio);
+        fprintf(stderr, "  -R FLOAT   Upper bound for ratio range iteration (0 = disabled) [%.1f]\n", max_r);
 
         fprintf(stderr, "\n");
         return 1;
@@ -930,40 +931,72 @@ int main(int argc, char *argv[])
     fprintf(stderr, "%d ......\n",max_index);
 
     unsigned int id, eid;
-
     unsigned int cov_cut;
     int c_index;
     int dec_strand_num=0;
-    for(cov_cut=min_cov;cov_cut<=max_cov;cov_cut++){
-        start = clock();
-        dec_strand_num = 0;
+    
+    // Check if ratio range iteration is enabled
+    if (max_r <= 0 || max_r <= max_cov_ratio) {
+        // Original behavior - use only the specified max_cov_ratio
+        for(cov_cut=min_cov; cov_cut<=max_cov; cov_cut++) {
+            start = clock();
+            dec_strand_num = 0;
 
-        for(id=min_index;id<=max_index;id++){
-            unsigned char *path[Max_Path_Num];
-            eid = index_encode(id, index_len);
+            for(id=min_index; id<=max_index; id++) {
+                unsigned char *path[Max_Path_Num];
+                eid = index_encode(id, index_len);
 
-            c_index = find_paths(h, path, pr_uint64 | (uint64_t)eid, mask, cov_cut, path_len, k, index_byte_num, max_cov_ratio);
-            if( c_index > -1){
-                dec_strand_num++;
-                unsigned char DNA_seq[Max_Path_Len];
+                c_index = find_paths(h, path, pr_uint64 | (uint64_t)eid, mask, cov_cut, path_len, k, index_byte_num, max_cov_ratio);
+                if(c_index > -1) {
+                    dec_strand_num++;
+                    unsigned char DNA_seq[Max_Path_Len];
 
-                DNA_seq[path_len + index_byte_num*4] = '\0';
-                intseq_actg(path[c_index], DNA_seq, (path_len>>2) + index_byte_num);
-                printf("%d", id);
+                    DNA_seq[path_len + index_byte_num*4] = '\0';
+                    intseq_actg(path[c_index], DNA_seq, (path_len>>2) + index_byte_num);
+                    printf("%d", id);
 
-                fprintf(stdout, "\t%s\n", DNA_seq);
+                    fprintf(stdout, "\t%s\n", DNA_seq);
+                }
+            }
 
+            end = clock();
+            dec_dur = (double)(end - start);
+            fprintf(stderr, "\nCoverage cutoff: %d, Ratio: %.2f", cov_cut, max_cov_ratio);
+            fprintf(stderr, "\nStrands decoded: %d ", dec_strand_num);
+            fprintf(stderr, "\nStrand decoding time: %f seconds\n",(dec_dur/CLOCKS_PER_SEC));
+        }
+    } else {
+        // New behavior - iterate through different r values
+        for(double r = max_cov_ratio; r <= max_r; r += 0.05) {
+            for(cov_cut=min_cov; cov_cut<=max_cov; cov_cut++) {
+                start = clock();
+                dec_strand_num = 0;
+
+                for(id=min_index; id<=max_index; id++) {
+                    unsigned char *path[Max_Path_Num];
+                    eid = index_encode(id, index_len);
+
+                    c_index = find_paths(h, path, pr_uint64 | (uint64_t)eid, mask, cov_cut, path_len, k, index_byte_num, r);
+                    if(c_index > -1) {
+                        dec_strand_num++;
+                        unsigned char DNA_seq[Max_Path_Len];
+
+                        DNA_seq[path_len + index_byte_num*4] = '\0';
+                        intseq_actg(path[c_index], DNA_seq, (path_len>>2) + index_byte_num);
+                        printf("%d", id);
+
+                        fprintf(stdout, "\t%s\n", DNA_seq);
+                    }
+                }
+
+                end = clock();
+                dec_dur = (double)(end - start);
+                fprintf(stderr, "\nCoverage cutoff: %d, Ratio: %.2f", cov_cut, r);
+                fprintf(stderr, "\nStrands decoded: %d ", dec_strand_num);
+                fprintf(stderr, "\nStrand decoding time: %f seconds\n",(dec_dur/CLOCKS_PER_SEC));
             }
         }
-
-        end = clock();
-        dec_dur = (double)(end - start);
-        fprintf(stderr, "\nCoverage cutoff: %d ", cov_cut);
-        fprintf(stderr, "\nStrands decoded: %d ", dec_strand_num);
-        fprintf(stderr, "\nStrand decoding time: %f seconds\n",(dec_dur/CLOCKS_PER_SEC));
-
     }
-
 
     for (i = 0; i < 1<<p; ++i) kc_c4_destroy(h->h[i]);
     free(h->h); free(h);

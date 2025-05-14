@@ -886,16 +886,16 @@ int main(int argc, char *argv[])
     char *output_prefix = NULL;
 
     ketopt_t o = KETOPT_INIT;
-    while ((c = ketopt(&o, argc, argv, 1, "k:c:d:l:o:r:a:", 0)) >= 0) {
+    while ((c = ketopt(&o, argc, argv, 1, "k:c:C:L:o:r:s:", 0)) >= 0) {
         if (c == 'k') k = atoi(o.arg);
         //else if (c == 'p') p = atoi(o.arg);
         else if (c == 't') n_thread = atoi(o.arg);
         else if (c == 'c') min_cov_cut = atoi(o.arg);
-        else if (c == 'd') max_cov_cut = atoi(o.arg);
-        else if (c == 'l') read_len = atoi(o.arg);
+        else if (c == 'C') max_cov_cut = atoi(o.arg);
+        else if (c == 'L') read_len = atoi(o.arg);
         else if (c == 'o') output_prefix = o.arg;
         else if (c == 'r') max_cov_ratio = atof(o.arg);
-        else if (c == 'a') skip_ratios = atoi(o.arg);
+        else if (c == 's') skip_ratios = atoi(o.arg);
     }
     if (argc - o.ind < 1) {
         fprintf(stderr, "\n************************************************************************\n");
@@ -910,12 +910,12 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Options:\n");
         fprintf(stderr, "  -k INT     k-mer size [%d]\n", k);
         fprintf(stderr, "  -t INT     number of threads [%d]\n", n_thread);
-        fprintf(stderr, "  -l INT     Maximal read length for k-mer counting [%d]\n", read_len);
+        fprintf(stderr, "  -L INT     Maximal read length for k-mer counting [%d]\n", read_len);
         fprintf(stderr, "  -r FLOAT   Maximum coverage ratio [%.1f] (0 = no limitation)\n", max_cov_ratio);
         fprintf(stderr, "  -c INT     min_cov_cut [%d]\n", min_cov_cut);
-        fprintf(stderr, "  -d INT     max_cov_cut [%d]\n", max_cov_cut);
+        fprintf(stderr, "  -C INT     max_cov_cut [%d]\n", max_cov_cut);
         fprintf(stderr, "  -o STR     output prefix for additional files [none]\n");
-        fprintf(stderr, "  -a INT     Number of initial ratio values to skip [%d]\n", skip_ratios);
+        fprintf(stderr, "  -s INT     Number of initial ratio values to skip [%d]\n", skip_ratios);
         fprintf(stderr, "\n");
         return 1;
     }

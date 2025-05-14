@@ -914,11 +914,13 @@ int main(int argc, char *argv[])
         fprintf(stderr, "  -t INT     number of threads [%d]\n", n_thread);
         fprintf(stderr, "  -L INT     Maximal read length for k-mer counting [%d]\n", read_len);
         fprintf(stderr, "  -r FLOAT   Maximum coverage ratio [%.1f] (0 = no limitation)\n", max_cov_ratio);
+        fprintf(stderr, "  -R FLOAT   Upper bound for ratio range iteration [%.1f]\n", max_R);
+        
         fprintf(stderr, "  -c INT     min_cov_cut [%d]\n", min_cov_cut);
         fprintf(stderr, "  -C INT     max_cov_cut [%d]\n", max_cov_cut);
         fprintf(stderr, "  -o STR     output prefix for additional files [none]\n");
         fprintf(stderr, "  -s INT     Number of initial ratio values to skip [%d]\n", skip_ratios);
-        fprintf(stderr, "  -R FLOAT   Upper bound for ratio range iteration [%.1f]\n", max_R);
+        
         fprintf(stderr, "\n");
         return 1;
     }

@@ -231,6 +231,7 @@ unsigned char* actg_intseq(char* actg_seq, unsigned char* int_seq, int8_t actg_s
         p = p + 4;
     }
     int_seq[p + 1] = '\0';
+    return int_seq;
 }
 
 
@@ -278,6 +279,7 @@ char* intseq_actg(char* int_seq, char* actg_seq, int8_t int_seq_len){
         p = p + 1;
     }
    // actg_seq[((p-1)<<2)+1] = "\0";
+    return actg_seq;
 }
 
 typedef struct {
@@ -417,7 +419,7 @@ static void worker_pipeline(void *data) // callback for kt_pipeline()
     pldat_t *p = (pldat_t*)data;
     uint64_t mask = (1ULL<<p->k*2) - 1;
     //if (step == 0) { // step 1: read a block of sequences
-    int ret, filter_num=0;
+    int ret;
     stepdat_t *s;
     CALLOC(s, 1);
     s->p = p;
@@ -427,7 +429,7 @@ static void worker_pipeline(void *data) // callback for kt_pipeline()
 
         i = i + 1;
         uint64_t *kms;
-        int l = p->ks->seq.l, km_num = 0, kms_cov=0;
+        int l = p->ks->seq.l, km_num = 0;
         if (l < p->k) continue;
         MALLOC(kms, l-p->k + 1); //
         km_num = seq_kmers(kms, p->k, l, p->ks->seq.s);
@@ -495,7 +497,7 @@ void print_kmer_seq(char *seq, int k){ //Debugging function
 int main(int argc, char *argv[])
 {
     kc_c4x_t *h;
-    int i, c, k = 30, p = KC_BITS, max_link_num = 1;
+    int i, c, k = 31, p = KC_BITS, max_link_num = 1;
 
     ketopt_t o = KETOPT_INIT;
     while ((c = ketopt(&o, argc, argv, 1, "k:p:m:", 0)) >= 0) {

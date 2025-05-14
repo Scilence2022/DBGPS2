@@ -1,10 +1,12 @@
 #include <stdio.h>
+//#include <stdlib.h>
+//#include <conio.h>
+//#include <curses.h>
 #include <stdint.h>
 #include <zlib.h>
 #include <stdlib.h>
 #include <inttypes.h>
 #include <time.h>
-
 #include "ketopt.h" // command-line argument parser
 #include "kthread.h" // multi-threading models: pipeline and multi-threaded for loop
 
@@ -13,7 +15,7 @@
 KSEQ_INIT(gzFile, gzread)
 
 #include "khashl.h" // hash table
-#define KC_BITS 10
+#define KC_BITS 14
 #define KC_MAX ((1<<KC_BITS) - 1)
 #define kc_c4_eq(a, b) ((a)>>KC_BITS == (b)>>KC_BITS) // lower 10 bits for counts; higher bits for k-mer
 #define kc_c4_hash(a) ((a)>>KC_BITS)
@@ -37,8 +39,6 @@ const unsigned char seq_nt4_table[256] = { // translate ACGT to 0123
         4, 4, 4, 4,  3, 3, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
         4, 0, 4, 1,  4, 4, 4, 2,  4, 4, 4, 4,  4, 4, 4, 4,
         4, 4, 4, 4,  3, 3, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
-        4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
-        4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
         4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
         4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
         4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
@@ -372,7 +372,7 @@ static void count_seq_buf(buf_c4_t *buf, int k, int p, int len, const char *seq)
 }
 
 typedef struct { // global data structure for kt_pipeline()
-    int k, block_len, n_thread;
+    int k, block_len, n_thread, read_len;
     kseq_t *ks;
     kc_c4x_t *h;
 } pldat_t;
@@ -436,7 +436,12 @@ static void *worker_pipeline(void *data, int step, void *in) // callback for kt_
             MALLOC(s->buf[i].a, m);
         }
         for (i = 0; i < s->n; ++i) {
-            count_seq_buf(s->buf, p->k, p->h->p, s->len[i], s->seq[i]);
+            //read_len
+            if(p->read_len > 0 && p->read_len < s->len[i]){
+                count_seq_buf(s->buf, p->k, p->h->p, p->read_len, s->seq[i]);
+            }else{
+                count_seq_buf(s->buf, p->k, p->h->p, s->len[i], s->seq[i]);
+            }
             free(s->seq[i]);
         }
         free(s->seq); free(s->len);
@@ -451,15 +456,43 @@ static void *worker_pipeline(void *data, int step, void *in) // callback for kt_
     return 0;
 }
 
-static kc_c4x_t *count_file(const char *fn, int k, int p, int block_size, int n_thread)
+static kc_c4x_t *count_file(const char *fn, int k, int p, int block_size, int n_thread, int read_len)
 {
     pldat_t pl;
     gzFile fp;
     if ((fp = gzopen(fn, "r")) == 0) return 0;
     pl.ks = kseq_init(fp);
     pl.k = k;
+    if(read_len > k){
+        pl.read_len = read_len;
+    }else{
+        pl.read_len = k;
+    }
+
     pl.n_thread = n_thread;
     pl.h = c4x_init(p);
+    pl.block_len = block_size;
+    kt_pipeline(3, worker_pipeline, &pl, 3);
+    kseq_destroy(pl.ks);
+    gzclose(fp);
+    return pl.h;
+}
+
+static kc_c4x_t *count_file2(const char *fn, void *hh, int k, int p, int block_size, int n_thread, int read_len)
+{
+    pldat_t pl;
+    gzFile fp;
+    if ((fp = gzopen(fn, "r")) == 0) return 0;
+    pl.ks = kseq_init(fp);
+    pl.k = k;
+    if(read_len > k){
+        pl.read_len = read_len;
+    }else{
+        pl.read_len = k;
+    }
+
+    pl.n_thread = n_thread;
+    pl.h = (kc_c4x_t *)hh;
     pl.block_len = block_size;
     kt_pipeline(3, worker_pipeline, &pl, 3);
     kseq_destroy(pl.ks);
@@ -547,8 +580,8 @@ unsigned short kmer_cov(uint64_t kmer, uint64_t mask, kc_c4x_t *h){
     uint64_t hash_key = hash64(kmer, mask);
     j = hash_key & ((1<<KC_BITS) - 1);
     if(kh_size(h->h[j]) < 1){return 0;}
-    hash_key = hash_key >> KC_BITS<< KC_BITS;
 
+    hash_key = hash_key >> KC_BITS<< KC_BITS;
     x = kc_c4_get(h->h[j], hash_key);
     //if(x == 0){return 50;} //To avoid of segment fault
     if(kh_exist(h->h[j], x)){
@@ -557,11 +590,14 @@ unsigned short kmer_cov(uint64_t kmer, uint64_t mask, kc_c4x_t *h){
     return cov;
 }
 
-typedef struct {
-    struct path_node* pre_node;
+// Forward declaration to resolve circular reference
+typedef struct path_node path_node;
+
+struct path_node {
+    path_node* pre_node;
     uint64_t kmer;
     unsigned int cov;
-}path_node;
+};
 
 const uint64_t BI_MASK = 3ULL;
 
@@ -633,10 +669,13 @@ path_node all_nodes[Max_Path_Num * Max_Path_Len];
 path_node *term_nodes[Max_Path_Num+1];
 
 
-int find_paths(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer, uint64_t mask, int min_cov, int path_len, int k, int index_byte_num){
+int find_paths(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer, uint64_t mask, int cut_cov, int path_len, int k, int index_byte_num, double max_cov_ratio, int skip_ratios){
 
     all_nodes[0].kmer = kmer;
-    all_nodes[0].cov = 50;
+    all_nodes[0].cov = kmer_cov(min_hash_key(kmer, k),mask,h);
+    int a_cov = all_nodes[0].cov/max_cov_ratio, b_cov = all_nodes[0].cov * max_cov_ratio;
+    if(a_cov < cut_cov + 1){a_cov = cut_cov + 1;}
+
     term_nodes[0] = &all_nodes[0];
 
     int term_node_num = 1, all_node_num = 1, p = 0;
@@ -646,15 +685,10 @@ int find_paths(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer, uint64_t mask
     path_node next_nodes[4];
     next_nodes[0].cov = 0; next_nodes[1].cov = 0; next_nodes[2].cov = 0; next_nodes[3].cov = 0;
 
-
-    path_node *p_term_nodes[Max_Path_Num+1];
     int new_term_node_num;
 
     while(p <= path_len && term_node_num > 0 && term_node_num <= Max_Path_Num){
         int i;
-        //Copying old term nodes pointer
-        for(i=0; i < Max_Path_Num; i++){
-            p_term_nodes[i] = term_nodes[i]; }
 
         new_term_node_num = 0;
 
@@ -662,6 +696,9 @@ int find_paths(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer, uint64_t mask
         while(n_p < term_node_num && new_term_node_num <=Max_Path_Num){
 
             p_node = term_nodes[n_p];
+
+            a_cov = p_node->cov/max_cov_ratio, b_cov = p_node->cov * max_cov_ratio;
+            if(a_cov < cut_cov + 1){a_cov = cut_cov + 1;}
 
             next_nodes[0].kmer = ((*p_node).kmer<<2) & mask;
             next_nodes[1].kmer = (((*p_node).kmer<<2) + 1) & mask;
@@ -673,28 +710,72 @@ int find_paths(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer, uint64_t mask
             next_nodes[2].cov = kmer_cov(min_hash_key(next_nodes[2].kmer, k),mask,h);
             next_nodes[3].cov = kmer_cov(min_hash_key(next_nodes[3].kmer, k),mask,h);
 
-            int i;
+            // Reuse the same i from the outer loop
             for(i=0;i<4;i++){
-                if(next_nodes[i].cov >= min_cov){
+                // Check if we're still in the skipping phase (skip ratio checks for first skip_ratios nodes)
+                if (p < skip_ratios) {
+                    // During skipping phase, only check minimum coverage
+                    if(next_nodes[i].cov >= cut_cov + 1) {
+                        all_nodes[all_node_num].pre_node = p_node;
+                        all_nodes[all_node_num].kmer = next_nodes[i].kmer;
+                        all_nodes[all_node_num].cov = next_nodes[i].cov;
+                        term_nodes[new_term_node_num] = &all_nodes[all_node_num];
+                        new_term_node_num++;
+                        all_node_num++;
+                    }
+                } else {
+                    // Normal phase: check ratio bounds as before
+                    if(next_nodes[i].cov >=a_cov && next_nodes[i].cov <= b_cov) {
 
-                    all_nodes[all_node_num].pre_node = p_node;
-                    all_nodes[all_node_num].kmer = next_nodes[i].kmer;
-                    all_nodes[all_node_num].cov = next_nodes[i].cov;
+                        all_nodes[all_node_num].pre_node = p_node;
+                        all_nodes[all_node_num].kmer = next_nodes[i].kmer;
+                        all_nodes[all_node_num].cov = next_nodes[i].cov;
 
-                    term_nodes[new_term_node_num] = &all_nodes[all_node_num];
+                        term_nodes[new_term_node_num] = &all_nodes[all_node_num];
 
-                    new_term_node_num++;
-                    all_node_num++;
+                        new_term_node_num++;
+                        all_node_num++;
+                    }
                 }
             }
+
+
+
             n_p++;
         }
         term_node_num = new_term_node_num;
         ++p;
     }
 
-    return term_node_num;
+    int i, pass_n=0, c_index;
 
+    for(i=0; i < term_node_num; i++){
+        CALLOC(paths[i], seq_len);
+        nodes_path(term_nodes[i], paths[i], path_len, k, index_byte_num);
+        unsigned char *path_tmp;
+        CALLOC(path_tmp, seq_len);
+        int j=0;
+        for(j=0; j< seq_len; j++){
+            *(path_tmp + j) = one_to_two_table[*(paths[i] + j)];
+            //*(paths[i] + j) = one_to_two_table[*(paths[i] + j)];
+        }
+        if(crc16_check(path_tmp, seq_len)){
+            pass_n = pass_n + 1;
+            c_index = i;
+            /*
+            unsigned char DNA_seq[Max_Path_Len];
+
+            DNA_seq[path_len + index_byte_num*4] = '\0';
+            intseq_actg(path_tmp, DNA_seq, (path_len>>2) + index_byte_num);
+            fprintf(stdout, "\t%s\n", DNA_seq);
+            */
+        }
+    }
+    //fprintf(stderr, "%d\t", n);
+    if(pass_n == 1){
+        return c_index;
+    }else{return -1;}
+    //return pass_n;
 }
 
 
@@ -760,8 +841,13 @@ void print_cov(unsigned char* seq, int k, kc_c4x_t *h){ //Debugging function
 int main(int argc, char *argv[])
 {
     kc_c4x_t *h;
-    int i, c, k = 31, p = KC_BITS, block_size = 10000000000, n_thread = 3, min_cov = 0, index_len = 16, payload_len=140, crc_len=8, path_len;
+    int i, c=1, k = 31, p = KC_BITS, block_size = 10000000, n_thread = 3, min_cov = 1, index_len = 16, payload_len=140, crc_len=8, path_len;
+    double max_cov_ratio = 4.0; // Default value for Max_Cov_Ratio
+    double max_r = 2.55; // Maximum r value for ratio range iteration, default 0 (disabled)
     int mem_test = 0;
+    int read_len = 200;
+    int skip_ratios = 0; // Number of initial ratio values to skip, default 0
+    char *output_prefix = NULL; // Output prefix for log file
 
     unsigned int min_index = 101010102, max_index=101295684, index_byte_num, max_cov=0;
     uint64_t mask, pr_uint64;
@@ -771,24 +857,29 @@ int main(int argc, char *argv[])
 
 
     ketopt_t o = KETOPT_INIT;
-    while ((c = ketopt(&o, argc, argv, 1, "k:p:b:t:c:l:a:b:i:d:m", 0)) >= 0) {
+    while ((c = ketopt(&o, argc, argv, 1, "k:p:b:t:c:l:a:b:i:C:r:R:m:s:o:", 0)) >= 0) {
         if (c == 'k') k = atoi(o.arg);
         else if (c == 'p') p = atoi(o.arg);
         else if (c == 't') n_thread = atoi(o.arg);
         else if (c == 'c') min_cov = atoi(o.arg);
-        else if (c == 'd') max_cov = atoi(o.arg);
+        else if (c == 'C') max_cov = atoi(o.arg);
 
         else if (c == 'a') min_index = atoi(o.arg);
         else if (c == 'b') max_index = atoi(o.arg);
-
         else if (c == 'i') index_len = atoi(o.arg);
         else if (c == 'l') payload_len = atoi(o.arg);
+        else if (c == 'r') max_cov_ratio = atof(o.arg); // Changed this to use max_cov_ratio
+        else if (c == 'R') max_r = atof(o.arg); // Maximum r value for ratio range iteration
         else if (c == 'm') mem_test = 1;
+        else if (c == 's') skip_ratios = atoi(o.arg); // Number of initial ratio values to skip
+        else if (c == 'o') output_prefix = o.arg; // Output prefix for log file
     }
+
     if (argc - o.ind < 1) {
         fprintf(stderr, "\n************************************************************************\n");
         fprintf(stderr, "**                                                                    **\n");
-        fprintf(stderr, "**  DBGPS - De Bruijn Graph based inner decoder for DNA data storage  **\n");
+        fprintf(stderr, "**  DBGPS v2 - De Bruijn Graph based strand assembller for DNA data storage  **\n");
+        fprintf(stderr, "**     Version 2.0 (2025-05-14)  Author: Lifu Song lifu.song@outlook.com      **\n");
         fprintf(stderr, "**                                                                    **\n");
         fprintf(stderr, "************************************************************************\n\n");
         fprintf(stderr, "Usage: DBGPS [options] <input file> \n");
@@ -799,11 +890,17 @@ int main(int argc, char *argv[])
         fprintf(stderr, "  -l INT     data encoding length [%d] bp\n", payload_len);
         //fprintf(stderr, "  -p INT     prefix length [%d]\n", p);
         fprintf(stderr, "  -t INT     number of threads [%d]\n", n_thread);
-        fprintf(stderr, "  -c INT     k-mer coverage cut-off for strand decoding [%d]\n", min_cov);
-        fprintf(stderr, "  -d INT     Maximal k-mer coverage cut-off for strand decoding [%d]\n", max_cov);
+        fprintf(stderr, "  -c INT     k-mer coverage cut-off for exclusion of noise k-mers [%d]\n", min_cov);
+        fprintf(stderr, "  -C INT     Switch on k-mer coverage testing mode.  [%d]\n", max_cov);
 
         fprintf(stderr, "  -a INT     Initial index [%d]\n", min_index);
         fprintf(stderr, "  -b INT     End index [%d]\n", max_index);
+
+        fprintf(stderr, "  -r FLOAT   Maximum coverage ratio [%.1f]\n", max_cov_ratio);
+        fprintf(stderr, "  -R FLOAT   Upper bound for ratio range iteration (0 = disabled) [%.1f]\n", max_r);
+        fprintf(stderr, "  -s INT     Number of initial positions to skip ratio checks for [%d]\n", skip_ratios);
+        fprintf(stderr, "  -o STR     Output prefix for log file [none]\n");
+
         fprintf(stderr, "\n");
         return 1;
     }
@@ -814,49 +911,185 @@ int main(int argc, char *argv[])
 
 
     if(max_cov < min_cov){max_cov = min_cov;}
-
     index_byte_num = index_len>>2;
-    mask = (1ULL<<k*2) - 1, pr_uint64;
+    mask = (1ULL<<k*2) - 1;
     pr_uint64 = primer_uint64(p1, pr_len, index_len, k);
 
     path_len = payload_len + crc_len;
 
     clock_t start,end;
     double kc_dur, dec_dur;
-    fprintf(stderr, "k-mers size: %d\n", k);
+    
+    // Files for output if output_prefix is provided
+    FILE *log_file = NULL;
+    FILE *strands_file = NULL;
+    if (output_prefix != NULL) {
+        // Open log file
+        char log_filename[1024];
+        sprintf(log_filename, "%s.log", output_prefix);
+        log_file = fopen(log_filename, "w");
+        if (log_file == NULL) {
+            fprintf(stderr, "Warning: Could not open log file %s for writing\n", log_filename);
+        } else {
+            fprintf(stderr, "Writing parameters to log file: %s\n", log_filename);
+        }
+        
+        // Open strands file
+        char strands_filename[1024];
+        sprintf(strands_filename, "%s.strands", output_prefix);
+        strands_file = fopen(strands_filename, "w");
+        if (strands_file == NULL) {
+            fprintf(stderr, "Warning: Could not open strands file %s for writing\n", strands_filename);
+        } else {
+            fprintf(stderr, "Will write assembled strands to: %s\n", strands_filename);
+        }
+    }
+    
+    // Function to print to both stdout and log file
+    #define PRINT_BOTH(format, ...) do { \
+        fprintf(stdout, format, ##__VA_ARGS__); \
+        if (log_file != NULL) fprintf(log_file, format, ##__VA_ARGS__); \
+    } while(0)
+    
+    PRINT_BOTH("========== DBGPS Parameters ==========\n");
+    PRINT_BOTH("k-mer size (-k): %d\n", k);
+    PRINT_BOTH("Prefix length (-p): %d\n", p);
+    PRINT_BOTH("Number of threads (-t): %d\n", n_thread);
+    PRINT_BOTH("Minimum coverage cutoff (-c): %d\n", min_cov);
+    PRINT_BOTH("Maximum coverage for testing (-C): %d\n", max_cov);
+    PRINT_BOTH("Index length (-i): %d bp\n", index_len);
+    PRINT_BOTH("Data encoding length (-l): %d bp\n", payload_len);
+    PRINT_BOTH("Read length for k-mer counting: %d\n", read_len);
+    PRINT_BOTH("Skip ratio checks for first (-s): %d positions\n", skip_ratios);
+    PRINT_BOTH("Initial index (-a): %d\n", min_index);
+    PRINT_BOTH("End index (-b): %d\n", max_index);
+    PRINT_BOTH("Maximum coverage ratio (-r): %.2f\n", max_cov_ratio);
+    PRINT_BOTH("Ratio range upper bound (-R): %.2f\n", max_r);
+    PRINT_BOTH("Memory test mode: %s\n", mem_test ? "enabled" : "disabled");
+    PRINT_BOTH("Path length (payload + CRC): %d\n", path_len);
+    PRINT_BOTH("Index byte number: %d\n", index_byte_num);
+    PRINT_BOTH("Output prefix: %s\n", output_prefix ? output_prefix : "none");
+    PRINT_BOTH("======================================\n");
+    
     fprintf(stderr, "Counting k-mers ......\n");
 
-    h = count_file(argv[o.ind], k, p, block_size, n_thread);
 
-    fprintf(stderr, "\nK-mer counting time: %f seconds\n",(kc_dur/CLOCKS_PER_SEC));
-    fprintf(stderr, "Counting paths from index %d to ",min_index);
+    start = clock();
+    fprintf(stderr, "Counting NGS file 1 ......\n");
+    h = count_file(argv[o.ind], k, p, block_size, n_thread, read_len);
+
+    int f_num = argc - o.ind, c_f_n = 2;
+    while(c_f_n <= f_num ) {
+        fprintf(stderr, "Counting NGS file %d ......\n", c_f_n);
+        h = count_file2(argv[o.ind + c_f_n - 1], h, k, p, block_size, n_thread, read_len);  
+        c_f_n = c_f_n + 1;
+    }
+
+
+    end = clock();
+    kc_dur = (double)(end - start);
+
+    PRINT_BOTH("\nK-mer counting time: %f seconds\n",(kc_dur/CLOCKS_PER_SEC));
+    if(mem_test){
+            fprintf(stderr, "Memory test mode activated! Press ENTER to continue...\n");
+            getchar();}
+    fprintf(stderr, "Decoding strands from index %d to ",min_index);
     fprintf(stderr, "%d ......\n",max_index);
 
     unsigned int id, eid;
     unsigned int cov_cut;
     int c_index;
     int dec_strand_num=0;
-    for(cov_cut=min_cov;cov_cut<=max_cov;cov_cut++){
-        start = clock();
-        dec_strand_num = 0;
+    
+    // Check if ratio range iteration is enabled
+    if (max_r <= 0 || max_r <= max_cov_ratio) {
+        // Original behavior - use only the specified max_cov_ratio
+        for(cov_cut=min_cov; cov_cut<=max_cov; cov_cut++) {
+            start = clock();
+            dec_strand_num = 0;
 
-        for(id=min_index;id<=max_index;id++){
-            unsigned char *path[Max_Path_Num];
-            eid = index_encode(id, index_len);
+            for(id=min_index; id<=max_index; id++) {
+                unsigned char *path[Max_Path_Num];
+                eid = index_encode(id, index_len);
 
-            c_index = find_paths(h, path, pr_uint64 | (uint64_t)eid, mask, cov_cut, path_len, k, index_byte_num);
-            if( c_index > 0){
-                printf("%d", id);
-                fprintf(stdout, "\t%d\n", c_index);
+                c_index = find_paths(h, path, pr_uint64 | (uint64_t)eid, mask, cov_cut, path_len, k, index_byte_num, max_cov_ratio, skip_ratios);
+                if(c_index > -1) {
+                    dec_strand_num++;
+                    unsigned char DNA_seq[Max_Path_Len];
+
+                    DNA_seq[path_len + index_byte_num*4] = '\0';
+                    intseq_actg(path[c_index], DNA_seq, (path_len>>2) + index_byte_num);
+                    
+                    if (output_prefix != NULL && strands_file != NULL) {
+                        // Output to strands file if -o is specified
+                        fprintf(strands_file, "%d\t%s\n", id, DNA_seq);
+                    } else {
+                        // Output to stdout if no output file is specified
+                        printf("%d\t%s\n", id, DNA_seq);
+                    }
+                }
+            }
+
+            end = clock();
+            dec_dur = (double)(end - start);
+            // Update to use PRINT_BOTH
+            PRINT_BOTH("\nCoverage cutoff: %d, Ratio: %.2f", cov_cut, max_cov_ratio);
+            PRINT_BOTH("\nStrands decoded: %d ", dec_strand_num);
+            PRINT_BOTH("\nStrand decoding time: %f seconds\n",(dec_dur/CLOCKS_PER_SEC));
+        }
+    } else {
+        // New behavior - iterate through different r values
+        for(double r = max_cov_ratio; r <= max_r; r += 0.05) {
+            for(cov_cut=min_cov; cov_cut<=max_cov; cov_cut++) {
+                start = clock();
+                dec_strand_num = 0;
+
+                for(id=min_index; id<=max_index; id++) {
+                    unsigned char *path[Max_Path_Num];
+                    eid = index_encode(id, index_len);
+
+                    c_index = find_paths(h, path, pr_uint64 | (uint64_t)eid, mask, cov_cut, path_len, k, index_byte_num, r, skip_ratios);
+                    if(c_index > -1) {
+                        dec_strand_num++;
+                        unsigned char DNA_seq[Max_Path_Len];
+
+                        DNA_seq[path_len + index_byte_num*4] = '\0';
+                        intseq_actg(path[c_index], DNA_seq, (path_len>>2) + index_byte_num);
+                        
+                        if (output_prefix != NULL && strands_file != NULL) {
+                            // Output to strands file if -o is specified
+                            fprintf(strands_file, "%d\t%s\n", id, DNA_seq);
+                        } else {
+                            // Output to stdout if no output file is specified
+                            printf("%d\t%s\n", id, DNA_seq);
+                        }
+                    }
+                }
+
+                end = clock();
+                dec_dur = (double)(end - start);
+                // Update to use PRINT_BOTH
+                PRINT_BOTH("\nCoverage cutoff: %d, Ratio: %.2f", cov_cut, r);
+                PRINT_BOTH("\nStrands decoded: %d ", dec_strand_num);
+                PRINT_BOTH("\nStrand decoding time: %f seconds\n",(dec_dur/CLOCKS_PER_SEC));
             }
         }
-
     }
-
 
     for (i = 0; i < 1<<p; ++i) kc_c4_destroy(h->h[i]);
     free(h->h); free(h);
-    return dec_strand_num;
+    
+    // Close output files if they were opened
+    if (log_file != NULL) {
+        fclose(log_file);
+    }
+    
+    if (strands_file != NULL) {
+        fclose(strands_file);
+    }
+    
+    #undef PRINT_BOTH
+    return 0;
 }
 
 

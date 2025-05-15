@@ -842,8 +842,8 @@ int main(int argc, char *argv[])
 {
     kc_c4x_t *h;
     int i, c=1, k = 31, p = KC_BITS, block_size = 10000000, n_thread = 3, min_cov = 1, index_len = 16, payload_len=140, crc_len=8, path_len;
-    double max_cov_ratio = 4.0; // Default value for Max_Cov_Ratio
-    double max_r = 2.55; // Maximum r value for ratio range iteration, default 0 (disabled)
+    double max_cov_ratio = 2.55; // Default value for Max_Cov_Ratio
+    double max_r = 0 ; // Maximum r value for ratio range iteration, default 0 (disabled)
     int mem_test = 0;
     int read_len = 200;
     int skip_ratios = 0; // Number of initial ratio values to skip, default 0

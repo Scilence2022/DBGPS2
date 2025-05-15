@@ -705,10 +705,10 @@ double kms_max_ratio(uint64_t *kms, int km_num, uint64_t mask, kc_c4x_t *h, int 
     for (int i = 1; i < km_num; i++) {
         int curr_cov = kmer_cov(kms[i], mask, h);
         
-        // Skip if either coverage is zero
+        // Return 0.0 if either coverage is zero
         if (prev_cov == 0 || curr_cov == 0) {
             prev_cov = curr_cov;
-            continue;
+            return 0.0;
         }
         
         // Calculate ratio (always larger / smaller)
@@ -752,14 +752,14 @@ static void eva_pipeline(void *data, evaluation_t *eva, FILE *cov_details_fp, FI
         eva->strand_num++;
         i = i + 1;
         uint64_t *kms;
-        int l = p->ks->seq.l, km_num = 0, kms_cov=0;
-        double max_ratio = 0.0;
+        int l = p->ks->seq.l, km_num = 0, strand_kms_min_cov=0;
+        double strand_max_ratio = 0.0;
         
         if (l < p->k) continue;
         MALLOC(kms, l-p->k + 1); //
         km_num = seq_kmers(kms, p->k, l, p->ks->seq.s);
-        kms_cov = kms_min_cov(kms, km_num, mask, eva->h);
-        max_ratio = kms_max_ratio(kms, km_num, mask, eva->h, eva->skip_ratios);
+        strand_kms_min_cov = kms_min_cov(kms, km_num, mask, eva->h);
+        strand_max_ratio = kms_max_ratio(kms, km_num, mask, eva->h, eva->skip_ratios);
 
         // Output coverage details if file pointer is provided
         if (cov_details_fp != NULL) {
@@ -782,7 +782,7 @@ static void eva_pipeline(void *data, evaluation_t *eva, FILE *cov_details_fp, FI
         // A path exists if minimum coverage is above cov_cut AND:
         // - If max_cov_ratio is 0, no ratio limitation is applied
         // - If max_cov_ratio > 0, the maximum ratio must be below max_cov_ratio
-        if (kms_cov > eva->cov_cut && (eva->max_cov_ratio == 0.0 || max_ratio == 0.0 || max_ratio <= eva->max_cov_ratio)) {
+        if (strand_kms_min_cov > eva->cov_cut && (eva->max_cov_ratio <= 1.0 || (strand_max_ratio > 1.0 && strand_max_ratio <= eva->max_cov_ratio))) {
             eva->exist_strand_num++;
         }
         
@@ -883,11 +883,12 @@ int main(int argc, char *argv[])
     int read_len = 200;
     double max_cov_ratio = 0.0; // No limitation on ratio by default
     double max_R = 0.0; // Upper bound for ratio range iteration
+    double step_size = 0.20; // Default step size for ratio iteration
     int skip_ratios = 0; // Default: skip the first N ratio values
     char *output_prefix = NULL;
 
     ketopt_t o = KETOPT_INIT;
-    while ((c = ketopt(&o, argc, argv, 1, "k:c:C:L:o:r:s:R:", 0)) >= 0) {
+    while ((c = ketopt(&o, argc, argv, 1, "k:c:C:L:o:r:s:R:I:", 0)) >= 0) {
         if (c == 'k') k = atoi(o.arg);
         //else if (c == 'p') p = atoi(o.arg);
         else if (c == 't') n_thread = atoi(o.arg);
@@ -898,6 +899,7 @@ int main(int argc, char *argv[])
         else if (c == 'r') max_cov_ratio = atof(o.arg);
         else if (c == 's') skip_ratios = atoi(o.arg);
         else if (c == 'R') max_R = atof(o.arg);
+        else if (c == 'I') step_size = atof(o.arg);
     }
     if (argc - o.ind < 1) {
         fprintf(stderr, "\n************************************************************************\n");
@@ -915,7 +917,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "  -L INT     Maximal read length for k-mer counting [%d]\n", read_len);
         fprintf(stderr, "  -r FLOAT   Maximum coverage ratio [%.1f] (0 = no limitation)\n", max_cov_ratio);
         fprintf(stderr, "  -R FLOAT   Upper bound for ratio range iteration [%.1f]\n", max_R);
-        
+        fprintf(stderr, "  -I FLOAT   Step size for ratio iteration [%.2f]\n", step_size);
         fprintf(stderr, "  -c INT     min_cov_cut [%d]\n", min_cov_cut);
         fprintf(stderr, "  -C INT     max_cov_cut [%d]\n", max_cov_cut);
         fprintf(stderr, "  -o STR     output prefix for additional files [none]\n");
@@ -948,6 +950,7 @@ int main(int argc, char *argv[])
     FILE *cov_details_fp = NULL;
     FILE *cov_ratios_fp = NULL;
     FILE *ratio_ranges_fp = NULL;
+    FILE *smkdkn_fp = NULL;
     if (output_prefix != NULL) {
         char *filename;
         MALLOC(filename, strlen(output_prefix) + 15);
@@ -979,6 +982,15 @@ int main(int argc, char *argv[])
             fprintf(stderr, "Writing ratio ranges to %s\n", filename);
         }
         
+        // Open SmKdKn values file
+        sprintf(filename, "%s.SmKdKn", output_prefix);
+        smkdkn_fp = fopen(filename, "w");
+        if (smkdkn_fp == NULL) {
+            fprintf(stderr, "Error: Could not open file %s for writing\n", filename);
+        } else {
+            fprintf(stderr, "Writing SmKdKn values to %s\n", filename);
+        }
+        
         free(filename);
     }
 
@@ -1001,11 +1013,15 @@ int main(int argc, char *argv[])
         max_R = max_cov_ratio;
     }
     
+    // Output header line to both stdout and file
     fprintf(stdout, "Ratio\tCoverage\tTotal\tPaths\tNoise\tExist\tLost\tSm\tKd\tKn\n");
+    if (smkdkn_fp != NULL) {
+        fprintf(smkdkn_fp, "Ratio\tCoverage\tTotal\tPaths\tNoise\tExist\tLost\tSm\tKd\tKn\n");
+    }
 
     // Iterate through different coverage ratio values
     double ratio;
-    for (ratio = max_cov_ratio; ratio <= max_R + 0.001; ratio += 0.05) { // Add small epsilon to include max_R
+    for (ratio = max_cov_ratio; ratio <= max_R + 0.001; ratio += step_size) { // Add small epsilon to include max_R
         // For each ratio, iterate through different coverage cutoffs
         int cov;
         for (cov = min_cov_cut; cov <= max_cov_cut; cov++) {
@@ -1018,13 +1034,19 @@ int main(int argc, char *argv[])
             eva.max_cov_ratio = ratio; // Set current ratio
             
             fprintf(stdout, "%.2f\t%d\t", ratio, cov);
+            if (smkdkn_fp != NULL) {
+                fprintf(smkdkn_fp, "%.2f\t%d\t", ratio, cov);
+            }
             
             evaluate_seq_file(&eva, argv[o.ind], k, p, block_size, n_thread, 
                              (cov == min_cov_cut && ratio == max_cov_ratio) ? cov_details_fp : NULL, 
                              (cov == min_cov_cut && ratio == max_cov_ratio) ? cov_ratios_fp : NULL);
             
             fprintf(stdout, "%d\t", eva.strand_num);
+            if (smkdkn_fp != NULL) fprintf(smkdkn_fp, "%d\t", eva.strand_num);
+            
             fprintf(stdout, "%d\t", eva.exist_strand_num);
+            if (smkdkn_fp != NULL) fprintf(smkdkn_fp, "%d\t", eva.exist_strand_num);
             
             eva.noise_km_num = kc_c4x_t_kmers(h, p, cov) - eva.exist_km_num;
             eva.sm = (double)eva.exist_strand_num / eva.strand_num;
@@ -1032,12 +1054,22 @@ int main(int argc, char *argv[])
             eva.kn = (double)eva.noise_km_num / eva.exist_km_num;
             
             fprintf(stdout, "%d\t", eva.noise_km_num);
+            if (smkdkn_fp != NULL) fprintf(smkdkn_fp, "%d\t", eva.noise_km_num);
+            
             fprintf(stdout, "%d\t", eva.exist_km_num);
+            if (smkdkn_fp != NULL) fprintf(smkdkn_fp, "%d\t", eva.exist_km_num);
+            
             fprintf(stdout, "%d\t", eva.lose_km_num);
+            if (smkdkn_fp != NULL) fprintf(smkdkn_fp, "%d\t", eva.lose_km_num);
             
             fprintf(stdout, "%f\t", eva.sm);
+            if (smkdkn_fp != NULL) fprintf(smkdkn_fp, "%f\t", eva.sm);
+            
             fprintf(stdout, "%f\t", eva.kd);
+            if (smkdkn_fp != NULL) fprintf(smkdkn_fp, "%f\t", eva.kd);
+            
             fprintf(stdout, "%f\n", eva.kn);
+            if (smkdkn_fp != NULL) fprintf(smkdkn_fp, "%f\n", eva.kn);
         }
     }
 
@@ -1056,6 +1088,9 @@ int main(int argc, char *argv[])
     }
     if (ratio_ranges_fp != NULL) {
         fclose(ratio_ranges_fp);
+    }
+    if (smkdkn_fp != NULL) {
+        fclose(smkdkn_fp);
     }
 
     for(i = 0; i < 1<<p; ++i) {

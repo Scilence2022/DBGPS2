@@ -737,8 +737,8 @@ double kms_max_ratio(uint64_t *kms, int km_num, uint64_t mask, kc_c4x_t *h, int 
     return max_ratio;
 }
 
-// Update the eva_pipeline function to pass skip_ratios to kms_max_ratio
-static void eva_pipeline(void *data, evaluation_t *eva, FILE *cov_details_fp, FILE *cov_ratios_fp) {
+// Update the eva_pipeline function to fix the k-mer counting issue
+static void eva_pipeline(void *data, evaluation_t *eva, FILE *cov_details_fp, FILE *cov_ratios_fp, kc_c4x_t *global_kmer_tracker) {
     pldat_t *p = (pldat_t*)data;
     uint64_t mask = (1ULL<<p->k*2) - 1;
     
@@ -788,8 +788,9 @@ static void eva_pipeline(void *data, evaluation_t *eva, FILE *cov_details_fp, FI
         
         int j;
         for(j=0;j<km_num;j++){
-            if( kmer_cov(*(kms+j), mask, p->h) <1) {//New k-mer found
-                add_kmer(*(kms+j), mask, p->h);
+            // Use global_kmer_tracker to ensure each k-mer is only counted once across all sequences
+            if( kmer_cov(*(kms+j), mask, global_kmer_tracker) <1) {//New k-mer found globally
+                add_kmer(*(kms+j), mask, global_kmer_tracker);
                 if(kmer_cov(*(kms+j), mask, eva->h) > eva->cov_cut ){
                     eva->exist_km_num++;
                 }else{
@@ -805,7 +806,7 @@ static void eva_pipeline(void *data, evaluation_t *eva, FILE *cov_details_fp, FI
 }
 
 // Modify the evaluate_seq_file function to support coverage details output
-static evaluation_t *evaluate_seq_file(evaluation_t *eva, const char *fn, int k, int p, int block_size, int n_thread, FILE *cov_details_fp, FILE *cov_ratios_fp)
+static evaluation_t *evaluate_seq_file(evaluation_t *eva, const char *fn, int k, int p, int block_size, int n_thread, FILE *cov_details_fp, FILE *cov_ratios_fp, kc_c4x_t *global_kmer_tracker)
 {
     pldat_t pl;
 
@@ -817,7 +818,7 @@ static evaluation_t *evaluate_seq_file(evaluation_t *eva, const char *fn, int k,
     pl.h = c4x_init(p);
     pl.block_len = block_size;
 
-    eva_pipeline(&pl, eva, cov_details_fp, cov_ratios_fp);
+    eva_pipeline(&pl, eva, cov_details_fp, cov_ratios_fp, global_kmer_tracker);
     kseq_destroy(pl.ks);
     gzclose(fp);
     return eva;
@@ -861,10 +862,11 @@ int kc_c4x_t_size(kc_c4x_t *h, int p){
 int kc_c4x_t_kmers(kc_c4x_t *h, int p, int cov){
     int j, total_size = 0;
     if(cov < 1){return kc_c4x_t_size(h,p);}
+    
     for (j=0; j < 1<<p; ++j){
         kc_c4_t *g = h->h[j];
         khint_t kk;
-        for (kk = kh_end(g); kk > 0; --kk)
+        for (kk = 0; kk < kh_end(g); ++kk)
             if (kh_exist(g, kk)){
                 int c = kh_key(g, kk) & KC_MAX;
                 //c = c < 255? c : 255;
@@ -873,6 +875,7 @@ int kc_c4x_t_kmers(kc_c4x_t *h, int p, int cov){
                 }
             }
     }
+    
     return total_size;
 }
 
@@ -905,11 +908,11 @@ int main(int argc, char *argv[])
         fprintf(stderr, "\n************************************************************************\n");
         fprintf(stderr, "**                                                                    **\n");
         fprintf(stderr, "**                   Sm Kn Kd Caculator for DBGPS                     **\n");
-        fprintf(stderr, "**     Version 20220116  Author: Lifu Song lifu.song@outlook.com      **\n");
+        fprintf(stderr, "**     Version 20260123  Author: Lifu Song lifu.song@outlook.com      **\n");
         //fprintf(stderr, "**  DBGPS - De Bruijn Graph based inner decoder for DNA data storage  **\n");
         fprintf(stderr, "**                                                                    **\n");
         fprintf(stderr, "************************************************************************\n\n");
-        fprintf(stderr, "Usage: DBGPS-SmKnd [options] <Strand seq file> <NGS files> \n");
+        fprintf(stderr, "Usage: DBGPS-analyzer [options] <Strand seq file> <NGS files> \n");
         fprintf(stderr, "                       [Supporting formats: *fq, *fa, *fq.gz, *fa.gz]\n");
         fprintf(stderr, "Options:\n");
         fprintf(stderr, "  -k INT     k-mer size [%d]\n", k);
@@ -921,7 +924,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "  -c INT     min_cov_cut [%d]\n", min_cov_cut);
         fprintf(stderr, "  -C INT     max_cov_cut [%d]\n", max_cov_cut);
         fprintf(stderr, "  -o STR     output prefix for additional files [none]\n");
-        fprintf(stderr, "  -s INT     Number of initial ratio values to skip [%d]\n", skip_ratios);
+        fprintf(stderr, "  -s INT     Number of initial ratio values to ignore [%d]\n", skip_ratios);
         
         fprintf(stderr, "\n");
         return 1;
@@ -933,7 +936,7 @@ int main(int argc, char *argv[])
     fprintf(stdout, ">> Settings:\nk-mer size = %d\n", k);
     fprintf(stdout, "Read length = %d\n", read_len);
     fprintf(stdout, "Maximum coverage ratio = %.1f\n", max_cov_ratio);
-    fprintf(stdout, "Skip initial ratios = %d\n", skip_ratios);
+    fprintf(stdout, "Ignore initial ratios = %d\n", skip_ratios);
     fprintf(stdout, "Upper bound for ratio range iteration = %.1f\n", max_R);
    
     fprintf(stderr, "Counting NGS file 1 ......\n");
@@ -1038,9 +1041,20 @@ int main(int argc, char *argv[])
                 fprintf(smkdkn_fp, "%.2f\t%d\t", ratio, cov);
             }
             
+            // Create a fresh global k-mer tracker for this evaluation run
+            kc_c4x_t *global_kmer_tracker = c4x_init(p);
+            
             evaluate_seq_file(&eva, argv[o.ind], k, p, block_size, n_thread, 
                              (cov == min_cov_cut && ratio == max_cov_ratio) ? cov_details_fp : NULL, 
-                             (cov == min_cov_cut && ratio == max_cov_ratio) ? cov_ratios_fp : NULL);
+                             (cov == min_cov_cut && ratio == max_cov_ratio) ? cov_ratios_fp : NULL,
+                             global_kmer_tracker);
+            
+            // Clean up the global k-mer tracker
+            for(int tracker_i = 0; tracker_i < 1<<p; ++tracker_i) {
+                kc_c4_destroy(global_kmer_tracker->h[tracker_i]);
+            }
+            free(global_kmer_tracker->h); 
+            free(global_kmer_tracker);
             
             fprintf(stdout, "%d\t", eva.strand_num);
             if (smkdkn_fp != NULL) fprintf(smkdkn_fp, "%d\t", eva.strand_num);

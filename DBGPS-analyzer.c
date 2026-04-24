@@ -742,15 +742,13 @@ static void eva_pipeline(void *data, evaluation_t *eva, FILE *cov_details_fp, FI
     pldat_t *p = (pldat_t*)data;
     uint64_t mask = (1ULL<<p->k*2) - 1;
     
-    stepdat_t *s;
-    CALLOC(s, 1);
-    s->p = p;
-    int i = 0;
     int ret;
+    // Reuse coverage array to avoid repeated allocations
+    int *coverages = NULL;
+    int coverages_cap = 0;
 
     while ((ret = kseq_read(p->ks)) >= 0) {// Reading seqs
         eva->strand_num++;
-        i = i + 1;
         uint64_t *kms;
         int l = p->ks->seq.l, km_num = 0, strand_kms_min_cov=0;
         double strand_max_ratio = 0.0;
@@ -758,24 +756,98 @@ static void eva_pipeline(void *data, evaluation_t *eva, FILE *cov_details_fp, FI
         if (l < p->k) continue;
         MALLOC(kms, l-p->k + 1); //
         km_num = seq_kmers(kms, p->k, l, p->ks->seq.s);
-        strand_kms_min_cov = kms_min_cov(kms, km_num, mask, eva->h);
-        strand_max_ratio = kms_max_ratio(kms, km_num, mask, eva->h, eva->skip_ratios);
+        
+        // Ensure coverage array is large enough
+        if (km_num > coverages_cap) {
+            coverages_cap = km_num * 2;
+            REALLOC(coverages, coverages_cap);
+        }
+        
+        // Cache all k-mer coverages in one pass to avoid repeated lookups
+        for (int i = 0; i < km_num; i++) {
+            coverages[i] = kmer_cov(kms[i], mask, eva->h);
+        }
+        
+        // Calculate min coverage from cached values
+        strand_kms_min_cov = coverages[0];
+        for (int i = 1; i < km_num; i++) {
+            if (coverages[i] < strand_kms_min_cov) {
+                strand_kms_min_cov = coverages[i];
+            }
+        }
+        
+        // Calculate max ratio from cached values
+        if (km_num >= 2) {
+            int ratios_counted = 0;
+            strand_max_ratio = 0.0;
+            for (int i = 1; i < km_num; i++) {
+                // Return 0.0 if either coverage is zero
+                if (coverages[i-1] == 0 || coverages[i] == 0) {
+                    strand_max_ratio = 0.0;
+                    break;
+                }
+                
+                // Calculate ratio (always larger / smaller)
+                double ratio = (coverages[i-1] >= coverages[i]) ? 
+                    (double)coverages[i-1] / coverages[i] : 
+                    (double)coverages[i] / coverages[i-1];
+                
+                // Skip the first skip_ratios valid ratios
+                ratios_counted++;
+                if (ratios_counted <= eva->skip_ratios) {
+                    continue;
+                }
+                
+                // Update maximum ratio if this one is larger
+                if (ratio > strand_max_ratio) {
+                    strand_max_ratio = ratio;
+                }
+            }
+        }
 
         // Output coverage details if file pointer is provided
         if (cov_details_fp != NULL) {
-            output_kmer_coverages(cov_details_fp, p->ks->name.s, kms, km_num, mask, eva->h);
+            fprintf(cov_details_fp, "%s\t", p->ks->name.s);
+            for (int i = 0; i < km_num; i++) {
+                fprintf(cov_details_fp, "%d ", coverages[i]);
+            }
+            fprintf(cov_details_fp, "\n");
         }
         
         // Output coverage ratios if file pointer is provided
-        if (cov_ratios_fp != NULL) {
-            int ratio_count = 0;
-            double *ratios = output_coverage_ratios(cov_ratios_fp, p->ks->name.s, kms, km_num, mask, eva->h, &ratio_count);
+        if (cov_ratios_fp != NULL && km_num >= 2) {
+            fprintf(cov_ratios_fp, "%s\t", p->ks->name.s);
+            
+            // Allocate memory for ratios
+            double *ratios;
+            int ratio_count = km_num - 1;
+            MALLOC(ratios, ratio_count);
+            
+            // Calculate and output ratios
+            for (int i = 0; i < ratio_count; i++) {
+                int a = coverages[i];
+                int b = coverages[i+1];
+                
+                // Always larger number / smaller number
+                if (a >= b && b > 0) {
+                    ratios[i] = (double)a / b;
+                } else if (b > a && a > 0) {
+                    ratios[i] = (double)b / a;
+                } else if (a == 0 && b == 0) {
+                    ratios[i] = 1.0; // Both zero, ratio is 1
+                } else {
+                    ratios[i] = 0.0; // One is zero, can't calculate ratio
+                }
+                
+                fprintf(cov_ratios_fp, "%.3f ", ratios[i]);
+            }
+            fprintf(cov_ratios_fp, "\n");
             
             // Update ratio range if we have valid ratios
             if (ratios && ratio_count > 0 && eva->ratio_range) {
                 update_ratio_range(eva->ratio_range, ratios, ratio_count);
-                free(ratios);
             }
+            free(ratios);
         }
 
         // Modified condition: Check both coverage and ratio for path existence
@@ -786,12 +858,12 @@ static void eva_pipeline(void *data, evaluation_t *eva, FILE *cov_details_fp, FI
             eva->exist_strand_num++;
         }
         
-        int j;
-        for(j=0;j<km_num;j++){
+        // Track k-mers using cached coverages
+        for(int j=0;j<km_num;j++){
             // Use global_kmer_tracker to ensure each k-mer is only counted once across all sequences
-            if( kmer_cov(*(kms+j), mask, global_kmer_tracker) <1) {//New k-mer found globally
-                add_kmer(*(kms+j), mask, global_kmer_tracker);
-                if(kmer_cov(*(kms+j), mask, eva->h) > eva->cov_cut ){
+            if(kmer_cov(kms[j], mask, global_kmer_tracker) < 1) {//New k-mer found globally
+                add_kmer(kms[j], mask, global_kmer_tracker);
+                if(coverages[j] > eva->cov_cut){
                     eva->exist_km_num++;
                 }else{
                     eva->lose_km_num++;
@@ -802,7 +874,7 @@ static void eva_pipeline(void *data, evaluation_t *eva, FILE *cov_details_fp, FI
         free(kms);
     }
     
-    free(s);
+    free(coverages);
 }
 
 // Modify the evaluate_seq_file function to support coverage details output
@@ -955,11 +1027,14 @@ int main(int argc, char *argv[])
     FILE *ratio_ranges_fp = NULL;
     FILE *smkdkn_fp = NULL;
     if (output_prefix != NULL) {
-        char *filename;
-        MALLOC(filename, strlen(output_prefix) + 15);
+        size_t prefix_len = strlen(output_prefix);
+        size_t max_ext_len = 12; // Longest extension is ".cov_details"
         
         // Open coverage details file
-        sprintf(filename, "%s.cov_details", output_prefix);
+        char *filename;
+        MALLOC(filename, prefix_len + max_ext_len + 1);
+        
+        snprintf(filename, prefix_len + max_ext_len + 1, "%s.cov_details", output_prefix);
         cov_details_fp = fopen(filename, "w");
         if (cov_details_fp == NULL) {
             fprintf(stderr, "Error: Could not open file %s for writing\n", filename);
@@ -968,7 +1043,7 @@ int main(int argc, char *argv[])
         }
         
         // Open coverage ratios file
-        sprintf(filename, "%s.cov_ratios", output_prefix);
+        snprintf(filename, prefix_len + max_ext_len + 1, "%s.cov_ratios", output_prefix);
         cov_ratios_fp = fopen(filename, "w");
         if (cov_ratios_fp == NULL) {
             fprintf(stderr, "Error: Could not open file %s for writing\n", filename);
@@ -977,7 +1052,7 @@ int main(int argc, char *argv[])
         }
         
         // Open ratio ranges file
-        sprintf(filename, "%s.ratio_ranges", output_prefix);
+        snprintf(filename, prefix_len + max_ext_len + 1, "%s.ratio_ranges", output_prefix);
         ratio_ranges_fp = fopen(filename, "w");
         if (ratio_ranges_fp == NULL) {
             fprintf(stderr, "Error: Could not open file %s for writing\n", filename);
@@ -986,7 +1061,7 @@ int main(int argc, char *argv[])
         }
         
         // Open SmKdKn values file
-        sprintf(filename, "%s.SmKdKn", output_prefix);
+        snprintf(filename, prefix_len + max_ext_len + 1, "%s.SmKdKn", output_prefix);
         smkdkn_fp = fopen(filename, "w");
         if (smkdkn_fp == NULL) {
             fprintf(stderr, "Error: Could not open file %s for writing\n", filename);

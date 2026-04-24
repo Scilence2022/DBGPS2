@@ -472,6 +472,43 @@ struct path_node {
     unsigned int cov;
 };
 
+const unsigned char two_to_one_table[256] = { //one base encoder to two base encoder
+    51, 50, 49, 48, 60, 61, 62, 63, 58, 56, 59, 57, 53, 55, 52, 54,
+    35, 34, 33, 32, 44, 45, 46, 47, 42, 40, 43, 41, 37, 39, 36, 38,
+    19, 18, 17, 16, 28, 29, 30, 31, 26, 24, 27, 25, 21, 23, 20, 22,
+    3, 2, 1, 0, 12, 13, 14, 15, 10, 8, 11, 9, 5, 7, 4, 6,
+    195, 194, 193, 192, 204, 205, 206, 207, 202, 200, 203, 201, 197, 199, 196, 198,
+    211, 210, 209, 208, 220, 221, 222, 223, 218, 216, 219, 217, 213, 215, 212, 214,
+    227, 226, 225, 224, 236, 237, 238, 239, 234, 232, 235, 233, 229, 231, 228, 230,
+    243, 242, 241, 240, 252, 253, 254, 255, 250, 248, 251, 249, 245, 247, 244, 246,
+    163, 162, 161, 160, 172, 173, 174, 175, 170, 168, 171, 169, 165, 167, 164, 166,
+    131, 130, 129, 128, 140, 141, 142, 143, 138, 136, 139, 137, 133, 135, 132, 134,
+    179, 178, 177, 176, 188, 189, 190, 191, 186, 184, 187, 185, 181, 183, 180, 182,
+    147, 146, 145, 144, 156, 157, 158, 159, 154, 152, 155, 153, 149, 151, 148, 150,
+    83, 82, 81, 80, 92, 93, 94, 95, 90, 88, 91, 89, 85, 87, 84, 86,
+    115, 114, 113, 112, 124, 125, 126, 127, 122, 120, 123, 121, 117, 119, 116, 118,
+    67, 66, 65, 64, 76, 77, 78, 79, 74, 72, 75, 73, 69, 71, 68, 70,
+    99, 98, 97, 96, 108, 109, 110, 111, 106, 104, 107, 105, 101, 103, 100, 102
+};
+
+// Simplified index encoding without CRC - converts decimal index to DNA k-mer encoding
+uint64_t index_encode(uint64_t index, unsigned int index_len){
+    uint64_t mask = 255ULL;
+    unsigned int index_byte_num = index_len>>2;
+    unsigned int i;
+    uint64_t m, y=0ULL;
+
+    for(i=0; i < index_byte_num; i++){
+        m = index & mask;
+        m = (uint64_t)two_to_one_table[m];
+        m = m<<((index_byte_num-1)*8);
+        y = y>>8;
+        y = y | m;
+        index = index>>8;
+    }
+    return y;
+}
+
 const uint64_t BI_MASK = 3ULL;
 
 
@@ -549,6 +586,9 @@ int find_paths(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer, uint64_t mask
     int a_cov = all_nodes[0].cov/max_cov_ratio, b_cov = all_nodes[0].cov * max_cov_ratio;
     if(a_cov < cut_cov + 1){a_cov = cut_cov + 1;}
 
+    fprintf(stderr, "[DEBUG] Initial kmer cov=%d, ratio range=[%d, %d]\n", 
+            all_nodes[0].cov, a_cov, b_cov);
+
     term_nodes[0] = &all_nodes[0];
 
     int term_node_num = 1, all_node_num = 1, p = 0;
@@ -624,7 +664,11 @@ int find_paths(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer, uint64_t mask
         CALLOC(paths[0], seq_len);
         nodes_path(term_nodes[0], paths[0], path_len, k, index_byte_num);
         return 0;
-    }else{return -1;}
+    }else{
+        fprintf(stderr, "[DEBUG] find_paths failed: term_node_num=%d, all_node_num=%d, p=%d\n", 
+                term_node_num, all_node_num, p);
+        return -1;
+    }
 }
 
 
@@ -838,9 +882,14 @@ int main(int argc, char *argv[])
             start = clock();
             dec_strand_num = 0;
 
+            unsigned int eid;
             for(id=min_index; id<=max_index; id++) {
+                fprintf(stderr, "Processing index: %u\t", id);
                 unsigned char *path[Max_Path_Num];
-                c_index = find_paths(h, path, pr_uint64 | (uint64_t)id, mask, cov_cut, path_len, k, index_byte_num, max_cov_ratio, skip_ratios);
+                eid = index_encode(id, index_len);
+                c_index = find_paths(h, path, pr_uint64 | (uint64_t)eid, mask, cov_cut, path_len, k, index_byte_num, max_cov_ratio, skip_ratios);
+                fprintf(stderr, "c_index: %u\n", c_index);
+
                 if(c_index > -1) {
                     dec_strand_num++;
                     unsigned char DNA_seq[Max_Path_Len];
@@ -872,9 +921,12 @@ int main(int argc, char *argv[])
                 start = clock();
                 dec_strand_num = 0;
 
+                unsigned int eid;
                 for(id=min_index; id<=max_index; id++) {
+                    fprintf(stderr, "Processing index: %u\r", id);
                     unsigned char *path[Max_Path_Num];
-                    c_index = find_paths(h, path, pr_uint64 | (uint64_t)id, mask, cov_cut, path_len, k, index_byte_num, r, skip_ratios);
+                    eid = index_encode(id, index_len);
+                    c_index = find_paths(h, path, pr_uint64 | (uint64_t)eid, mask, cov_cut, path_len, k, index_byte_num, r, skip_ratios);
                     if(c_index > -1) {
                         dec_strand_num++;
                         unsigned char DNA_seq[Max_Path_Len];

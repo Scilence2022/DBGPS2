@@ -1,7 +1,7 @@
 CFLAGS=-g -Wall -O3
 CXXFLAGS=$(CFLAGS) -std=c++11
 LIBS=-lz
-PROG=DBGPS-analyzer DBGPS-links DBGPS2 DBGPS-seq-filter
+PROG=DBGPS-analyzer DBGPS-links DBGPS2 DBGPS-seq-filter DBGPS3
 
 ifneq ($(asan),)
 	CFLAGS+=-fsanitize=address
@@ -39,6 +39,15 @@ DBGPS2:DBGPS2.c khashl.h ketopt.h kseq.h kthread.h
 # Also known as DBGPS-ft
 DBGPS-seq-filter:DBGPS-seq-filter.c khashl.h ketopt.h kseq.h kthread.h
 	$(CC) $(CFLAGS) -o $@ DBGPS-seq-filter.c kthread.c $(LIBS) -lpthread
+
+# DBGPS3: Simplified version without 4-base encoding and CRC validation
+# Features:
+# - Removed two_to_one_table / one_to_two_table encoding arrays
+# - Removed CRC-16 checksum validation
+# - Removed index_encode function
+# - Simplified path finding with direct terminal node check
+DBGPS3:DBGPS3.c khashl.h ketopt.h kseq.h kthread.h
+	$(CC) $(CFLAGS) -o $@ DBGPS3.c kthread.c $(LIBS) -lpthread
 
 clean:
 	rm -fr *.dSYM $(PROG)

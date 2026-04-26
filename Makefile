@@ -1,7 +1,7 @@
 CFLAGS=-g -Wall -O3
 CXXFLAGS=$(CFLAGS) -std=c++11
 LIBS=-lz
-PROG=DBGPS-analyzer DBGPS-links DBGPS2 DBGPS-seq-filter DBGPS3
+PROG=DBGPS-analyzer DBGPS-links DBGPS2 DBGPS-seq-filter DBGPS3 dbgps3-client
 
 ifneq ($(asan),)
 	CFLAGS+=-fsanitize=address
@@ -40,14 +40,18 @@ DBGPS2:DBGPS2.c khashl.h ketopt.h kseq.h kthread.h
 DBGPS-seq-filter:DBGPS-seq-filter.c khashl.h ketopt.h kseq.h kthread.h
 	$(CC) $(CFLAGS) -o $@ DBGPS-seq-filter.c kthread.c $(LIBS) -lpthread
 
-# DBGPS3: Simplified version without 4-base encoding and CRC validation
+# DBGPS3: Modular version with CLI + server mode
 # Features:
-# - Removed two_to_one_table / one_to_two_table encoding arrays
-# - Removed CRC-16 checksum validation
-# - Removed index_encode function
-# - Simplified path finding with direct terminal node check
-DBGPS3:DBGPS3.c khashl.h ketopt.h kseq.h kthread.h
-	$(CC) $(CFLAGS) -o $@ DBGPS3.c kthread.c $(LIBS) -lpthread
+# - Refactored into dbgps3_core (graph engine) + dbgps3_server (JSON-RPC server)
+# - Server mode via -S flag with JSON-RPC 2.0 over TCP
+# - Thread-per-connection concurrency model
+# - minjson: lightweight JSON parser/builder for JSON-RPC protocol
+DBGPS3:DBGPS3.c dbgps3_core.c dbgps3_server.c minjson.c khashl.h ketopt.h kseq.h kthread.h dbgps3_core.h dbgps3_server.h minjson.h
+	$(CC) $(CFLAGS) -o $@ DBGPS3.c dbgps3_core.c dbgps3_server.c minjson.c kthread.c $(LIBS) -lpthread
+
+# dbgps3-client: Interactive CLI client for DBGPS3 server
+dbgps3-client:dbgps3_client.c minjson.c minjson.h
+	$(CC) $(CFLAGS) -o $@ dbgps3_client.c minjson.c $(LIBS)
 
 clean:
 	rm -fr *.dSYM $(PROG)

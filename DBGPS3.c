@@ -202,6 +202,7 @@ int main(int argc, char *argv[])
                 eid = dbgps3_index_encode(id, index_len);
                 c_index = dbgps3_find_path(g, pr_uint64 | (uint64_t)eid,
                                            cov_cut, max_cov_ratio, skip_ratios,
+                                           path_len, index_byte_num,
                                            result_buf, sizeof(result_buf));
                 fprintf(stderr, "c_index: %u\n", (unsigned)c_index);
 
@@ -234,6 +235,7 @@ int main(int argc, char *argv[])
                     eid = dbgps3_index_encode(id, index_len);
                     c_index = dbgps3_find_path(g, pr_uint64 | (uint64_t)eid,
                                                cov_cut, r, skip_ratios,
+                                               path_len, index_byte_num,
                                                result_buf, sizeof(result_buf));
                     if(c_index > -1) {
                         dec_strand_num++;

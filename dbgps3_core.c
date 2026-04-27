@@ -445,6 +445,7 @@ unsigned short dbgps3_kmer_cov(const dbgps3_graph_t *g, uint64_t kmer)
 
 int dbgps3_find_path(const dbgps3_graph_t *g, uint64_t start_kmer,
                      int cut_cov, double max_cov_ratio, int skip_ratios,
+                     int path_len, int index_byte_num,
                      char *result_buf, int result_buf_len)
 {
     if (!g || !result_buf) return -1;
@@ -452,8 +453,6 @@ int dbgps3_find_path(const dbgps3_graph_t *g, uint64_t start_kmer,
     int k = g->k;
     uint64_t mask = g->mask;
     const kc_c4x_t *h = (const kc_c4x_t*)g->_h;
-    int path_len = g->path_len;
-    int index_byte_num = g->index_byte_num;
     int seq_len = (path_len>>2) + index_byte_num;
 
     /* Check result buffer is large enough */

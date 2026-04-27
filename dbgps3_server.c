@@ -81,14 +81,17 @@ static mj_val handle_path_find(dbgps3_graph_t *g, const mj_val *params, mj_val i
         return jrpc_error(JRPC_INVALID_PARAMS, "Missing or invalid 'index' parameter", id);
     }
 
-    pv = mj_object_get(params, "cut_cov");
+    pv = mj_object_get(params, "cutCov");
     int cut_cov = mj_get_int(&pv, 1);
-    pv = mj_object_get(params, "max_cov_ratio");
+    pv = mj_object_get(params, "maxCovRatio");
     double max_cov_ratio = mj_get_number(&pv, 2.55);
-    pv = mj_object_get(params, "skip_ratios");
+    pv = mj_object_get(params, "skipRatios");
     int skip_ratios = mj_get_int(&pv, 0);
+    pv = mj_object_get(params, "indexLen");
+    int index_len = mj_get_int(&pv, dbgps3_get_index_len(g));
+    pv = mj_object_get(params, "pathLen");
+    int path_len = mj_get_int(&pv, dbgps3_get_path_len(g));
 
-    int index_len = dbgps3_get_index_len(g);
     int k = dbgps3_get_k(g);
 
     /* Default primer: same as CLI */
@@ -97,9 +100,11 @@ static mj_val handle_path_find(dbgps3_graph_t *g, const mj_val *params, mj_val i
     uint64_t pr_uint64 = dbgps3_primer_uint64(primer, pr_len, index_len, k);
     uint64_t eid = dbgps3_index_encode((uint64_t)index, index_len);
     uint64_t start_kmer = pr_uint64 | eid;
+    int index_byte_num = index_len >> 2;
 
     char result_buf[DBGPS3_MAX_PATH_LEN + 128];
     int rc = dbgps3_find_path(g, start_kmer, cut_cov, max_cov_ratio, skip_ratios,
+                               path_len, index_byte_num,
                                result_buf, sizeof(result_buf));
 
     mj_val result = mj_object();
@@ -131,17 +136,23 @@ static mj_val handle_path_find_kmer(dbgps3_graph_t *g, const mj_val *params, mj_
         return jrpc_error(JRPC_INVALID_PARAMS, msg, id);
     }
 
-    pv = mj_object_get(params, "cut_cov");
+    pv = mj_object_get(params, "cutCov");
     int cut_cov = mj_get_int(&pv, 1);
-    pv = mj_object_get(params, "max_cov_ratio");
+    pv = mj_object_get(params, "maxCovRatio");
     double max_cov_ratio = mj_get_number(&pv, 2.55);
-    pv = mj_object_get(params, "skip_ratios");
+    pv = mj_object_get(params, "skipRatios");
     int skip_ratios = mj_get_int(&pv, 0);
+    pv = mj_object_get(params, "pathLen");
+    int path_len = mj_get_int(&pv, dbgps3_get_path_len(g));
+    /* index_byte_num is not needed for findKmer since the client provides the raw k-mer,
+       but the decode step still needs it. Use 0 as default (no index in output). */
+    int index_byte_num = 0;
 
     uint64_t start_kmer = dbgps3_actgkmer_uint64(kmer_str, k);
 
     char result_buf[DBGPS3_MAX_PATH_LEN + 128];
     int rc = dbgps3_find_path(g, start_kmer, cut_cov, max_cov_ratio, skip_ratios,
+                               path_len, index_byte_num,
                                result_buf, sizeof(result_buf));
 
     mj_val result = mj_object();

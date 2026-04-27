@@ -70,11 +70,14 @@ unsigned short dbgps3_kmer_cov(const dbgps3_graph_t *g, uint64_t kmer);
  * @param cut_cov      Minimum coverage cutoff
  * @param max_cov_ratio Maximum coverage ratio for branching
  * @param skip_ratios  Number of initial positions to skip ratio checks
+ * @param path_len     Payload path length (in bases)
+ * @param index_byte_num Number of bytes in the index encoding
  * @param result_buf   Output buffer for the decoded DNA sequence
  * @param result_buf_len Size of result_buf (must be >= path_len + index_byte_num*4 + 1)
  */
 int dbgps3_find_path(const dbgps3_graph_t *g, uint64_t start_kmer,
                      int cut_cov, double max_cov_ratio, int skip_ratios,
+                     int path_len, int index_byte_num,
                      char *result_buf, int result_buf_len);
 
 /* ---- Utility functions ---- */

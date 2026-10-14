@@ -14,3 +14,9 @@ DBGPS-ps
 DBGPS-SmKnd
 DBGPS-seq-filter
 *.pdf
+.qoder/
+input/
+DBGPS-analyzer
+*.dSYM/
+DBGPS3
+dbgps3-client

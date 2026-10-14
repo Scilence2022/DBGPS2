@@ -549,7 +549,7 @@ unsigned short kmer_cov(uint64_t kmer, uint64_t mask, kc_c4x_t *h){
 
     x = kc_c4_get(h->h[j], hash_key);
     //if(x == 0){if(kh_size(h->h[j]) < 1){return 0;}} //To avoid of segment fault
-    if(kh_exist(h->h[j], x)){
+    if(x != kh_end(h->h[j]) && kh_exist(h->h[j], x)){
         cov = kh_key(h->h[j], x) & KC_MAX;
     }
     return cov;

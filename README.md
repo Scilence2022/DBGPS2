@@ -47,6 +47,14 @@ To build all targets:
 make all
 ```
 
+### Regression checks
+
+Run `make test` (requires Python 3) to check missing k-mer lookups, bounded path
+searches, CRC ambiguity, allocation cleanup, and exact strand reconstruction
+across repeated CLI runs, thread counts, coverage cutoffs, and ratio sweeps.
+Test binaries and generated reads are stored in temporary directories.
+Use `make test asan=1` to run the same checks with AddressSanitizer.
+
 ## Tool Descriptions
 
 ### DBGPS2

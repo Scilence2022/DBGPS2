@@ -63,14 +63,15 @@ unsigned short dbgps3_kmer_cov(const dbgps3_graph_t *g, uint64_t kmer);
 /**
  * Find a path in the de Bruijn graph starting from start_kmer.
  * On success, writes the decoded DNA sequence into result_buf and returns 0.
- * On failure (no unique path found), returns -1 and result_buf is unchanged.
+ * On failure (no unique path, workspace limit, invalid parameters or allocation
+ * failure), returns -1 and result_buf is unchanged.
  *
  * @param g            Graph object
  * @param start_kmer   Starting k-mer (uint64 encoded)
  * @param cut_cov      Minimum coverage cutoff
- * @param max_cov_ratio Maximum coverage ratio for branching
+ * @param max_cov_ratio Maximum coverage ratio for branching (finite and >= 1)
  * @param skip_ratios  Number of initial positions to skip ratio checks
- * @param path_len     Payload path length (in bases)
+ * @param path_len     Payload path length (a multiple of 4, from 0 to DBGPS3_MAX_PATH_LEN)
  * @param index_byte_num Number of bytes in the index encoding
  * @param result_buf   Output buffer for the decoded DNA sequence
  * @param result_buf_len Size of result_buf (must be >= path_len + index_byte_num*4 + 1)

@@ -8,9 +8,25 @@ ifneq ($(asan),)
 	LIBS+=-fsanitize=address
 endif
 
-.PHONY:all clean version
+.PHONY:all clean version test
 
 all:$(PROG)
+
+# Keep test executables outside the checkout. Use `make test asan=1` for ASan.
+test:
+	@set -eu; test_dir=$$(mktemp -d); trap 'rm -rf "$$test_dir"' EXIT; \
+	for source in DBGPS2.c DBGPS-analyzer.c DBGPS-links.c DBGPS-seq-filter.c dbgps3_core.c; do \
+		defs=; if [ "$$source" = dbgps3_core.c ]; then defs=-DTEST_DBGPS3; fi; \
+		$(CC) $(CFLAGS) -I. $$defs -DTEST_SOURCE=\"$$source\" -o "$$test_dir/cov" tests/test_kmer_cov.c kthread.c $(LIBS) -lpthread; \
+		"$$test_dir/cov"; \
+	done; \
+	for defs in '' '-DTEST_DBGPS3'; do \
+		$(CC) $(CFLAGS) -I. $$defs -o "$$test_dir/paths" tests/test_paths.c kthread.c $(LIBS) -lpthread; \
+		"$$test_dir/paths"; \
+	done; \
+	$(CC) $(CFLAGS) -o "$$test_dir/DBGPS2" DBGPS2.c kthread.c $(LIBS) -lpthread; \
+	$(CC) $(CFLAGS) -o "$$test_dir/DBGPS3" DBGPS3.c dbgps3_core.c dbgps3_server.c minjson.c kthread.c $(LIBS) -lpthread; \
+	python3 tests/test_cli.py "$$test_dir/DBGPS2" "$$test_dir/DBGPS3"
 
 # DBGPS-analyzer: Analyzer tool for calculating Sm, Kn, Kd values
 # Recent updates: 

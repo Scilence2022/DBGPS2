@@ -318,7 +318,7 @@ unsigned short kmer_cov(uint64_t kmer, uint64_t mask, kc_c4x_t *h){
     x = kc_c4_get(h->h[j], hash_key);
 
     //if(x >0){
-    if(kh_exist(h->h[j], x)){
+    if(x != kh_end(h->h[j]) && kh_exist(h->h[j], x)){
         cov = kh_key(h->h[j], x) & KC_MAX;
     }
    // }else{cov = 0;}
@@ -530,7 +530,7 @@ int main(int argc, char *argv[])
         kc_c4_t *g = h->h[j];
         khint_t kk;
         if(kh_size(h->h[j]) > 0){
-            for (kk = kh_end(g); kk > 0; --kk){
+            for (kk = 0; kk < kh_end(g); ++kk){
                 if (kh_exist(g, kk)){
                     int c = kh_key(g, kk) & KC_MAX;
                     if(c > max_link_num){

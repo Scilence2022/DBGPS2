@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <inttypes.h>
 #include <string.h>
+#include <math.h>
 #include <zlib.h>
 #include "kseq.h"
 KSEQ_INIT(gzFile, gzread)
@@ -262,7 +263,7 @@ static unsigned short kmer_cov_internal(uint64_t kmer, uint64_t mask, const kc_c
     if (kh_size(h->h[j]) < 1) return 0;
     hash_key = hash_key >> DBGPS3_KC_BITS << DBGPS3_KC_BITS;
     x = kc_c4_get(h->h[j], hash_key);
-    if (kh_exist(h->h[j], x)) {
+    if (x != kh_end(h->h[j]) && kh_exist(h->h[j], x)) {
         cov = kh_key(h->h[j], x) & DBGPS3_KC_MAX;
     }
     return cov;
@@ -448,7 +449,12 @@ int dbgps3_find_path(const dbgps3_graph_t *g, uint64_t start_kmer,
                      int path_len, int index_byte_num,
                      char *result_buf, int result_buf_len)
 {
-    if (!g || !result_buf) return -1;
+    if (!g || !g->_h || !result_buf) return -1;
+
+    if (path_len < 0 || path_len % 4 != 0 || path_len > DBGPS3_MAX_PATH_LEN ||
+        index_byte_num < 0 || index_byte_num > g->k / 4 ||
+        cut_cov < 0 || cut_cov >= DBGPS3_KC_MAX ||
+        !isfinite(max_cov_ratio) || max_cov_ratio < 1.0) return -1;
 
     int k = g->k;
     uint64_t mask = g->mask;
@@ -463,18 +469,20 @@ int dbgps3_find_path(const dbgps3_graph_t *g, uint64_t start_kmer,
     path_node_t *all_nodes = (path_node_t *)malloc(
         DBGPS3_MAX_PATH_NUM * DBGPS3_MAX_PATH_LEN * sizeof(path_node_t));
     path_node_t **term_nodes = (path_node_t **)malloc(
-        (DBGPS3_MAX_PATH_NUM + 1) * sizeof(path_node_t *));
-    if (!all_nodes || !term_nodes) {
+        DBGPS3_MAX_PATH_NUM * sizeof(path_node_t *));
+    path_node_t **next_term_nodes = (path_node_t **)malloc(
+        DBGPS3_MAX_PATH_NUM * sizeof(path_node_t *));
+    int ret = -1;
+    if (!all_nodes || !term_nodes || !next_term_nodes) {
         free(all_nodes);
         free(term_nodes);
+        free(next_term_nodes);
         return -1;
     }
 
+    all_nodes[0].pre_node = NULL;
     all_nodes[0].kmer = start_kmer;
     all_nodes[0].cov = kmer_cov_internal(dbgps3_min_hash_key(start_kmer, k), mask, h);
-    int a_cov = all_nodes[0].cov / max_cov_ratio;
-    int b_cov = all_nodes[0].cov * max_cov_ratio;
-    if (a_cov < cut_cov + 1) a_cov = cut_cov + 1;
 
     term_nodes[0] = &all_nodes[0];
     int term_node_num = 1, all_node_num = 1, p = 0;
@@ -485,14 +493,15 @@ int dbgps3_find_path(const dbgps3_graph_t *g, uint64_t start_kmer,
 
     int new_term_node_num;
 
-    while(p <= path_len && term_node_num > 0 && term_node_num <= DBGPS3_MAX_PATH_NUM){
+    while(p <= path_len && term_node_num > 0){
         int i;
         new_term_node_num = 0;
         int n_p = 0;
-        while(n_p < term_node_num && new_term_node_num <= DBGPS3_MAX_PATH_NUM){
+        while(n_p < term_node_num){
             p_node = term_nodes[n_p];
-            a_cov = p_node->cov / max_cov_ratio;
-            b_cov = p_node->cov * max_cov_ratio;
+            int a_cov = p_node->cov / max_cov_ratio;
+            double upper_cov = p_node->cov * max_cov_ratio;
+            int b_cov = upper_cov > DBGPS3_KC_MAX ? DBGPS3_KC_MAX : (int)upper_cov;
             if(a_cov < cut_cov + 1) a_cov = cut_cov + 1;
 
             next_nodes[0].kmer = ((*p_node).kmer<<2) & mask;
@@ -506,36 +515,33 @@ int dbgps3_find_path(const dbgps3_graph_t *g, uint64_t start_kmer,
             next_nodes[3].cov = kmer_cov_internal(dbgps3_min_hash_key(next_nodes[3].kmer, k), mask, h);
 
             for(i=0; i<4; i++){
-                if (p < skip_ratios) {
-                    if(next_nodes[i].cov >= cut_cov + 1) {
-                        all_nodes[all_node_num].pre_node = p_node;
-                        all_nodes[all_node_num].kmer = next_nodes[i].kmer;
-                        all_nodes[all_node_num].cov = next_nodes[i].cov;
-                        term_nodes[new_term_node_num] = &all_nodes[all_node_num];
-                        new_term_node_num++;
-                        all_node_num++;
-                    }
-                } else {
-                    if(next_nodes[i].cov >= a_cov && next_nodes[i].cov <= b_cov) {
-                        all_nodes[all_node_num].pre_node = p_node;
-                        all_nodes[all_node_num].kmer = next_nodes[i].kmer;
-                        all_nodes[all_node_num].cov = next_nodes[i].cov;
-                        term_nodes[new_term_node_num] = &all_nodes[all_node_num];
-                        new_term_node_num++;
-                        all_node_num++;
-                    }
+                int eligible = p < skip_ratios
+                    ? next_nodes[i].cov >= cut_cov + 1
+                    : next_nodes[i].cov >= a_cov && next_nodes[i].cov <= b_cov;
+                if (eligible) {
+                    /* Stop before writing either workspace past its capacity. */
+                    if (new_term_node_num >= DBGPS3_MAX_PATH_NUM ||
+                        all_node_num >= DBGPS3_MAX_PATH_NUM * DBGPS3_MAX_PATH_LEN)
+                        goto cleanup;
+                    all_nodes[all_node_num].pre_node = p_node;
+                    all_nodes[all_node_num].kmer = next_nodes[i].kmer;
+                    all_nodes[all_node_num].cov = next_nodes[i].cov;
+                    next_term_nodes[new_term_node_num++] = &all_nodes[all_node_num++];
                 }
             }
             n_p++;
         }
+        path_node_t **swap = term_nodes;
+        term_nodes = next_term_nodes;
+        next_term_nodes = swap;
         term_node_num = new_term_node_num;
         ++p;
     }
 
-    int ret;
     if(term_node_num == 1){
         unsigned char *path_buf;
-        CALLOC(path_buf, seq_len);
+        CALLOC(path_buf, seq_len > 0 ? seq_len : 1);
+        if (!path_buf) goto cleanup;
         nodes_path(term_nodes[0], path_buf, path_len, k, index_byte_num);
 
         /* Decode internal seq to ACGT */
@@ -545,12 +551,12 @@ int dbgps3_find_path(const dbgps3_graph_t *g, uint64_t start_kmer,
 
         free(path_buf);
         ret = 0;
-    } else {
-        ret = -1;
     }
 
+cleanup:
     free(all_nodes);
     free(term_nodes);
+    free(next_term_nodes);
     return ret;
 }
 

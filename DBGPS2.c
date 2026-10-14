@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include <inttypes.h>
 #include <time.h>
+#include <math.h>
+#include <string.h>
 #include "ketopt.h" // command-line argument parser
 #include "kthread.h" // multi-threading models: pipeline and multi-threaded for loop
 
@@ -584,7 +586,7 @@ unsigned short kmer_cov(uint64_t kmer, uint64_t mask, kc_c4x_t *h){
     hash_key = hash_key >> KC_BITS<< KC_BITS;
     x = kc_c4_get(h->h[j], hash_key);
     //if(x == 0){return 50;} //To avoid of segment fault
-    if(kh_exist(h->h[j], x)){
+    if(x != kh_end(h->h[j]) && kh_exist(h->h[j], x)){
         cov = kh_key(h->h[j], x) & KC_MAX;
     }
     return cov;
@@ -666,15 +668,22 @@ void print_uint64_kmer(uint64_t km, int km_len){
 }
 
 path_node all_nodes[Max_Path_Num * Max_Path_Len];
-path_node *term_nodes[Max_Path_Num+1];
+path_node *term_nodes[Max_Path_Num];
+path_node *next_term_nodes[Max_Path_Num];
 
 
 int find_paths(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer, uint64_t mask, int cut_cov, int path_len, int k, int index_byte_num, double max_cov_ratio, int skip_ratios){
 
+    if (path_len < 0 || path_len % 4 != 0 || index_byte_num < 0 ||
+        index_byte_num > k / 4 || path_len >= Max_Path_Len ||
+        path_len + index_byte_num * 4 >= Max_Path_Len ||
+        (path_len >> 2) + index_byte_num < 2 ||
+        cut_cov < 0 || cut_cov >= KC_MAX ||
+        !isfinite(max_cov_ratio) || max_cov_ratio < 1.0) return -1;
+
+    all_nodes[0].pre_node = NULL;
     all_nodes[0].kmer = kmer;
     all_nodes[0].cov = kmer_cov(min_hash_key(kmer, k),mask,h);
-    int a_cov = all_nodes[0].cov/max_cov_ratio, b_cov = all_nodes[0].cov * max_cov_ratio;
-    if(a_cov < cut_cov + 1){a_cov = cut_cov + 1;}
 
     term_nodes[0] = &all_nodes[0];
 
@@ -687,17 +696,19 @@ int find_paths(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer, uint64_t mask
 
     int new_term_node_num;
 
-    while(p <= path_len && term_node_num > 0 && term_node_num <= Max_Path_Num){
+    while(p <= path_len && term_node_num > 0){
         int i;
 
         new_term_node_num = 0;
 
         int n_p = 0;
-        while(n_p < term_node_num && new_term_node_num <=Max_Path_Num){
+        while(n_p < term_node_num){
 
             p_node = term_nodes[n_p];
 
-            a_cov = p_node->cov/max_cov_ratio, b_cov = p_node->cov * max_cov_ratio;
+            int a_cov = p_node->cov/max_cov_ratio;
+            double upper_cov = p_node->cov * max_cov_ratio;
+            int b_cov = upper_cov > KC_MAX ? KC_MAX : (int)upper_cov;
             if(a_cov < cut_cov + 1){a_cov = cut_cov + 1;}
 
             next_nodes[0].kmer = ((*p_node).kmer<<2) & mask;
@@ -710,32 +721,18 @@ int find_paths(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer, uint64_t mask
             next_nodes[2].cov = kmer_cov(min_hash_key(next_nodes[2].kmer, k),mask,h);
             next_nodes[3].cov = kmer_cov(min_hash_key(next_nodes[3].kmer, k),mask,h);
 
-            // Reuse the same i from the outer loop
             for(i=0;i<4;i++){
-                // Check if we're still in the skipping phase (skip ratio checks for first skip_ratios nodes)
-                if (p < skip_ratios) {
-                    // During skipping phase, only check minimum coverage
-                    if(next_nodes[i].cov >= cut_cov + 1) {
-                        all_nodes[all_node_num].pre_node = p_node;
-                        all_nodes[all_node_num].kmer = next_nodes[i].kmer;
-                        all_nodes[all_node_num].cov = next_nodes[i].cov;
-                        term_nodes[new_term_node_num] = &all_nodes[all_node_num];
-                        new_term_node_num++;
-                        all_node_num++;
-                    }
-                } else {
-                    // Normal phase: check ratio bounds as before
-                    if(next_nodes[i].cov >=a_cov && next_nodes[i].cov <= b_cov) {
-
-                        all_nodes[all_node_num].pre_node = p_node;
-                        all_nodes[all_node_num].kmer = next_nodes[i].kmer;
-                        all_nodes[all_node_num].cov = next_nodes[i].cov;
-
-                        term_nodes[new_term_node_num] = &all_nodes[all_node_num];
-
-                        new_term_node_num++;
-                        all_node_num++;
-                    }
+                int eligible = p < skip_ratios
+                    ? next_nodes[i].cov >= cut_cov + 1
+                    : next_nodes[i].cov >= a_cov && next_nodes[i].cov <= b_cov;
+                if (eligible) {
+                    /* An incomplete search cannot establish a unique CRC-valid path. */
+                    if (new_term_node_num >= Max_Path_Num ||
+                        all_node_num >= Max_Path_Num * Max_Path_Len) return -1;
+                    all_nodes[all_node_num].pre_node = p_node;
+                    all_nodes[all_node_num].kmer = next_nodes[i].kmer;
+                    all_nodes[all_node_num].cov = next_nodes[i].cov;
+                    next_term_nodes[new_term_node_num++] = &all_nodes[all_node_num++];
                 }
             }
 
@@ -743,39 +740,43 @@ int find_paths(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer, uint64_t mask
 
             n_p++;
         }
+        /* Keep this generation intact until every parent has been visited. */
+        memcpy(term_nodes, next_term_nodes, new_term_node_num * sizeof(*term_nodes));
         term_node_num = new_term_node_num;
         ++p;
     }
 
-    int i, pass_n=0, c_index;
+    if (term_node_num == 0) return -1;
 
-    for(i=0; i < term_node_num; i++){
-        CALLOC(paths[i], seq_len);
-        nodes_path(term_nodes[i], paths[i], path_len, k, index_byte_num);
-        unsigned char *path_tmp;
-        CALLOC(path_tmp, seq_len);
-        int j=0;
-        for(j=0; j< seq_len; j++){
-            *(path_tmp + j) = one_to_two_table[*(paths[i] + j)];
-            //*(paths[i] + j) = one_to_two_table[*(paths[i] + j)];
-        }
-        if(crc16_check(path_tmp, seq_len)){
-            pass_n = pass_n + 1;
+    unsigned char *candidate = (unsigned char *)calloc(seq_len, 1);
+    unsigned char *path_tmp = (unsigned char *)malloc(seq_len);
+    if (!candidate || !path_tmp) {
+        free(candidate);
+        free(path_tmp);
+        return -1;
+    }
+
+    int c_index = -1;
+    for (int i = 0; i < term_node_num; i++) {
+        nodes_path(term_nodes[i], candidate, path_len, k, index_byte_num);
+        for (int j = 0; j < seq_len; j++) path_tmp[j] = one_to_two_table[candidate[j]];
+        if (crc16_check(path_tmp, seq_len)) {
+            if (c_index >= 0) {
+                free(paths[c_index]);
+                paths[c_index] = NULL;
+                c_index = -1;
+                break;
+            }
+            paths[i] = (unsigned char *)malloc(seq_len);
+            if (!paths[i]) break;
+            memcpy(paths[i], candidate, seq_len);
             c_index = i;
-            /*
-            unsigned char DNA_seq[Max_Path_Len];
-
-            DNA_seq[path_len + index_byte_num*4] = '\0';
-            intseq_actg(path_tmp, DNA_seq, (path_len>>2) + index_byte_num);
-            fprintf(stdout, "\t%s\n", DNA_seq);
-            */
         }
     }
-    //fprintf(stderr, "%d\t", n);
-    if(pass_n == 1){
-        return c_index;
-    }else{return -1;}
-    //return pass_n;
+    free(candidate);
+    free(path_tmp);
+    /* Only the unique result is retained; the caller owns that allocation. */
+    return c_index;
 }
 
 
@@ -1027,6 +1028,7 @@ int main(int argc, char *argv[])
                         // Output to stdout if no output file is specified
                         printf("%d\t%s\n", id, DNA_seq);
                     }
+                    free(path[c_index]);
                 }
             }
 
@@ -1063,6 +1065,7 @@ int main(int argc, char *argv[])
                             // Output to stdout if no output file is specified
                             printf("%d\t%s\n", id, DNA_seq);
                         }
+                        free(path[c_index]);
                     }
                 }
 

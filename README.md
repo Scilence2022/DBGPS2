@@ -88,15 +88,21 @@ Options:
   -R FLOAT   Upper bound for ratio range iteration (0 = disabled)
   -s INT     Number of initial positions to skip ratio checks for
   -o STR     Output prefix for log file and strands file
-  -M FILE    Custom DNA/bit mapping (default: original two-base mapping)
+  -M FILE    Custom DNA/bit mapping (default: none; built-in A=00,C=01,G=10,T=11)
 ```
 
 #### Custom base-to-bit mappings
 
 `DBGPS2 -M codebook.map` supports a reversible, context-independent mapping from
 `N` bases to `M` bits, with `1 <= N <= 8` and `1 <= M <= 16`, `M <= 2N`.
-Omit `-M` to retain the original encoding and output. This option applies to
-DBGPS2; DBGPS3 retains its existing codec.
+Without `-M`, DBGPS2 uses the same built-in encoding as its k-mers:
+`A=00, C=01, G=10, T=11`. Index bits are used directly as packed DNA, and CRC
+validation reads the reconstructed bytes directly, without a mapping table or
+an extra conversion. For example, the byte `00011011` is the DNA word `ACGT`.
+This option applies to DBGPS2; DBGPS3 retains its existing codec.
+
+**Default behavior change:** strands encoded with the original special two-base
+permutation now require `-M examples/legacy-2base.map` explicitly.
 
 The text format specifies the block widths followed by `DNA BITS` rows. For example:
 
@@ -120,12 +126,13 @@ this format.
 
 Ready-to-use examples:
 
-- [legacy-2base.map](examples/legacy-2base.map): the original two-base permutation.
-- [acgt-1base.map](examples/acgt-1base.map): `A=00, C=01, G=10, T=11`.
+- [legacy-2base.map](examples/legacy-2base.map): explicitly enables the original two-base permutation.
+- [acgt-1base.map](examples/acgt-1base.map): an explicit codebook equivalent to the default built-in encoding.
 - [3base-5bit.map](examples/3base-5bit.map): an example of 32 allowed DNA triplets.
 
 ```bash
 make DBGPS2
+./DBGPS2 -a 1000 -b 1001 -o assembled reads.fq.gz # Built-in canonical encoding
 ./DBGPS2 -M examples/legacy-2base.map -a 1000 -b 1001 -o assembled reads.fq.gz
 ./DBGPS2 -M examples/3base-5bit.map -i 24 -l 120 -a 0 -b 1000 -o assembled reads.fq.gz
 ```
@@ -162,10 +169,12 @@ the two existing 18-base primers.
 The graph always stores `A=0, C=1, G=2, T=3`, preserving its rolling k-mer updates,
 reverse complements, canonicalization, and coverage lookups. The configurable
 codec is used only to construct index seeds and validate completed candidates.
+Without `-M`, the index needs only a bit mask, and reconstructed candidate bytes
+go directly to CRC validation. No mapping tables are allocated, loaded, or queried.
 
 At startup, full-rate mappings with block sizes 1, 2, or 4 bases are compiled
-into forward and reverse 256-entry byte tables. Candidate decoding therefore
-uses one lookup per four bases, just like the original codec. Other block sizes
+into forward and reverse 256-entry byte tables. Custom candidate decoding therefore
+uses one lookup per four bases. Other block sizes
 use a dense DNA-word lookup table and a small integer bit buffer; no strings,
 hash lookups, or codebook searches occur during candidate decoding. A forbidden
 word rejects a candidate immediately. Temporary candidate buffers are on the

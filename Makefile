@@ -27,9 +27,12 @@ test:
 	$(CC) $(CFLAGS) -I. -o "$$test_dir/codec" tests/test_codec.c dbgps_codec.c; \
 	"$$test_dir/codec" "$$test_dir/generated.map"; \
 	$(CC) $(CFLAGS) -o "$$test_dir/DBGPS2" DBGPS2.c dbgps_codec.c kthread.c $(LIBS) -lpthread; \
-	$(CC) $(CFLAGS) -o "$$test_dir/DBGPS3" DBGPS3.c dbgps3_core.c dbgps3_server.c minjson.c kthread.c $(LIBS) -lpthread; \
+	$(CC) $(CFLAGS) -o "$$test_dir/DBGPS3" DBGPS3.c dbgps3_core.c dbgps3_server.c dbgps_codec.c minjson.c kthread.c $(LIBS) -lpthread; \
+	$(CC) $(CFLAGS) -o "$$test_dir/dbgps3-client" dbgps3_client.c minjson.c $(LIBS); \
 	python3 tests/test_cli.py "$$test_dir/DBGPS2" "$$test_dir/DBGPS3"; \
-	python3 tests/test_mapping_cli.py "$$test_dir/DBGPS2"
+	python3 tests/test_mapping_cli.py "$$test_dir/DBGPS2"; \
+	python3 tests/test_mapping_cli.py "$$test_dir/DBGPS3"; \
+	python3 tests/test_mapping_server.py "$$test_dir/DBGPS3" "$$test_dir/dbgps3-client"
 
 # DBGPS2: Read-Length constrained version with dynamic coverage ratio support
 # Previously DBGPS-dy2-rl
@@ -47,8 +50,8 @@ DBGPS2:DBGPS2.c dbgps_codec.c dbgps_codec.h khashl.h ketopt.h kseq.h kthread.h
 # - Server mode via -S flag with JSON-RPC 2.0 over TCP
 # - Thread-per-connection concurrency model
 # - minjson: lightweight JSON parser/builder for JSON-RPC protocol
-DBGPS3:DBGPS3.c dbgps3_core.c dbgps3_server.c minjson.c khashl.h ketopt.h kseq.h kthread.h dbgps3_core.h dbgps3_server.h minjson.h
-	$(CC) $(CFLAGS) -o $@ DBGPS3.c dbgps3_core.c dbgps3_server.c minjson.c kthread.c $(LIBS) -lpthread
+DBGPS3:DBGPS3.c dbgps3_core.c dbgps3_server.c dbgps_codec.c dbgps_codec.h minjson.c khashl.h ketopt.h kseq.h kthread.h dbgps3_core.h dbgps3_server.h minjson.h
+	$(CC) $(CFLAGS) -o $@ DBGPS3.c dbgps3_core.c dbgps3_server.c dbgps_codec.c minjson.c kthread.c $(LIBS) -lpthread
 
 # dbgps3-client: Interactive CLI client for DBGPS3 server
 dbgps3-client:dbgps3_client.c minjson.c minjson.h

@@ -4,6 +4,10 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* Immutable after loading; graph keys always retain A=0,C=1,G=2,T=3. */
 typedef struct {
     unsigned bases, bits;
@@ -23,5 +27,9 @@ int dbgps_codec_encode_index(const dbgps_codec_t *codec, uint64_t index,
    are zero. Decode exactly out_bytes and require zero CRC padding bits. */
 int dbgps_codec_decode(const dbgps_codec_t *codec, const unsigned char *dna,
                        unsigned dna_bases, unsigned char *out, unsigned out_bytes);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

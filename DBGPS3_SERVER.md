@@ -52,7 +52,7 @@ DBGPS3 supports a **server mode** that exposes the de Bruijn graph engine over a
 ### Build
 
 ```bash
-make dbgps3-server
+make DBGPS3
 ```
 
 ### Launch
@@ -71,6 +71,9 @@ make dbgps3-server
 
 # With graph build options
 ./DBGPS3 -S -k 31 -t 4 input.fq.gz
+
+# Custom mapping shared by every query (same format as DBGPS2)
+./DBGPS3 -S -M examples/3base-5bit.map -i 24 -l 120 input.fq.gz
 ```
 
 ### Server-Specific Options
@@ -80,6 +83,7 @@ make dbgps3-server
 | `-S [PORT]` | Start server mode. Optional port argument. | 9300 |
 | `-P INT` | Server TCP port. Overrides `-S` port. | 9300 |
 | `-L INT` | Max concurrent clients. | 10 |
+| `-M FILE` | Immutable DNA/bit codebook, shared by all queries. | No custom mapping |
 
 ### Graph Build Options
 
@@ -89,11 +93,25 @@ These options affect the de Bruijn graph construction and are set at server star
 |------|-------------|---------|
 | `-k INT` | K-mer size. | 31 |
 | `-t INT` | Number of threads for graph building. | 3 |
-| `-p INT` | Prefix length in bits (min: 14). | 14 |
+| `-p INT` | Prefix length in bits (must be 14). | 14 |
+
+Without `-M`, index seeds use the canonical k-mer encoding directly:
+`A=00,C=01,G=10,T=11`. Use `-M examples/legacy-2base.map` for data encoded with
+the original special two-base permutation. The codebook is parsed once before
+graph construction and remains read-only during queries. There is no per-query
+codebook filename parameter.
+
+All DBGPS2 codebook widths are supported: 1–8 bases to 1–16 bits, with at most
+two bits per base. Index and payload lengths must contain complete mapping
+blocks and decode to whole bytes. For a 3-base/5-bit code, `-i 24` is a 40-bit
+index and `-l 120` is a 200-bit payload. DBGPS3 returns a unique codebook-valid
+DNA path and does not append or validate CRC. `pathLen` is the payload length
+in bases, excluding any following CRC.
 
 ### Per-Query Parameters
 
-The following parameters are provided by the client in each request, not at server startup:
+Clients may provide these parameters in each request. Startup `-i` and `-l`
+set the default index and payload lengths for requests that omit them:
 
 | Parameter | API Key | Description | Default |
 |-----------|---------|-------------|---------|
@@ -200,7 +218,11 @@ Get the coverage count for a k-mer in the graph.
 
 ### 2. `path/find` — Find Path by Index
 
-Decode a DNA strand by its decimal index number. The server encodes the index into a starting k-mer using `indexLen`.
+Decode a DNA strand by its decimal index number. The server encodes the index
+into a starting k-mer using `indexLen` and the startup codebook. `index` accepts
+an unsigned integer up to `2^53-1` or an unsigned decimal string for exact larger
+values. The index must fit the selected layout. The client `find <index>`
+shortcut sends a decimal string, preserving all supported index bits.
 
 **Request:**
 ```json
@@ -227,8 +249,8 @@ All parameters except `index` are optional and default to the graph's built-in v
   "jsonrpc": "2.0",
   "result": {
     "index": 101010102,
-    "path": "CCTGCAGAGTAGCATGTCACGTACGT...",
-    "c_index": 42
+    "found": true,
+    "sequence": "ACGTACGT..."
   },
   "id": 2
 }
@@ -240,16 +262,22 @@ All parameters except `index` are optional and default to the graph's built-in v
   "jsonrpc": "2.0",
   "result": {
     "index": 101010102,
-    "path": "",
-    "c_index": -1
+    "found": false
   },
   "id": 2
 }
 ```
 
+String indices are returned as decimal strings. Incompatible block lengths,
+out-of-range indices, fractional numbers, and invalid query parameters return
+JSON-RPC error `-32602` before constructing a primer seed.
+
 ### 3. `path/findKmer` — Find Path by Raw K-mer
 
-Find a path starting from an arbitrary k-mer sequence. Since the client provides the starting k-mer directly, `indexLen` is not needed.
+Find a path starting from an arbitrary k-mer sequence. Since the client provides
+the starting k-mer directly, `indexLen` is not needed. The literal k-mer always
+uses canonical A/C/G/T encoding; the returned extension must start at a codeword
+boundary and satisfy the startup codebook. Only the extension is returned.
 
 **Request:**
 ```json
@@ -257,7 +285,7 @@ Find a path starting from an arbitrary k-mer sequence. Since the client provides
   "jsonrpc": "2.0",
   "method": "path/findKmer",
   "params": {
-    "startKmer": "ACGTACGTACGTACGTACGTACGT",
+    "kmer": "ACGTACGTACGTACGTACGTACGTACGTACG",
     "cutCov": 1,
     "maxCovRatio": 2.55,
     "skipRatios": 0,
@@ -267,16 +295,16 @@ Find a path starting from an arbitrary k-mer sequence. Since the client provides
 }
 ```
 
-All parameters except `startKmer` are optional.
+All parameters except `kmer` are optional. The k-mer must contain exactly `k` bases.
 
 **Success Response:**
 ```json
 {
   "jsonrpc": "2.0",
   "result": {
-    "startKmer": "ACGTACGTACGTACGTACGTACGT",
-    "path": "ACGTACGTACGTACGTACGTACGT...",
-    "c_index": 42
+    "kmer": "ACGTACGTACGTACGTACGTACGTACGTACG",
+    "found": true,
+    "sequence": "ACGTACGT..."
   },
   "id": 3
 }
@@ -301,21 +329,26 @@ Retrieve graph metadata.
 {
   "jsonrpc": "2.0",
   "result": {
-    "kmerSize": 31,
-    "prefixBits": 14,
-    "kmerCount": 12345678,
-    "indexLen": 16,
-    "indexByteNum": 4,
-    "pathLen": 140,
-    "threadCount": 3,
-    "blockSize": 10000000,
-    "readLen": 200
+    "k": 31,
+    "kmer_count": 12345678,
+    "index_len": 16,
+    "index_byte_num": 4,
+    "path_len": 140,
+    "mapping": {
+      "custom": false,
+      "bases": 1,
+      "bits": 2,
+      "mode": "canonical"
+    }
   },
   "id": 4
 }
 ```
 
-> **Note:** `indexLen` and `pathLen` in `graph/info` are the graph's default values. Clients can override them per-query in `path/find` and `path/findKmer`.
+`index_len` and `path_len` are the default query lengths. `index_byte_num` counts
+decoded data bytes; for a 24-base/40-bit index it is 5. Mapping mode is
+`canonical`, `byte_lookup`, or `block_lookup`. Clients may override lengths
+per query, subject to the same codeword and byte alignment checks.
 
 ### 5. `graph/load` — Load Additional Data
 
@@ -436,7 +469,7 @@ def dbgps3_request(method, params=None, host="127.0.0.1", port=9300):
 
 # Example usage
 result = dbgps3_request("graph/info")
-print(f"K-mer count: {result['result']['kmerCount']}")
+print(f"K-mer count: {result['result']['kmer_count']}")
 
 result = dbgps3_request("kmer/cov", {"kmer": "ACGT" * 8})
 print(f"Coverage: {result['result']['coverage']}")
@@ -449,18 +482,36 @@ For embedding the DBGPS3 engine into other C applications:
 ```c
 #include "dbgps3_core.h"
 #include "dbgps3_server.h"
+#include <stdio.h>
 
 /* Build graph */
 dbgps3_graph_t *g = dbgps3_load(31, 14, 3, 10000000, 200, 1, &input_file);
+if (!g) return 1;
+
+/* Optional custom mapping: set compatible defaults before configuring it.
+   The graph owns the codebook; configure it before starting any query threads. */
+g->index_len = 24;
+g->path_len = 120;
+char error[512];
+if (dbgps3_set_mapping(g, "examples/3base-5bit.map", error, sizeof(error)) < 0) {
+    fprintf(stderr, "%s\n", error);
+    dbgps3_destroy(g);
+    return 1;
+}
+
+uint64_t encoded_index;
+dbgps3_encode_index(g, 1000, g->index_len, &encoded_index);
+uint64_t start_kmer = dbgps3_primer_uint64("CCTGCAGAGTAGCATGTC", 18, g->index_len, g->k)
+                      | encoded_index;
 
 /* Query k-mer coverage */
-uint64_t key = dbgps3_actgkmer_hashkey("ACGTACGTACGTACGTACGTACGT", 31);
+uint64_t key = dbgps3_actgkmer_hashkey("ACGTACGTACGTACGTACGTACGTACGTACG", 31);
 unsigned short cov = dbgps3_kmer_cov(g, key);
 
 /* Find a path (path_len and index_byte_num are explicit per-query params) */
 char buf[DBGPS3_MAX_PATH_LEN + 128];
 int rc = dbgps3_find_path(g, start_kmer, 1, 2.55, 0,
-                          140, 4,  /* path_len, index_byte_num */
+                          g->path_len, g->index_byte_num,
                           buf, sizeof(buf));
 
 /* Start server */

@@ -8,6 +8,9 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <pthread.h>
+#include <math.h>
+#include <limits.h>
+#include <inttypes.h>
 #include "dbgps3_core.h"
 #include "dbgps3_server.h"
 #include "minjson.h"
@@ -72,43 +75,81 @@ static mj_val handle_kmer_cov(dbgps3_graph_t *g, const mj_val *params, mj_val id
 }
 
 /* ---- Handler: path/find ---- */
+static int optional_int(const mj_val *params, const char *key, int fallback,
+                         int minimum, int maximum, int *value)
+{
+    mj_val field = mj_object_get(params, key);
+    if (!mj_object_has(params, key)) {
+        *value = fallback;
+        return 0;
+    }
+    if (field.type != MJ_NUMBER || !isfinite(field.number) ||
+        field.number < minimum || field.number > maximum ||
+        (double)(int)field.number != field.number) return -1;
+    *value = (int)field.number;
+    return 0;
+}
+
+typedef struct {
+    int cut_cov, skip_ratios, index_len, index_bytes, path_len;
+    double ratio;
+} path_options_t;
+
+static int read_path_options(const dbgps3_graph_t *g, const mj_val *params,
+                              int raw_kmer, path_options_t *out)
+{
+    if (optional_int(params, "cutCov", 1, 0, DBGPS3_KC_MAX - 1, &out->cut_cov) < 0 ||
+        optional_int(params, "skipRatios", 0, 0, INT_MAX, &out->skip_ratios) < 0 ||
+        optional_int(params, "pathLen", g->path_len, 0, DBGPS3_MAX_PATH_LEN, &out->path_len) < 0)
+        return -1;
+    out->index_len = 0;
+    if (!raw_kmer && optional_int(params, "indexLen", g->index_len, 0, g->k, &out->index_len) < 0)
+        return -1;
+    mj_val ratio = mj_object_get(params, "maxCovRatio");
+    if (mj_object_has(params, "maxCovRatio") && ratio.type != MJ_NUMBER) return -1;
+    out->ratio = mj_get_number(&ratio, 2.55);
+    if (!isfinite(out->ratio) || out->ratio < 1 ||
+        (!raw_kmer && g->k - out->index_len > 18)) return -1;
+    return dbgps3_validate_layout(g, out->index_len, out->path_len, &out->index_bytes);
+}
+
 static mj_val handle_path_find(dbgps3_graph_t *g, const mj_val *params, mj_val id)
 {
-    mj_val pv;
-    pv = mj_object_get(params, "index");
-    int index = mj_get_int(&pv, -1);
-    if (index < 0) {
+    mj_val pv = mj_object_get(params, "index");
+    uint64_t index;
+    if (pv.type == MJ_STRING) {
+        if (dbgps3_parse_index(pv.string, &index) < 0)
+            return jrpc_error(JRPC_INVALID_PARAMS, "Invalid unsigned decimal 'index'", id);
+    } else if (pv.type == MJ_NUMBER && isfinite(pv.number) && pv.number >= 0 &&
+               pv.number <= 9007199254740991.0 && (double)(uint64_t)pv.number == pv.number) {
+        index = (uint64_t)pv.number;
+    } else {
         return jrpc_error(JRPC_INVALID_PARAMS, "Missing or invalid 'index' parameter", id);
     }
 
-    pv = mj_object_get(params, "cutCov");
-    int cut_cov = mj_get_int(&pv, 1);
-    pv = mj_object_get(params, "maxCovRatio");
-    double max_cov_ratio = mj_get_number(&pv, 2.55);
-    pv = mj_object_get(params, "skipRatios");
-    int skip_ratios = mj_get_int(&pv, 0);
-    pv = mj_object_get(params, "indexLen");
-    int index_len = mj_get_int(&pv, dbgps3_get_index_len(g));
-    pv = mj_object_get(params, "pathLen");
-    int path_len = mj_get_int(&pv, dbgps3_get_path_len(g));
-
-    int k = dbgps3_get_k(g);
+    path_options_t options;
+    uint64_t eid;
+    if (read_path_options(g, params, 0, &options) < 0 ||
+        dbgps3_encode_index(g, index, options.index_len, &eid) < 0)
+        return jrpc_error(JRPC_INVALID_PARAMS, "Incompatible mapping layout or index capacity", id);
 
     /* Default primer: same as CLI */
     const char *primer = "CCTGCAGAGTAGCATGTC";
     int pr_len = 18;
-    uint64_t pr_uint64 = dbgps3_primer_uint64(primer, pr_len, index_len, k);
-    uint64_t eid = dbgps3_index_encode((uint64_t)index, index_len);
+    uint64_t pr_uint64 = dbgps3_primer_uint64(primer, pr_len, options.index_len, g->k);
     uint64_t start_kmer = pr_uint64 | eid;
-    int index_byte_num = index_len >> 2;
 
     char result_buf[DBGPS3_MAX_PATH_LEN + 128];
-    int rc = dbgps3_find_path(g, start_kmer, cut_cov, max_cov_ratio, skip_ratios,
-                               path_len, index_byte_num,
+    int rc = dbgps3_find_path(g, start_kmer, options.cut_cov, options.ratio, options.skip_ratios,
+                               options.path_len, options.index_bytes,
                                result_buf, sizeof(result_buf));
 
     mj_val result = mj_object();
-    mj_object_set(&result, "index", mj_number(index));
+    if (pv.type == MJ_STRING) {
+        char decimal[32];
+        snprintf(decimal, sizeof(decimal), "%"PRIu64, index);
+        mj_object_set(&result, "index", mj_string(decimal));
+    } else mj_object_set(&result, "index", mj_number((double)index));
     if (rc == 0) {
         mj_object_set(&result, "found", mj_bool(1));
         mj_object_set(&result, "sequence", mj_string(result_buf));
@@ -136,23 +177,15 @@ static mj_val handle_path_find_kmer(dbgps3_graph_t *g, const mj_val *params, mj_
         return jrpc_error(JRPC_INVALID_PARAMS, msg, id);
     }
 
-    pv = mj_object_get(params, "cutCov");
-    int cut_cov = mj_get_int(&pv, 1);
-    pv = mj_object_get(params, "maxCovRatio");
-    double max_cov_ratio = mj_get_number(&pv, 2.55);
-    pv = mj_object_get(params, "skipRatios");
-    int skip_ratios = mj_get_int(&pv, 0);
-    pv = mj_object_get(params, "pathLen");
-    int path_len = mj_get_int(&pv, dbgps3_get_path_len(g));
-    /* index_byte_num is not needed for findKmer since the client provides the raw k-mer,
-       but the decode step still needs it. Use 0 as default (no index in output). */
-    int index_byte_num = 0;
+    path_options_t options;
+    if (read_path_options(g, params, 1, &options) < 0)
+        return jrpc_error(JRPC_INVALID_PARAMS, "Incompatible mapping layout or path parameters", id);
 
     uint64_t start_kmer = dbgps3_actgkmer_uint64(kmer_str, k);
 
     char result_buf[DBGPS3_MAX_PATH_LEN + 128];
-    int rc = dbgps3_find_path(g, start_kmer, cut_cov, max_cov_ratio, skip_ratios,
-                               path_len, index_byte_num,
+    int rc = dbgps3_find_path(g, start_kmer, options.cut_cov, options.ratio, options.skip_ratios,
+                               options.path_len, 0,
                                result_buf, sizeof(result_buf));
 
     mj_val result = mj_object();
@@ -176,6 +209,14 @@ static mj_val handle_graph_info(dbgps3_graph_t *g, const mj_val *params, mj_val 
     mj_object_set(&result, "index_byte_num", mj_number(dbgps3_get_index_byte_num(g)));
     mj_object_set(&result, "path_len", mj_number(dbgps3_get_path_len(g)));
     mj_object_set(&result, "kmer_count", mj_number(dbgps3_get_kmer_count(g)));
+    mj_val mapping = mj_object();
+    int custom = g->codec.bases != 0;
+    mj_object_set(&mapping, "custom", mj_bool(custom));
+    mj_object_set(&mapping, "bases", mj_number(custom ? g->codec.bases : 1));
+    mj_object_set(&mapping, "bits", mj_number(custom ? g->codec.bits : 2));
+    mj_object_set(&mapping, "mode", mj_string(!custom ? "canonical" :
+                  g->codec.byte_fast ? "byte_lookup" : "block_lookup"));
+    mj_object_set(&result, "mapping", mapping);
     return jrpc_result(result, id);
 }
 

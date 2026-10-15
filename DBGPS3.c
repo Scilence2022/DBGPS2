@@ -7,6 +7,24 @@
 #include "dbgps3_core.h"
 #include "dbgps3_server.h"
 
+/* ketopt implements required short-option arguments only. Consume -S's
+   optional port explicitly so -S never swallows the input filename or -P. */
+static int optional_server_port(ketopt_t *o, int argc, char **argv, int *port)
+{
+    uint64_t value;
+    int attached = o->pos != 0;
+    if (o->i >= argc) return 0;
+    const char *text = argv[o->i] + (attached ? o->pos : 0);
+    if (dbgps3_parse_index(text, &value) < 0) return attached ? -1 : 0;
+    if (value < 1 || value > 65535) return -1;
+    *port = (int)value;
+    if (o->n_args) ketopt_permute(argv, o->i, o->n_args);
+    ++o->i;
+    o->pos = 0;
+    o->ind = o->i - o->n_args;
+    return 0;
+}
+
 int main(int argc, char *argv[])
 {
     int c=1, k = 31, p = DBGPS3_KC_BITS, block_size = 10000000, n_thread = 3;
@@ -21,21 +39,28 @@ int main(int argc, char *argv[])
     int server_port = 9300;
     int max_clients = 10;
 
-    unsigned int min_index = 101010102, max_index = 101295684, index_byte_num, max_cov = 0;
+    uint64_t min_index = 101010102, max_index = 101295684;
+    int index_byte_num;
+    unsigned int max_cov = 0;
+    const char *mapping_file = NULL;
     uint64_t pr_uint64;
 
     char p1[] = "CCTGCAGAGTAGCATGTC";
     int pr_len = 18;
 
     ketopt_t o = KETOPT_INIT;
-    while ((c = ketopt(&o, argc, argv, 1, "k:p:b:t:c:l:a:b:i:C:r:R:m:s:o:S::P:L:", 0)) >= 0) {
+    while ((c = ketopt(&o, argc, argv, 1, "k:p:b:t:c:l:a:b:i:C:r:R:m:s:o:M:SP:L:", 0)) >= 0) {
         if (c == 'k') k = atoi(o.arg);
         else if (c == 'p') p = atoi(o.arg);
         else if (c == 't') n_thread = atoi(o.arg);
         else if (c == 'c') min_cov = atoi(o.arg);
         else if (c == 'C') max_cov = atoi(o.arg);
-        else if (c == 'a') min_index = atoi(o.arg);
-        else if (c == 'b') max_index = atoi(o.arg);
+        else if (c == 'a' || c == 'b') {
+            if (dbgps3_parse_index(o.arg, c == 'a' ? &min_index : &max_index) < 0) {
+                fprintf(stderr, "ERROR: -%c requires an unsigned decimal index\n", c);
+                return 1;
+            }
+        }
         else if (c == 'i') index_len = atoi(o.arg);
         else if (c == 'l') payload_len = atoi(o.arg);
         else if (c == 'r') max_cov_ratio = atof(o.arg);
@@ -43,9 +68,20 @@ int main(int argc, char *argv[])
         else if (c == 'm') mem_test = 1;
         else if (c == 's') skip_ratios = atoi(o.arg);
         else if (c == 'o') output_prefix = o.arg;
-        else if (c == 'S') { server_mode = 1; if (o.arg) server_port = atoi(o.arg); }
+        else if (c == 'M') mapping_file = o.arg;
+        else if (c == 'S') {
+            server_mode = 1;
+            if (optional_server_port(&o, argc, argv, &server_port) < 0) {
+                fprintf(stderr, "ERROR: server port must be an integer from 1 to 65535\n");
+                return 1;
+            }
+        }
         else if (c == 'P') server_port = atoi(o.arg);
         else if (c == 'L') max_clients = atoi(o.arg);
+        else {
+            fprintf(stderr, "ERROR: unknown option or missing option value\n");
+            return 1;
+        }
     }
 
     if (argc - o.ind < 1) {
@@ -64,27 +100,48 @@ int main(int argc, char *argv[])
         fprintf(stderr, "  -t INT     number of threads [%d]\n", n_thread);
         fprintf(stderr, "  -c INT     k-mer coverage cut-off for exclusion of noise k-mers [%d]\n", min_cov);
         fprintf(stderr, "  -C INT     Switch on k-mer coverage testing mode.  [%d]\n", max_cov);
-        fprintf(stderr, "  -a INT     Initial index [%d]\n", min_index);
-        fprintf(stderr, "  -b INT     End index [%d]\n", max_index);
+        fprintf(stderr, "  -a INT     Initial index [%"PRIu64"]\n", min_index);
+        fprintf(stderr, "  -b INT     End index [%"PRIu64"]\n", max_index);
         fprintf(stderr, "  -r FLOAT   Maximum coverage ratio [%.1f]\n", max_cov_ratio);
         fprintf(stderr, "  -R FLOAT   Upper bound for ratio range iteration (0 = disabled) [%.1f]\n", max_r);
         fprintf(stderr, "  -s INT     Number of initial positions to skip ratio checks for [%d]\n", skip_ratios);
         fprintf(stderr, "  -o STR     Output prefix for log file [none]\n");
+        fprintf(stderr, "  -M FILE    Custom DNA/bit mapping [none; built-in A=00,C=01,G=10,T=11]\n");
         fprintf(stderr, "  -S [PORT]  Start in server mode (default port: %d)\n", server_port);
         fprintf(stderr, "  -P INT     Server TCP port [%d]\n", server_port);
         fprintf(stderr, "  -L INT     Server max concurrent clients [%d]\n", max_clients);
         fprintf(stderr, "\n");
         return 1;
     }
-    if (p < DBGPS3_KC_BITS) {
-        fprintf(stderr, "ERROR: -p should be at least %d\n", DBGPS3_KC_BITS);
+    if (p != DBGPS3_KC_BITS) {
+        fprintf(stderr, "ERROR: -p must be %d\n", DBGPS3_KC_BITS);
         return 1;
     }
 
+    dbgps3_graph_t config = {0};
+    config.k = k;
+    config.index_len = index_len;
+    config.path_len = payload_len;
+    char mapping_error[512];
+    if (dbgps3_set_mapping(&config, mapping_file, mapping_error, sizeof(mapping_error)) < 0) {
+        fprintf(stderr, "ERROR: %s\n", mapping_error);
+        return 1;
+    }
+    uint64_t encoded_max;
+    if (dbgps3_validate_layout(&config, index_len, payload_len, &index_byte_num) < 0 ||
+        k - index_len > pr_len ||
+        (!server_mode && (min_index > max_index ||
+                         dbgps3_encode_index(&config, max_index, index_len, &encoded_max) < 0))) {
+        fprintf(stderr, "ERROR: incompatible strand layout or index range; index and payload must\n"
+                        "       contain whole mapping blocks and whole bytes, index must fit k,\n"
+                        "       k-index must fit the primer, and payload must be <= %d bp\n", DBGPS3_MAX_PATH_LEN);
+        dbgps_codec_destroy(&config.codec);
+        return 1;
+    }
     if(max_cov < min_cov){max_cov = min_cov;}
-    index_byte_num = index_len>>2;
     pr_uint64 = dbgps3_primer_uint64(p1, pr_len, index_len, k);
     path_len = payload_len;
+    if (config.codec.bases) read_len = 2 * pr_len + index_len + path_len;
 
     /* ---- Load the de Bruijn graph ---- */
     clock_t start, end;
@@ -97,8 +154,10 @@ int main(int argc, char *argv[])
                                       argc - o.ind, argv + o.ind);
     if (!g) {
         fprintf(stderr, "ERROR: failed to load input files\n");
+        dbgps_codec_destroy(&config.codec);
         return 1;
     }
+    g->codec = config.codec; /* Transfer ownership to the graph. */
 
     /* Override graph parameters set during loading */
     g->index_len = index_len;
@@ -110,6 +169,9 @@ int main(int argc, char *argv[])
 
     /* ---- Server mode ---- */
     if (server_mode) {
+        if (mapping_file)
+            fprintf(stderr, "Mapping: %s (%u bases <-> %u bits)\n", mapping_file, g->codec.bases, g->codec.bits);
+        else fprintf(stderr, "Mapping: none (built-in A=00,C=01,G=10,T=11; direct 2-bit packing)\n");
         fprintf(stderr, "\nK-mer counting time: %f seconds\n", (kc_dur/CLOCKS_PER_SEC));
         fprintf(stderr, "Starting DBGPS3 server on port %d (max clients: %d)...\n",
                 server_port, max_clients);
@@ -163,13 +225,19 @@ int main(int argc, char *argv[])
     PRINT_BOTH("Data encoding length (-l): %d bp\n", payload_len);
     PRINT_BOTH("Read length for k-mer counting: %d\n", read_len);
     PRINT_BOTH("Skip ratio checks for first (-s): %d positions\n", skip_ratios);
-    PRINT_BOTH("Initial index (-a): %d\n", min_index);
-    PRINT_BOTH("End index (-b): %d\n", max_index);
+    PRINT_BOTH("Initial index (-a): %"PRIu64"\n", min_index);
+    PRINT_BOTH("End index (-b): %"PRIu64"\n", max_index);
     PRINT_BOTH("Maximum coverage ratio (-r): %.2f\n", max_cov_ratio);
     PRINT_BOTH("Ratio range upper bound (-R): %.2f\n", max_r);
     PRINT_BOTH("Memory test mode: %s\n", mem_test ? "enabled" : "disabled");
     PRINT_BOTH("Path length (payload): %d\n", path_len);
     PRINT_BOTH("Index byte number: %d\n", index_byte_num);
+    if (mapping_file) {
+        PRINT_BOTH("Mapping: %s (%u bases <-> %u bits; %s)\n", mapping_file,
+                   g->codec.bases, g->codec.bits, g->codec.byte_fast ? "byte lookup" : "block lookup");
+    } else {
+        PRINT_BOTH("Mapping: none (built-in A=00,C=01,G=10,T=11; direct 2-bit packing)\n");
+    }
     PRINT_BOTH("Output prefix: %s\n", output_prefix ? output_prefix : "none");
     PRINT_BOTH("======================================\n");
 
@@ -179,10 +247,10 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Memory test mode activated! Press ENTER to continue...\n");
         getchar();
     }
-    fprintf(stderr, "Decoding strands from index %d to ",min_index);
-    fprintf(stderr, "%d ......\n",max_index);
+    fprintf(stderr, "Decoding strands from index %"PRIu64" to ",min_index);
+    fprintf(stderr, "%"PRIu64" ......\n",max_index);
 
-    unsigned int id;
+    uint64_t id;
     unsigned int cov_cut;
     int c_index;
     int dec_strand_num = 0;
@@ -196,10 +264,10 @@ int main(int argc, char *argv[])
             start = clock();
             dec_strand_num = 0;
 
-            unsigned int eid;
+            uint64_t eid;
             for(id=min_index; id<=max_index; id++) {
-                fprintf(stderr, "Processing index: %u\t", id);
-                eid = dbgps3_index_encode(id, index_len);
+                fprintf(stderr, "Processing index: %"PRIu64"\t", id);
+                if (dbgps3_encode_index(g, id, index_len, &eid) < 0) continue;
                 c_index = dbgps3_find_path(g, pr_uint64 | (uint64_t)eid,
                                            cov_cut, max_cov_ratio, skip_ratios,
                                            path_len, index_byte_num,
@@ -209,9 +277,9 @@ int main(int argc, char *argv[])
                 if(c_index > -1) {
                     dec_strand_num++;
                     if (output_prefix != NULL && strands_file != NULL) {
-                        fprintf(strands_file, "%d\t%s\n", id, result_buf);
+                        fprintf(strands_file, "%"PRIu64"\t%s\n", id, result_buf);
                     } else {
-                        printf("%d\t%s\n", id, result_buf);
+                        printf("%"PRIu64"\t%s\n", id, result_buf);
                     }
                 }
             }
@@ -229,10 +297,10 @@ int main(int argc, char *argv[])
                 start = clock();
                 dec_strand_num = 0;
 
-                unsigned int eid;
+                uint64_t eid;
                 for(id=min_index; id<=max_index; id++) {
-                    fprintf(stderr, "Processing index: %u\r", id);
-                    eid = dbgps3_index_encode(id, index_len);
+                    fprintf(stderr, "Processing index: %"PRIu64"\r", id);
+                    if (dbgps3_encode_index(g, id, index_len, &eid) < 0) continue;
                     c_index = dbgps3_find_path(g, pr_uint64 | (uint64_t)eid,
                                                cov_cut, r, skip_ratios,
                                                path_len, index_byte_num,
@@ -240,9 +308,9 @@ int main(int argc, char *argv[])
                     if(c_index > -1) {
                         dec_strand_num++;
                         if (output_prefix != NULL && strands_file != NULL) {
-                            fprintf(strands_file, "%d\t%s\n", id, result_buf);
+                            fprintf(strands_file, "%"PRIu64"\t%s\n", id, result_buf);
                         } else {
-                            printf("%d\t%s\n", id, result_buf);
+                            printf("%"PRIu64"\t%s\n", id, result_buf);
                         }
                     }
                 }

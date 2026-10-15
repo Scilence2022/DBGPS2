@@ -48,7 +48,10 @@ across repeated CLI runs, thread counts, coverage cutoffs, and ratio sweeps.
 They also check all 72 supported codec block widths, custom mapping reconstruction,
 forbidden words, CRC padding, malformed codebooks, and larger indices. DBGPS3's
 live JSON-RPC checks cover mapping metadata, exact large indices, invalid layouts,
-and the interactive client's index shortcut.
+and the interactive client's index shortcut. Bloom regressions cover exact
+query fallback, forced false positives, two-pass singleton removal, cross-file
+repeats, saturated counts, concurrent queries during reload, malformed inputs,
+and reconstruction with both filters enabled.
 Test binaries and generated reads are stored in temporary directories.
 Use `make test asan=1` to run the same checks with AddressSanitizer.
 
@@ -84,7 +87,35 @@ Options:
   -s INT     Number of initial positions to skip ratio checks for
   -o STR     Output prefix for log file and strands file
   -M FILE    Custom DNA/bit mapping (default: none; built-in A=00,C=01,G=10,T=11)
+  -B INT     Bloom query prefilter bits/key (1..64; 0 disables) [0]
+  -F INT     Two-pass singleton filter log2 bitmap bits (23..40; 0 disables) [0]
 ```
+
+#### Optional Bloom filters
+
+Both DBGPS2 and DBGPS3 support two independent Bloom options, disabled by default:
+
+- `-B 12` builds a query prefilter after counting. Absent k-mers can skip the
+  exact hash lookup; positive probes still use the exact table. Coverage and
+  assembly results are unchanged, including singletons.
+- `-F 27` uses a 16 MiB total Bloom bitmap during the first of two input scans.
+  It selects repeated candidates, recounts them exactly, and removes all k-mers
+  with coverage one. This can reduce graph memory for reads rich in singleton
+  errors, at the cost of a second scan. It changes coverage-one queries and may
+  change low-coverage assembly results.
+- `-B 0 -F 0` explicitly disables both. The options can also be used separately.
+
+```bash
+./DBGPS2 -B 12 -F 27 -a 1000 -b 1001 -o assembled reads.fq.gz
+./DBGPS3 -S -B 12 -F 27 reads.fq.gz
+```
+
+The backend is adapted from the pure-C blocked Bloom filter in `lh3/yak`.
+See [BLOOM_FILTER.md](BLOOM_FILTER.md) for the GitHub implementation comparison,
+provenance, memory tuning, exactness guarantees, API usage, and a reproducible
+synthetic benchmark. Two-pass mode requires regular input files that remain
+available and unchanged for replay; DBGPS3 `graph/load` rebuilds from the full
+input history in this mode.
 
 #### Custom base-to-bit mappings
 
@@ -216,6 +247,8 @@ Options:
   -s INT     Number of initial positions to skip ratio checks for [0]
   -o STR     Output prefix for log file and strands file
   -M FILE    Custom DNA/bit mapping (default: none; canonical A/C/G/T encoding)
+  -B INT     Bloom query prefilter bits/key (1..64; 0 disables) [0]
+  -F INT     Two-pass singleton filter log2 bitmap bits (23..40; 0 disables) [0]
 ```
 
 #### Server Mode

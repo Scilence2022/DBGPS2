@@ -22,6 +22,10 @@
 #define JRPC_INVALID_PARAMS   -32602
 #define JRPC_INTERNAL_ERROR   -32603
 
+/* A load replaces both the exact table and its immutable Bloom filter. Keep
+ * readers concurrent while excluding them from graph/load and replacement. */
+static pthread_rwlock_t graph_access_lock = PTHREAD_RWLOCK_INITIALIZER;
+
 /* ---- Helper: build a JSON-RPC error response ---- */
 static mj_val jrpc_error(int code, const char *message, mj_val id)
 {
@@ -209,6 +213,13 @@ static mj_val handle_graph_info(dbgps3_graph_t *g, const mj_val *params, mj_val 
     mj_object_set(&result, "index_byte_num", mj_number(dbgps3_get_index_byte_num(g)));
     mj_object_set(&result, "path_len", mj_number(dbgps3_get_path_len(g)));
     mj_object_set(&result, "kmer_count", mj_number(dbgps3_get_kmer_count(g)));
+    mj_val bloom = mj_object();
+    mj_object_set(&bloom, "enabled", mj_bool(dbgps3_bloom_bytes(g) != 0));
+    mj_object_set(&bloom, "bits_per_key", mj_number(g->bloom_bits_per_key));
+    mj_object_set(&bloom, "bitmap_bytes", mj_number(dbgps3_bloom_bytes(g)));
+    mj_object_set(&bloom, "count_shift", mj_number(g->count_bloom_shift));
+    mj_object_set(&bloom, "singletons_removed", mj_bool(g->count_bloom_shift != 0));
+    mj_object_set(&result, "bloom", bloom);
     mj_val mapping = mj_object();
     int custom = g->codec.bases != 0;
     mj_object_set(&mapping, "custom", mj_bool(custom));
@@ -308,7 +319,12 @@ static mj_val process_request(dbgps3_server_t *srv, const mj_val *req)
     int i;
     for (i = 0; method_table[i].method != NULL; i++) {
         if (strcmp(method, method_table[i].method) == 0) {
-            return method_table[i].handler(srv->graph, &params, id);
+            if (strcmp(method, "graph/load") == 0) pthread_rwlock_wrlock(&graph_access_lock);
+            else pthread_rwlock_rdlock(&graph_access_lock);
+            mj_val response = srv->running ? method_table[i].handler(srv->graph, &params, id) :
+                    jrpc_error(JRPC_INTERNAL_ERROR, "Server is shutting down", id);
+            pthread_rwlock_unlock(&graph_access_lock);
+            return response;
         }
     }
 
@@ -490,6 +506,9 @@ int dbgps3_server_start(dbgps3_server_t *srv)
     }
 
     fprintf(stderr, "[dbgps3_server] Shutting down...\n");
+    pthread_rwlock_wrlock(&graph_access_lock); /* drain in-flight graph access */
+    srv->running = 0;
+    pthread_rwlock_unlock(&graph_access_lock);
     close(server_fd);
     g_srv = NULL;
     return 0;

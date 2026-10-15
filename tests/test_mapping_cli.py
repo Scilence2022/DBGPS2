@@ -88,6 +88,7 @@ def main():
                     assert sum(int(row[0]) == index for row in rows) == repeats
 
             run(["-t", "1"])
+            run(["-B", "12", "-F", "23", "-t", "3"])
             if case in (1, 4, 7):
                 run(["-t", "3", "-C", "2", "-R", "2.65"], repeats=6)
             if bits == 5 and has_crc:
@@ -109,7 +110,9 @@ def main():
                 run(wanted={}, use_mapping=False)
             print(f"mapping CLI: {bases} bases/{bits} bits, index={index_bases}, payload={payload_bases} passed")
 
-        invalid_options = [("-i", "15"), ("-l", "139"), ("-k", "32"), ("-i", "32"),
+        invalid_options = [("-B", "-1"), ("-B", "65"), ("-B", "12x"),
+                           ("-B", "999999999999999999999999"), ("-F", "22"),
+                           ("-F", "41"), ("-F", "27x"), ("-i", "15"), ("-l", "139"), ("-k", "32"), ("-i", "32"),
                            ("-a", "-1"), ("-b", "18446744073709551616"),
                            ("-a", "1001", "-b", "1000"), ("-b", str(1 << 32)),
                            ("-M", str(directory / "missing.map"))]

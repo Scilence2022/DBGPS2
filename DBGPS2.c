@@ -13,6 +13,7 @@
 #include "ketopt.h" // command-line argument parser
 #include "kthread.h" // multi-threading models: pipeline and multi-threaded for loop
 #include "dbgps_codec.h"
+#include "dbgps_bloom.h"
 
 
 #include "kseq.h" // FASTA/Q parser
@@ -260,22 +261,9 @@ void intseq_actg(unsigned char* int_seq, unsigned char* actg_seq, int8_t int_seq
     }
 }
 
-typedef struct {
-    int p; // suffix length; at least 8
-    kc_c4_t **h; // 1<<p hash tables
-} kc_c4x_t;
-
-static kc_c4x_t *c4x_init(int p)
-{
-    int i;
-    kc_c4x_t *h;
-    CALLOC(h, 1);
-    MALLOC(h->h, 1<<p);
-    h->p = p;
-    for (i = 0; i < 1<<p; ++i)
-        h->h[i] = kc_c4_init();
-    return h;
-}
+#define DBGPS_COUNT_BITS KC_BITS
+#define DBGPS_COUNT_MAX KC_MAX
+#include "dbgps_bloom_graph.h"
 
 typedef struct {
     int n, m;
@@ -313,6 +301,7 @@ static void count_seq_buf(buf_c4_t *buf, int k, int p, int len, const char *seq)
 
 typedef struct { // global data structure for kt_pipeline()
     int k, block_len, n_thread, read_len;
+    int read_error;
     kseq_t *ks;
     kc_c4x_t *h;
 } pldat_t;
@@ -329,15 +318,8 @@ static void worker_for(void *data, long i, int tid) // callback for kt_for()
 {
     stepdat_t *s = (stepdat_t*)data;
     buf_c4_t *b = &s->buf[i];
-    kc_c4_t *h = s->p->h->h[i];
-
-    int j, p = s->p->h->p;
-    for (j = 0; j < b->n; ++j) {
-        khint_t k;
-        int absent;
-        k = kc_c4_put(h, b->a[j]>>p<<KC_BITS, &absent);
-        if ((kh_key(h, k)&KC_MAX) < KC_MAX) ++kh_key(h, k);
-    }
+    for (int j = 0; j < b->n; ++j)
+        c4x_count_key(s->p->h, (int)i, b->a[j]);
 }
 
 static void *worker_pipeline(void *data, int step, void *in) // callback for kt_pipeline()
@@ -364,6 +346,7 @@ static void *worker_pipeline(void *data, int step, void *in) // callback for kt_
             if (s->sum_len >= p->block_len)
                 break;
         }
+        if (ret < -1) p->read_error = 1;
         if (s->sum_len == 0) free(s);
         else return s;
     } else if (step == 1) { // step 2: extract k-mers
@@ -398,7 +381,7 @@ static void *worker_pipeline(void *data, int step, void *in) // callback for kt_
 
 static kc_c4x_t *count_file(const char *fn, int k, int p, int block_size, int n_thread, int read_len)
 {
-    pldat_t pl;
+    pldat_t pl = {0};
     gzFile fp;
     if ((fp = gzopen(fn, "r")) == 0) return 0;
     pl.ks = kseq_init(fp);
@@ -411,16 +394,23 @@ static kc_c4x_t *count_file(const char *fn, int k, int p, int block_size, int n_
 
     pl.n_thread = n_thread;
     pl.h = c4x_init(p);
+    if (!pl.h) { kseq_destroy(pl.ks); gzclose(fp); return NULL; }
     pl.block_len = block_size;
     kt_pipeline(3, worker_pipeline, &pl, 3);
+    int gzip_error;
+    gzerror(fp, &gzip_error);
     kseq_destroy(pl.ks);
-    gzclose(fp);
+    int close_error = gzclose(fp);
+    if (pl.read_error || (gzip_error != Z_OK && gzip_error != Z_STREAM_END) || close_error != Z_OK) {
+        c4x_destroy(pl.h);
+        return NULL;
+    }
     return pl.h;
 }
 
-static kc_c4x_t *count_file2(const char *fn, void *hh, int k, int p, int block_size, int n_thread, int read_len)
+static kc_c4x_t *count_file2(const char *fn, kc_c4x_t *hh, int k, int p, int block_size, int n_thread, int read_len)
 {
-    pldat_t pl;
+    pldat_t pl = {0};
     gzFile fp;
     if ((fp = gzopen(fn, "r")) == 0) return 0;
     pl.ks = kseq_init(fp);
@@ -433,10 +423,16 @@ static kc_c4x_t *count_file2(const char *fn, void *hh, int k, int p, int block_s
 
     pl.n_thread = n_thread;
     pl.h = (kc_c4x_t *)hh;
+    c4x_set_bloom(pl.h, 0);
     pl.block_len = block_size;
     kt_pipeline(3, worker_pipeline, &pl, 3);
+    int gzip_error;
+    gzerror(fp, &gzip_error);
     kseq_destroy(pl.ks);
-    gzclose(fp);
+    int close_error = gzclose(fp);
+    if (pl.read_error || (gzip_error != Z_OK && gzip_error != Z_STREAM_END) || close_error != Z_OK) {
+        return NULL; /* caller owns the possibly partially updated table */
+    }
     return pl.h;
 }
 
@@ -518,6 +514,7 @@ unsigned short kmer_cov(uint64_t kmer, uint64_t mask, kc_c4x_t *h){
 
     int j, x, cov=0;
     uint64_t hash_key = hash64(kmer, mask);
+    if (h->bloom && !dbgps_bloom_contains(h->bloom, hash_key)) return 0;
     j = hash_key & ((1<<KC_BITS) - 1);
     if(kh_size(h->h[j]) < 1){return 0;}
 
@@ -823,11 +820,14 @@ static void packed_dna_string(const unsigned char *packed, unsigned char *dna, i
 
 int main(int argc, char *argv[])
 {
-    kc_c4x_t *h;
-    int i, c=1, k = 31, p = KC_BITS, block_size = 10000000, n_thread = 3, min_cov = 1, index_len = 16, payload_len=140, crc_len=8, path_len;
+    kc_c4x_t *h = NULL;
+    int exit_status = 0;
+    int c=1, k = 31, p = KC_BITS, block_size = 10000000, n_thread = 3, min_cov = 1, index_len = 16, payload_len=140, crc_len=8, path_len;
     double max_cov_ratio = 2.55; // Default value for Max_Cov_Ratio
     double max_r = 0 ; // Maximum r value for ratio range iteration, default 0 (disabled)
     int mem_test = 0;
+    int bloom_bits_per_key = 0;
+    int count_bloom_shift = 0;
     int read_len = 200;
     int skip_ratios = 0; // Number of initial ratio values to skip, default 0
     char *output_prefix = NULL; // Output prefix for log file
@@ -844,7 +844,7 @@ int main(int argc, char *argv[])
 
 
     ketopt_t o = KETOPT_INIT;
-    while ((c = ketopt(&o, argc, argv, 1, "k:p:b:t:c:l:a:b:i:C:r:R:m:s:o:M:", 0)) >= 0) {
+    while ((c = ketopt(&o, argc, argv, 1, "k:p:b:t:c:l:a:b:i:C:r:R:m:s:o:M:B:F:", 0)) >= 0) {
         if (c == 'k') k = atoi(o.arg);
         else if (c == 'p') p = atoi(o.arg);
         else if (c == 't') n_thread = atoi(o.arg);
@@ -865,6 +865,18 @@ int main(int argc, char *argv[])
         else if (c == 's') skip_ratios = atoi(o.arg); // Number of initial ratio values to skip
         else if (c == 'o') output_prefix = o.arg; // Output prefix for log file
         else if (c == 'M') mapping_file = o.arg;
+        else if (c == 'F') {
+            if (dbgps_bloom_parse_shift(o.arg, &count_bloom_shift) < 0) {
+                fprintf(stderr, "ERROR: -F requires 0 (disabled) or log2 bitmap bits from 23 to 40\n");
+                return 1;
+            }
+        }
+        else if (c == 'B') {
+            if (dbgps_bloom_parse_bits(o.arg, &bloom_bits_per_key) < 0) {
+                fprintf(stderr, "ERROR: -B requires an integer from 0 to 64 (0 disables Bloom filtering)\n");
+                return 1;
+            }
+        }
         else {
             fprintf(stderr, "ERROR: unknown option or missing option value\n");
             return 1;
@@ -897,6 +909,8 @@ int main(int argc, char *argv[])
         fprintf(stderr, "  -s INT     Number of initial positions to skip ratio checks for [%d]\n", skip_ratios);
         fprintf(stderr, "  -o STR     Output prefix for log file [none]\n");
         fprintf(stderr, "  -M FILE    Custom DNA/bit mapping [none; built-in A=00,C=01,G=10,T=11]\n");
+        fprintf(stderr, "  -B INT     Bloom query prefilter bits/key (1..64; 0 disables) [0]\n");
+        fprintf(stderr, "  -F INT     Two-pass singleton filter log2 bits (23..40; 0 disables) [0]\n");
 
         fprintf(stderr, "\n");
         return 1;
@@ -974,6 +988,7 @@ int main(int argc, char *argv[])
     PRINT_BOTH("k-mer size (-k): %d\n", k);
     PRINT_BOTH("Prefix length (-p): %d\n", p);
     PRINT_BOTH("Number of threads (-t): %d\n", n_thread);
+    PRINT_BOTH("Bloom counting filter (-F): %d (0 disables; singletons removed when enabled)\n", count_bloom_shift);
     PRINT_BOTH("Minimum coverage cutoff (-c): %d\n", min_cov);
     PRINT_BOTH("Maximum coverage for testing (-C): %d\n", max_cov);
     PRINT_BOTH("Index length (-i): %d bp\n", index_len);
@@ -1001,16 +1016,43 @@ int main(int argc, char *argv[])
 
 
     start = clock();
-    fprintf(stderr, "Counting NGS file 1 ......\n");
-    h = count_file(argv[o.ind], k, p, block_size, n_thread, read_len);
+    if (count_bloom_shift) {
+        h = count_files_filtered(argc - o.ind, argv + o.ind, k, p, block_size,
+                                 n_thread, read_len, count_bloom_shift);
+        if (!h) {
+            fprintf(stderr, "ERROR: Bloom counting failed; check regular input files and memory budget\n");
+            exit_status = 1;
+            goto cleanup;
+        }
+    } else {
+        fprintf(stderr, "Counting NGS file 1 ......\n");
+        h = count_file(argv[o.ind], k, p, block_size, n_thread, read_len);
+        if (!h) {
+            fprintf(stderr, "ERROR: failed to load input file %s\n", argv[o.ind]);
+            exit_status = 1;
+            goto cleanup;
+        }
 
-    int f_num = argc - o.ind, c_f_n = 2;
-    while(c_f_n <= f_num ) {
-        fprintf(stderr, "Counting NGS file %d ......\n", c_f_n);
-        h = count_file2(argv[o.ind + c_f_n - 1], h, k, p, block_size, n_thread, read_len);  
-        c_f_n = c_f_n + 1;
+        int f_num = argc - o.ind, c_f_n = 2;
+        while(c_f_n <= f_num ) {
+            fprintf(stderr, "Counting NGS file %d ......\n", c_f_n);
+            if (!count_file2(argv[o.ind + c_f_n - 1], h, k, p, block_size, n_thread, read_len)) {
+                fprintf(stderr, "ERROR: failed to load input file %s\n", argv[o.ind + c_f_n - 1]);
+                exit_status = 1;
+                goto cleanup;
+            }
+            c_f_n = c_f_n + 1;
+        }
+
     }
 
+    if (c4x_set_bloom(h, bloom_bits_per_key) < 0) {
+        fprintf(stderr, "ERROR: failed to allocate Bloom query filter\n");
+        exit_status = 1;
+        goto cleanup;
+    }
+    PRINT_BOTH("Bloom query filter (-B): %d bits/key; %zu bitmap bytes\n",
+               bloom_bits_per_key, h->bloom ? h->bloom->n_bytes : 0);
 
     end = clock();
     kc_dur = (double)(end - start);
@@ -1104,8 +1146,8 @@ int main(int argc, char *argv[])
         }
     }
 
-    for (i = 0; i < 1<<p; ++i) kc_c4_destroy(h->h[i]);
-    free(h->h); free(h);
+cleanup:
+    c4x_destroy(h);
     
     // Close output files if they were opened
     if (log_file != NULL) {
@@ -1118,7 +1160,7 @@ int main(int argc, char *argv[])
     dbgps_codec_destroy(&mapping);
     
     #undef PRINT_BOTH
-    return 0;
+    return exit_status;
 }
 
 

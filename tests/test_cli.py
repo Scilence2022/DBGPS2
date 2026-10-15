@@ -40,10 +40,12 @@ def main():
             expected_rows = {index: sequence if has_crc else sequence[:-8]
                              for index, sequence in expected.items()}
             for threads in (1, 3):
-                for repeat in (0, 1):
+                for repeat in (0, 1, 2, 3):
                     for sweep in (False, True):
                         prefix = directory / f"{Path(binary).name}-{threads}-{repeat}-{sweep}"
                         args = [binary, "-a", "1000", "-b", "1001", "-t", str(threads), "-o", str(prefix)]
+                        if repeat >= 2:
+                            args += ["-B", "12", "-F", "23"]
                         copies = 1
                         if sweep:
                             args += ["-C", "2", "-R", "2.65"]

@@ -11,6 +11,7 @@ KSEQ_INIT(gzFile, gzread)
 #include "khashl.h"
 #include "kthread.h"
 #include "dbgps3_core.h"
+#include "dbgps_bloom.h"
 
 /* ---- Internal hash table types ---- */
 
@@ -75,31 +76,9 @@ static inline uint64_t hash64i(uint64_t key, uint64_t mask)
 
 /* ---- Partitioned hash table ---- */
 
-typedef struct {
-    int p;
-    kc_c4_t **h;
-} kc_c4x_t;
-
-static kc_c4x_t *c4x_init(int p)
-{
-    int i;
-    kc_c4x_t *h;
-    CALLOC(h, 1);
-    MALLOC(h->h, 1<<p);
-    h->p = p;
-    for (i = 0; i < 1<<p; ++i)
-        h->h[i] = kc_c4_init();
-    return h;
-}
-
-static void c4x_destroy(kc_c4x_t *h)
-{
-    int i;
-    if (!h) return;
-    for (i = 0; i < 1<<h->p; ++i) kc_c4_destroy(h->h[i]);
-    free(h->h);
-    free(h);
-}
+#define DBGPS_COUNT_BITS DBGPS3_KC_BITS
+#define DBGPS_COUNT_MAX DBGPS3_KC_MAX
+#include "dbgps_bloom_graph.h"
 
 typedef struct {
     int n, m;
@@ -138,6 +117,7 @@ static void count_seq_buf(buf_c4_t *buf, int k, int p, int len, const char *seq)
 
 typedef struct {
     int k, block_len, n_thread, read_len;
+    int read_error;
     kseq_t *ks;
     kc_c4x_t *h;
 } pldat_t;
@@ -154,14 +134,8 @@ static void worker_for(void *data, long i, int tid)
 {
     stepdat_t *s = (stepdat_t*)data;
     buf_c4_t *b = &s->buf[i];
-    kc_c4_t *h = s->p->h->h[i];
-    int j, p = s->p->h->p;
-    for (j = 0; j < b->n; ++j) {
-        khint_t k;
-        int absent;
-        k = kc_c4_put(h, b->a[j]>>p<<DBGPS3_KC_BITS, &absent);
-        if ((kh_key(h, k)&DBGPS3_KC_MAX) < DBGPS3_KC_MAX) ++kh_key(h, k);
-    }
+    for (int j = 0; j < b->n; ++j)
+        c4x_count_key(s->p->h, (int)i, b->a[j]);
 }
 
 static void *worker_pipeline(void *data, int step, void *in)
@@ -188,6 +162,7 @@ static void *worker_pipeline(void *data, int step, void *in)
             if (s->sum_len >= p->block_len)
                 break;
         }
+        if (ret < -1) p->read_error = 1;
         if (s->sum_len == 0) free(s);
         else return s;
     } else if (step == 1) {
@@ -221,7 +196,7 @@ static void *worker_pipeline(void *data, int step, void *in)
 
 static kc_c4x_t *count_file(const char *fn, int k, int p, int block_size, int n_thread, int read_len)
 {
-    pldat_t pl;
+    pldat_t pl = {0};
     gzFile fp;
     if ((fp = gzopen(fn, "r")) == 0) return 0;
     pl.ks = kseq_init(fp);
@@ -229,16 +204,23 @@ static kc_c4x_t *count_file(const char *fn, int k, int p, int block_size, int n_
     pl.read_len = read_len > k ? read_len : k;
     pl.n_thread = n_thread;
     pl.h = c4x_init(p);
+    if (!pl.h) { kseq_destroy(pl.ks); gzclose(fp); return NULL; }
     pl.block_len = block_size;
     kt_pipeline(3, worker_pipeline, &pl, 3);
+    int gzip_error;
+    gzerror(fp, &gzip_error);
     kseq_destroy(pl.ks);
-    gzclose(fp);
+    int close_error = gzclose(fp);
+    if (pl.read_error || (gzip_error != Z_OK && gzip_error != Z_STREAM_END) || close_error != Z_OK) {
+        c4x_destroy(pl.h);
+        return NULL;
+    }
     return pl.h;
 }
 
 static kc_c4x_t *count_file2(const char *fn, kc_c4x_t *hh, int k, int p, int block_size, int n_thread, int read_len)
 {
-    pldat_t pl;
+    pldat_t pl = {0};
     gzFile fp;
     if ((fp = gzopen(fn, "r")) == 0) return 0;
     pl.ks = kseq_init(fp);
@@ -246,10 +228,16 @@ static kc_c4x_t *count_file2(const char *fn, kc_c4x_t *hh, int k, int p, int blo
     pl.read_len = read_len > k ? read_len : k;
     pl.n_thread = n_thread;
     pl.h = hh;
+    c4x_set_bloom(pl.h, 0);
     pl.block_len = block_size;
     kt_pipeline(3, worker_pipeline, &pl, 3);
+    int gzip_error;
+    gzerror(fp, &gzip_error);
     kseq_destroy(pl.ks);
-    gzclose(fp);
+    int close_error = gzclose(fp);
+    if (pl.read_error || (gzip_error != Z_OK && gzip_error != Z_STREAM_END) || close_error != Z_OK) {
+        return NULL; /* caller owns the possibly partially updated table */
+    }
     return pl.h;
 }
 
@@ -260,6 +248,7 @@ static unsigned short kmer_cov_internal(uint64_t kmer, uint64_t mask, const kc_c
     int j, x;
     unsigned short cov = 0;
     uint64_t hash_key = hash64(kmer, mask);
+    if (h->bloom && !dbgps_bloom_contains(h->bloom, hash_key)) return 0;
     j = hash_key & ((1<<DBGPS3_KC_BITS) - 1);
     if (kh_size(h->h[j]) < 1) return 0;
     hash_key = hash_key >> DBGPS3_KC_BITS << DBGPS3_KC_BITS;
@@ -349,21 +338,45 @@ static void nodes_path_packed(path_node_t *node, unsigned char *out,
 dbgps3_graph_t *dbgps3_load(int k, int p, int n_thread, int block_size,
                              int read_len, int n_files, char **files)
 {
+    return dbgps3_load_filtered(k, p, n_thread, block_size, read_len, n_files, files, 0);
+}
+
+dbgps3_graph_t *dbgps3_load_filtered(int k, int p, int n_thread, int block_size,
+                                     int read_len, int n_files, char **files,
+                                     int count_bloom_shift)
+{
     if (n_files < 1 || !files || k < 1 || k > 31 || p != DBGPS3_KC_BITS) return NULL;
+    if (count_bloom_shift && (count_bloom_shift < p + 9 || count_bloom_shift > 40)) return NULL;
+    for (int i = 0; i < n_files; ++i) if (!files[i]) return NULL;
 
     dbgps3_graph_t *g;
     CALLOC(g, 1);
+    if (!g) return NULL;
     g->k = k;
     g->p = p;
     g->mask = (1ULL<<k*2) - 1;
     g->n_thread = n_thread;
     g->block_size = block_size;
     g->read_len = read_len > k ? read_len : k;
+    g->count_bloom_shift = count_bloom_shift;
 
     /* Default index/payload parameters — can be overridden by caller */
     g->index_len = 16;
     g->index_byte_num = g->index_len >> 2;
     g->path_len = 140; /* default payload_len */
+
+    if (count_bloom_shift) {
+        g->_h = count_files_filtered(n_files, files, k, p, block_size, n_thread,
+                                     read_len, count_bloom_shift);
+        g->_source_files = (char**)calloc(n_files, sizeof(*g->_source_files));
+        if (!g->_h || !g->_source_files) { dbgps3_destroy(g); return NULL; }
+        for (int i = 0; i < n_files; ++i) {
+            g->_source_files[i] = strdup(files[i]);
+            if (!g->_source_files[i]) { dbgps3_destroy(g); return NULL; }
+            ++g->_n_source_files;
+        }
+        return g;
+    }
 
     fprintf(stderr, "[dbgps3_core] Counting k-mers from file 1 ......\n");
     g->_h = count_file(files[0], k, p, block_size, n_thread, read_len);
@@ -375,7 +388,10 @@ dbgps3_graph_t *dbgps3_load(int k, int p, int n_thread, int block_size,
     int i;
     for (i = 1; i < n_files; i++) {
         fprintf(stderr, "[dbgps3_core] Counting k-mers from file %d ......\n", i+1);
-        g->_h = count_file2(files[i], (kc_c4x_t*)g->_h, k, p, block_size, n_thread, read_len);
+        if (!count_file2(files[i], (kc_c4x_t*)g->_h, k, p, block_size, n_thread, read_len)) {
+            dbgps3_destroy(g);
+            return NULL;
+        }
     }
 
     return g;
@@ -383,14 +399,57 @@ dbgps3_graph_t *dbgps3_load(int k, int p, int n_thread, int block_size,
 
 int dbgps3_load_more(dbgps3_graph_t *g, int n_files, char **files)
 {
-    if (!g || n_files < 1 || !files) return -1;
+    if (!g || !g->_h || n_files < 1 || !files) return -1;
+    if (g->count_bloom_shift) {
+        if (n_files > INT32_MAX - g->_n_source_files) return -1;
+        int total = g->_n_source_files + n_files;
+        char **all = (char**)calloc(total, sizeof(*all));
+        if (!all) return -1;
+        for (int i = 0; i < g->_n_source_files; ++i) all[i] = g->_source_files[i];
+        for (int i = 0; i < n_files; ++i) all[g->_n_source_files + i] = files[i];
+        dbgps3_graph_t *replacement = dbgps3_load_filtered(g->k, g->p, g->n_thread,
+                g->block_size, g->read_len, total, all, g->count_bloom_shift);
+        free(all);
+        if (!replacement) return -1;
+        if (dbgps3_set_bloom(replacement, g->bloom_bits_per_key) < 0) {
+            dbgps3_destroy(replacement);
+            return -1;
+        }
+        /* Keep query layout and codec ownership in g; retire only old data. */
+        void *old_h = g->_h;
+        char **old_files = g->_source_files;
+        int old_n = g->_n_source_files;
+        g->_h = replacement->_h;
+        g->_source_files = replacement->_source_files;
+        g->_n_source_files = replacement->_n_source_files;
+        replacement->_h = old_h;
+        replacement->_source_files = old_files;
+        replacement->_n_source_files = old_n;
+        dbgps3_destroy(replacement);
+        return 0;
+    }
+    int bits_per_key = g->bloom_bits_per_key;
+    c4x_set_bloom((kc_c4x_t*)g->_h, 0);
     int i;
     for (i = 0; i < n_files; i++) {
         fprintf(stderr, "[dbgps3_core] Loading additional file %d ......\n", i+1);
-        g->_h = count_file2(files[i], (kc_c4x_t*)g->_h, g->k, g->p, g->block_size, g->n_thread, g->read_len);
-        if (!g->_h) return -1;
+        if (!count_file2(files[i], (kc_c4x_t*)g->_h, g->k, g->p,
+                         g->block_size, g->n_thread, g->read_len)) return -1;
     }
+    return dbgps3_set_bloom(g, bits_per_key);
+}
+
+int dbgps3_set_bloom(dbgps3_graph_t *g, int bits_per_key)
+{
+    if (!g || c4x_set_bloom((kc_c4x_t*)g->_h, bits_per_key) < 0) return -1;
+    g->bloom_bits_per_key = bits_per_key;
     return 0;
+}
+
+size_t dbgps3_bloom_bytes(const dbgps3_graph_t *g)
+{
+    const kc_c4x_t *h = g ? (const kc_c4x_t*)g->_h : NULL;
+    return h && h->bloom ? h->bloom->n_bytes : 0;
 }
 
 void dbgps3_destroy(dbgps3_graph_t *g)
@@ -398,6 +457,8 @@ void dbgps3_destroy(dbgps3_graph_t *g)
     if (!g) return;
     c4x_destroy((kc_c4x_t*)g->_h);
     dbgps_codec_destroy(&g->codec);
+    for (int i = 0; i < g->_n_source_files; ++i) free(g->_source_files[i]);
+    free(g->_source_files);
     free(g);
 }
 

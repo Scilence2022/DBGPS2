@@ -83,6 +83,8 @@ make DBGPS3
 | `-S [PORT]` | Start server mode. Optional port argument. | 9300 |
 | `-P INT` | Server TCP port. Overrides `-S` port. | 9300 |
 | `-L INT` | Max concurrent clients. | 10 |
+| `-B INT` | Query Bloom bitmap bits per retained k-mer (1..64; 0 disables). | 0 |
+| `-F INT` | Two-pass singleton filtering; log2 total bitmap bits (23..40; 0 disables). | 0 |
 | `-M FILE` | Immutable DNA/bit codebook, shared by all queries. | No custom mapping |
 
 ### Graph Build Options
@@ -334,6 +336,13 @@ Retrieve graph metadata.
     "index_len": 16,
     "index_byte_num": 4,
     "path_len": 140,
+    "bloom": {
+      "enabled": false,
+      "bits_per_key": 0,
+      "bitmap_bytes": 0,
+      "count_shift": 0,
+      "singletons_removed": false
+    },
     "mapping": {
       "custom": false,
       "bases": 1,
@@ -350,9 +359,22 @@ decoded data bytes; for a 24-base/40-bit index it is 5. Mapping mode is
 `canonical`, `byte_lookup`, or `block_lookup`. Clients may override lengths
 per query, subject to the same codeword and byte alignment checks.
 
+`bloom.enabled` reports the query filter controlled by `-B`; positive probes
+still use exact coverage lookup. `count_shift` independently reports the `-F`
+two-pass mode, which removes singletons. Both are disabled by default. See
+[BLOOM_FILTER.md](BLOOM_FILTER.md) for configuration, implementation selection,
+and performance measurements.
+
 ### 5. `graph/load` — Load Additional Data
 
 Hot-load more FASTQ/FASTA files into the existing graph.
+
+Loads hold exclusive graph access while concurrent queries share read access.
+With `-B`, the query filter is rebuilt after successful loading. With `-F`, the
+server rebuilds from all historical inputs plus the new files so a prior
+singleton can become a correctly counted repeated k-mer. Keep those regular
+input files available and unchanged. A failed filtered rebuild preserves the
+old graph; reload temporarily holds both the old and replacement graphs.
 
 **Request:**
 ```json
@@ -524,7 +546,7 @@ dbgps3_destroy(g);
 
 ## Performance Considerations
 
-- **Concurrent queries**: The hash table is read-only after initial build, so multiple clients can query simultaneously without locking.
+- **Concurrent queries**: Queries share read access; `graph/load` holds a write lock while updating the graph and its Bloom filter.
 - **Memory**: The graph is shared across all clients. Monitor memory usage with large datasets.
 - **Network**: Responses for `path/find` can be large (up to ~300 bytes for the DNA sequence). The protocol uses `\n` as the message delimiter.
 - **Client limit**: The `-L` flag controls maximum concurrent connections. Excess connections are rejected.

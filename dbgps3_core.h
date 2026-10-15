@@ -31,6 +31,10 @@ typedef struct dbgps3_graph_s {
     int n_thread;      /* number of threads */
     int block_size;    /* pipeline block size */
     int read_len;      /* read length for counting */
+    int bloom_bits_per_key; /* optional query filter budget; 0 disables */
+    int count_bloom_shift; /* two-pass singleton filtering; 0 disables */
+    char **_source_files;  /* owned replay list for filtered graph/load */
+    int _n_source_files;
     dbgps_codec_t codec; /* owned; bases=0 means direct canonical packing */
 } dbgps3_graph_t;
 
@@ -43,10 +47,26 @@ typedef struct dbgps3_graph_s {
 dbgps3_graph_t *dbgps3_load(int k, int p, int n_thread, int block_size,
                              int read_len, int n_files, char **files);
 
+/** Optional two-pass counting: count_bloom_shift=0 preserves all k-mers;
+ * 23..40 allocates 2^shift bitmap bits for candidate selection, then counts
+ * candidates exactly and removes singletons. Inputs must be regular files
+ * available for replay, including subsequent load_more calls. */
+dbgps3_graph_t *dbgps3_load_filtered(int k, int p, int n_thread, int block_size,
+                                     int read_len, int n_files, char **files,
+                                     int count_bloom_shift);
+
 /**
  * Destroy a graph object and free all associated memory.
  */
 void dbgps3_destroy(dbgps3_graph_t *g);
+
+/** Configure an optional exact-query prefilter (0 disables; 1..64 bits/key).
+ * Build from all existing k-mers; preserve the previous filter on failure.
+ * Call only while queries are stopped. No coverage counts are changed. */
+int dbgps3_set_bloom(dbgps3_graph_t *g, int bits_per_key);
+
+/** Bitmap bytes currently allocated (0 when disabled). */
+size_t dbgps3_bloom_bytes(const dbgps3_graph_t *g);
 
 /** Load an optional codebook (NULL resets canonical encoding). Set compatible
  * index_len/path_len defaults before calling; index_byte_num is recalculated.
@@ -69,6 +89,11 @@ int dbgps3_parse_index(const char *text, uint64_t *index);
 /**
  * Load additional FASTQ/FASTA files into an existing graph.
  * Returns 0 on success, -1 on failure.
+ * Queries must be stopped. Rebuild an enabled Bloom filter after loading;
+ * on failure, partial counts may remain and filtering is disabled so queries
+ * continue to use exact counts without a stale filter.
+ * In two-pass counting mode, rebuild from all recorded inputs plus new files
+ * and replace the graph only on success; preserve the old graph on failure.
  */
 int dbgps3_load_more(dbgps3_graph_t *g, int n_files, char **files);
 

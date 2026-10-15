@@ -4,6 +4,7 @@
 #include <inttypes.h>
 #include <time.h>
 #include "ketopt.h"
+#include "dbgps_bloom.h"
 #include "dbgps3_core.h"
 #include "dbgps3_server.h"
 
@@ -32,6 +33,8 @@ int main(int argc, char *argv[])
     double max_cov_ratio = 2.55;
     double max_r = 0;
     int mem_test = 0;
+    int bloom_bits_per_key = 0;
+    int count_bloom_shift = 0;
     int read_len = 200;
     int skip_ratios = 0;
     char *output_prefix = NULL;
@@ -49,7 +52,7 @@ int main(int argc, char *argv[])
     int pr_len = 18;
 
     ketopt_t o = KETOPT_INIT;
-    while ((c = ketopt(&o, argc, argv, 1, "k:p:b:t:c:l:a:b:i:C:r:R:m:s:o:M:SP:L:", 0)) >= 0) {
+    while ((c = ketopt(&o, argc, argv, 1, "k:p:b:t:c:l:a:b:i:C:r:R:m:s:o:M:B:F:SP:L:", 0)) >= 0) {
         if (c == 'k') k = atoi(o.arg);
         else if (c == 'p') p = atoi(o.arg);
         else if (c == 't') n_thread = atoi(o.arg);
@@ -69,6 +72,18 @@ int main(int argc, char *argv[])
         else if (c == 's') skip_ratios = atoi(o.arg);
         else if (c == 'o') output_prefix = o.arg;
         else if (c == 'M') mapping_file = o.arg;
+        else if (c == 'F') {
+            if (dbgps_bloom_parse_shift(o.arg, &count_bloom_shift) < 0) {
+                fprintf(stderr, "ERROR: -F requires 0 (disabled) or log2 bitmap bits from 23 to 40\n");
+                return 1;
+            }
+        }
+        else if (c == 'B') {
+            if (dbgps_bloom_parse_bits(o.arg, &bloom_bits_per_key) < 0) {
+                fprintf(stderr, "ERROR: -B requires an integer from 0 to 64 (0 disables Bloom filtering)\n");
+                return 1;
+            }
+        }
         else if (c == 'S') {
             server_mode = 1;
             if (optional_server_port(&o, argc, argv, &server_port) < 0) {
@@ -107,6 +122,8 @@ int main(int argc, char *argv[])
         fprintf(stderr, "  -s INT     Number of initial positions to skip ratio checks for [%d]\n", skip_ratios);
         fprintf(stderr, "  -o STR     Output prefix for log file [none]\n");
         fprintf(stderr, "  -M FILE    Custom DNA/bit mapping [none; built-in A=00,C=01,G=10,T=11]\n");
+        fprintf(stderr, "  -B INT     Bloom query prefilter bits/key (1..64; 0 disables) [0]\n");
+        fprintf(stderr, "  -F INT     Two-pass singleton filter log2 bits (23..40; 0 disables) [0]\n");
         fprintf(stderr, "  -S [PORT]  Start in server mode (default port: %d)\n", server_port);
         fprintf(stderr, "  -P INT     Server TCP port [%d]\n", server_port);
         fprintf(stderr, "  -L INT     Server max concurrent clients [%d]\n", max_clients);
@@ -150,14 +167,25 @@ int main(int argc, char *argv[])
     fprintf(stderr, "Counting k-mers ......\n");
     start = clock();
 
-    dbgps3_graph_t *g = dbgps3_load(k, p, n_thread, block_size, read_len,
-                                      argc - o.ind, argv + o.ind);
+    dbgps3_graph_t *g = dbgps3_load_filtered(k, p, n_thread, block_size, read_len,
+                                      argc - o.ind, argv + o.ind, count_bloom_shift);
     if (!g) {
-        fprintf(stderr, "ERROR: failed to load input files\n");
+        fprintf(stderr, "ERROR: failed to load input files or allocate graph/filter memory\n");
         dbgps_codec_destroy(&config.codec);
         return 1;
     }
     g->codec = config.codec; /* Transfer ownership to the graph. */
+    if (dbgps3_set_bloom(g, bloom_bits_per_key) < 0) {
+        fprintf(stderr, "ERROR: failed to allocate Bloom query filter\n");
+        dbgps3_destroy(g);
+        return 1;
+    }
+    if (bloom_bits_per_key)
+        fprintf(stderr, "Bloom query filter: %d bits/key; %zu bitmap bytes\n",
+                bloom_bits_per_key, dbgps3_bloom_bytes(g));
+
+    if (count_bloom_shift)
+        fprintf(stderr, "Bloom counting filter: 2^%d bits; singletons removed\n", count_bloom_shift);
 
     /* Override graph parameters set during loading */
     g->index_len = index_len;
@@ -219,6 +247,9 @@ int main(int argc, char *argv[])
     PRINT_BOTH("k-mer size (-k): %d\n", k);
     PRINT_BOTH("Prefix length (-p): %d\n", p);
     PRINT_BOTH("Number of threads (-t): %d\n", n_thread);
+    PRINT_BOTH("Bloom counting filter (-F): %d (0 disables; singletons removed when enabled)\n", count_bloom_shift);
+    PRINT_BOTH("Bloom query filter (-B): %d bits/key; %zu bitmap bytes\n",
+               bloom_bits_per_key, dbgps3_bloom_bytes(g));
     PRINT_BOTH("Minimum coverage cutoff (-c): %d\n", min_cov);
     PRINT_BOTH("Maximum coverage for testing (-C): %d\n", max_cov);
     PRINT_BOTH("Index length (-i): %d bp\n", index_len);

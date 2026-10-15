@@ -1,6 +1,7 @@
 """Exercise the running JSON-RPC server and client with independent codebooks."""
 
 import json
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 import random
 import socket
@@ -13,7 +14,8 @@ from test_mapping_cli import encode, word, PRIMERS
 
 
 def main():
-    binary, client = (str(Path(arg).resolve()) for arg in sys.argv[1:])
+    binary, client = (str(Path(arg).resolve()) for arg in sys.argv[1:3])
+    bloom_args = sys.argv[3:]
     repo = Path(__file__).resolve().parent.parent
     rng = random.Random(193)
     cases = [(None, 1, 2, 16, 80, 1000),
@@ -52,7 +54,7 @@ def main():
             with log_path.open("w") as log:
                 server_args = (["-S", "-P", str(port)] if case % 3 == 0 else
                                ["-S", str(port)] if case % 3 == 1 else [f"-S{port}"])
-                proc = subprocess.Popen([binary, *server_args, "-i", str(index_bases),
+                proc = subprocess.Popen([binary, *server_args, *bloom_args, "-i", str(index_bases),
                                          "-l", str(payload_bases), *mapping_args, str(reads)],
                                         stdout=log, stderr=log)
                 try:
@@ -77,6 +79,8 @@ def main():
                                 return response
 
                             info = rpc("graph/info")["result"]
+                            assert info["bloom"]["enabled"] == ("-B" in bloom_args)
+                            assert info["bloom"]["singletons_removed"] == ("-F" in bloom_args)
                             assert info["index_byte_num"] == index_bits // 8
                             assert info["mapping"]["custom"] == bool(kind)
                             assert (info["mapping"]["bases"], info["mapping"]["bits"]) == (bases, bits)
@@ -103,6 +107,39 @@ def main():
                             assert result.returncode == 0, result.stderr
                             reply = json.loads(result.stdout)["result"]
                             assert reply["index"] == str(index) and reply["sequence"] == expected, reply
+                            if case == 0:
+                                original_cov = rpc("kmer/cov", {"kmer": root})["result"]["coverage"]
+                                first_extra = directory / "singleton.fa"
+                                second_extra = directory / "repeat.fa"
+                                first_extra.write_text(">a\n" + "A" * 31 + "\n>c\n" + "C" * 31 + "\n")
+                                second_extra.write_text(">t\n" + "T" * 31 + "\n>c1\n" + "C" * 31 +
+                                                        "\n>c2\n" + "C" * 31 + "\n")
+                                assert "result" in rpc("graph/load", {"files": [str(first_extra)]})
+                                singleton_cov = 0 if "-F" in bloom_args else 1
+                                assert rpc("kmer/cov", {"kmer": "A" * 31})["result"]["coverage"] == singleton_cov
+
+                                def concurrent_reader():
+                                    with socket.create_connection(("127.0.0.1", port), timeout=10) as sock:
+                                        with sock.makefile("rwb") as concurrent:
+                                            for _ in range(50):
+                                                request = {"jsonrpc": "2.0", "id": 900,
+                                                           "method": "kmer/cov", "params": {"kmer": root}}
+                                                concurrent.write(json.dumps(request).encode() + b"\n")
+                                                concurrent.flush()
+                                                response = json.loads(concurrent.readline())
+                                                assert response["result"]["coverage"] == original_cov, response
+
+                                with ThreadPoolExecutor(max_workers=3) as pool:
+                                    readers = [pool.submit(concurrent_reader) for _ in range(3)]
+                                    assert "result" in rpc("graph/load", {"files": [str(second_extra)]})
+                                    for reader in readers:
+                                        reader.result(timeout=15)
+                                assert rpc("kmer/cov", {"kmer": "A" * 31})["result"]["coverage"] == 2
+                                assert rpc("kmer/cov", {"kmer": "G" * 31})["result"]["coverage"] == 3
+                                after = rpc("graph/info")["result"]["bloom"]
+                                assert after["enabled"] == ("-B" in bloom_args)
+                                assert "error" in rpc("graph/load", {"files": [str(directory / "absent.fa")]})
+                                assert rpc("kmer/cov", {"kmer": root})["result"]["coverage"] == original_cov
                             assert rpc("server/shutdown")["result"]["status"] == "shutting down"
                     # Wake the existing blocking accept loop after the shutdown reply.
                     try:

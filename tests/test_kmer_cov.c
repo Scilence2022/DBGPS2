@@ -31,11 +31,19 @@ int main(void)
     assert(kh_end(h->h[partition]) == 32);
     assert(kc_c4_get(h->h[partition], (uint64_t)25 << KC_BITS) == kh_end(h->h[partition]));
 
-    for (unsigned i = 1; i <= 128; ++i) {
-        uint64_t key = ((uint64_t)i << KC_BITS) | partition;
-        assert(query_cov(hash64i(key, mask), mask, h) == (i <= 24 ? 9 : 0));
+    for (int mode = 0; mode < 3; ++mode) {
+        if (mode == 1) assert(c4x_set_bloom(h, 12) == 0);
+        /* Force every Bloom probe to hit: false positives must still return
+           the exact coverage, including zero for every absent key. */
+        if (mode == 2) memset(h->bloom->bits, 255, h->bloom->n_bytes);
+        for (unsigned i = 1; i <= 128; ++i) {
+            uint64_t key = ((uint64_t)i << KC_BITS) | partition;
+            assert(query_cov(hash64i(key, mask), mask, h) == (i <= 24 ? 9 : 0));
+        }
+        assert(query_cov(hash64i(8, mask), mask, h) == 0); /* empty partition */
     }
-    assert(query_cov(hash64i(8, mask), mask, h) == 0); /* empty partition */
+    dbgps_bloom_t *previous = h->bloom;
+    assert(c4x_set_bloom(h, 65) == -1 && h->bloom == previous);
 
     /* Make an unchecked kh_end probe fail deterministically even without
        ASan: guard storage is allocated, but lies outside the table capacity. */
@@ -47,9 +55,7 @@ int main(void)
     kh_key(table, 32) = 123;
     assert(query_cov(hash64i(((uint64_t)25 << KC_BITS) | partition, mask), mask, h) == 0);
 
-    for (unsigned i = 0; i < 1U << KC_BITS; ++i) kc_c4_destroy(h->h[i]);
-    free(h->h);
-    free(h);
-    puts("coverage: present, absent, empty partitions and end-sentinel checks passed");
+    c4x_destroy(h);
+    puts("coverage: exact counts with Bloom disabled, enabled and forced false positives passed");
     return 0;
 }

@@ -17,16 +17,19 @@ test:
 	@set -eu; test_dir=$$(mktemp -d); trap 'rm -rf "$$test_dir"' EXIT; \
 	for source in DBGPS2.c DBGPS-analyzer.c DBGPS-links.c DBGPS-seq-filter.c dbgps3_core.c; do \
 		defs=; if [ "$$source" = dbgps3_core.c ]; then defs=-DTEST_DBGPS3; fi; \
-		$(CC) $(CFLAGS) -I. $$defs -DTEST_SOURCE=\"$$source\" -o "$$test_dir/cov" tests/test_kmer_cov.c kthread.c $(LIBS) -lpthread; \
+		$(CC) $(CFLAGS) -I. $$defs -DTEST_SOURCE=\"$$source\" -o "$$test_dir/cov" tests/test_kmer_cov.c dbgps_codec.c kthread.c $(LIBS) -lpthread; \
 		"$$test_dir/cov"; \
 	done; \
 	for defs in '' '-DTEST_DBGPS3'; do \
-		$(CC) $(CFLAGS) -I. $$defs -o "$$test_dir/paths" tests/test_paths.c kthread.c $(LIBS) -lpthread; \
+		$(CC) $(CFLAGS) -I. $$defs -o "$$test_dir/paths" tests/test_paths.c dbgps_codec.c kthread.c $(LIBS) -lpthread; \
 		"$$test_dir/paths"; \
 	done; \
-	$(CC) $(CFLAGS) -o "$$test_dir/DBGPS2" DBGPS2.c kthread.c $(LIBS) -lpthread; \
+	$(CC) $(CFLAGS) -I. -o "$$test_dir/codec" tests/test_codec.c dbgps_codec.c; \
+	"$$test_dir/codec" "$$test_dir/generated.map"; \
+	$(CC) $(CFLAGS) -o "$$test_dir/DBGPS2" DBGPS2.c dbgps_codec.c kthread.c $(LIBS) -lpthread; \
 	$(CC) $(CFLAGS) -o "$$test_dir/DBGPS3" DBGPS3.c dbgps3_core.c dbgps3_server.c minjson.c kthread.c $(LIBS) -lpthread; \
-	python3 tests/test_cli.py "$$test_dir/DBGPS2" "$$test_dir/DBGPS3"
+	python3 tests/test_cli.py "$$test_dir/DBGPS2" "$$test_dir/DBGPS3"; \
+	python3 tests/test_mapping_cli.py "$$test_dir/DBGPS2"
 
 # DBGPS-analyzer: Analyzer tool for calculating Sm, Kn, Kd values
 # Recent updates: 
@@ -48,8 +51,8 @@ DBGPS-links:DBGPS-links.c khashl.h ketopt.h kseq.h kthread.h
 # - Output prefix option for log and strands files
 # - Ratio range iteration support
 # - Improved path finding algorithm
-DBGPS2:DBGPS2.c khashl.h ketopt.h kseq.h kthread.h
-	$(CC) $(CFLAGS) -o $@ DBGPS2.c kthread.c $(LIBS) -lpthread
+DBGPS2:DBGPS2.c dbgps_codec.c dbgps_codec.h khashl.h ketopt.h kseq.h kthread.h
+	$(CC) $(CFLAGS) -o $@ DBGPS2.c dbgps_codec.c kthread.c $(LIBS) -lpthread
 
 # DBGPS-seq-filter: Filter to screen out entangled strands
 # Also known as DBGPS-ft

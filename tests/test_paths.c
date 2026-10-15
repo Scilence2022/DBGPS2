@@ -181,6 +181,77 @@ static void test_unique_and_ambiguous(void)
     assert(find_paths(h, paths, root, test_mask, 1, 12, test_k, 1, NAN, 0) == -1);
     destroy_table(h);
 }
+
+static void custom_strand(const dbgps_codec_t *map, unsigned char payload,
+                          unsigned char *packed, char *suffix)
+{
+    unsigned char raw[12] = {1, 35, 69, 103, 137, payload, 67, 215, 128, 11, 0, 0};
+    unsigned short crc = crc16xmodem(raw, 10);
+    raw[10] = crc >> 8;
+    raw[11] = crc & 255;
+    memset(packed, 0, 15);
+    /* 12 bytes + four zero bits -> twenty 5-bit words -> sixty bases. */
+    for (unsigned block = 0; block < 20; ++block) {
+        unsigned value = 0;
+        for (unsigned bit = 0; bit < 5; ++bit) {
+            unsigned pos = block * 5 + bit;
+            value = (value << 1) | (pos < 96 ? ((raw[pos / 8] >> (7 - pos % 8)) & 1) : 0);
+        }
+        unsigned word = map->encode[value];
+        for (unsigned j = 0; j < 3; ++j) {
+            unsigned pos = block * 3 + j;
+            packed[pos / 4] |= ((word >> (4 - 2 * j)) & 3) << (6 - 2 * (pos % 4));
+        }
+    }
+    for (int pos = 24; pos < 60; ++pos)
+        suffix[pos - 24] = "ACGT"[(packed[pos / 4] >> (6 - 2 * (pos % 4))) & 3];
+    suffix[36] = 'C';
+    suffix[37] = '\0';
+}
+
+static void test_custom_ambiguity(void)
+{
+    dbgps_codec_t map = {0};
+    map.bases = 3;
+    map.bits = 5;
+    map.encode = malloc(32 * sizeof(*map.encode));
+    map.decode = malloc(64 * sizeof(*map.decode));
+    assert(map.encode && map.decode);
+    for (unsigned i = 0; i < 64; ++i) map.decode[i] = UINT32_MAX;
+    for (unsigned i = 0; i < 32; ++i) {
+        map.encode[i] = (i * 5 + 11) & 63;
+        map.decode[map.encode[i]] = i;
+    }
+    kc_c4x_t *h = c4x_init(KC_BITS);
+    unsigned char packed[15];
+    char suffix[38];
+    uint64_t index;
+    assert(dbgps_codec_encode_index(&map, 0x0123456789ULL, 24, &index) == 0);
+    uint64_t root = actgkmer_uint64((unsigned char *)"CCTGCAGAGTAGCATGTCACGATCTGACGTAC", test_k);
+    root = (root & ~((1ULL << 48) - 1)) | index;
+    custom_strand(&map, 100, packed, suffix);
+    add_path(h, root, suffix);
+    size_t baseline = live_allocations;
+    unsigned char *paths[Max_Path_Num] = {0};
+    for (int repeat = 0; repeat < 10; ++repeat) {
+        int pos = find_paths_mapped(h, paths, root, test_mask, 1, 36, test_k, 24, 2.55, 0, &map);
+        assert(pos >= 0);
+        assert(memcmp(paths[pos], packed, sizeof(packed)) == 0);
+        free(paths[pos]);
+        paths[pos] = NULL;
+        assert(live_allocations == baseline);
+    }
+    custom_strand(&map, 101, packed, suffix);
+    add_path(h, root, suffix);
+    baseline = live_allocations;
+    assert(find_paths_mapped(h, paths, root, test_mask, 1, 36, test_k, 24, 2.55, 0, &map) == -1);
+    for (int i = 0; i < Max_Path_Num; ++i) assert(paths[i] == NULL);
+    assert(live_allocations == baseline);
+    /* These allocations are tracked in this translation unit. */
+    free(map.encode);
+    free(map.decode);
+    destroy_table(h);
+}
 #endif
 
 static void test_branch_limit(void)
@@ -215,6 +286,9 @@ static void test_branch_limit(void)
 int main(void)
 {
     test_unique_and_ambiguous();
+#ifndef TEST_DBGPS3
+    test_custom_ambiguity();
+#endif
     test_branch_limit();
     puts("paths: unique, ambiguous, branching, invalid inputs and allocation checks passed");
     return 0;

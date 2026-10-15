@@ -1,0 +1,19 @@
+# Equivalent to the original DBGPS2 byte tables.
+bases 2
+bits 4
+AT 0000
+AG 0001
+AC 0010
+AA 0011
+TA 0100
+TC 0101
+TG 0110
+TT 0111
+GG 1000
+GA 1001
+GT 1010
+GC 1011
+CC 1100
+CT 1101
+CA 1110
+CG 1111

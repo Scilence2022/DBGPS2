@@ -9,8 +9,10 @@
 #include <time.h>
 #include <math.h>
 #include <string.h>
+#include <errno.h>
 #include "ketopt.h" // command-line argument parser
 #include "kthread.h" // multi-threading models: pipeline and multi-threaded for loop
+#include "dbgps_codec.h"
 
 
 #include "kseq.h" // FASTA/Q parser
@@ -111,7 +113,7 @@ unsigned char* uint64_int8(uint64_t key, unsigned char* seq){
 }
 
 
-const unsigned char two_to_one_table[256] = { //one base encoder to two base encoder
+const unsigned char two_to_one_table[256] = { // legacy data byte -> canonical packed DNA
     51, 50, 49, 48, 60, 61, 62, 63, 58, 56, 59, 57, 53, 55, 52, 54,
     35, 34, 33, 32, 44, 45, 46, 47, 42, 40, 43, 41, 37, 39, 36, 38,
     19, 18, 17, 16, 28, 29, 30, 31, 26, 24, 27, 25, 21, 23, 20, 22,
@@ -131,7 +133,7 @@ const unsigned char two_to_one_table[256] = { //one base encoder to two base enc
 };
 
 
-const unsigned char one_to_two_table[256] = { //one base encoder to two base encoder
+const unsigned char one_to_two_table[256] = { // legacy canonical packed DNA -> data byte
 
     51, 50, 49, 48, 62, 60, 63, 61, 57, 59, 56, 58, 52, 53, 54, 55,
     35, 34, 33, 32, 46, 44, 47, 45, 41, 43, 40, 42, 36, 37, 38, 39,
@@ -159,7 +161,7 @@ const unsigned char one_to_two_table[256] = { //one base encoder to two base enc
     int i;
     for(i=0; i < seq_len; i++){
 
-        seq[i] = one_to_two_table[i];
+        seq[i] = one_to_two_table[seq[i]];
     }
     return seq;
 }
@@ -169,7 +171,7 @@ unsigned char* two_encode_one(unsigned char* seq, int seq_len){
 
     int i;
     for(i=0; i < seq_len; i++){
-        seq[i] = two_to_one_table[i];
+        seq[i] = two_to_one_table[seq[i]];
     }
     return seq;
 }
@@ -621,10 +623,7 @@ unsigned char* nodes_path(path_node *term_node, unsigned char *path_seq, int pat
     uint64_t kms[4];
     kms[nd_p] = p_node->kmer;
 
-    int node_num=0;
-
     while(p_node->pre_node && path_seq_p >= index_byte_num){
-        node_num++;
         p_node = p_node->pre_node;
         kms[nd_p] = p_node->kmer;
 
@@ -672,12 +671,44 @@ path_node *term_nodes[Max_Path_Num];
 path_node *next_term_nodes[Max_Path_Num];
 
 
-int find_paths(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer, uint64_t mask, int cut_cov, int path_len, int k, int index_byte_num, double max_cov_ratio, int skip_ratios){
+/* Reconstruct arbitrary block boundaries, retaining canonical packed DNA for
+   output. The terminal node is the historical one-base primer lookahead. */
+static void nodes_path_packed(path_node *node, unsigned char *out, int path_len, int index_len)
+{
+    int total = path_len + index_len;
+    memset(out, 0, (total + 3) / 4);
+    node = node->pre_node;
+    for (int pos = total - 1; pos >= index_len; --pos) {
+        out[pos / 4] |= (node->kmer & 3) << (6 - 2 * (pos % 4));
+        node = node->pre_node;
+    }
+    uint64_t index = node->kmer;
+    for (int pos = index_len - 1; pos >= 0; --pos) {
+        out[pos / 4] |= (index & 3) << (6 - 2 * (pos % 4));
+        index >>= 2;
+    }
+}
 
-    if (path_len < 0 || path_len % 4 != 0 || index_byte_num < 0 ||
-        index_byte_num > k / 4 || path_len >= Max_Path_Len ||
-        path_len + index_byte_num * 4 >= Max_Path_Len ||
-        (path_len >> 2) + index_byte_num < 2 ||
+static int codec_path_sizes(const dbgps_codec_t *codec, int path_len, int index_len,
+                            int k, int *packed_bytes, int *raw_bytes)
+{
+    unsigned bases = codec ? codec->bases : 2, bits = codec ? codec->bits : 4;
+    if (k < 1 || k > 31 || path_len < 0 || index_len < 0 || index_len > k ||
+        path_len >= Max_Path_Len || index_len + path_len >= Max_Path_Len ||
+        !bases || index_len % bases || path_len % bases) return -1;
+    unsigned padding = (bits - 16 % bits) % bits;
+    unsigned total_bits = (index_len + path_len) / bases * bits;
+    if (index_len / bases * bits % 8 || total_bits < 16 + padding ||
+        (total_bits - padding) % 8) return -1;
+    *packed_bytes = (index_len + path_len + 3) / 4;
+    *raw_bytes = (total_bits - padding) / 8;
+    return 0;
+}
+
+static int find_paths_mapped(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer, uint64_t mask, int cut_cov, int path_len, int k, int index_len, double max_cov_ratio, int skip_ratios, const dbgps_codec_t *codec){
+
+    int seq_len, raw_len;
+    if (codec_path_sizes(codec, path_len, index_len, k, &seq_len, &raw_len) < 0 ||
         cut_cov < 0 || cut_cov >= KC_MAX ||
         !isfinite(max_cov_ratio) || max_cov_ratio < 1.0) return -1;
 
@@ -688,7 +719,6 @@ int find_paths(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer, uint64_t mask
     term_nodes[0] = &all_nodes[0];
 
     int term_node_num = 1, all_node_num = 1, p = 0;
-    int seq_len = (path_len>>2) + index_byte_num;
 
     path_node *p_node;
     path_node next_nodes[4];
@@ -748,19 +778,23 @@ int find_paths(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer, uint64_t mask
 
     if (term_node_num == 0) return -1;
 
-    unsigned char *candidate = (unsigned char *)calloc(seq_len, 1);
-    unsigned char *path_tmp = (unsigned char *)malloc(seq_len);
-    if (!candidate || !path_tmp) {
-        free(candidate);
-        free(path_tmp);
-        return -1;
-    }
+    /* Scratch space is bounded by Max_Path_Len; avoid two heap allocations
+       for every index, cutoff, and ratio that reaches candidate validation. */
+    unsigned char candidate[(Max_Path_Len + 3) / 4];
+    unsigned char path_tmp[(Max_Path_Len + 3) / 4];
 
     int c_index = -1;
     for (int i = 0; i < term_node_num; i++) {
-        nodes_path(term_nodes[i], candidate, path_len, k, index_byte_num);
-        for (int j = 0; j < seq_len; j++) path_tmp[j] = one_to_two_table[candidate[j]];
-        if (crc16_check(path_tmp, seq_len)) {
+        if (!codec || codec->byte_fast) {
+            nodes_path(term_nodes[i], candidate, path_len, k, index_len / 4);
+            const unsigned char *decode = codec ? codec->decode_byte : one_to_two_table;
+            for (int j = 0; j < seq_len; j++) path_tmp[j] = decode[candidate[j]];
+        } else {
+            nodes_path_packed(term_nodes[i], candidate, path_len, index_len);
+            if (dbgps_codec_decode(codec, candidate, index_len + path_len, path_tmp, raw_len) < 0)
+                continue;
+        }
+        if (crc16_check(path_tmp, raw_len)) {
             if (c_index >= 0) {
                 free(paths[c_index]);
                 paths[c_index] = NULL;
@@ -773,10 +807,15 @@ int find_paths(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer, uint64_t mask
             c_index = i;
         }
     }
-    free(candidate);
-    free(path_tmp);
     /* Only the unique result is retained; the caller owns that allocation. */
     return c_index;
+}
+
+int find_paths(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer, uint64_t mask, int cut_cov, int path_len, int k, int index_byte_num, double max_cov_ratio, int skip_ratios)
+{
+    if (index_byte_num < 0 || index_byte_num > k / 4) return -1;
+    return find_paths_mapped(h, paths, kmer, mask, cut_cov, path_len, k,
+                             index_byte_num * 4, max_cov_ratio, skip_ratios, NULL);
 }
 
 
@@ -838,6 +877,22 @@ void print_cov(unsigned char* seq, int k, kc_c4x_t *h){ //Debugging function
     printf("cov: %d\n", test_cov);
 }
 
+static int parse_index(const char *text, uint64_t *value)
+{
+    char *end;
+    if (*text < '0' || *text > '9') return -1;
+    errno = 0;
+    *value = strtoull(text, &end, 10);
+    return errno || *end ? -1 : 0;
+}
+
+static void packed_dna_string(const unsigned char *packed, unsigned char *dna, int bases)
+{
+    for (int i = 0; i < bases; ++i)
+        dna[i] = nt4_seq_table[(packed[i / 4] >> (6 - 2 * (i % 4))) & 3];
+    dna[bases] = '\0';
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -849,8 +904,12 @@ int main(int argc, char *argv[])
     int read_len = 200;
     int skip_ratios = 0; // Number of initial ratio values to skip, default 0
     char *output_prefix = NULL; // Output prefix for log file
+    const char *mapping_file = NULL;
+    dbgps_codec_t mapping = {0};
+    const dbgps_codec_t *codec = NULL; /* NULL preserves the legacy byte tables. */
 
-    unsigned int min_index = 101010102, max_index=101295684, index_byte_num, max_cov=0;
+    uint64_t min_index = 101010102, max_index = 101295684;
+    unsigned int max_cov = 0;
     uint64_t mask, pr_uint64;
 
     char p1[] = "CCTGCAGAGTAGCATGTC"; //p2[18] = 'CTGACACTGATGCATCCG';
@@ -858,15 +917,19 @@ int main(int argc, char *argv[])
 
 
     ketopt_t o = KETOPT_INIT;
-    while ((c = ketopt(&o, argc, argv, 1, "k:p:b:t:c:l:a:b:i:C:r:R:m:s:o:", 0)) >= 0) {
+    while ((c = ketopt(&o, argc, argv, 1, "k:p:b:t:c:l:a:b:i:C:r:R:m:s:o:M:", 0)) >= 0) {
         if (c == 'k') k = atoi(o.arg);
         else if (c == 'p') p = atoi(o.arg);
         else if (c == 't') n_thread = atoi(o.arg);
         else if (c == 'c') min_cov = atoi(o.arg);
         else if (c == 'C') max_cov = atoi(o.arg);
 
-        else if (c == 'a') min_index = atoi(o.arg);
-        else if (c == 'b') max_index = atoi(o.arg);
+        else if (c == 'a' || c == 'b') {
+            if (parse_index(o.arg, c == 'a' ? &min_index : &max_index) < 0) {
+                fprintf(stderr, "ERROR: -%c requires an unsigned decimal index\n", c);
+                return 1;
+            }
+        }
         else if (c == 'i') index_len = atoi(o.arg);
         else if (c == 'l') payload_len = atoi(o.arg);
         else if (c == 'r') max_cov_ratio = atof(o.arg); // Changed this to use max_cov_ratio
@@ -874,6 +937,11 @@ int main(int argc, char *argv[])
         else if (c == 'm') mem_test = 1;
         else if (c == 's') skip_ratios = atoi(o.arg); // Number of initial ratio values to skip
         else if (c == 'o') output_prefix = o.arg; // Output prefix for log file
+        else if (c == 'M') mapping_file = o.arg;
+        else {
+            fprintf(stderr, "ERROR: unknown option or missing option value\n");
+            return 1;
+        }
     }
 
     if (argc - o.ind < 1) {
@@ -894,13 +962,14 @@ int main(int argc, char *argv[])
         fprintf(stderr, "  -c INT     k-mer coverage cut-off for exclusion of noise k-mers [%d]\n", min_cov);
         fprintf(stderr, "  -C INT     Switch on k-mer coverage testing mode.  [%d]\n", max_cov);
 
-        fprintf(stderr, "  -a INT     Initial index [%d]\n", min_index);
-        fprintf(stderr, "  -b INT     End index [%d]\n", max_index);
+        fprintf(stderr, "  -a INT     Initial index [%"PRIu64"]\n", min_index);
+        fprintf(stderr, "  -b INT     End index [%"PRIu64"]\n", max_index);
 
         fprintf(stderr, "  -r FLOAT   Maximum coverage ratio [%.1f]\n", max_cov_ratio);
         fprintf(stderr, "  -R FLOAT   Upper bound for ratio range iteration (0 = disabled) [%.1f]\n", max_r);
         fprintf(stderr, "  -s INT     Number of initial positions to skip ratio checks for [%d]\n", skip_ratios);
         fprintf(stderr, "  -o STR     Output prefix for log file [none]\n");
+        fprintf(stderr, "  -M FILE    Fixed-block DNA/bit mapping [legacy two-base mapping]\n");
 
         fprintf(stderr, "\n");
         return 1;
@@ -910,13 +979,35 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    if (mapping_file) {
+        char error[512];
+        if (dbgps_codec_load(&mapping, mapping_file, error, sizeof(error)) < 0) {
+            fprintf(stderr, "ERROR: %s\n", error);
+            return 1;
+        }
+        codec = &mapping;
+        crc_len = ((16 + codec->bits - 1) / codec->bits) * codec->bases;
+    }
 
     if(max_cov < min_cov){max_cov = min_cov;}
-    index_byte_num = index_len>>2;
+    int packed_bytes, raw_bytes;
+    unsigned bases = codec ? codec->bases : 2, bits = codec ? codec->bits : 4;
+    if (payload_len < 0 || payload_len >= Max_Path_Len || payload_len % bases ||
+        (payload_len / bases * bits) % 8 ||
+        codec_path_sizes(codec, payload_len + crc_len, index_len, k, &packed_bytes, &raw_bytes) < 0 ||
+        k - index_len > pr_len || min_index > max_index ||
+        max_index >> (index_len / bases * bits)) {
+        fprintf(stderr, "ERROR: incompatible strand layout or index range; index and payload must\n"
+                        "       contain whole mapping blocks and whole bytes, index must fit k,\n"
+                        "       k-index must fit the primer, and total strand length must be < %d bp\n", Max_Path_Len);
+        dbgps_codec_destroy(&mapping);
+        return 1;
+    }
     mask = (1ULL<<k*2) - 1;
     pr_uint64 = primer_uint64(p1, pr_len, index_len, k);
 
     path_len = payload_len + crc_len;
+    if (codec) read_len = 2 * pr_len + index_len + path_len;
 
     clock_t start,end;
     double kc_dur, dec_dur;
@@ -962,13 +1053,16 @@ int main(int argc, char *argv[])
     PRINT_BOTH("Data encoding length (-l): %d bp\n", payload_len);
     PRINT_BOTH("Read length for k-mer counting: %d\n", read_len);
     PRINT_BOTH("Skip ratio checks for first (-s): %d positions\n", skip_ratios);
-    PRINT_BOTH("Initial index (-a): %d\n", min_index);
-    PRINT_BOTH("End index (-b): %d\n", max_index);
+    PRINT_BOTH("Initial index (-a): %"PRIu64"\n", min_index);
+    PRINT_BOTH("End index (-b): %"PRIu64"\n", max_index);
     PRINT_BOTH("Maximum coverage ratio (-r): %.2f\n", max_cov_ratio);
     PRINT_BOTH("Ratio range upper bound (-R): %.2f\n", max_r);
     PRINT_BOTH("Memory test mode: %s\n", mem_test ? "enabled" : "disabled");
     PRINT_BOTH("Path length (payload + CRC): %d\n", path_len);
-    PRINT_BOTH("Index byte number: %d\n", index_byte_num);
+    PRINT_BOTH("Index byte number: %u\n", index_len / bases * bits / 8);
+    PRINT_BOTH("Mapping: %s (%u bases <-> %u bits; %s)\n", mapping_file ? mapping_file : "legacy",
+               bases, bits, !codec || codec->byte_fast ? "byte lookup" : "block lookup");
+    PRINT_BOTH("CRC encoding length: %d bp; zero padding: %u bits\n", crc_len, (bits - 16 % bits) % bits);
     PRINT_BOTH("Output prefix: %s\n", output_prefix ? output_prefix : "none");
     PRINT_BOTH("======================================\n");
     
@@ -994,10 +1088,10 @@ int main(int argc, char *argv[])
     if(mem_test){
             fprintf(stderr, "Memory test mode activated! Press ENTER to continue...\n");
             getchar();}
-    fprintf(stderr, "Decoding strands from index %d to ",min_index);
-    fprintf(stderr, "%d ......\n",max_index);
+    fprintf(stderr, "Decoding strands from index %"PRIu64" to ",min_index);
+    fprintf(stderr, "%"PRIu64" ......\n",max_index);
 
-    unsigned int id, eid;
+    uint64_t id, eid;
     unsigned int cov_cut;
     int c_index;
     int dec_strand_num=0;
@@ -1011,22 +1105,22 @@ int main(int argc, char *argv[])
 
             for(id=min_index; id<=max_index; id++) {
                 unsigned char *path[Max_Path_Num];
-                eid = index_encode(id, index_len);
+                if (codec) dbgps_codec_encode_index(codec, id, index_len, &eid);
+                else eid = index_encode(id, index_len);
 
-                c_index = find_paths(h, path, pr_uint64 | (uint64_t)eid, mask, cov_cut, path_len, k, index_byte_num, max_cov_ratio, skip_ratios);
+                c_index = find_paths_mapped(h, path, pr_uint64 | eid, mask, cov_cut, path_len, k, index_len, max_cov_ratio, skip_ratios, codec);
                 if(c_index > -1) {
                     dec_strand_num++;
                     unsigned char DNA_seq[Max_Path_Len];
 
-                    DNA_seq[path_len + index_byte_num*4] = '\0';
-                    intseq_actg(path[c_index], DNA_seq, (path_len>>2) + index_byte_num);
+                    packed_dna_string(path[c_index], DNA_seq, path_len + index_len);
                     
                     if (output_prefix != NULL && strands_file != NULL) {
                         // Output to strands file if -o is specified
-                        fprintf(strands_file, "%d\t%s\n", id, DNA_seq);
+                        fprintf(strands_file, "%"PRIu64"\t%s\n", id, DNA_seq);
                     } else {
                         // Output to stdout if no output file is specified
-                        printf("%d\t%s\n", id, DNA_seq);
+                        printf("%"PRIu64"\t%s\n", id, DNA_seq);
                     }
                     free(path[c_index]);
                 }
@@ -1048,22 +1142,22 @@ int main(int argc, char *argv[])
 
                 for(id=min_index; id<=max_index; id++) {
                     unsigned char *path[Max_Path_Num];
-                    eid = index_encode(id, index_len);
+                    if (codec) dbgps_codec_encode_index(codec, id, index_len, &eid);
+                    else eid = index_encode(id, index_len);
 
-                    c_index = find_paths(h, path, pr_uint64 | (uint64_t)eid, mask, cov_cut, path_len, k, index_byte_num, r, skip_ratios);
+                    c_index = find_paths_mapped(h, path, pr_uint64 | eid, mask, cov_cut, path_len, k, index_len, r, skip_ratios, codec);
                     if(c_index > -1) {
                         dec_strand_num++;
                         unsigned char DNA_seq[Max_Path_Len];
 
-                        DNA_seq[path_len + index_byte_num*4] = '\0';
-                        intseq_actg(path[c_index], DNA_seq, (path_len>>2) + index_byte_num);
+                        packed_dna_string(path[c_index], DNA_seq, path_len + index_len);
                         
                         if (output_prefix != NULL && strands_file != NULL) {
                             // Output to strands file if -o is specified
-                            fprintf(strands_file, "%d\t%s\n", id, DNA_seq);
+                            fprintf(strands_file, "%"PRIu64"\t%s\n", id, DNA_seq);
                         } else {
                             // Output to stdout if no output file is specified
-                            printf("%d\t%s\n", id, DNA_seq);
+                            printf("%"PRIu64"\t%s\n", id, DNA_seq);
                         }
                         free(path[c_index]);
                     }
@@ -1090,6 +1184,7 @@ int main(int argc, char *argv[])
     if (strands_file != NULL) {
         fclose(strands_file);
     }
+    dbgps_codec_destroy(&mapping);
     
     #undef PRINT_BOTH
     return 0;

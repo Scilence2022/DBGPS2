@@ -58,10 +58,12 @@ static void test_load_more(char **files, const char *missing)
     fclose(fp);
     dbgps3_graph_t *g = dbgps3_load_filtered(31, KC_BITS, 3, 40, 80, 1, files, 23);
     assert(g && dbgps3_set_bloom(g, 12) == 0);
+    assert(!strcmp(dbgps_redundancy_name(&g->redundancy), "crc16"));
     uint64_t a = dbgps3_actgkmer_hashkey("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", 31);
     uint64_t c = dbgps3_actgkmer_hashkey("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", 31);
     assert(dbgps3_kmer_cov(g, a) == 0 && dbgps3_kmer_cov(g, c) == 2);
     assert(dbgps3_load_more(g, 1, files + 1) == 0);
+    assert(!strcmp(dbgps_redundancy_name(&g->redundancy), "crc16"));
     assert(dbgps3_kmer_cov(g, a) == 2 && dbgps3_kmer_cov(g, c) == 2);
     assert(g->bloom_bits_per_key == 12 && dbgps3_bloom_bytes(g) > 0);
     void *before = g->_h;
@@ -74,10 +76,13 @@ static void test_load_more(char **files, const char *missing)
      * A failed partial append must disable the stale filter and keep g usable. */
     g = dbgps3_load(31, KC_BITS, 1, 40, 80, 1, files);
     assert(g && dbgps3_set_bloom(g, 12) == 0);
+    assert(!strcmp(dbgps_redundancy_name(&g->redundancy), "crc16"));
+    assert(dbgps3_set_redundancy(g, "none", NULL, 0) == 0);
     assert(dbgps3_kmer_cov(g, a) == 1);
     assert(dbgps3_load_more(g, 2, bad_files) == -1);
     assert(dbgps3_kmer_cov(g, a) == 2 && !dbgps3_bloom_bytes(g));
     assert(dbgps3_load_more(g, 1, files + 1) == 0);
+    assert(!dbgps_redundancy_enabled(&g->redundancy));
     assert(dbgps3_kmer_cov(g, a) == 3 && dbgps3_bloom_bytes(g));
     dbgps3_destroy(g);
     puts("counting API: append restores prior singletons; rebuild and failure ownership passed");

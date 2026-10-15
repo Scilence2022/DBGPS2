@@ -11,6 +11,7 @@ import tempfile
 import time
 
 from test_mapping_cli import encode, word, PRIMERS
+from test_redundancy_cli import protect, canonical_spec
 
 
 def main():
@@ -18,14 +19,23 @@ def main():
     bloom_args = sys.argv[3:]
     repo = Path(__file__).resolve().parent.parent
     rng = random.Random(193)
-    cases = [(None, 1, 2, 16, 80, 1000),
-             ("legacy", 2, 4, 16, 80, 1000),
-             ("custom", 3, 5, 24, 120, (1 << 35) + 123),
-             ("custom", 5, 8, 15, 100, (1 << 22) + 31),
-             (None, 1, 2, 28, 80, (1 << 54) + 123)]
+    cases = [(None, 1, 2, 16, 80, 1000, "default"),
+             (None, 1, 2, 16, 80, 1000, "none"),
+             ("legacy", 2, 4, 16, 80, 1000, "none"),
+             ("custom", 3, 5, 24, 120, (1 << 35) + 123, "none"),
+             ("custom", 5, 8, 15, 100, (1 << 22) + 31, "none"),
+             (None, 1, 2, 28, 80, (1 << 54) + 123, "none")]
+    cases += [(None, 1, 2, 16, 80, 1000, spec) for spec in
+              ("crc16", "crc32", "crc32c", "rs:4", "rs:8B", "rs", "hamming")]
+    cases += [("custom", 3, 5, 24, 48, (1 << 35) + 123, "default"),
+              ("custom", 3, 5, 24, 48, (1 << 35) + 123, "rs:4B")]
     with tempfile.TemporaryDirectory(prefix="dbgps-rpc-") as directory:
         directory = Path(directory)
-        for case, (kind, bases, bits, index_bases, payload_bases, index) in enumerate(cases):
+        for case, (kind, bases, bits, index_bases, payload_bases, index, spec) in enumerate(cases):
+            use_default = spec == "default"
+            if use_default:
+                spec = "crc16"
+            redundancy_args = [] if use_default else ["-E", spec]
             words = [word(i, bases) for i in range(2 ** bits)]
             mapping_args = []
             if kind == "legacy":
@@ -43,9 +53,14 @@ def main():
             index_bits = index_bases // bases * bits
             raw = index.to_bytes(index_bits // 8, "big") + bytes(
                 rng.randrange(256) for _ in range(payload_bases // bases * bits // 8))
-            expected = encode(raw, words, bits)
+            protected = protect(raw, spec)
+            expected = encode(protected, words, bits)
+            observed = bytearray(protected)
+            if spec.startswith("rs") or spec == "hamming":
+                observed[index_bits // 8] ^= 0x80
+            observed_dna = encode(observed, words, bits)
             reads = directory / f"case{case}.fa"
-            reads.write_text("".join(f">{copy}\n{PRIMERS[0]}{expected}{PRIMERS[1]}\n"
+            reads.write_text("".join(f">{copy}\n{PRIMERS[0]}{observed_dna}{PRIMERS[1]}\n"
                                      for copy in range(10)))
             with socket.socket() as reservation:
                 reservation.bind(("127.0.0.1", 0))
@@ -55,7 +70,7 @@ def main():
                 server_args = (["-S", "-P", str(port)] if case % 3 == 0 else
                                ["-S", str(port)] if case % 3 == 1 else [f"-S{port}"])
                 proc = subprocess.Popen([binary, *server_args, *bloom_args, "-i", str(index_bases),
-                                         "-l", str(payload_bases), *mapping_args, str(reads)],
+                                         "-l", str(payload_bases), *redundancy_args, *mapping_args, str(reads)],
                                         stdout=log, stderr=log)
                 try:
                     deadline = time.monotonic() + 10
@@ -63,6 +78,7 @@ def main():
                         assert proc.poll() is None, log_path.read_text()
                         assert time.monotonic() < deadline, log_path.read_text()
                         time.sleep(0.02)
+                    assert f"Redundancy (-E): {canonical_spec(spec)};" in log_path.read_text()
                     with socket.create_connection(("127.0.0.1", port), timeout=5) as connection:
                         with connection.makefile("rwb") as stream:
                             request_id = 0
@@ -82,6 +98,10 @@ def main():
                             assert info["bloom"]["enabled"] == ("-B" in bloom_args)
                             assert info["bloom"]["singletons_removed"] == ("-F" in bloom_args)
                             assert info["index_byte_num"] == index_bits // 8
+                            assert info["redundancy"]["code"] == spec.split(":")[0]
+                            assert info["redundancy"]["spec"] == canonical_spec(spec)
+                            assert info["redundancy"]["parity_bytes"] == len(protected) - len(raw)
+                            assert info["redundancy"]["parity_bases"] == len(expected) - index_bases - payload_bases
                             assert info["mapping"]["custom"] == bool(kind)
                             assert (info["mapping"]["bases"], info["mapping"]["bits"]) == (bases, bits)
                             for value in (str(index), index) if index < 2 ** 53 else (str(index),):
@@ -107,7 +127,7 @@ def main():
                             assert result.returncode == 0, result.stderr
                             reply = json.loads(result.stdout)["result"]
                             assert reply["index"] == str(index) and reply["sequence"] == expected, reply
-                            if case == 0:
+                            if case in (0, len(cases) - 1):
                                 original_cov = rpc("kmer/cov", {"kmer": root})["result"]["coverage"]
                                 first_extra = directory / "singleton.fa"
                                 second_extra = directory / "repeat.fa"
@@ -128,6 +148,13 @@ def main():
                                                 concurrent.flush()
                                                 response = json.loads(concurrent.readline())
                                                 assert response["result"]["coverage"] == original_cov, response
+                                                if _ % 10 == 0:
+                                                    request = {"jsonrpc": "2.0", "id": 901,
+                                                               "method": "path/find", "params": {"index": str(index)}}
+                                                    concurrent.write(json.dumps(request).encode() + b"\n")
+                                                    concurrent.flush()
+                                                    response = json.loads(concurrent.readline())
+                                                    assert response["result"]["sequence"] == expected, response
 
                                 with ThreadPoolExecutor(max_workers=3) as pool:
                                     readers = [pool.submit(concurrent_reader) for _ in range(3)]
@@ -140,6 +167,8 @@ def main():
                                 assert after["enabled"] == ("-B" in bloom_args)
                                 assert "error" in rpc("graph/load", {"files": [str(directory / "absent.fa")]})
                                 assert rpc("kmer/cov", {"kmer": root})["result"]["coverage"] == original_cov
+                            # Reloads preserve the selected mapping and redundancy.
+                            assert rpc("path/find", {"index": str(index)})["result"]["sequence"] == expected
                             assert rpc("server/shutdown")["result"]["status"] == "shutting down"
                     # Wake the existing blocking accept loop after the shutdown reply.
                     try:
@@ -152,7 +181,7 @@ def main():
                     if proc.poll() is None:
                         proc.kill()
                         proc.wait(timeout=5)
-            print(f"mapping server: {kind or 'canonical'}, {bases} bases/{bits} bits, exact index={index} passed")
+            print(f"mapping server: {kind or 'canonical'}, {bases} bases/{bits} bits, exact index={index}, redundancy={spec} passed")
 
 
 if __name__ == "__main__":

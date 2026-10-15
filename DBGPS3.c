@@ -46,13 +46,14 @@ int main(int argc, char *argv[])
     int index_byte_num;
     unsigned int max_cov = 0;
     const char *mapping_file = NULL;
+    const char *redundancy_spec = DBGPS3_DEFAULT_REDUNDANCY;
     uint64_t pr_uint64;
 
     char p1[] = "CCTGCAGAGTAGCATGTC";
     int pr_len = 18;
 
     ketopt_t o = KETOPT_INIT;
-    while ((c = ketopt(&o, argc, argv, 1, "k:p:b:t:c:l:a:b:i:C:r:R:m:s:o:M:B:F:SP:L:", 0)) >= 0) {
+    while ((c = ketopt(&o, argc, argv, 1, "k:p:b:t:c:l:a:b:i:C:r:R:m:s:o:M:E:B:F:SP:L:", 0)) >= 0) {
         if (c == 'k') k = atoi(o.arg);
         else if (c == 'p') p = atoi(o.arg);
         else if (c == 't') n_thread = atoi(o.arg);
@@ -72,6 +73,7 @@ int main(int argc, char *argv[])
         else if (c == 's') skip_ratios = atoi(o.arg);
         else if (c == 'o') output_prefix = o.arg;
         else if (c == 'M') mapping_file = o.arg;
+        else if (c == 'E') redundancy_spec = o.arg;
         else if (c == 'F') {
             if (dbgps_bloom_parse_shift(o.arg, &count_bloom_shift) < 0) {
                 fprintf(stderr, "ERROR: -F requires 0 (disabled) or log2 bitmap bits from 23 to 40\n");
@@ -122,6 +124,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "  -s INT     Number of initial positions to skip ratio checks for [%d]\n", skip_ratios);
         fprintf(stderr, "  -o STR     Output prefix for log file [none]\n");
         fprintf(stderr, "  -M FILE    Custom DNA/bit mapping [none; built-in A=00,C=01,G=10,T=11]\n");
+        fprintf(stderr, "  -E CODE    Redundancy: " DBGPS_REDUNDANCY_OPTIONS " [" DBGPS3_DEFAULT_REDUNDANCY "]\n");
         fprintf(stderr, "  -B INT     Bloom query prefilter bits/key (1..64; 0 disables) [0]\n");
         fprintf(stderr, "  -F INT     Two-pass singleton filter log2 bits (23..40; 0 disables) [0]\n");
         fprintf(stderr, "  -S [PORT]  Start in server mode (default port: %d)\n", server_port);
@@ -144,6 +147,16 @@ int main(int argc, char *argv[])
         fprintf(stderr, "ERROR: %s\n", mapping_error);
         return 1;
     }
+    if (dbgps3_set_redundancy(&config, redundancy_spec, mapping_error, sizeof(mapping_error)) < 0) {
+        fprintf(stderr, "ERROR: %s\n", mapping_error);
+        dbgps_codec_destroy(&config.codec);
+        return 1;
+    }
+    char redundancy_label[DBGPS_REDUNDANCY_SPEC_SIZE];
+    dbgps_redundancy_format(&config.redundancy, redundancy_label, sizeof(redundancy_label));
+    dbgps_strand_layout_t layout;
+    dbgps_strand_layout(config.codec.bases ? &config.codec : NULL, &config.redundancy,
+                         index_len, payload_len, &layout);
     uint64_t encoded_max;
     if (dbgps3_validate_layout(&config, index_len, payload_len, &index_byte_num) < 0 ||
         k - index_len > pr_len ||
@@ -158,7 +171,8 @@ int main(int argc, char *argv[])
     if(max_cov < min_cov){max_cov = min_cov;}
     pr_uint64 = dbgps3_primer_uint64(p1, pr_len, index_len, k);
     path_len = payload_len;
-    if (config.codec.bases) read_len = 2 * pr_len + index_len + path_len;
+    if (config.codec.bases || 2 * pr_len + (int)layout.total_bases > read_len)
+        read_len = 2 * pr_len + layout.total_bases;
 
     /* ---- Load the de Bruijn graph ---- */
     clock_t start, end;
@@ -175,6 +189,7 @@ int main(int argc, char *argv[])
         return 1;
     }
     g->codec = config.codec; /* Transfer ownership to the graph. */
+    g->redundancy = config.redundancy;
     if (dbgps3_set_bloom(g, bloom_bits_per_key) < 0) {
         fprintf(stderr, "ERROR: failed to allocate Bloom query filter\n");
         dbgps3_destroy(g);
@@ -200,6 +215,8 @@ int main(int argc, char *argv[])
         if (mapping_file)
             fprintf(stderr, "Mapping: %s (%u bases <-> %u bits)\n", mapping_file, g->codec.bases, g->codec.bits);
         else fprintf(stderr, "Mapping: none (built-in A=00,C=01,G=10,T=11; direct 2-bit packing)\n");
+        fprintf(stderr, "Redundancy (-E): %s; %u parity bytes; %u bp; zero padding: %u bits\n",
+                redundancy_label, layout.parity_bytes, layout.parity_bases, layout.padding_bits);
         fprintf(stderr, "\nK-mer counting time: %f seconds\n", (kc_dur/CLOCKS_PER_SEC));
         fprintf(stderr, "Starting DBGPS3 server on port %d (max clients: %d)...\n",
                 server_port, max_clients);
@@ -261,7 +278,9 @@ int main(int argc, char *argv[])
     PRINT_BOTH("Maximum coverage ratio (-r): %.2f\n", max_cov_ratio);
     PRINT_BOTH("Ratio range upper bound (-R): %.2f\n", max_r);
     PRINT_BOTH("Memory test mode: %s\n", mem_test ? "enabled" : "disabled");
-    PRINT_BOTH("Path length (payload): %d\n", path_len);
+    PRINT_BOTH("Path length (payload + redundancy): %u\n", layout.path_bases);
+    PRINT_BOTH("Redundancy (-E): %s; %u parity bytes; %u bp; zero padding: %u bits\n",
+               redundancy_label, layout.parity_bytes, layout.parity_bases, layout.padding_bits);
     PRINT_BOTH("Index byte number: %d\n", index_byte_num);
     if (mapping_file) {
         PRINT_BOTH("Mapping: %s (%u bases <-> %u bits; %s)\n", mapping_file,

@@ -7,9 +7,6 @@ DBGPS2 is a collection of tools for DNA data storage analysis and processing, wi
 This project provides software tools for analyzing and reconstructing DNA sequences from data storage systems. The main components are:
 
 - **DBGPS2**: A read-length constrained sequence assembler with dynamic coverage ratio support (formerly DBGPS-dy2-rl)
-- **DBGPS-analyzer**: Tool for calculating key sequencing metrics (Sm, Kn, Kd values)
-- **DBGPS-links**: Analyzer for detecting cross-links between DNA strands
-- **DBGPS-seq-filter**: Filter to screen out entangled strands (also known as DBGPS-ft)
 - **DBGPS3**: Next-generation de Bruijn graph assembler with interactive server mode support
 
 ## Installation
@@ -33,11 +30,7 @@ To build individual components:
 
 ```
 make DBGPS2
-make DBGPS-analyzer
-make DBGPS-links
-make DBGPS-seq-filter
 make DBGPS3
-make dbgps3-server
 make dbgps3-client
 ```
 
@@ -185,65 +178,6 @@ tables; the maximum is 384 KiB. The 8-base limit bounds memory growth rather
 than allocating tables exponential in an unrestricted block size. Runtime
 depends mainly on graph branching and candidate count; the byte fast path does
 not imply identical assembly times for different codebooks or code rates.
-
-### DBGPS-analyzer
-
-Analyzer tool for calculating sequencing metrics like Sm, Kn, and Kd values.
-
-#### Features
-- Output prefix specification for log files
-- Coverage ratio range iteration
-- Parametrized read length and max coverage settings
-
-#### Usage
-```
-DBGPS-analyzer [options] <Strand seq file> <NGS files>
-                         [Supporting formats: *fq, *fa, *fq.gz, *fa.gz]
-
-Options:
-  -k INT     k-mer size
-  -t INT     number of threads
-  -L INT     Maximal read length for k-mer counting
-  -r FLOAT   Maximum coverage ratio (0 = no limitation)
-  -R FLOAT   Upper bound for ratio range iteration
-  -c INT     Minimum coverage cutoff
-  -C INT     Maximum coverage cutoff
-  -s INT     Number of initial ratio values to skip
-  -o STR     Output prefix for additional files
-```
-
-### DBGPS-links
-
-Analyzer for detecting cross-links between DNA strands in a dataset.
-
-#### Usage
-```
-DBGPS-links [options] <in.fa>
-
-Options:
-  -k INT     k-mer size [31]
-  -m INT     max link number [1]
-```
-
-### DBGPS-seq-filter
-
-Filter tool to screen out entangled strands from DNA data. This tool identifies and removes strands with more than a specified number of cross-links, helping to improve sequence quality.
-
-#### Features
-- Primer-aware analysis that excludes primer regions from k-mer analysis
-- Configurable k-mer size for entanglement detection
-- Option to output either passed or filtered sequences
-
-#### Usage
-```
-DBGPS-seq-filter [options] <in.fa>
-
-Options:
-  -k INT     k-mer size for entangle analysis [31]
-  -m INT     Maximal strand cross-links [0]
-  -p INT     Length of primers [18]
-  -s         Output passed sequences instead of filtered ones
-```
 
 ### DBGPS3
 

@@ -24,6 +24,7 @@ def encode(raw, codewords, bits, padding_value=0):
 
 def main():
     binary = str(Path(sys.argv[1]).resolve())
+    has_crc = Path(binary).name == "DBGPS2"
     repo = Path(__file__).resolve().parent.parent
     legacy = {}
     for line in (repo / "examples/legacy-2base.map").read_text().splitlines():
@@ -78,6 +79,8 @@ def main():
                 assert result.returncode == 0, (args, result.stderr)
                 rows = [line.split("\t") for line in prefix.with_suffix(".strands").read_text().splitlines()]
                 target = expected if wanted is None else wanted
+                if not has_crc:
+                    target = {index: dna[:index_bases + payload_bases] for index, dna in target.items()}
                 assert len(rows) == repeats * len(target), (args, rows, result.stdout)
                 for index, dna in rows:
                     assert dna == target[int(index)], (args, index, dna)
@@ -87,7 +90,7 @@ def main():
             run(["-t", "1"])
             if case in (1, 4, 7):
                 run(["-t", "3", "-C", "2", "-R", "2.65"], repeats=6)
-            if bits == 5:
+            if bits == 5 and has_crc:
                 # A legal DNA word can carry nonzero padding while the CRC itself
                 # remains correct. It must still be rejected.
                 write_reads({i: encode(raw, codewords, bits, 1) for i, raw in raw_by_index.items()})

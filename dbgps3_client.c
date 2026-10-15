@@ -137,8 +137,7 @@ static int send_shortcut(int fd, const char *cmd, int id)
         request_str = build_request("kmer/cov", params, id);
     }
     else if (strncmp(cmd, "find ", 5) == 0) {
-        int index = atoi(cmd + 5);
-        mj_object_set(&params, "index", mj_number(index));
+        mj_object_set(&params, "index", mj_string(cmd + 5));
         request_str = build_request("path/find", params, id);
     }
     else if (strncmp(cmd, "findkmer ", 9) == 0) {

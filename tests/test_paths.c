@@ -125,6 +125,70 @@ static void test_unique_and_ambiguous(void)
     assert(strcmp(out, "unchanged") == 0);
     destroy_table(h);
 }
+
+static void test_mapped_paths(void)
+{
+    dbgps3_graph_t g = {0};
+    g.k = test_k;
+    g.mask = test_mask;
+    uint64_t index;
+    assert(dbgps3_index_encode(0x0123456789abULL, 24) == 0x0123456789abULL);
+    assert(dbgps3_encode_index(&g, 0x0123456789abULL, 24, &index) == 0);
+    assert(index == 0x0123456789abULL);
+    assert(dbgps3_encode_index(&g, 1ULL << 48, 24, &index) == -1);
+
+    g.codec.bases = 3;
+    g.codec.bits = 5;
+    g.codec.encode = malloc(32 * sizeof(*g.codec.encode));
+    g.codec.decode = malloc(64 * sizeof(*g.codec.decode));
+    assert(g.codec.encode && g.codec.decode);
+    for (unsigned i = 0; i < 64; ++i) g.codec.decode[i] = i < 32 ? i : UINT32_MAX;
+    for (unsigned i = 0; i < 32; ++i) g.codec.encode[i] = i;
+    assert(dbgps3_encode_index(&g, 0x0123456789ULL, 24, &index) == 0);
+    uint64_t root = dbgps3_actgkmer_uint64("CCTGCAGAGTAGCATGTCACGATCTGACGTAC", test_k);
+    root = (root & ~((1ULL << 48) - 1)) | index;
+    kc_c4x_t *h = c4x_init(KC_BITS);
+    g._h = h;
+    char suffix[26];
+    for (unsigned block = 0; block < 8; ++block) {
+        unsigned value = (block * 7 + 3) % 32;
+        for (unsigned pos = 0; pos < 3; ++pos)
+            suffix[block * 3 + pos] = "ACGT"[(value >> (4 - 2 * pos)) & 3];
+    }
+    suffix[24] = 'C';
+    suffix[25] = '\0';
+    add_path(h, root, suffix);
+    char forbidden[sizeof(suffix)];
+    strcpy(forbidden, suffix);
+    forbidden[0] = 'T'; /* word >= 48, forbidden by this codebook */
+    add_path(h, root, forbidden);
+
+    char expected[49], out[64];
+    dbgps3_uint64_acgt(index, expected, 24);
+    memcpy(expected + 24, suffix, 24);
+    expected[48] = '\0';
+    size_t baseline = live_allocations;
+    strcpy(out, "unchanged");
+    assert(dbgps3_find_path(&g, root, 1, 2.55, 0, 24, 5, out, 48) == -1);
+    assert(!strcmp(out, "unchanged"));
+    assert(live_allocations == baseline);
+    for (int repeat = 0; repeat < 10; ++repeat) {
+        strcpy(out, "unchanged");
+        assert(dbgps3_find_path(&g, root, 1, 2.55, 0, 24, 5, out, sizeof(out)) == 0);
+        assert(!strcmp(out, expected));
+        assert(live_allocations == baseline);
+    }
+    suffix[23] = suffix[23] == 'A' ? 'C' : 'A'; /* another allowed final word */
+    add_path(h, root, suffix);
+    baseline = live_allocations;
+    strcpy(out, "unchanged");
+    assert(dbgps3_find_path(&g, root, 1, 2.55, 0, 24, 5, out, sizeof(out)) == -1);
+    assert(!strcmp(out, "unchanged"));
+    assert(live_allocations == baseline);
+    free(g.codec.encode);
+    free(g.codec.decode);
+    destroy_table(h);
+}
 #else
 static void encoded_strand(unsigned char payload, unsigned char *encoded, char *suffix)
 {
@@ -306,6 +370,8 @@ int main(void)
 #ifndef TEST_DBGPS3
     test_builtin_encoding();
     test_custom_ambiguity();
+#else
+    test_mapped_paths();
 #endif
     test_branch_limit();
     puts("paths: unique, ambiguous, branching, invalid inputs and allocation checks passed");

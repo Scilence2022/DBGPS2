@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include "dbgps_codec.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -25,11 +26,12 @@ typedef struct dbgps3_graph_s {
     int p;             /* prefix bits */
     uint64_t mask;     /* k-mer bit mask */
     int index_len;     /* index length in bases */
-    int index_byte_num;/* index length in bytes */
+    int index_byte_num;/* index length in decoded data bytes */
     int path_len;      /* payload path length */
     int n_thread;      /* number of threads */
     int block_size;    /* pipeline block size */
     int read_len;      /* read length for counting */
+    dbgps_codec_t codec; /* owned; bases=0 means direct canonical packing */
 } dbgps3_graph_t;
 
 /* ---- Graph lifecycle ---- */
@@ -45,6 +47,24 @@ dbgps3_graph_t *dbgps3_load(int k, int p, int n_thread, int block_size,
  * Destroy a graph object and free all associated memory.
  */
 void dbgps3_destroy(dbgps3_graph_t *g);
+
+/** Load an optional codebook (NULL resets canonical encoding). Set compatible
+ * index_len/path_len defaults before calling; index_byte_num is recalculated.
+ * On error, preserve the previous codec. Configure only before starting queries;
+ * the graph owns the codebook until destruction. */
+int dbgps3_set_mapping(dbgps3_graph_t *g, const char *filename,
+                       char *error, size_t error_size);
+
+/** Validate index/payload lengths in bases and return decoded index bytes. */
+int dbgps3_validate_layout(const dbgps3_graph_t *g, int index_len, int path_len,
+                           int *index_bytes);
+
+/** Encode an index with the graph's selected codec; reject capacity overflow. */
+int dbgps3_encode_index(const dbgps3_graph_t *g, uint64_t index, int index_len,
+                        uint64_t *encoded);
+
+/** Parse an exact unsigned decimal index (also used by CLI and JSON strings). */
+int dbgps3_parse_index(const char *text, uint64_t *index);
 
 /**
  * Load additional FASTQ/FASTA files into an existing graph.
@@ -63,7 +83,7 @@ unsigned short dbgps3_kmer_cov(const dbgps3_graph_t *g, uint64_t kmer);
 /**
  * Find a path in the de Bruijn graph starting from start_kmer.
  * On success, writes the decoded DNA sequence into result_buf and returns 0.
- * On failure (no unique path, workspace limit, invalid parameters or allocation
+ * On failure (no unique codebook-valid path, workspace limit, invalid parameters or allocation
  * failure), returns -1 and result_buf is unchanged.
  *
  * @param g            Graph object
@@ -71,10 +91,11 @@ unsigned short dbgps3_kmer_cov(const dbgps3_graph_t *g, uint64_t kmer);
  * @param cut_cov      Minimum coverage cutoff
  * @param max_cov_ratio Maximum coverage ratio for branching (finite and >= 1)
  * @param skip_ratios  Number of initial positions to skip ratio checks
- * @param path_len     Payload path length (a multiple of 4, from 0 to DBGPS3_MAX_PATH_LEN)
- * @param index_byte_num Number of bytes in the index encoding
+ * @param path_len     Payload length in bases, from 0 to DBGPS3_MAX_PATH_LEN;
+ *                     must contain complete codewords and decode to whole bytes
+ * @param index_byte_num Number of decoded data bytes in the index
  * @param result_buf   Output buffer for the decoded DNA sequence
- * @param result_buf_len Size of result_buf (must be >= path_len + index_byte_num*4 + 1)
+ * @param result_buf_len Size of result_buf (must be >= payload bases + index bases + 1)
  */
 int dbgps3_find_path(const dbgps3_graph_t *g, uint64_t start_kmer,
                      int cut_cov, double max_cov_ratio, int skip_ratios,
@@ -92,7 +113,8 @@ uint64_t dbgps3_actgkmer_hashkey(const char *seq, int km_len);
 /** Compute the primer k-mer as uint64 from a primer sequence. */
 uint64_t dbgps3_primer_uint64(const char *pr, int pr_len, int index_len, int km_len);
 
-/** Encode a decimal index into DNA encoding. */
+/** Use index bits directly as canonical DNA (A=00,C=01,G=10,T=11).
+ * Use dbgps3_encode_index() when a graph-specific codebook is needed. */
 uint64_t dbgps3_index_encode(uint64_t index, unsigned int index_len);
 
 /** Compute reverse complement of a k-mer. */

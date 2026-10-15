@@ -4,6 +4,7 @@
 #include <inttypes.h>
 #include <string.h>
 #include <math.h>
+#include <errno.h>
 #include <zlib.h>
 #include "kseq.h"
 KSEQ_INIT(gzFile, gzread)
@@ -269,27 +270,6 @@ static unsigned short kmer_cov_internal(uint64_t kmer, uint64_t mask, const kc_c
     return cov;
 }
 
-/* ---- Internal encoding tables ---- */
-
-static const unsigned char two_to_one_table[256] = {
-    51, 50, 49, 48, 60, 61, 62, 63, 58, 56, 59, 57, 53, 55, 52, 54,
-    35, 34, 33, 32, 44, 45, 46, 47, 42, 40, 43, 41, 37, 39, 36, 38,
-    19, 18, 17, 16, 28, 29, 30, 31, 26, 24, 27, 25, 21, 23, 20, 22,
-     3,  2,  1,  0, 12, 13, 14, 15, 10,  8, 11,  9,  5,  7,  4,  6,
-   195,194,193,192,204,205,206,207,202,200,203,201,197,199,196,198,
-   211,210,209,208,220,221,222,223,218,216,219,217,213,215,212,214,
-   227,226,225,224,236,237,238,239,234,232,235,233,229,231,228,230,
-   243,242,241,240,252,253,254,255,250,248,251,249,245,247,244,246,
-   163,162,161,160,172,173,174,175,170,168,171,169,165,167,164,166,
-   131,130,129,128,140,141,142,143,138,136,139,137,133,135,132,134,
-   179,178,177,176,188,189,190,191,186,184,187,185,181,183,180,182,
-   147,146,145,144,156,157,158,159,154,152,155,153,149,151,148,150,
-    83, 82, 81, 80, 92, 93, 94, 95, 90, 88, 91, 89, 85, 87, 84, 86,
-   115,114,113,112,124,125,126,127,122,120,123,121,117,119,116,118,
-    67, 66, 65, 64, 76, 77, 78, 79, 74, 72, 75, 73, 69, 71, 68, 70,
-    99, 98, 97, 96,108,109,110,111,106,104,107,105,101,103,100,102
-};
-
 /* ---- Internal path node type ---- */
 
 typedef struct path_node_s {
@@ -341,38 +321,20 @@ static unsigned char* nodes_path(path_node_t *term_node, unsigned char *path_seq
     return path_seq;
 }
 
-static void intseq_actg(const unsigned char *int_seq, unsigned char *actg_seq, int8_t int_seq_len)
+static void nodes_path_packed(path_node_t *node, unsigned char *out,
+                               int path_len, int index_len)
 {
-    int p = 0;
-    unsigned long n, mask;
-    unsigned char n1, n2, n3, n4;
-
-    while(p < int_seq_len){
-        unsigned long tmp = 0;
-        int i2;
-        /* Decode one byte to 4 bases */
-        unsigned char bv = int_seq[p];
-        for(i2=0; i2<4; i2++){
-            int m = bv & 3;
-            bv = bv >> 2;
-            tmp = tmp >> 8;
-            tmp = tmp + ((unsigned long)dbgps3_nt4_seq_table[m] << 24);
-        }
-        mask = (1<<8) - 1;
-        n = tmp;
-        n4 = (n & mask);
-        mask = mask << 8;
-        n3 = (n & mask)>>8;
-        mask = mask << 8;
-        n2 = (n & mask)>>16;
-        mask = mask << 8;
-        n1 = (n & mask)>>24;
-
-        actg_seq[p<<2] = n1;
-        actg_seq[(p<<2) + 1] = n2;
-        actg_seq[(p<<2) + 2] = n3;
-        actg_seq[(p<<2) + 3] = n4;
-        p = p + 1;
+    int total = path_len + index_len;
+    memset(out, 0, (total + 3) / 4);
+    node = node->pre_node; /* skip the one-base lookahead */
+    for (int pos = total - 1; pos >= index_len; --pos) {
+        out[pos / 4] |= (node->kmer & 3) << (6 - 2 * (pos % 4));
+        node = node->pre_node;
+    }
+    uint64_t index = node->kmer;
+    for (int pos = index_len - 1; pos >= 0; --pos) {
+        out[pos / 4] |= (index & 3) << (6 - 2 * (pos % 4));
+        index >>= 2;
     }
 }
 
@@ -387,7 +349,7 @@ static void intseq_actg(const unsigned char *int_seq, unsigned char *actg_seq, i
 dbgps3_graph_t *dbgps3_load(int k, int p, int n_thread, int block_size,
                              int read_len, int n_files, char **files)
 {
-    if (n_files < 1 || !files) return NULL;
+    if (n_files < 1 || !files || k < 1 || k > 31 || p != DBGPS3_KC_BITS) return NULL;
 
     dbgps3_graph_t *g;
     CALLOC(g, 1);
@@ -435,7 +397,62 @@ void dbgps3_destroy(dbgps3_graph_t *g)
 {
     if (!g) return;
     c4x_destroy((kc_c4x_t*)g->_h);
+    dbgps_codec_destroy(&g->codec);
     free(g);
+}
+
+int dbgps3_set_mapping(dbgps3_graph_t *g, const char *filename,
+                       char *error, size_t error_size)
+{
+    if (!g) return -1;
+    dbgps_codec_t replacement = {0};
+    if (filename && dbgps_codec_load(&replacement, filename, error, error_size) < 0) return -1;
+    dbgps3_graph_t proposed = *g;
+    proposed.codec = replacement;
+    int index_bytes;
+    if (dbgps3_validate_layout(&proposed, g->index_len, g->path_len, &index_bytes) < 0) {
+        snprintf(error, error_size, "index/payload lengths are incompatible with the selected mapping");
+        dbgps_codec_destroy(&replacement);
+        return -1;
+    }
+    dbgps_codec_destroy(&g->codec);
+    g->codec = replacement;
+    g->index_byte_num = index_bytes;
+    return 0;
+}
+
+int dbgps3_validate_layout(const dbgps3_graph_t *g, int index_len, int path_len,
+                           int *index_bytes)
+{
+    if (!g || g->k < 1 || g->k > 31 || index_len < 0 || index_len > g->k ||
+        path_len < 0 || path_len > DBGPS3_MAX_PATH_LEN) return -1;
+    unsigned bases = g->codec.bases ? g->codec.bases : 1;
+    unsigned bits = g->codec.bases ? g->codec.bits : 2;
+    if (index_len % bases || path_len % bases ||
+        (index_len / bases * bits) % 8 || (path_len / bases * bits) % 8) return -1;
+    if (index_bytes) *index_bytes = index_len / bases * bits / 8;
+    return 0;
+}
+
+int dbgps3_encode_index(const dbgps3_graph_t *g, uint64_t index, int index_len,
+                        uint64_t *encoded)
+{
+    int bytes;
+    if (!encoded || dbgps3_validate_layout(g, index_len, 0, &bytes) < 0 ||
+        index >> (bytes * 8)) return -1;
+    if (g->codec.bases)
+        return dbgps_codec_encode_index(&g->codec, index, index_len, encoded);
+    *encoded = dbgps3_index_encode(index, index_len);
+    return 0;
+}
+
+int dbgps3_parse_index(const char *text, uint64_t *index)
+{
+    char *end;
+    if (!text || !index || *text < '0' || *text > '9') return -1;
+    errno = 0;
+    *index = strtoull(text, &end, 10);
+    return errno || *end ? -1 : 0;
 }
 
 unsigned short dbgps3_kmer_cov(const dbgps3_graph_t *g, uint64_t kmer)
@@ -451,18 +468,22 @@ int dbgps3_find_path(const dbgps3_graph_t *g, uint64_t start_kmer,
 {
     if (!g || !g->_h || !result_buf) return -1;
 
-    if (path_len < 0 || path_len % 4 != 0 || path_len > DBGPS3_MAX_PATH_LEN ||
-        index_byte_num < 0 || index_byte_num > g->k / 4 ||
+    const dbgps_codec_t *codec = g->codec.bases ? &g->codec : NULL;
+    unsigned bases = codec ? codec->bases : 1, bits = codec ? codec->bits : 2;
+    if (index_byte_num < 0 || index_byte_num > 7 || (index_byte_num * 8) % bits ||
         cut_cov < 0 || cut_cov >= DBGPS3_KC_MAX ||
         !isfinite(max_cov_ratio) || max_cov_ratio < 1.0) return -1;
+    int index_len = index_byte_num * 8 / bits * bases;
+    if (dbgps3_validate_layout(g, index_len, path_len, NULL) < 0) return -1;
 
     int k = g->k;
     uint64_t mask = g->mask;
     const kc_c4x_t *h = (const kc_c4x_t*)g->_h;
-    int seq_len = (path_len>>2) + index_byte_num;
+    int total_bases = path_len + index_len;
+    int raw_bytes = total_bases / bases * bits / 8;
 
     /* Check result buffer is large enough */
-    int needed = path_len + index_byte_num * 4 + 1;
+    int needed = total_bases + 1;
     if (result_buf_len < needed) return -1;
 
     /* Allocate workspace locally — no global variables, thread-safe */
@@ -538,18 +559,27 @@ int dbgps3_find_path(const dbgps3_graph_t *g, uint64_t start_kmer,
         ++p;
     }
 
-    if(term_node_num == 1){
-        unsigned char *path_buf;
-        CALLOC(path_buf, seq_len > 0 ? seq_len : 1);
-        if (!path_buf) goto cleanup;
-        nodes_path(term_nodes[0], path_buf, path_len, k, index_byte_num);
-
-        /* Decode internal seq to ACGT */
-        unsigned char *dna_buf = (unsigned char *)result_buf;
-        intseq_actg(path_buf, dna_buf, (path_len>>2) + index_byte_num);
-        dna_buf[path_len + index_byte_num*4] = '\0';
-
-        free(path_buf);
+    /* Full-rate codes allow every DNA word; sparse codes may reject paths.
+       Uniqueness is established before touching the caller's result buffer. */
+    int check_words = codec && codec->bits < 2 * codec->bases;
+    if (term_node_num != 1 && !check_words) goto cleanup;
+    unsigned char candidate[(DBGPS3_MAX_PATH_LEN + 31 + 3) / 4];
+    unsigned char selected[sizeof(candidate)], raw[sizeof(candidate)];
+    int found = 0;
+    for (int i = 0; i < term_node_num; ++i) {
+        if (path_len % 4 == 0 && index_len % 4 == 0)
+            nodes_path(term_nodes[i], candidate, path_len, k, index_len / 4);
+        else nodes_path_packed(term_nodes[i], candidate, path_len, index_len);
+        if (check_words && dbgps_codec_decode(codec, candidate, total_bases, raw, raw_bytes) < 0)
+            continue;
+        if (found) goto cleanup;
+        memcpy(selected, candidate, (total_bases + 3) / 4);
+        found = 1;
+    }
+    if (found) {
+        for (int i = 0; i < total_bases; ++i)
+            result_buf[i] = dbgps3_nt4_seq_table[(selected[i / 4] >> (6 - 2 * (i % 4))) & 3];
+        result_buf[total_bases] = '\0';
         ret = 0;
     }
 
@@ -635,20 +665,7 @@ uint64_t dbgps3_primer_uint64(const char *pr, int pr_len, int index_len, int km_
 
 uint64_t dbgps3_index_encode(uint64_t index, unsigned int index_len)
 {
-    uint64_t mask = 255ULL;
-    unsigned int index_byte_num = index_len>>2;
-    unsigned int i;
-    uint64_t m, y = 0ULL;
-
-    for(i=0; i < index_byte_num; i++){
-        m = index & mask;
-        m = (uint64_t)two_to_one_table[m];
-        m = m<<((index_byte_num-1)*8);
-        y = y>>8;
-        y = y | m;
-        index = index>>8;
-    }
-    return y;
+    return index_len >= 32 ? index : index & ((1ULL << (index_len * 2)) - 1);
 }
 
 void dbgps3_uint64_acgt(uint64_t key, char *seq, int km_len)

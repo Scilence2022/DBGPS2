@@ -46,7 +46,9 @@ Run `make test` (requires Python 3) to check missing k-mer lookups, bounded path
 searches, CRC ambiguity, allocation cleanup, and exact strand reconstruction
 across repeated CLI runs, thread counts, coverage cutoffs, and ratio sweeps.
 They also check all 72 supported codec block widths, custom mapping reconstruction,
-forbidden words, CRC padding, malformed codebooks, and larger indices.
+forbidden words, CRC padding, malformed codebooks, and larger indices. DBGPS3's
+live JSON-RPC checks cover mapping metadata, exact large indices, invalid layouts,
+and the interactive client's index shortcut.
 Test binaries and generated reads are stored in temporary directories.
 Use `make test asan=1` to run the same checks with AddressSanitizer.
 
@@ -92,7 +94,7 @@ Without `-M`, DBGPS2 uses the same built-in encoding as its k-mers:
 `A=00, C=01, G=10, T=11`. Index bits are used directly as packed DNA, and CRC
 validation reads the reconstructed bytes directly, without a mapping table or
 an extra conversion. For example, the byte `00011011` is the DNA word `ACGT`.
-This option applies to DBGPS2; DBGPS3 retains its existing codec.
+DBGPS2 and DBGPS3 share this default and the same codebook format.
 
 **Default behavior change:** strands encoded with the original special two-base
 permutation now require `-M examples/legacy-2base.map` explicitly.
@@ -128,10 +130,11 @@ make DBGPS2
 ./DBGPS2 -a 1000 -b 1001 -o assembled reads.fq.gz # Built-in canonical encoding
 ./DBGPS2 -M examples/legacy-2base.map -a 1000 -b 1001 -o assembled reads.fq.gz
 ./DBGPS2 -M examples/3base-5bit.map -i 24 -l 120 -a 0 -b 1000 -o assembled reads.fq.gz
+./DBGPS3 -M examples/3base-5bit.map -i 24 -l 120 -a 0 -b 1000 -o assembled reads.fq.gz
 ```
 
-Use the codebook that was used to encode the input strands. The entire encoded
-strand has this layout, with the same mapping applied to all three sections:
+Use the codebook that was used to encode the input strands. In **DBGPS2**, the
+encoded strand has this layout, with the same mapping applied to all sections:
 
 ```text
 index | payload | CRC-16/XMODEM | zero padding to the next mapping block
@@ -156,6 +159,13 @@ within the index's bit capacity; use both options when the defaults do not fit.
 An empty index (`-i 0 -a 0 -b 0`) is supported if the primer covers the k-mer.
 For custom mappings the read counting limit adjusts to the full strand plus
 the two existing 18-base primers.
+
+**DBGPS3** searches the index plus the `-l` payload bases and returns their DNA
+sequence. It validates codewords and requires a unique valid path, without CRC
+screening or an automatically appended CRC region. Both index and payload must
+contain complete codewords and whole decoded bytes. Its payload can be up to
+300 bases, in addition to the index. If reads contain a following CRC, it is
+outside this requested path length.
 
 #### Mapping performance
 
@@ -182,6 +192,9 @@ not imply identical assembly times for different codebooks or code rates.
 ### DBGPS3
 
 A next-generation de Bruijn graph assembler for DNA data storage with an interactive server mode.
+The `-M` option uses the same codebooks as DBGPS2. Omitting it uses direct
+`A=00,C=01,G=10,T=11` encoding; the original two-base permutation requires
+`-M examples/legacy-2base.map`.
 
 #### Command-Line Mode
 
@@ -202,6 +215,7 @@ Options:
   -R FLOAT   Upper bound for ratio range iteration (0 = disabled) [0.0]
   -s INT     Number of initial positions to skip ratio checks for [0]
   -o STR     Output prefix for log file and strands file
+  -M FILE    Custom DNA/bit mapping (default: none; canonical A/C/G/T encoding)
 ```
 
 #### Server Mode
@@ -214,6 +228,9 @@ DBGPS3 can also run as a TCP server, allowing remote clients to interactively qu
 
 # Start on custom port with max 20 clients
 ./DBGPS3 -S 8080 -L 20 input.fq.gz
+
+# Start with a custom codebook and compatible default query lengths
+./DBGPS3 -S -M examples/3base-5bit.map -i 24 -l 120 input.fq.gz
 
 # Connect with the interactive client
 ./dbgps3-client -h 127.0.0.1 -p 8080

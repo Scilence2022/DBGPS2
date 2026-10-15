@@ -13,6 +13,7 @@
 #include "ketopt.h" // command-line argument parser
 #include "kthread.h" // multi-threading models: pipeline and multi-threaded for loop
 #include "dbgps_codec.h"
+#include "dbgps_strand.h"
 #include "dbgps_bloom.h"
 
 
@@ -449,66 +450,17 @@ typedef struct {
 
 
 
-static const unsigned short crc16tab[] = {
-        0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50a5, 0x60c6, 0x70e7,
-        0x8108, 0x9129, 0xa14a, 0xb16b, 0xc18c, 0xd1ad, 0xe1ce, 0xf1ef,
-        0x1231, 0x0210, 0x3273, 0x2252, 0x52b5, 0x4294, 0x72f7, 0x62d6,
-        0x9339, 0x8318, 0xb37b, 0xa35a, 0xd3bd, 0xc39c, 0xf3ff, 0xe3de,
-        0x2462, 0x3443, 0x0420, 0x1401, 0x64e6, 0x74c7, 0x44a4, 0x5485,
-        0xa56a, 0xb54b, 0x8528, 0x9509, 0xe5ee, 0xf5cf, 0xc5ac, 0xd58d,
-        0x3653, 0x2672, 0x1611, 0x0630, 0x76d7, 0x66f6, 0x5695, 0x46b4,
-        0xb75b, 0xa77a, 0x9719, 0x8738, 0xf7df, 0xe7fe, 0xd79d, 0xc7bc,
-        0x48c4, 0x58e5, 0x6886, 0x78a7, 0x0840, 0x1861, 0x2802, 0x3823,
-        0xc9cc, 0xd9ed, 0xe98e, 0xf9af, 0x8948, 0x9969, 0xa90a, 0xb92b,
-        0x5af5, 0x4ad4, 0x7ab7, 0x6a96, 0x1a71, 0x0a50, 0x3a33, 0x2a12,
-        0xdbfd, 0xcbdc, 0xfbbf, 0xeb9e, 0x9b79, 0x8b58, 0xbb3b, 0xab1a,
-        0x6ca6, 0x7c87, 0x4ce4, 0x5cc5, 0x2c22, 0x3c03, 0x0c60, 0x1c41,
-        0xedae, 0xfd8f, 0xcdec, 0xddcd, 0xad2a, 0xbd0b, 0x8d68, 0x9d49,
-        0x7e97, 0x6eb6, 0x5ed5, 0x4ef4, 0x3e13, 0x2e32, 0x1e51, 0x0e70,
-        0xff9f, 0xefbe, 0xdfdd, 0xcffc, 0xbf1b, 0xaf3a, 0x9f59, 0x8f78,
-        0x9188, 0x81a9, 0xb1ca, 0xa1eb, 0xd10c, 0xc12d, 0xf14e, 0xe16f,
-        0x1080, 0x00a1, 0x30c2, 0x20e3, 0x5004, 0x4025, 0x7046, 0x6067,
-        0x83b9, 0x9398, 0xa3fb, 0xb3da, 0xc33d, 0xd31c, 0xe37f, 0xf35e,
-        0x02b1, 0x1290, 0x22f3, 0x32d2, 0x4235, 0x5214, 0x6277, 0x7256,
-        0xb5ea, 0xa5cb, 0x95a8, 0x8589, 0xf56e, 0xe54f, 0xd52c, 0xc50d,
-        0x34e2, 0x24c3, 0x14a0, 0x0481, 0x7466, 0x6447, 0x5424, 0x4405,
-        0xa7db, 0xb7fa, 0x8799, 0x97b8, 0xe75f, 0xf77e, 0xc71d, 0xd73c,
-        0x26d3, 0x36f2, 0x0691, 0x16b0, 0x6657, 0x7676, 0x4615, 0x5634,
-        0xd94c, 0xc96d, 0xf90e, 0xe92f, 0x99c8, 0x89e9, 0xb98a, 0xa9ab,
-        0x5844, 0x4865, 0x7806, 0x6827, 0x18c0, 0x08e1, 0x3882, 0x28a3,
-        0xcb7d, 0xdb5c, 0xeb3f, 0xfb1e, 0x8bf9, 0x9bd8, 0xabbb, 0xbb9a,
-        0x4a75, 0x5a54, 0x6a37, 0x7a16, 0x0af1, 0x1ad0, 0x2ab3, 0x3a92,
-        0xfd2e, 0xed0f, 0xdd6c, 0xcd4d, 0xbdaa, 0xad8b, 0x9de8, 0x8dc9,
-        0x7c26, 0x6c07, 0x5c64, 0x4c45, 0x3ca2, 0x2c83, 0x1ce0, 0x0cc1,
-        0xef1f, 0xff3e, 0xcf5d, 0xdf7c, 0xaf9b, 0xbfba, 0x8fd9, 0x9ff8,
-        0x6e17, 0x7e36, 0x4e55, 0x5e74, 0x2e93, 0x3eb2, 0x0ed1, 0x1ef0,
-};
-
-
-unsigned short  crc16xmodem(unsigned char *data, int len){
-    unsigned short crc = 0;
-    int i;
-
-    for (i = 0; i < len; ++i) {
-        crc = ((crc<<8)&0xff00) ^ crc16tab[((crc>>8)&0xff)^data[i]];
-    }
-    return crc;
+/* Kept for source-level callers of the historical helpers. */
+unsigned short crc16xmodem(unsigned char *data, int len)
+{
+    return len < 0 ? 0 : dbgps_crc16_xmodem(data, (size_t)len);
 }
 
-int crc16_check(unsigned char *data, int data_len){
-     unsigned short crc = 0;
-     crc = *(data + data_len -2) * 256 +  *(data + data_len -1);
-     //crc = (unsigned short)*(data + data_len -2);
-
-     unsigned short crc_cl = crc16xmodem(data, data_len-2);
-
-     if(crc == crc_cl){
-        return 1;
-     }else{
-        return 0;
-     }
+int crc16_check(unsigned char *data, int data_len)
+{
+    return data_len >= 2 && dbgps_crc16_xmodem(data, data_len - 2) ==
+        ((unsigned)data[data_len - 2] << 8 | data[data_len - 1]);
 }
-
 
 unsigned short kmer_cov(uint64_t kmer, uint64_t mask, kc_c4x_t *h){
 
@@ -622,28 +574,19 @@ static void nodes_path_packed(path_node *node, unsigned char *out, int path_len,
     }
 }
 
-static int codec_path_sizes(const dbgps_codec_t *codec, int path_len, int index_len,
-                            int k, int *packed_bytes, int *raw_bytes)
+static int find_paths_protected(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer,
+        uint64_t mask, int cut_cov, int payload_len, int k, int index_len,
+        double max_cov_ratio, int skip_ratios, const dbgps_codec_t *codec,
+        const dbgps_redundancy_t *redundancy)
 {
-    unsigned bases = codec ? codec->bases : 1, bits = codec ? codec->bits : 2;
-    if (k < 1 || k > 31 || path_len < 0 || index_len < 0 || index_len > k ||
-        path_len >= Max_Path_Len || index_len + path_len >= Max_Path_Len ||
-        !bases || index_len % bases || path_len % bases) return -1;
-    unsigned padding = (bits - 16 % bits) % bits;
-    unsigned total_bits = (index_len + path_len) / bases * bits;
-    if (index_len / bases * bits % 8 || total_bits < 16 + padding ||
-        (total_bits - padding) % 8) return -1;
-    *packed_bytes = (index_len + path_len + 3) / 4;
-    *raw_bytes = (total_bits - padding) / 8;
-    return 0;
-}
-
-static int find_paths_mapped(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer, uint64_t mask, int cut_cov, int path_len, int k, int index_len, double max_cov_ratio, int skip_ratios, const dbgps_codec_t *codec){
-
-    int seq_len, raw_len;
-    if (codec_path_sizes(codec, path_len, index_len, k, &seq_len, &raw_len) < 0 ||
+    dbgps_strand_layout_t layout;
+    if (k < 1 || k > 31 || index_len < 0 || index_len > k ||
+        dbgps_strand_layout(codec, redundancy, index_len, payload_len, &layout) < 0 ||
+        layout.total_bases >= Max_Path_Len ||
         cut_cov < 0 || cut_cov >= KC_MAX ||
         !isfinite(max_cov_ratio) || max_cov_ratio < 1.0) return -1;
+    int path_len = layout.path_bases;
+    int seq_len = (layout.total_bases + 3) / 4;
 
     all_nodes[0].pre_node = NULL;
     all_nodes[0].kmer = kmer;
@@ -689,7 +632,7 @@ static int find_paths_mapped(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer,
                     ? next_nodes[i].cov >= cut_cov + 1
                     : next_nodes[i].cov >= a_cov && next_nodes[i].cov <= b_cov;
                 if (eligible) {
-                    /* An incomplete search cannot establish a unique CRC-valid path. */
+                    /* An incomplete search cannot establish a unique valid result. */
                     if (new_term_node_num >= Max_Path_Num ||
                         all_node_num >= Max_Path_Num * Max_Path_Len) return -1;
                     all_nodes[all_node_num].pre_node = p_node;
@@ -714,38 +657,43 @@ static int find_paths_mapped(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer,
     /* Scratch space is bounded by Max_Path_Len; avoid two heap allocations
        for every index, cutoff, and ratio that reaches candidate validation. */
     unsigned char candidate[(Max_Path_Len + 3) / 4];
-    unsigned char path_tmp[(Max_Path_Len + 3) / 4];
+    unsigned char corrected[sizeof(candidate)], raw[sizeof(candidate)];
 
     int c_index = -1;
     for (int i = 0; i < term_node_num; i++) {
-        unsigned char *crc_data = candidate;
-        if (!codec || codec->byte_fast) {
+        if (path_len % 4 == 0 && index_len % 4 == 0)
             nodes_path(term_nodes[i], candidate, path_len, k, index_len / 4);
-            if (codec) {
-                for (int j = 0; j < seq_len; j++) path_tmp[j] = codec->decode_byte[candidate[j]];
-                crc_data = path_tmp;
-            }
-        } else {
-            nodes_path_packed(term_nodes[i], candidate, path_len, index_len);
-            if (dbgps_codec_decode(codec, candidate, index_len + path_len, path_tmp, raw_len) < 0)
-                continue;
-            crc_data = path_tmp;
+        else nodes_path_packed(term_nodes[i], candidate, path_len, index_len);
+        if (dbgps_strand_check(codec, redundancy, &layout, candidate, corrected, raw) < 0)
+            continue;
+        if (c_index >= 0) {
+            if (!memcmp(paths[c_index], corrected, seq_len)) continue;
+            free(paths[c_index]);
+            paths[c_index] = NULL;
+            return -1;
         }
-        if (crc16_check(crc_data, raw_len)) {
-            if (c_index >= 0) {
-                free(paths[c_index]);
-                paths[c_index] = NULL;
-                c_index = -1;
-                break;
-            }
-            paths[i] = (unsigned char *)malloc(seq_len);
-            if (!paths[i]) break;
-            memcpy(paths[i], candidate, seq_len);
-            c_index = i;
-        }
+        paths[i] = (unsigned char *)malloc(seq_len ? seq_len : 1);
+        if (!paths[i]) return -1;
+        memcpy(paths[i], corrected, seq_len);
+        c_index = i;
     }
-    /* Only the unique result is retained; the caller owns that allocation. */
     return c_index;
+}
+
+/* Historical API: path_len includes CRC16, while the extensible entry point
+   takes the payload length and derives redundancy from its descriptor. */
+static int find_paths_mapped(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer,
+        uint64_t mask, int cut_cov, int path_len, int k, int index_len,
+        double max_cov_ratio, int skip_ratios, const dbgps_codec_t *codec)
+{
+    dbgps_redundancy_t crc = {0};
+    dbgps_redundancy_init(&crc, "crc16", NULL, 0);
+    unsigned bases = codec ? codec->bases : 1, bits = codec ? codec->bits : 2;
+    if (!bits) return -1;
+    int parity_bases = (16 + bits - 1) / bits * bases;
+    if (path_len < parity_bases) return -1;
+    return find_paths_protected(h, paths, kmer, mask, cut_cov, path_len - parity_bases,
+                               k, index_len, max_cov_ratio, skip_ratios, codec, &crc);
 }
 
 int find_paths(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer, uint64_t mask, int cut_cov, int path_len, int k, int index_byte_num, double max_cov_ratio, int skip_ratios)
@@ -822,7 +770,7 @@ int main(int argc, char *argv[])
 {
     kc_c4x_t *h = NULL;
     int exit_status = 0;
-    int c=1, k = 31, p = KC_BITS, block_size = 10000000, n_thread = 3, min_cov = 1, index_len = 16, payload_len=140, crc_len=8, path_len;
+    int c=1, k = 31, p = KC_BITS, block_size = 10000000, n_thread = 3, min_cov = 1, index_len = 16, payload_len=140, path_len;
     double max_cov_ratio = 2.55; // Default value for Max_Cov_Ratio
     double max_r = 0 ; // Maximum r value for ratio range iteration, default 0 (disabled)
     int mem_test = 0;
@@ -832,6 +780,9 @@ int main(int argc, char *argv[])
     int skip_ratios = 0; // Number of initial ratio values to skip, default 0
     char *output_prefix = NULL; // Output prefix for log file
     const char *mapping_file = NULL;
+    const char *redundancy_spec = "crc16";
+    dbgps_redundancy_t redundancy = {0};
+    dbgps_strand_layout_t layout;
     dbgps_codec_t mapping = {0};
     const dbgps_codec_t *codec = NULL; /* NULL uses canonical packed DNA directly. */
 
@@ -844,7 +795,7 @@ int main(int argc, char *argv[])
 
 
     ketopt_t o = KETOPT_INIT;
-    while ((c = ketopt(&o, argc, argv, 1, "k:p:b:t:c:l:a:b:i:C:r:R:m:s:o:M:B:F:", 0)) >= 0) {
+    while ((c = ketopt(&o, argc, argv, 1, "k:p:b:t:c:l:a:b:i:C:r:R:m:s:o:M:E:B:F:", 0)) >= 0) {
         if (c == 'k') k = atoi(o.arg);
         else if (c == 'p') p = atoi(o.arg);
         else if (c == 't') n_thread = atoi(o.arg);
@@ -865,6 +816,7 @@ int main(int argc, char *argv[])
         else if (c == 's') skip_ratios = atoi(o.arg); // Number of initial ratio values to skip
         else if (c == 'o') output_prefix = o.arg; // Output prefix for log file
         else if (c == 'M') mapping_file = o.arg;
+        else if (c == 'E') redundancy_spec = o.arg;
         else if (c == 'F') {
             if (dbgps_bloom_parse_shift(o.arg, &count_bloom_shift) < 0) {
                 fprintf(stderr, "ERROR: -F requires 0 (disabled) or log2 bitmap bits from 23 to 40\n");
@@ -909,6 +861,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "  -s INT     Number of initial positions to skip ratio checks for [%d]\n", skip_ratios);
         fprintf(stderr, "  -o STR     Output prefix for log file [none]\n");
         fprintf(stderr, "  -M FILE    Custom DNA/bit mapping [none; built-in A=00,C=01,G=10,T=11]\n");
+        fprintf(stderr, "  -E CODE    Redundancy: " DBGPS_REDUNDANCY_OPTIONS " [crc16]\n");
         fprintf(stderr, "  -B INT     Bloom query prefilter bits/key (1..64; 0 disables) [0]\n");
         fprintf(stderr, "  -F INT     Two-pass singleton filter log2 bits (23..40; 0 disables) [0]\n");
 
@@ -927,28 +880,38 @@ int main(int argc, char *argv[])
             return 1;
         }
         codec = &mapping;
-        crc_len = ((16 + codec->bits - 1) / codec->bits) * codec->bases;
     }
 
     if(max_cov < min_cov){max_cov = min_cov;}
-    int packed_bytes, raw_bytes;
+    char redundancy_error[512];
+    if (dbgps_redundancy_init(&redundancy, redundancy_spec, redundancy_error, sizeof(redundancy_error)) < 0) {
+        fprintf(stderr, "ERROR: %s\n", redundancy_error);
+        dbgps_codec_destroy(&mapping);
+        return 1;
+    }
+    char redundancy_label[DBGPS_REDUNDANCY_SPEC_SIZE];
+    dbgps_redundancy_format(&redundancy, redundancy_label, sizeof(redundancy_label));
     unsigned bases = codec ? codec->bases : 1, bits = codec ? codec->bits : 2;
     if (payload_len < 0 || payload_len >= Max_Path_Len || payload_len % bases ||
         (payload_len / bases * bits) % 8 ||
-        codec_path_sizes(codec, payload_len + crc_len, index_len, k, &packed_bytes, &raw_bytes) < 0 ||
+        k < 1 || k > 31 || index_len < 0 || index_len > k ||
+        dbgps_strand_layout(codec, &redundancy, index_len, payload_len, &layout) < 0 ||
+        layout.total_bases >= Max_Path_Len ||
         k - index_len > pr_len || min_index > max_index ||
         max_index >> (index_len / bases * bits)) {
         fprintf(stderr, "ERROR: incompatible strand layout or index range; index and payload must\n"
                         "       contain whole mapping blocks and whole bytes, index must fit k,\n"
-                        "       k-index must fit the primer, and total strand length must be < %d bp\n", Max_Path_Len);
+                        "       k-index must fit the primer, total strand length must be < %d bp,\n"
+                        "       and redundancy must fit its codeword capacity (RS: data + parity <= 255 bytes)\n", Max_Path_Len);
         dbgps_codec_destroy(&mapping);
         return 1;
     }
     mask = (1ULL<<k*2) - 1;
     pr_uint64 = primer_uint64(p1, pr_len, index_len, k);
 
-    path_len = payload_len + crc_len;
-    if (codec) read_len = 2 * pr_len + index_len + path_len;
+    path_len = layout.path_bases;
+    if (codec || 2 * pr_len + index_len + path_len > read_len)
+        read_len = 2 * pr_len + index_len + path_len;
 
     clock_t start,end;
     double kc_dur, dec_dur;
@@ -1000,7 +963,7 @@ int main(int argc, char *argv[])
     PRINT_BOTH("Maximum coverage ratio (-r): %.2f\n", max_cov_ratio);
     PRINT_BOTH("Ratio range upper bound (-R): %.2f\n", max_r);
     PRINT_BOTH("Memory test mode: %s\n", mem_test ? "enabled" : "disabled");
-    PRINT_BOTH("Path length (payload + CRC): %d\n", path_len);
+    PRINT_BOTH("Path length (payload + redundancy): %d\n", path_len);
     PRINT_BOTH("Index byte number: %u\n", index_len / bases * bits / 8);
     if (codec) {
         PRINT_BOTH("Mapping: %s (%u bases <-> %u bits; %s)\n", mapping_file,
@@ -1008,7 +971,8 @@ int main(int argc, char *argv[])
     } else {
         PRINT_BOTH("Mapping: none (built-in A=00,C=01,G=10,T=11; direct 2-bit packing)\n");
     }
-    PRINT_BOTH("CRC encoding length: %d bp; zero padding: %u bits\n", crc_len, (bits - 16 % bits) % bits);
+    PRINT_BOTH("Redundancy (-E): %s; %u parity bytes; %u bp; zero padding: %u bits\n",
+               redundancy_label, layout.parity_bytes, layout.parity_bases, layout.padding_bits);
     PRINT_BOTH("Output prefix: %s\n", output_prefix ? output_prefix : "none");
     PRINT_BOTH("======================================\n");
     
@@ -1081,7 +1045,7 @@ int main(int argc, char *argv[])
                 if (codec) dbgps_codec_encode_index(codec, id, index_len, &eid);
                 else eid = index_encode(id, index_len);
 
-                c_index = find_paths_mapped(h, path, pr_uint64 | eid, mask, cov_cut, path_len, k, index_len, max_cov_ratio, skip_ratios, codec);
+                c_index = find_paths_protected(h, path, pr_uint64 | eid, mask, cov_cut, payload_len, k, index_len, max_cov_ratio, skip_ratios, codec, &redundancy);
                 if(c_index > -1) {
                     dec_strand_num++;
                     unsigned char DNA_seq[Max_Path_Len];
@@ -1118,7 +1082,7 @@ int main(int argc, char *argv[])
                     if (codec) dbgps_codec_encode_index(codec, id, index_len, &eid);
                     else eid = index_encode(id, index_len);
 
-                    c_index = find_paths_mapped(h, path, pr_uint64 | eid, mask, cov_cut, path_len, k, index_len, r, skip_ratios, codec);
+                    c_index = find_paths_protected(h, path, pr_uint64 | eid, mask, cov_cut, payload_len, k, index_len, r, skip_ratios, codec, &redundancy);
                     if(c_index > -1) {
                         dec_strand_num++;
                         unsigned char DNA_seq[Max_Path_Len];

@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include "dbgps_codec.h"
+#include "dbgps_strand.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -14,6 +15,7 @@ extern "C" {
 #define DBGPS3_KC_MAX ((1<<DBGPS3_KC_BITS) - 1)
 #define DBGPS3_MAX_PATH_NUM 1050
 #define DBGPS3_MAX_PATH_LEN 300
+#define DBGPS3_DEFAULT_REDUNDANCY "crc16"
 
 /* Translation tables */
 extern const unsigned char dbgps3_seq_nt4_table[256];
@@ -36,13 +38,15 @@ typedef struct dbgps3_graph_s {
     char **_source_files;  /* owned replay list for filtered graph/load */
     int _n_source_files;
     dbgps_codec_t codec; /* owned; bases=0 means direct canonical packing */
+    dbgps_redundancy_t redundancy; /* immutable query configuration; zero=none */
 } dbgps3_graph_t;
 
 /* ---- Graph lifecycle ---- */
 
 /**
  * Load a de Bruijn graph from one or more FASTQ/FASTA files.
- * Returns a new graph object, or NULL on failure.
+ * Returns a new graph object, or NULL on failure. Loaded graphs default to
+ * CRC16 protection; call dbgps3_set_redundancy(g, "none", ...) to disable it.
  */
 dbgps3_graph_t *dbgps3_load(int k, int p, int n_thread, int block_size,
                              int read_len, int n_files, char **files);
@@ -74,6 +78,11 @@ size_t dbgps3_bloom_bytes(const dbgps3_graph_t *g);
  * the graph owns the codebook until destruction. */
 int dbgps3_set_mapping(dbgps3_graph_t *g, const char *filename,
                        char *error, size_t error_size);
+
+/** Select byte-level redundancy before starting queries. Validate the default
+ * layout and preserve the old configuration on failure. NULL spec is invalid. */
+int dbgps3_set_redundancy(dbgps3_graph_t *g, const char *spec,
+                          char *error, size_t error_size);
 
 /** Validate index/payload lengths in bases and return decoded index bytes. */
 int dbgps3_validate_layout(const dbgps3_graph_t *g, int index_len, int path_len,
@@ -108,7 +117,7 @@ unsigned short dbgps3_kmer_cov(const dbgps3_graph_t *g, uint64_t kmer);
 /**
  * Find a path in the de Bruijn graph starting from start_kmer.
  * On success, writes the decoded DNA sequence into result_buf and returns 0.
- * On failure (no unique codebook-valid path, workspace limit, invalid parameters or allocation
+ * On failure (no unique validated/corrected result, workspace limit, invalid parameters or allocation
  * failure), returns -1 and result_buf is unchanged.
  *
  * @param g            Graph object
@@ -117,10 +126,11 @@ unsigned short dbgps3_kmer_cov(const dbgps3_graph_t *g, uint64_t kmer);
  * @param max_cov_ratio Maximum coverage ratio for branching (finite and >= 1)
  * @param skip_ratios  Number of initial positions to skip ratio checks
  * @param path_len     Payload length in bases, from 0 to DBGPS3_MAX_PATH_LEN;
- *                     must contain complete codewords and decode to whole bytes
+ *                     must contain complete codewords and decode to whole bytes.
+ *                     Selected redundancy is appended automatically.
  * @param index_byte_num Number of decoded data bytes in the index
  * @param result_buf   Output buffer for the decoded DNA sequence
- * @param result_buf_len Size of result_buf (must be >= payload bases + index bases + 1)
+ * @param result_buf_len Size of result_buf (>= index + payload + redundancy bases + 1)
  */
 int dbgps3_find_path(const dbgps3_graph_t *g, uint64_t start_kmer,
                      int cut_cov, double max_cov_ratio, int skip_ratios,

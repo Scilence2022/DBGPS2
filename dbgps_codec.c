@@ -84,7 +84,8 @@ int dbgps_codec_load(dbgps_codec_t *codec, const char *filename, char *error, si
         ++rows;
     }
     if (ferror(fp)) MAP_FAIL("read failed");
-    if (!map.bits || rows != (1U << map.bits)) MAP_FAIL("mapping must cover every bit word exactly once");
+    if (!map.bases || !map.bits || !map.encode || !map.decode || rows != (1U << map.bits))
+        MAP_FAIL("mapping must cover every bit word exactly once");
 
     /* Full-rate 1-, 2-, and 4-base mappings collapse into the same 256-entry
        byte permutation as the historical codec. No per-base runtime loop. */
@@ -137,6 +138,11 @@ int dbgps_codec_encode_index(const dbgps_codec_t *codec, uint64_t index,
 int dbgps_codec_decode(const dbgps_codec_t *codec, const unsigned char *dna,
                        unsigned dna_bases, unsigned char *out, unsigned out_bytes)
 {
+    if (!codec) {
+        if (dna_bases % 4 || dna_bases / 4 != out_bytes) return -1;
+        memcpy(out, dna, out_bytes);
+        return 0;
+    }
     if (!codec->bases || dna_bases % codec->bases) return -1;
     if (codec->byte_fast) {
         if (dna_bases % 4 || dna_bases / 4 != out_bytes) return -1;
@@ -168,4 +174,33 @@ int dbgps_codec_decode(const dbgps_codec_t *codec, const unsigned char *dna,
         buffer &= (1U << buffered) - 1;
     }
     return written == out_bytes && buffer == 0 ? 0 : -1;
+}
+
+int dbgps_codec_encode(const dbgps_codec_t *codec, const unsigned char *raw,
+                       unsigned raw_bytes, unsigned char *dna, unsigned dna_bases)
+{
+    unsigned bases = codec ? codec->bases : 1, bits = codec ? codec->bits : 2;
+    if (!bases || !bits || (uint64_t)dna_bases !=
+        (((uint64_t)raw_bytes * 8 + bits - 1) / bits) * bases) return -1;
+    if (!codec || codec->byte_fast) {
+        if (!codec) memcpy(dna, raw, raw_bytes);
+        else for (unsigned i = 0; i < raw_bytes; ++i) dna[i] = codec->encode_byte[raw[i]];
+        return 0;
+    }
+    memset(dna, 0, (dna_bases + 3) / 4);
+    for (unsigned pos = 0; pos < dna_bases; pos += bases) {
+        unsigned value = 0;
+        uint64_t start = (uint64_t)(pos / bases) * bits;
+        for (unsigned bit = 0; bit < bits; ++bit) {
+            uint64_t at = start + bit;
+            value = (value << 1) | (at < (uint64_t)raw_bytes * 8 ?
+                (raw[at / 8] >> (7 - at % 8)) & 1 : 0);
+        }
+        unsigned word = codec->encode[value];
+        for (unsigned j = 0; j < bases; ++j) {
+            unsigned at = pos + j;
+            dna[at / 4] |= ((word >> (2 * (bases - j - 1))) & 3) << (6 - 2 * (at % 4));
+        }
+    }
+    return 0;
 }

@@ -335,6 +335,100 @@ static void test_builtin_encoding(void)
 }
 #endif
 
+static int protected_query(kc_c4x_t *h, uint64_t root, const dbgps_redundancy_t *c,
+                           const unsigned char *expected, unsigned length)
+{
+#ifdef TEST_DBGPS3
+    dbgps3_graph_t g = {0};
+    g._h = h;
+    g.k = test_k;
+    g.mask = test_mask;
+    g.redundancy = *c;
+    char out[160] = "unchanged";
+    int rc = dbgps3_find_path(&g, root, 1, 2.55, 0, 24, 4, out, sizeof(out));
+    if (rc == 0) {
+        assert(strlen(out) == length * 4);
+        for (unsigned i = 0; i < length * 4; ++i)
+            assert(out[i] == "ACGT"[(expected[i / 4] >> (6 - 2 * (i % 4))) & 3]);
+    } else assert(!strcmp(out, "unchanged"));
+    return rc;
+#else
+    unsigned char *paths[Max_Path_Num] = {0};
+    int pos = find_paths_protected(h, paths, root, test_mask, 1, 24, test_k, 16, 2.55, 0, NULL, c);
+    if (pos < 0) return -1;
+    assert(!memcmp(paths[pos], expected, length));
+    free(paths[pos]);
+    return 0;
+#endif
+}
+
+static void add_encoded_path(kc_c4x_t *h, uint64_t root, const unsigned char *word, unsigned length)
+{
+    char suffix[160];
+    for (unsigned i = 16; i < length * 4; ++i)
+        suffix[i - 16] = "ACGT"[(word[i / 4] >> (6 - 2 * (i % 4))) & 3];
+    suffix[length * 4 - 16] = 'C'; /* historical primer lookahead */
+    suffix[length * 4 - 15] = '\0';
+    add_path(h, root, suffix);
+}
+
+static void test_protected_paths(void)
+{
+    const char *names[] = {"none", "crc16", "crc32", "crc32c", "rs:4", "hamming"};
+    for (unsigned mode = 0; mode < sizeof(names) / sizeof(*names); ++mode) {
+        dbgps_redundancy_t c = {0};
+        assert(dbgps_redundancy_init(&c, names[mode], NULL, 0) == 0);
+        unsigned char expected[32] = {0x01,0x35,0xab,0x79,0x26,0x93,0x4d,0xb8,0x65,0xf1};
+        size_t parity;
+        assert(dbgps_redundancy_size(&c, 10, &parity) == 0);
+        unsigned length = 10 + parity;
+        assert(dbgps_redundancy_encode(&c, expected, 10, expected, length) == 0);
+        uint64_t root = 0x19358bcULL << 32 | 0x0135ab79ULL;
+        kc_c4x_t *h = c4x_init(KC_BITS);
+        unsigned char damaged[32];
+        memcpy(damaged, expected, length);
+        int repairs = mode >= 4;
+        if (mode) damaged[5] ^= 0x80;
+        add_encoded_path(h, root, damaged, length);
+        size_t baseline = live_allocations;
+        int wanted = mode && !repairs ? -1 : 0;
+        for (unsigned repeat = 0; repeat < 10; ++repeat) {
+            assert(protected_query(h, root, &c, expected, length) == wanted);
+            assert(live_allocations == baseline);
+        }
+        add_encoded_path(h, root, expected, length);
+        baseline = live_allocations;
+        assert(protected_query(h, root, &c, expected, length) == 0);
+        assert(live_allocations == baseline);
+        if (repairs) {
+            memcpy(damaged, expected, length);
+            damaged[length - 1] ^= 0x80; /* parity-only errors also converge */
+            add_encoded_path(h, root, damaged, length);
+            baseline = live_allocations;
+            assert(protected_query(h, root, &c, expected, length) == 0);
+            assert(live_allocations == baseline);
+        }
+        expected[4] ^= 0x20;
+        assert(dbgps_redundancy_encode(&c, expected, 10, expected, length) == 0);
+        add_encoded_path(h, root, expected, length);
+        baseline = live_allocations;
+        assert(protected_query(h, root, &c, expected, length) == -1);
+        assert(live_allocations == baseline);
+        destroy_table(h);
+    }
+#ifdef TEST_DBGPS3
+    dbgps3_graph_t g = {0};
+    g.k = 31; g.index_len = 16; g.path_len = 140;
+    char error[256];
+    assert(dbgps3_set_redundancy(&g, "rs:4", error, sizeof(error)) == 0);
+    assert(dbgps3_set_redundancy(&g, "rs:254", error, sizeof(error)) == -1);
+    assert(g.redundancy.parity == 4);
+    assert(dbgps3_set_redundancy(&g, "bad", error, sizeof(error)) == -1);
+    assert(g.redundancy.parity == 4);
+    assert(dbgps3_set_redundancy(&g, "none", error, sizeof(error)) == 0);
+#endif
+}
+
 static void test_branch_limit(void)
 {
     kc_c4x_t *h = c4x_init(KC_BITS);
@@ -374,6 +468,7 @@ int main(void)
     test_mapped_paths();
 #endif
     test_branch_limit();
+    test_protected_paths();
     puts("paths: unique, ambiguous, branching, invalid inputs and allocation checks passed");
     return 0;
 }

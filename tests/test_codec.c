@@ -93,6 +93,12 @@ static void test_widths(const char *path)
             }
             assert(dbgps_codec_decode(&map, packed, length, out, sizeof(out)) == 0);
             assert(memcmp(out, raw, sizeof(raw)) == 0);
+            unsigned char *encoded_dna = malloc((length + 3) / 4);
+            assert(encoded_dna);
+            assert(dbgps_codec_encode(&map, raw, sizeof(raw), encoded_dna, length) == 0);
+            assert(memcmp(encoded_dna, packed, (length + 3) / 4) == 0);
+            assert(dbgps_codec_encode(&map, raw, sizeof(raw), encoded_dna, length + bases) == -1);
+            free(encoded_dna);
             if (blocks * bits > sizeof(raw) * 8) {
                 set_word(packed, (blocks - 1) * bases, dna_word(last_value | 1, bases), bases);
                 assert(dbgps_codec_decode(&map, packed, length, out, sizeof(out)) == -1);

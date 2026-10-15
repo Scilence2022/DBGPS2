@@ -51,7 +51,9 @@ live JSON-RPC checks cover mapping metadata, exact large indices, invalid layout
 and the interactive client's index shortcut. Bloom regressions cover exact
 query fallback, forced false positives, two-pass singleton removal, cross-file
 repeats, saturated counts, concurrent queries during reload, malformed inputs,
-and reconstruction with both filters enabled.
+and reconstruction with both filters enabled. Redundancy checks cover CRC vectors,
+all RS parity sizes, exhaustive Hamming single/double bit errors, corrected-path
+uniqueness, and CLI/server error correction with independent encoders.
 Test binaries and generated reads are stored in temporary directories.
 Use `make test asan=1` to run the same checks with AddressSanitizer.
 
@@ -67,6 +69,7 @@ A read-length constrained sequence assembler with dynamic coverage ratio handlin
 - Ratio range iteration support
 - Improved path finding algorithm
 - Configurable fixed-block DNA/bit mapping with byte lookup acceleration
+- Shared, extensible redundancy layer: CRC16, CRC32, CRC32C, RS and Hamming SECDED
 
 #### Usage
 ```
@@ -87,9 +90,34 @@ Options:
   -s INT     Number of initial positions to skip ratio checks for
   -o STR     Output prefix for log file and strands file
   -M FILE    Custom DNA/bit mapping (default: none; built-in A=00,C=01,G=10,T=11)
+  -E CODE    none, crc16, crc32, crc32c, rs[:NB], hamming (default: crc16; rs means rs:16B)
   -B INT     Bloom query prefilter bits/key (1..64; 0 disables) [0]
   -F INT     Two-pass singleton filter log2 bitmap bits (23..40; 0 disables) [0]
 ```
+
+#### Redundancy and error correction
+
+Both assemblers accept `-E none|crc16|crc32|crc32c|rs[:NB]|hamming`.
+`rs:8B` explicitly means eight parity bytes; legacy `rs:8` remains accepted,
+and lowercase `rs:8b` is rejected. Logs always show the canonical `rs:NB` form.
+Both DBGPS2 and DBGPS3 default to `crc16`; use `-E none` for unprotected input. CRC modes detect errors. RS corrects
+up to `floor(N/2)` byte errors per strand, with 16 parity bytes if N is omitted.
+Hamming SECDED corrects one bit and detects two bits per 13-bit codeword.
+The selected code protects index and payload bytes before DNA mapping.
+
+```bash
+./DBGPS2 -E rs:8B -a 1000 -b 1001 -o assembled reads.fa
+./DBGPS3 -E crc32c -a 1000 -b 1001 -o assembled reads.fa
+./DBGPS3 -E none -a 1000 -b 1001 -o assembled reads.fa
+./DBGPS3 -S -E rs:8B reads.fa
+```
+
+`-l` always specifies payload bases; redundancy is calculated and appended to
+the search length automatically. Input reads must already use the selected
+format. Corrected candidates are returned as repaired DNA, including parity;
+different paths that repair to the same strand are deduplicated. See
+[REDUNDANCY.md](REDUNDANCY.md) for code parameters, wire formats, bounds,
+server semantics, the byte encoding API, and how to add further codes.
 
 #### Optional Bloom filters
 
@@ -164,8 +192,9 @@ make DBGPS2
 ./DBGPS3 -M examples/3base-5bit.map -i 24 -l 120 -a 0 -b 1000 -o assembled reads.fq.gz
 ```
 
-Use the codebook that was used to encode the input strands. In **DBGPS2**, the
-encoded strand has this layout, with the same mapping applied to all sections:
+Use the codebook that was used to encode the input strands. With the default
+**DBGPS2/DBGPS3 `-E crc16`**, the encoded strand has this layout, with the same mapping
+applied to all sections:
 
 ```text
 index | payload | CRC-16/XMODEM | zero padding to the next mapping block
@@ -188,15 +217,16 @@ must fit the existing 18-base forward primer. Index, payload, and encoded CRC
 together must be shorter than 300 bases. `-a`/`-b` accept unsigned decimal values
 within the index's bit capacity; use both options when the defaults do not fit.
 An empty index (`-i 0 -a 0 -b 0`) is supported if the primer covers the k-mer.
-For custom mappings the read counting limit adjusts to the full strand plus
-the two existing 18-base primers.
+When necessary, the read counting limit adjusts to the full strand plus the
+two existing 18-base primers.
 
-**DBGPS3** searches the index plus the `-l` payload bases and returns their DNA
-sequence. It validates codewords and requires a unique valid path, without CRC
-screening or an automatically appended CRC region. Both index and payload must
-contain complete codewords and whole decoded bytes. Its payload can be up to
-300 bases, in addition to the index. If reads contain a following CRC, it is
-outside this requested path length.
+**DBGPS3** also defaults to CRC16 and validates index plus payload bytes using
+its following CRC trailer. The `-l` value remains the payload length in bases;
+payload plus redundancy can be up to 300 bases, in addition to the index.
+Select `-E none` to search only the index and payload, validate codebook words,
+and require a unique path without checksum screening. A following CRC is outside
+the requested path in that mode. Other `-E` modes select their corresponding
+redundancy format and validation/correction behavior.
 
 #### Mapping performance
 
@@ -247,6 +277,7 @@ Options:
   -s INT     Number of initial positions to skip ratio checks for [0]
   -o STR     Output prefix for log file and strands file
   -M FILE    Custom DNA/bit mapping (default: none; canonical A/C/G/T encoding)
+  -E CODE    none, crc16, crc32, crc32c, rs[:NB], hamming (default: crc16; rs means rs:16B)
   -B INT     Bloom query prefilter bits/key (1..64; 0 disables) [0]
   -F INT     Two-pass singleton filter log2 bitmap bits (23..40; 0 disables) [0]
 ```

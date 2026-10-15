@@ -58,8 +58,11 @@ make DBGPS3
 ### Launch
 
 ```bash
-# Basic server (default port 9300)
+# Basic server (default port 9300, CRC16 protection)
 ./DBGPS3 -S input.fq.gz
+
+# Input without a checksum
+./DBGPS3 -S -E none input.fq.gz
 
 # Specify port
 ./DBGPS3 -S 8080 input.fq.gz
@@ -74,6 +77,9 @@ make DBGPS3
 
 # Custom mapping shared by every query (same format as DBGPS2)
 ./DBGPS3 -S -M examples/3base-5bit.map -i 24 -l 120 input.fq.gz
+
+# Enable Reed–Solomon correction (input must use matching RS parameters)
+./DBGPS3 -S -E rs:8B input.fq.gz
 ```
 
 ### Server-Specific Options
@@ -86,6 +92,7 @@ make DBGPS3
 | `-B INT` | Query Bloom bitmap bits per retained k-mer (1..64; 0 disables). | 0 |
 | `-F INT` | Two-pass singleton filtering; log2 total bitmap bits (23..40; 0 disables). | 0 |
 | `-M FILE` | Immutable DNA/bit codebook, shared by all queries. | No custom mapping |
+| `-E CODE` | `none`, `crc16`, `crc32`, `crc32c`, `rs[:NB]`, `hamming`; shared by all queries. | `crc16` |
 
 ### Graph Build Options
 
@@ -106,9 +113,13 @@ codebook filename parameter.
 All DBGPS2 codebook widths are supported: 1–8 bases to 1–16 bits, with at most
 two bits per base. Index and payload lengths must contain complete mapping
 blocks and decode to whole bytes. For a 3-base/5-bit code, `-i 24` is a 40-bit
-index and `-l 120` is a 200-bit payload. DBGPS3 returns a unique codebook-valid
-DNA path and does not append or validate CRC. `pathLen` is the payload length
-in bases, excluding any following CRC.
+index and `-l 120` is a 200-bit payload. By default (`-E crc16`), DBGPS3
+extends the search to include the CRC16 trailer and checks index plus payload
+bytes. Explicit `-E none` searches only the index and payload without checksum
+screening. Other `-E` modes use their corresponding trailers and validation/correction. `pathLen` always excludes redundancy. The payload plus trailer must
+fit within 300 bases. Different candidates corrected to the same DNA count as
+one result; distinct corrected strands are rejected as ambiguous. See
+[REDUNDANCY.md](REDUNDANCY.md) for exact wire formats and correction limits.
 
 ### Per-Query Parameters
 
@@ -120,8 +131,8 @@ set the default index and payload lengths for requests that omit them:
 | Coverage cutoff | `cutCov` | Minimum k-mer coverage to follow. | 1 |
 | Max coverage ratio | `maxCovRatio` | Max ratio for branching decisions. | 2.55 |
 | Skip ratios | `skipRatios` | Number of initial positions to skip ratio checks. | 0 |
-| Path length | `pathLen` | How far to extend the path search (in bases). | 140 |
-| Index length | `indexLen` | Index encoding length (for `path/find` only). | 16 |
+| Payload length | `pathLen` | Payload bases; the selected redundancy is added automatically. | 140 |
+| Index length | `indexLen` | Index bases; also used by protected `path/findKmer`. | 16 |
 
 ## Client Usage
 
@@ -277,8 +288,8 @@ JSON-RPC error `-32602` before constructing a primer seed.
 ### 3. `path/findKmer` — Find Path by Raw K-mer
 
 Find a path starting from an arbitrary k-mer sequence. Since the client provides
-the starting k-mer directly, `indexLen` is not needed. The literal k-mer always
-uses canonical A/C/G/T encoding; the returned extension must start at a codeword
+the starting k-mer directly, `indexLen` is not needed with `-E none`. The literal
+k-mer always uses canonical A/C/G/T encoding; the returned extension must start at a codeword
 boundary and satisfy the startup codebook. Only the extension is returned.
 
 **Request:**
@@ -312,7 +323,19 @@ All parameters except `kmer` are optional. The k-mer must contain exactly `k` ba
 }
 ```
 
+With protection enabled, the last `indexLen` bases of the k-mer are included
+as index bytes in validation/correction (default: startup `-i`). The returned
+sequence still excludes that index and contains the payload plus redundancy.
+Use `indexLen: 0` when the encoded protection covers only the extension.
+
 ### 4. `graph/info` — Get Graph Information
+
+The response also includes `redundancy`: `code`, `spec`, `parity_bytes`, `parity_bases`,
+`padding_bits`, and `path_bases` for the default query layout. The existing
+`path_len` is the payload length; `redundancy.path_bases` includes its trailer.
+For RS, `code` is `rs` and `spec` is the canonical byte-unit form, e.g.
+`rs:8B`. Legacy `rs:8` startup arguments remain accepted; lowercase `rs:8b`
+is rejected. Mapping and protection remain unchanged across `graph/load`.
 
 Retrieve graph metadata.
 
@@ -348,6 +371,14 @@ Retrieve graph metadata.
       "bases": 1,
       "bits": 2,
       "mode": "canonical"
+    },
+    "redundancy": {
+      "code": "crc16",
+      "spec": "crc16",
+      "parity_bytes": 2,
+      "parity_bases": 8,
+      "padding_bits": 0,
+      "path_bases": 148
     }
   },
   "id": 4
@@ -506,7 +537,8 @@ For embedding the DBGPS3 engine into other C applications:
 #include "dbgps3_server.h"
 #include <stdio.h>
 
-/* Build graph */
+/* Build graph (CRC16 protection by default; configure "none" explicitly
+   with dbgps3_set_redundancy() for input without a checksum). */
 dbgps3_graph_t *g = dbgps3_load(31, 14, 3, 10000000, 200, 1, &input_file);
 if (!g) return 1;
 

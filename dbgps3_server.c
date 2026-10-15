@@ -107,7 +107,8 @@ static int read_path_options(const dbgps3_graph_t *g, const mj_val *params,
         optional_int(params, "pathLen", g->path_len, 0, DBGPS3_MAX_PATH_LEN, &out->path_len) < 0)
         return -1;
     out->index_len = 0;
-    if (!raw_kmer && optional_int(params, "indexLen", g->index_len, 0, g->k, &out->index_len) < 0)
+    if ((!raw_kmer || dbgps_redundancy_enabled(&g->redundancy)) &&
+        optional_int(params, "indexLen", g->index_len, 0, g->k, &out->index_len) < 0)
         return -1;
     mj_val ratio = mj_object_get(params, "maxCovRatio");
     if (mj_object_has(params, "maxCovRatio") && ratio.type != MJ_NUMBER) return -1;
@@ -135,7 +136,7 @@ static mj_val handle_path_find(dbgps3_graph_t *g, const mj_val *params, mj_val i
     uint64_t eid;
     if (read_path_options(g, params, 0, &options) < 0 ||
         dbgps3_encode_index(g, index, options.index_len, &eid) < 0)
-        return jrpc_error(JRPC_INVALID_PARAMS, "Incompatible mapping layout or index capacity", id);
+        return jrpc_error(JRPC_INVALID_PARAMS, "Incompatible mapping/redundancy layout or index capacity", id);
 
     /* Default primer: same as CLI */
     const char *primer = "CCTGCAGAGTAGCATGTC";
@@ -189,14 +190,14 @@ static mj_val handle_path_find_kmer(dbgps3_graph_t *g, const mj_val *params, mj_
 
     char result_buf[DBGPS3_MAX_PATH_LEN + 128];
     int rc = dbgps3_find_path(g, start_kmer, options.cut_cov, options.ratio, options.skip_ratios,
-                               options.path_len, 0,
+                               options.path_len, options.index_bytes,
                                result_buf, sizeof(result_buf));
 
     mj_val result = mj_object();
     mj_object_set(&result, "kmer", mj_string(kmer_str));
     if (rc == 0) {
         mj_object_set(&result, "found", mj_bool(1));
-        mj_object_set(&result, "sequence", mj_string(result_buf));
+        mj_object_set(&result, "sequence", mj_string(result_buf + options.index_len));
     } else {
         mj_object_set(&result, "found", mj_bool(0));
     }
@@ -228,6 +229,20 @@ static mj_val handle_graph_info(dbgps3_graph_t *g, const mj_val *params, mj_val 
     mj_object_set(&mapping, "mode", mj_string(!custom ? "canonical" :
                   g->codec.byte_fast ? "byte_lookup" : "block_lookup"));
     mj_object_set(&result, "mapping", mapping);
+    dbgps_strand_layout_t layout;
+    if (dbgps_strand_layout(custom ? &g->codec : NULL, &g->redundancy,
+                            g->index_len, g->path_len, &layout) == 0) {
+        mj_val redundancy = mj_object();
+        char spec[DBGPS_REDUNDANCY_SPEC_SIZE];
+        dbgps_redundancy_format(&g->redundancy, spec, sizeof(spec));
+        mj_object_set(&redundancy, "code", mj_string(dbgps_redundancy_name(&g->redundancy)));
+        mj_object_set(&redundancy, "spec", mj_string(spec));
+        mj_object_set(&redundancy, "parity_bytes", mj_number(layout.parity_bytes));
+        mj_object_set(&redundancy, "parity_bases", mj_number(layout.parity_bases));
+        mj_object_set(&redundancy, "padding_bits", mj_number(layout.padding_bits));
+        mj_object_set(&redundancy, "path_bases", mj_number(layout.path_bases));
+        mj_object_set(&result, "redundancy", redundancy);
+    }
     return jrpc_result(result, id);
 }
 

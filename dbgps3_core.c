@@ -364,6 +364,10 @@ dbgps3_graph_t *dbgps3_load_filtered(int k, int p, int n_thread, int block_size,
     g->index_len = 16;
     g->index_byte_num = g->index_len >> 2;
     g->path_len = 140; /* default payload_len */
+    if (dbgps_redundancy_init(&g->redundancy, DBGPS3_DEFAULT_REDUNDANCY, NULL, 0) < 0) {
+        free(g);
+        return NULL;
+    }
 
     if (count_bloom_shift) {
         g->_h = count_files_filtered(n_files, files, k, p, block_size, n_thread,
@@ -472,7 +476,8 @@ int dbgps3_set_mapping(dbgps3_graph_t *g, const char *filename,
     proposed.codec = replacement;
     int index_bytes;
     if (dbgps3_validate_layout(&proposed, g->index_len, g->path_len, &index_bytes) < 0) {
-        snprintf(error, error_size, "index/payload lengths are incompatible with the selected mapping");
+        if (error && error_size)
+            snprintf(error, error_size, "index/payload lengths are incompatible with the selected mapping/redundancy");
         dbgps_codec_destroy(&replacement);
         return -1;
     }
@@ -482,16 +487,30 @@ int dbgps3_set_mapping(dbgps3_graph_t *g, const char *filename,
     return 0;
 }
 
+int dbgps3_set_redundancy(dbgps3_graph_t *g, const char *spec,
+                          char *error, size_t error_size)
+{
+    if (!g) return -1;
+    dbgps3_graph_t proposed = *g;
+    if (dbgps_redundancy_init(&proposed.redundancy, spec, error, error_size) < 0) return -1;
+    if (dbgps3_validate_layout(&proposed, g->index_len, g->path_len, NULL) < 0) {
+        if (error && error_size) snprintf(error, error_size, "redundancy exceeds strand or codeword capacity");
+        return -1;
+    }
+    g->redundancy = proposed.redundancy;
+    return 0;
+}
+
 int dbgps3_validate_layout(const dbgps3_graph_t *g, int index_len, int path_len,
                            int *index_bytes)
 {
     if (!g || g->k < 1 || g->k > 31 || index_len < 0 || index_len > g->k ||
         path_len < 0 || path_len > DBGPS3_MAX_PATH_LEN) return -1;
-    unsigned bases = g->codec.bases ? g->codec.bases : 1;
-    unsigned bits = g->codec.bases ? g->codec.bits : 2;
-    if (index_len % bases || path_len % bases ||
-        (index_len / bases * bits) % 8 || (path_len / bases * bits) % 8) return -1;
-    if (index_bytes) *index_bytes = index_len / bases * bits / 8;
+    dbgps_strand_layout_t layout;
+    if (dbgps_strand_layout(g->codec.bases ? &g->codec : NULL, &g->redundancy,
+                            index_len, path_len, &layout) < 0 ||
+        layout.path_bases > DBGPS3_MAX_PATH_LEN) return -1;
+    if (index_bytes) *index_bytes = layout.index_bytes;
     return 0;
 }
 
@@ -499,7 +518,10 @@ int dbgps3_encode_index(const dbgps3_graph_t *g, uint64_t index, int index_len,
                         uint64_t *encoded)
 {
     int bytes;
-    if (!encoded || dbgps3_validate_layout(g, index_len, 0, &bytes) < 0 ||
+    if (!g || !encoded) return -1;
+    dbgps3_graph_t unprotected = *g;
+    memset(&unprotected.redundancy, 0, sizeof(unprotected.redundancy));
+    if (dbgps3_validate_layout(&unprotected, index_len, 0, &bytes) < 0 ||
         index >> (bytes * 8)) return -1;
     if (g->codec.bases)
         return dbgps_codec_encode_index(&g->codec, index, index_len, encoded);
@@ -540,8 +562,10 @@ int dbgps3_find_path(const dbgps3_graph_t *g, uint64_t start_kmer,
     int k = g->k;
     uint64_t mask = g->mask;
     const kc_c4x_t *h = (const kc_c4x_t*)g->_h;
-    int total_bases = path_len + index_len;
-    int raw_bytes = total_bases / bases * bits / 8;
+    dbgps_strand_layout_t layout;
+    if (dbgps_strand_layout(codec, &g->redundancy, index_len, path_len, &layout) < 0) return -1;
+    path_len = layout.path_bases;
+    int total_bases = layout.total_bases;
 
     /* Check result buffer is large enough */
     int needed = total_bases + 1;
@@ -620,21 +644,24 @@ int dbgps3_find_path(const dbgps3_graph_t *g, uint64_t start_kmer,
         ++p;
     }
 
-    /* Full-rate codes allow every DNA word; sparse codes may reject paths.
-       Uniqueness is established before touching the caller's result buffer. */
+    /* Only distinct validated/corrected strands create ambiguity. */
     int check_words = codec && codec->bits < 2 * codec->bases;
-    if (term_node_num != 1 && !check_words) goto cleanup;
+    int protected = dbgps_redundancy_enabled(&g->redundancy);
+    if (term_node_num != 1 && !check_words && !protected) goto cleanup;
     unsigned char candidate[(DBGPS3_MAX_PATH_LEN + 31 + 3) / 4];
-    unsigned char selected[sizeof(candidate)], raw[sizeof(candidate)];
+    unsigned char selected[sizeof(candidate)], corrected[sizeof(candidate)], raw[sizeof(candidate)];
     int found = 0;
     for (int i = 0; i < term_node_num; ++i) {
         if (path_len % 4 == 0 && index_len % 4 == 0)
             nodes_path(term_nodes[i], candidate, path_len, k, index_len / 4);
         else nodes_path_packed(term_nodes[i], candidate, path_len, index_len);
-        if (check_words && dbgps_codec_decode(codec, candidate, total_bases, raw, raw_bytes) < 0)
+        if (dbgps_strand_check(codec, &g->redundancy, &layout, candidate, corrected, raw) < 0)
             continue;
-        if (found) goto cleanup;
-        memcpy(selected, candidate, (total_bases + 3) / 4);
+        if (found) {
+            if (!memcmp(selected, corrected, (total_bases + 3) / 4)) continue;
+            goto cleanup;
+        }
+        memcpy(selected, corrected, (total_bases + 3) / 4);
         found = 1;
     }
     if (found) {

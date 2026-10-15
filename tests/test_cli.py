@@ -25,7 +25,6 @@ def main():
     with tempfile.TemporaryDirectory(prefix="dbgps-regression-") as directory:
         directory = Path(directory)
         for binary in sys.argv[1:]:
-            has_crc = Path(binary).name == "DBGPS2"
             expected = {index: encode(raw) for index, raw in raw_strands.items()}
             inputs = []
             for mate in (1, 2):
@@ -37,8 +36,7 @@ def main():
                         for copy in range(10):
                             out.write(f"@{index}_{copy}/{mate}\n{sequence}\n+\n{'I' * len(sequence)}\n")
                 inputs.append(str(path))
-            expected_rows = {index: sequence if has_crc else sequence[:-8]
-                             for index, sequence in expected.items()}
+            expected_rows = expected
             for threads in (1, 3):
                 for repeat in (0, 1, 2, 3):
                     for sweep in (False, True):
@@ -53,6 +51,7 @@ def main():
                         result = subprocess.run(args + inputs, capture_output=True, text=True, timeout=30)
                         assert result.returncode == 0, result.stderr
                         assert "Mapping: none" in result.stdout and "direct 2-bit packing" in result.stdout
+                        assert "Redundancy (-E): crc16;" in result.stdout
                         rows = [line.split("\t") for line in prefix.with_suffix(".strands").read_text().splitlines()]
                         assert len(rows) == 2 * copies, (args, rows, result.stdout, result.stderr)
                         for index, sequence in rows:
@@ -67,6 +66,20 @@ def main():
             rows = [line.split("\t") for line in prefix.with_suffix(".strands").read_text().splitlines()]
             assert len(rows) == len(expected_rows)
             assert {int(index): dna for index, dna in rows} == expected_rows
+            # Omitting -E now validates CRC16 in both assemblers. Explicit
+            # none still accepts the payload when the following CRC is bad.
+            bad_reads = directory / "bad-crc.fa"
+            bad_reads.write_text("".join(
+                f">{index}_{copy}\n{primers[0]}{encode(raw[:-1] + bytes([raw[-1] ^ 1]))}{primers[1]}\n"
+                for index, raw in raw_strands.items() for copy in range(8)))
+            for protection in ([], ["-E", "crc16"], ["-E", "none"]):
+                prefix = directory / "crc-default"
+                result = subprocess.run([binary, "-a", "1000", "-b", "1001", "-o", str(prefix),
+                                         *protection, str(bad_reads)], capture_output=True, text=True, timeout=30)
+                assert result.returncode == 0, result.stderr
+                rows = [line.split("\t") for line in prefix.with_suffix(".strands").read_text().splitlines()]
+                wanted = {index: dna[:-8] for index, dna in expected.items()} if protection == ["-E", "none"] else {}
+                assert {int(index): dna for index, dna in rows} == wanted, (protection, rows)
             print(f"{Path(binary).name}: exact CLI strands, repeatability, thread counts and ratio sweep passed")
 
 

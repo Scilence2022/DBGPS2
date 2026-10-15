@@ -24,9 +24,14 @@ void dbgps_codec_destroy(dbgps_codec_t *codec);
 int dbgps_codec_encode_index(const dbgps_codec_t *codec, uint64_t index,
                              unsigned index_bases, uint64_t *encoded);
 /* DNA is packed MSB first, four canonical bases per byte. Final unused slots
-   are zero. Decode exactly out_bytes and require zero CRC padding bits. */
+   are zero. Decode exactly out_bytes and require zero trailing padding bits.
+   A NULL codec selects canonical A=00,C=01,G=10,T=11 packing. */
 int dbgps_codec_decode(const dbgps_codec_t *codec, const unsigned char *dna,
                        unsigned dna_bases, unsigned char *out, unsigned out_bytes);
+/* Encode complete bytes, appending zero bits to fill the final mapping block.
+   dna_bases must be the exact resulting length; NULL selects canonical packing. */
+int dbgps_codec_encode(const dbgps_codec_t *codec, const unsigned char *raw,
+                       unsigned raw_bytes, unsigned char *dna, unsigned dna_bases);
 
 #ifdef __cplusplus
 }

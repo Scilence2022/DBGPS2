@@ -113,70 +113,6 @@ unsigned char* uint64_int8(uint64_t key, unsigned char* seq){
 }
 
 
-const unsigned char two_to_one_table[256] = { // legacy data byte -> canonical packed DNA
-    51, 50, 49, 48, 60, 61, 62, 63, 58, 56, 59, 57, 53, 55, 52, 54,
-    35, 34, 33, 32, 44, 45, 46, 47, 42, 40, 43, 41, 37, 39, 36, 38,
-    19, 18, 17, 16, 28, 29, 30, 31, 26, 24, 27, 25, 21, 23, 20, 22,
-    3, 2, 1, 0, 12, 13, 14, 15, 10, 8, 11, 9, 5, 7, 4, 6,
-    195, 194, 193, 192, 204, 205, 206, 207, 202, 200, 203, 201, 197, 199, 196, 198,
-    211, 210, 209, 208, 220, 221, 222, 223, 218, 216, 219, 217, 213, 215, 212, 214,
-    227, 226, 225, 224, 236, 237, 238, 239, 234, 232, 235, 233, 229, 231, 228, 230,
-    243, 242, 241, 240, 252, 253, 254, 255, 250, 248, 251, 249, 245, 247, 244, 246,
-    163, 162, 161, 160, 172, 173, 174, 175, 170, 168, 171, 169, 165, 167, 164, 166,
-    131, 130, 129, 128, 140, 141, 142, 143, 138, 136, 139, 137, 133, 135, 132, 134,
-    179, 178, 177, 176, 188, 189, 190, 191, 186, 184, 187, 185, 181, 183, 180, 182,
-    147, 146, 145, 144, 156, 157, 158, 159, 154, 152, 155, 153, 149, 151, 148, 150,
-    83, 82, 81, 80, 92, 93, 94, 95, 90, 88, 91, 89, 85, 87, 84, 86,
-    115, 114, 113, 112, 124, 125, 126, 127, 122, 120, 123, 121, 117, 119, 116, 118,
-    67, 66, 65, 64, 76, 77, 78, 79, 74, 72, 75, 73, 69, 71, 68, 70,
-    99, 98, 97, 96, 108, 109, 110, 111, 106, 104, 107, 105, 101, 103, 100, 102
-};
-
-
-const unsigned char one_to_two_table[256] = { // legacy canonical packed DNA -> data byte
-
-    51, 50, 49, 48, 62, 60, 63, 61, 57, 59, 56, 58, 52, 53, 54, 55,
-    35, 34, 33, 32, 46, 44, 47, 45, 41, 43, 40, 42, 36, 37, 38, 39,
-    19, 18, 17, 16, 30, 28, 31, 29, 25, 27, 24, 26, 20, 21, 22, 23,
-    3, 2, 1, 0, 14, 12, 15, 13, 9, 11, 8, 10, 4, 5, 6, 7,
-    227, 226, 225, 224, 238, 236, 239, 237, 233, 235, 232, 234, 228, 229, 230, 231,
-    195, 194, 193, 192, 206, 204, 207, 205, 201, 203, 200, 202, 196, 197, 198, 199,
-    243, 242, 241, 240, 254, 252, 255, 253, 249, 251, 248, 250, 244, 245, 246, 247,
-    211, 210, 209, 208, 222, 220, 223, 221, 217, 219, 216, 218, 212, 213, 214, 215,
-    147, 146, 145, 144, 158, 156, 159, 157, 153, 155, 152, 154, 148, 149, 150, 151,
-    179, 178, 177, 176, 190, 188, 191, 189, 185, 187, 184, 186, 180, 181, 182, 183,
-    131, 130, 129, 128, 142, 140, 143, 141, 137, 139, 136, 138, 132, 133, 134, 135,
-    163, 162, 161, 160, 174, 172, 175, 173, 169, 171, 168, 170, 164, 165, 166, 167,
-    67, 66, 65, 64, 78, 76, 79, 77, 73, 75, 72, 74, 68, 69, 70, 71,
-    83, 82, 81, 80, 94, 92, 95, 93, 89, 91, 88, 90, 84, 85, 86, 87,
-    99, 98, 97, 96, 110, 108, 111, 109, 105, 107, 104, 106, 100, 101, 102, 103,
-    115, 114, 113, 112, 126, 124, 127, 125, 121, 123, 120, 122, 116, 117, 118, 119
-
-
-};
-
-
- unsigned char* one_encode_two(unsigned char* seq, int seq_len){
-
-    int i;
-    for(i=0; i < seq_len; i++){
-
-        seq[i] = one_to_two_table[seq[i]];
-    }
-    return seq;
-}
-
-
-unsigned char* two_encode_one(unsigned char* seq, int seq_len){
-
-    int i;
-    for(i=0; i < seq_len; i++){
-        seq[i] = two_to_one_table[seq[i]];
-    }
-    return seq;
-}
-
-
 uint64_t comp_rev2(uint64_t x, unsigned char km_len){
     uint64_t a, b=0ULL, mask = (1ULL<<km_len*2) - 1;
 
@@ -692,7 +628,7 @@ static void nodes_path_packed(path_node *node, unsigned char *out, int path_len,
 static int codec_path_sizes(const dbgps_codec_t *codec, int path_len, int index_len,
                             int k, int *packed_bytes, int *raw_bytes)
 {
-    unsigned bases = codec ? codec->bases : 2, bits = codec ? codec->bits : 4;
+    unsigned bases = codec ? codec->bases : 1, bits = codec ? codec->bits : 2;
     if (k < 1 || k > 31 || path_len < 0 || index_len < 0 || index_len > k ||
         path_len >= Max_Path_Len || index_len + path_len >= Max_Path_Len ||
         !bases || index_len % bases || path_len % bases) return -1;
@@ -785,16 +721,20 @@ static int find_paths_mapped(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer,
 
     int c_index = -1;
     for (int i = 0; i < term_node_num; i++) {
+        unsigned char *crc_data = candidate;
         if (!codec || codec->byte_fast) {
             nodes_path(term_nodes[i], candidate, path_len, k, index_len / 4);
-            const unsigned char *decode = codec ? codec->decode_byte : one_to_two_table;
-            for (int j = 0; j < seq_len; j++) path_tmp[j] = decode[candidate[j]];
+            if (codec) {
+                for (int j = 0; j < seq_len; j++) path_tmp[j] = codec->decode_byte[candidate[j]];
+                crc_data = path_tmp;
+            }
         } else {
             nodes_path_packed(term_nodes[i], candidate, path_len, index_len);
             if (dbgps_codec_decode(codec, candidate, index_len + path_len, path_tmp, raw_len) < 0)
                 continue;
+            crc_data = path_tmp;
         }
-        if (crc16_check(path_tmp, raw_len)) {
+        if (crc16_check(crc_data, raw_len)) {
             if (c_index >= 0) {
                 free(paths[c_index]);
                 paths[c_index] = NULL;
@@ -820,21 +760,8 @@ int find_paths(kc_c4x_t *h, unsigned char *paths[], uint64_t kmer, uint64_t mask
 
 
 uint64_t index_encode(uint64_t index, unsigned int index_len){
-
-    uint64_t mask = 255ULL;
-    unsigned int index_byte_num = index_len>>2;
-    unsigned int i;
-    uint64_t m, y=0ULL;
-
-    for(i=0; i < index_byte_num; i++){
-        m = index & mask;
-        m = (uint64_t)two_to_one_table[m];
-        m = m<<((index_byte_num-1)*8);
-        y = y>>8;
-        y = y | m;
-        index = index>>8;
-    }
-    return y;
+    /* Index bits already are canonical packed DNA: A=00,C=01,G=10,T=11. */
+    return index_len >= 32 ? index : index & ((1ULL << (index_len * 2)) - 1);
 }
 
 
@@ -906,7 +833,7 @@ int main(int argc, char *argv[])
     char *output_prefix = NULL; // Output prefix for log file
     const char *mapping_file = NULL;
     dbgps_codec_t mapping = {0};
-    const dbgps_codec_t *codec = NULL; /* NULL preserves the legacy byte tables. */
+    const dbgps_codec_t *codec = NULL; /* NULL uses canonical packed DNA directly. */
 
     uint64_t min_index = 101010102, max_index = 101295684;
     unsigned int max_cov = 0;
@@ -969,7 +896,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "  -R FLOAT   Upper bound for ratio range iteration (0 = disabled) [%.1f]\n", max_r);
         fprintf(stderr, "  -s INT     Number of initial positions to skip ratio checks for [%d]\n", skip_ratios);
         fprintf(stderr, "  -o STR     Output prefix for log file [none]\n");
-        fprintf(stderr, "  -M FILE    Fixed-block DNA/bit mapping [legacy two-base mapping]\n");
+        fprintf(stderr, "  -M FILE    Custom DNA/bit mapping [none; built-in A=00,C=01,G=10,T=11]\n");
 
         fprintf(stderr, "\n");
         return 1;
@@ -991,7 +918,7 @@ int main(int argc, char *argv[])
 
     if(max_cov < min_cov){max_cov = min_cov;}
     int packed_bytes, raw_bytes;
-    unsigned bases = codec ? codec->bases : 2, bits = codec ? codec->bits : 4;
+    unsigned bases = codec ? codec->bases : 1, bits = codec ? codec->bits : 2;
     if (payload_len < 0 || payload_len >= Max_Path_Len || payload_len % bases ||
         (payload_len / bases * bits) % 8 ||
         codec_path_sizes(codec, payload_len + crc_len, index_len, k, &packed_bytes, &raw_bytes) < 0 ||
@@ -1060,8 +987,12 @@ int main(int argc, char *argv[])
     PRINT_BOTH("Memory test mode: %s\n", mem_test ? "enabled" : "disabled");
     PRINT_BOTH("Path length (payload + CRC): %d\n", path_len);
     PRINT_BOTH("Index byte number: %u\n", index_len / bases * bits / 8);
-    PRINT_BOTH("Mapping: %s (%u bases <-> %u bits; %s)\n", mapping_file ? mapping_file : "legacy",
-               bases, bits, !codec || codec->byte_fast ? "byte lookup" : "block lookup");
+    if (codec) {
+        PRINT_BOTH("Mapping: %s (%u bases <-> %u bits; %s)\n", mapping_file,
+                   bases, bits, codec->byte_fast ? "byte lookup" : "block lookup");
+    } else {
+        PRINT_BOTH("Mapping: none (built-in A=00,C=01,G=10,T=11; direct 2-bit packing)\n");
+    }
     PRINT_BOTH("CRC encoding length: %d bp; zero padding: %u bits\n", crc_len, (bits - 16 % bits) % bits);
     PRINT_BOTH("Output prefix: %s\n", output_prefix ? output_prefix : "none");
     PRINT_BOTH("======================================\n");

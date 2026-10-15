@@ -132,7 +132,7 @@ static void encoded_strand(unsigned char payload, unsigned char *encoded, char *
     unsigned short crc = crc16xmodem(raw, 2);
     raw[2] = crc >> 8;
     raw[3] = crc & 255;
-    for (int i = 0; i < 4; ++i) encoded[i] = two_to_one_table[raw[i]];
+    memcpy(encoded, raw, sizeof(raw)); /* Native A=00,C=01,G=10,T=11 packing. */
     for (int i = 0; i < 12; ++i)
         suffix[i] = "ACGT"[(encoded[1 + i / 4] >> (6 - 2 * (i % 4))) & 3];
     suffix[12] = 'A'; /* one-base lookahead required by path reconstruction */
@@ -252,6 +252,23 @@ static void test_custom_ambiguity(void)
     free(map.decode);
     destroy_table(h);
 }
+
+static void test_builtin_encoding(void)
+{
+    /* Integer indices must retain their bit patterns, including leading zero
+       bytes and bits beyond the old uint32_t index limit. */
+    assert(index_encode(0x01234567ULL, 16) == 0x01234567ULL);
+    assert(index_encode(0xff01234567ULL, 16) == 0x01234567ULL);
+    assert(index_encode(0x0123456789abULL, 24) == 0x0123456789abULL);
+    assert(index_encode(UINT64_MAX, 0) == 0);
+    assert(index_encode(UINT64_MAX, 32) == UINT64_MAX);
+    for (unsigned byte = 0; byte < 256; ++byte) {
+        unsigned char dna[4];
+        for (unsigned pos = 0; pos < 4; ++pos)
+            dna[pos] = "ACGT"[(byte >> (6 - 2 * pos)) & 3];
+        assert(actgkmer_uint64(dna, 4) == byte);
+    }
+}
 #endif
 
 static void test_branch_limit(void)
@@ -287,6 +304,7 @@ int main(void)
 {
     test_unique_and_ambiguous();
 #ifndef TEST_DBGPS3
+    test_builtin_encoding();
     test_custom_ambiguity();
 #endif
     test_branch_limit();

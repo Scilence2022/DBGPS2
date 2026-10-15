@@ -3,7 +3,6 @@
 import binascii
 from pathlib import Path
 import random
-import re
 import subprocess
 import sys
 import tempfile
@@ -26,8 +25,12 @@ def encode(raw, codewords, bits, padding_value=0):
 def main():
     binary = str(Path(sys.argv[1]).resolve())
     repo = Path(__file__).resolve().parent.parent
-    source = (repo / "DBGPS2.c").read_text().split("two_to_one_table[256]", 1)[1]
-    legacy = [int(x) for x in re.findall(r"\d+", source.split("{", 1)[1].split("}", 1)[0])]
+    legacy = {}
+    for line in (repo / "examples/legacy-2base.map").read_text().splitlines():
+        fields = line.split("#", 1)[0].split()
+        if len(fields) == 2 and set(fields[0]) <= set("ACGT"):
+            legacy[int(fields[1], 2)] = fields[0]
+    assert len(legacy) == 16
     rng = random.Random(182)
     # Includes partial packed DNA bytes, CRC padding >= 8 bits, reads > 200 bp,
     # nonseparable permutations, and index values beyond the former uint32 limit.
@@ -41,9 +44,7 @@ def main():
         for case, (bases, bits, index_bases, payload_bases) in enumerate(cases):
             codewords = [word(x, bases) for x in rng.sample(range(4 ** bases), 2 ** bits)]
             if case == len(cases) - 1:
-                codewords = [word(legacy[value << 4] >> 4, 2) for value in range(16)]
-                assert all(word(legacy[value], 4) == codewords[value >> 4] + codewords[value & 15]
-                           for value in range(256))
+                codewords = [legacy[value] for value in range(16)]
             mapping_file = directory / f"case{case}.map"
             mapping_file.write_text(f"bases {bases}\nbits {bits}\n" + "".join(
                 f"{dna} {value:0{bits}b}\n" for value, dna in enumerate(codewords)))
@@ -69,9 +70,10 @@ def main():
             common = [binary, "-M", str(mapping_file), "-k", str(k), "-i", str(index_bases),
                       "-l", str(payload_bases), "-a", str(indices[0]), "-b", str(indices[-1])]
 
-            def run(extra=(), repeats=1, wanted=None):
+            def run(extra=(), repeats=1, wanted=None, use_mapping=True):
                 prefix = directory / f"output{case}"
-                args = common + list(extra) + ["-o", str(prefix), str(reads)]
+                options = common if use_mapping else common[:1] + common[3:]
+                args = options + list(extra) + ["-o", str(prefix), str(reads)]
                 result = subprocess.run(args, capture_output=True, text=True, timeout=30)
                 assert result.returncode == 0, (args, result.stderr)
                 rows = [line.split("\t") for line in prefix.with_suffix(".strands").read_text().splitlines()]
@@ -98,6 +100,10 @@ def main():
                 write_reads({i: dna[:index_bases] + forbidden + dna[index_bases + bases:]
                              for i, dna in expected.items()})
                 run(wanted={})
+            if case == len(cases) - 1:
+                # The legacy permutation is opt-in; default canonical seeds
+                # must not silently reconstruct strands using that codebook.
+                run(wanted={}, use_mapping=False)
             print(f"mapping CLI: {bases} bases/{bits} bits, index={index_bases}, payload={payload_bases} passed")
 
         invalid_options = [("-i", "15"), ("-l", "139"), ("-k", "32"), ("-i", "32"),

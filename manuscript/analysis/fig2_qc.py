@@ -62,15 +62,18 @@ labels = [fs.LABEL[s] for s in fs.SAMPLES]
 # a: fragment length cumulative distribution (aligned read pairs)
 ax = fig.add_subplot(gs[0, 0])
 for s in fs.SAMPLES:
-    h = ins_len[s]
+    h = np.r_[ins_len[s], np.zeros(11)]          # extend past the 200-nt strand length
     c = np.cumsum(h) / h.sum()
     ax.step(np.arange(len(h)), c * 100, where="post", color=fs.COLOR[s], lw=1, label=fs.LABEL[s])
 ax.set_xlabel("Fragment length (nt, from paired alignments)")
 ax.set_ylabel("Aligned pairs ≤ length (%)")
-ax.set_xlim(0, 200); ax.set_ylim(0, 100)
+ax.set_xlim(0, 210); ax.set_ylim(0, 102)
 ax.set_xticks([0, 50, 100, 150, 200])
+ax.set_yticks([0, 20, 40, 60, 80, 100])
 ax.axvline(150, color=fs.GRID, lw=0.6, zorder=0)
-ax.text(148, 52, "read length", ha="right", va="center", fontsize=5.2, color=fs.INK2, rotation=90)
+ax.axvline(200, color=fs.GRID, lw=0.6, zorder=0)
+ax.text(147, 40, "read length", ha="right", va="center", fontsize=5.2, color=fs.INK2, rotation=90)
+ax.text(197, 40, "strand length", ha="right", va="center", fontsize=5.2, color=fs.INK2, rotation=90)
 ax.legend(loc="upper left", ncol=1, handlelength=1.0)
 fs.panel(ax, "a")
 

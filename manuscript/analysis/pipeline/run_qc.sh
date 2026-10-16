@@ -9,4 +9,5 @@ for s in HT_con HT1 HT2 HT3 HT4 HT5; do for r in 1 2; do
   python3 $A/qc_align.py $s results/qc/${s}_$r.fq results/qc/${s}_$r.paf results/qc/${s}_$r > results/qc/${s}_$r.summary
   rm results/qc/${s}_$r.fq
 done; done
+python3 $A/qc_fragments.py results/qc HT_con HT1 HT2 HT3 HT4 HT5 > results/qc/fragments.jsonl
 echo done > results/qc/ALL_DONE

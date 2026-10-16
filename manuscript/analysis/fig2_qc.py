@@ -21,13 +21,10 @@ for s in fs.SAMPLES:
     n_sub = sum(sub.values())
     adapter = np.mean([j["adapter_frac"] for j in js])
     polyg = np.mean([j["polyg_frac"] for j in js])
-    # insert length: adapter start position in the read (reads without adapter: >= 150)
-    h = np.zeros(151)
-    for j in js:
-        for k, v in j["adapter_pos"].items():
-            h[min(int(k), 150)] += v
-        h[150] += j["reads"] - sum(j["adapter_pos"].values())
-    ins_len[s] = h
+    # fragment length from the reference span of both aligned mates (resolves up to the 200-nt strand)
+    fr = np.loadtxt(f"{QC}/{s}.frag.tsv", skiprows=1)
+    ins_len[s] = fr[:, 1]
+    n_pair = js[0]["reads"]
     e = np.zeros(21)
     for j in js:
         for k, v in j["edit_hist"].items():
@@ -49,7 +46,8 @@ for s in fs.SAMPLES:
                      CT_GA_frac_of_subs=ct / n_sub,
                      CT_GA_rate=ct / agg["aligned_bases"],
                      perfect_read_frac=float(e[0] / e.sum()),
-                     median_insert=int(np.searchsorted(np.cumsum(h) / h.sum(), 0.5)),
+                     median_fragment=int(np.searchsorted(np.cumsum(ins_len[s]) / ins_len[s].sum(), 0.5)),
+                     pairs_aligned_frac=float(ins_len[s].sum() / n_pair),
                      strands_hit=len(ps), reads_per_strand_cv=float(ps.std() / ps.mean())))
 qc = pd.DataFrame(rows)
 qc.to_csv(os.path.join(fs.DATADIR, "qc_summary.csv"), index=False)
@@ -61,16 +59,18 @@ x = np.arange(len(fs.SAMPLES))
 cols = [fs.COLOR[s] for s in fs.SAMPLES]
 labels = [fs.LABEL[s] for s in fs.SAMPLES]
 
-# a: insert length cumulative distribution
+# a: fragment length cumulative distribution (aligned read pairs)
 ax = fig.add_subplot(gs[0, 0])
 for s in fs.SAMPLES:
     h = ins_len[s]
     c = np.cumsum(h) / h.sum()
-    ax.step(np.arange(151), c * 100, where="post", color=fs.COLOR[s], lw=1, label=fs.LABEL[s])
-ax.set_xlabel("Insert length (nt, from adapter position)")
-ax.set_ylabel("Reads with insert ≤ length (%)")
-ax.set_xlim(0, 150); ax.set_ylim(0, 100)
-ax.text(148, 4, "≥150 nt\n(full-length\nreads)", ha="right", va="bottom", fontsize=5.3, color=fs.INK2)
+    ax.step(np.arange(len(h)), c * 100, where="post", color=fs.COLOR[s], lw=1, label=fs.LABEL[s])
+ax.set_xlabel("Fragment length (nt, from paired alignments)")
+ax.set_ylabel("Aligned pairs ≤ length (%)")
+ax.set_xlim(0, 200); ax.set_ylim(0, 100)
+ax.set_xticks([0, 50, 100, 150, 200])
+ax.axvline(150, color=fs.GRID, lw=0.6, zorder=0)
+ax.text(148, 52, "read length", ha="right", va="center", fontsize=5.2, color=fs.INK2, rotation=90)
 ax.legend(loc="upper left", ncol=1, handlelength=1.0)
 fs.panel(ax, "a")
 

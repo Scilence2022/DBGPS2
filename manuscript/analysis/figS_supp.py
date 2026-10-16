@@ -50,7 +50,7 @@ for s in fs.SAMPLES:
     q = qc[qc["sample"] == fs.LABEL[s]].iloc[0]
     rows.append({"Sample": fs.LABEL[s], "Read pairs (M)": reads[s] / 1e6,
                  "Read pairs per strand": reads[s] / N,
-                 "Adapter read-through (%)": q.adapter_frac * 100, "Median insert (nt)": q.median_insert,
+                 "Adapter read-through (%)": q.adapter_frac * 100, "Median fragment (nt)": q.median_fragment, "Pairs with both mates aligned (%)": q.pairs_aligned_frac * 100,
                  "Mapped (%)": q.mapped_frac * 100, "Substitutions per kb": q.sub_rate * 1e3,
                  "C>T+G>A per kb": q.CT_GA_rate * 1e3, "Q30 (%)": q.q30_frac * 100,
                  "Distinct 31-mers (M)": int(inf["distinct_kmers"]) / 1e6,

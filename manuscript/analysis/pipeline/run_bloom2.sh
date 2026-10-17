@@ -10,7 +10,7 @@ for s in HT_con HT3 HT5; do
       exact) opt="-r 2.55";; F34) opt="-r 2.55 -F 34";; B12) opt="-r 2.55 -B 12";;
       F34B12) opt="-r 2.55 -F 34 -B 12";; dbgps) opt="-r 1000000 -c 10";;
     esac
-    /usr/bin/time -l $W/DBGPS2 -M $W/examples/legacy-2base.map -t 16 -c 1 $opt -o $O/${s}_$mode $f1 $f2 \
+    /usr/bin/time -l $W/DBGPS2 -M $W/examples/legacy-2base.map -t 3 -c 1 $opt -o $O/${s}_$mode $f1 $f2 \
       > $O/${s}_$mode.stdout 2> $O/${s}_$mode.time
   done
 done

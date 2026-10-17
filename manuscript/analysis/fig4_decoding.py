@@ -30,7 +30,7 @@ print(best.to_string())
 
 fig = plt.figure(figsize=(fs.DOUBLE, 128 * fs.MM))
 outer = fig.add_gridspec(2, 1, height_ratios=[0.8, 1.15], hspace=0.5, left=0.065, right=0.985,
-                         top=0.955, bottom=0.075)
+                         top=0.955, bottom=0.115)
 top = outer[0].subgridspec(1, 6, wspace=0.12)
 bot = outer[1].subgridspec(1, 3, wspace=0.45, width_ratios=[1, 1.05, 1.15])
 
@@ -68,7 +68,7 @@ for i in range(len(x)):
             ha="center", fontsize=4.6, rotation=90, va="bottom", color=fs.INK2)
 ax.set_xticks(x, best["sample"])
 ax.set_ylabel("Strands recovered (%)")
-ax.set_ylim(0, 125); ax.set_yticks([0, 20, 40, 60, 80, 100])
+ax.set_ylim(0, 118); ax.set_yticks([0, 20, 40, 60, 80, 100])
 ax.legend(loc="upper right", ncol=1)
 fs.panel(ax, "b")
 
@@ -82,7 +82,7 @@ mat = np.array([[g[(g.r == r) & (g.c == c)].correct.iloc[0] / N * 100 for c in c
 cmap = LinearSegmentedColormap.from_list("blu", ["#f5f9fe", "#9ec5f4", "#3987e5", "#184f95", "#0d366b"])
 im = ax.imshow(mat, aspect="auto", cmap=cmap, vmin=0, vmax=100, origin="lower")
 ax.set_xticks(range(len(cs)), [str(c) for c in cs], rotation=90, fontsize=5)
-ax.set_yticks(range(len(rs)), [("∞ (DBGPS)" if r == 0 else f"{r:g}") for r in rs], fontsize=5.5)
+ax.set_yticks(range(len(rs)), [("no limit" if r == 0 else f"{r:g}") for r in rs], fontsize=5.5)
 ax.set_xlabel("Coverage cutoff c"); ax.set_ylabel("Ratio bound r")
 bi = np.unravel_index(np.argmax(mat), mat.shape)
 ax.scatter(bi[1], bi[0], marker="*", s=22, color="white", edgecolor=fs.INK, linewidth=0.4)
@@ -112,10 +112,9 @@ for i, s in enumerate(fs.SAMPLES):
                    label=lab if (i == 0 and j == 0) else None)
             bottom += v
         xs.append(xpos); labs.append("D" if r == 0 else "D2")
-ax.set_xticks(xs, ["1" if l == "D" else "2" for l in labs], fontsize=5)
+ax.set_xticks(xs, ["DBGPS" if l == "D" else "DBGPS2" for l in labs], fontsize=4.6, rotation=90)
 for i, s in enumerate(fs.SAMPLES):
-    ax.text(i * 2.6 + 0.52, -14, fs.LABEL[s], ha="center", fontsize=5.5, color=fs.INK)
-ax.text(-1.2, -6.2, "DBGPS", ha="right", fontsize=5, color=fs.INK2)
+    ax.annotate(fs.LABEL[s], (i * 2.6 + 0.52, -0.2), xycoords=("data", "axes fraction"), ha="center", va="top", fontsize=5.5, color=fs.INK, annotation_clip=False)
 ax.set_ylim(0, 100)
 ax.set_ylabel("Indexed strands (%)")
 ax.legend(loc="lower center", bbox_to_anchor=(0.47, 1.0), ncol=3, fontsize=4.9, handlelength=0.9, columnspacing=0.6, handletextpad=0.4)

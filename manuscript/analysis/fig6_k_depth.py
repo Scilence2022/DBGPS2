@@ -90,6 +90,7 @@ for s in fs.SAMPLES:
     d = kt[kt["sample"] == s].sort_values("k")
     ax.plot(d.k, d.median_min_cov, color=fs.COLOR[s], lw=1, marker="o", ms=2.4, mec="white", mew=0.3)
 ax.set_yscale("log")
+ax.set_yticks([10, 20, 50, 100, 200], ["10", "20", "50", "100", "200"]); ax.yaxis.set_minor_locator(plt.NullLocator())
 ax.set_xlabel("k-mer size k"); ax.set_ylabel("Median minimum true-path coverage")
 ax.set_xticks(KLIST)
 fs.panel(ax, "c")

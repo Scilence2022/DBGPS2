@@ -41,7 +41,7 @@ for s, mk in (("HT_con", "o"), ("HT5", "s")):
 ax.set_xscale("log"); ax.set_yscale("log")
 ax.set_xlabel("Coverage cutoff c"); ax.set_ylabel("Graph nodes visited per index")
 ax.axhline(150, color=fs.GRID, lw=0.6, zorder=0)
-ax.text(1, 135, "single path (150 nodes)", ha="left", va="top", fontsize=5, color=fs.INK2)
+ax.text(1.0, 163, "single path (150 nodes)", ha="left", va="bottom", fontsize=4.8, color=fs.INK2)
 ax.legend(handles=[Line2D([], [], color=fs.DBGPS_C, lw=1, label="DBGPS"),
                    Line2D([], [], color=fs.DBGPS2_C, lw=1, label="DBGPS2"),
                    Line2D([], [], color=fs.INK2, marker="o", lw=0, ms=2.4, label="Control"),
@@ -73,13 +73,12 @@ groups = [("Both", (o1 == "S") & (o2 == "S"), "#9ec5f4"),
           ("Neither", (o1 != "S") & (o2 != "S"), "#b9b8b3")]
 for lab, m, col in groups:
     v = np.sort(np.maximum(mc[m], 0.5))
-    ax.plot(v, np.arange(1, len(v) + 1) / len(v) * 100, color=col, lw=1.2, label=f"{lab} (n = {m.sum():,})")
-ax.axvline(d1.c + 0.5, color=fs.DBGPS_C, lw=0.7, ls="--")
-ax.text(d1.c * 0.9, 95, f"DBGPS best c = {int(d1.c)}", ha="right", va="top", fontsize=5, color=fs.INK2)
+    ax.plot(v, np.arange(1, len(v) + 1) / len(v) * 100, color=col, lw=1.2, label=lab)
+ax.axvline(d1.c + 0.5, color=fs.DBGPS_C, lw=0.7, ls="--", label=f"DBGPS c = {int(d1.c)}")
 ax.set_xscale("log"); ax.set_xlim(0.5, 300); ax.set_ylim(0, 101)
 ax.set_xlabel("Minimum true-path k-mer coverage"); ax.set_ylabel("Strands in group (cumulative %)")
 ax.set_title("HT5: strands recovered by", fontsize=6.3, pad=2)
-ax.legend(loc="lower right", fontsize=5.2, bbox_to_anchor=(1.0, 0.12))
+ax.legend(loc="lower right", fontsize=5.0, handlelength=1.2, labelspacing=0.3, borderaxespad=0.1)
 fs.panel(ax, "c")
 only1 = ((o1 == "S") & (o2 != "S")).sum()
 
@@ -110,8 +109,7 @@ fs.panel(ax, "d")
 
 # e: why DBGPS2 still loses strands
 ax = fig.add_subplot(gs[1, 1])
-cats = [("Coverage gap (min cov ≤1)", "#b9b8b3"), ("Ratio > r on true path", "#eda100"),
-        ("Search outcome (no CRC-valid / ambiguous)", "#6250d6")]
+cats = [("Coverage gap (min cov ≤1)", "#b9b8b3"), ("Ratio > r on true path", "#eda100")]
 for i, s in enumerate(fs.SAMPLES):
     o, hdr = outc[s]
     o2 = outcome_col(s, 1, R_DEF)
@@ -121,7 +119,8 @@ for i, s in enumerate(fs.SAMPLES):
     rat = lost & ~gap & (st.r_needed.values > R_DEF)
     oth = lost & ~gap & ~rat
     bottom = 0
-    for (lab, col), m in zip(cats, (gap, rat, oth)):
+    assert oth.sum() == 0  # every lost strand has a coverage gap or a steeper-than-r true transition
+    for (lab, col), m in zip(cats, (gap, rat)):
         v = m.sum() / N * 100
         ax.bar(i, v, 0.7, bottom=bottom, color=col, edgecolor="white", lw=0.3, label=lab if i == 0 else None)
         bottom += v
@@ -139,8 +138,9 @@ for s in fs.SAMPLES:
     ax.plot(v, np.arange(1, len(v) + 1) / N * 100, color=fs.COLOR[s], lw=1, label=fs.LABEL[s])
 for rv in (1.5, 2.55):
     ax.axvline(rv, color=fs.DBGPS2_C, lw=0.6, ls="--" if rv == 1.5 else "-")
-ax.text(2.6, 4, "r = 2.55", fontsize=5, color=fs.INK2)
-ax.text(1.53, 4, "1.5", fontsize=5, color=fs.INK2)
+ax.set_ylim(0, 108)
+ax.text(2.65, 102, "r = 2.55", fontsize=5, color=fs.INK2, va="center")
+ax.text(1.45, 102, "1.5", fontsize=5, color=fs.INK2, va="center", ha="right")
 ax.set_xscale("log"); ax.set_xlim(1, 20)
 ax.set_xticks([1, 2, 5, 10, 20], ["1", "2", "5", "10", "20"])
 ax.set_xlabel("Smallest r admitting the true path, r$_{needed}$")

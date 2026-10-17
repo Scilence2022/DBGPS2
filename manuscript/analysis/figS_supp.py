@@ -57,7 +57,6 @@ for s in fs.SAMPLES:
                  "True 31-mers absent (%)": int(meta["ref_kmers_absent"]) / int(meta["ref_kmers_total"]) * 100,
                  "Median strand coverage": st.median_cov.median(),
                  "Median minimum path coverage": st.min_cov.median(),
-                 "Counting time (s)": float(inf["count_seconds"]),
                  "Peak memory (GB)": float(inf["peak_rss_mb_final"]) / 1024})
 t1 = pd.DataFrame(rows)
 t1.to_csv(os.path.join(fs.DATADIR, "SupplementaryTable1_samples.csv"), index=False)

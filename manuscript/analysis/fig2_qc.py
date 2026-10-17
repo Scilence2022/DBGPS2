@@ -88,8 +88,8 @@ ax.set_xticks(x, labels, rotation=0)
 ax.set_ylabel("Reads (%)")
 ax.set_ylim(0, 112)
 from matplotlib.patches import Patch
-ax.legend(handles=[Patch(facecolor="#9a9a9a", label="Adapter read-through (insert <150 nt)"),
-                   Patch(facecolor="#9a9a9a", alpha=0.55, hatch="////", label="Unmapped")],
+ax.legend(handles=[Patch(facecolor="#9a9a9a", label="Adapter read-through (fragment <150 nt)"),
+                   Patch(facecolor="#9a9a9a", alpha=0.55, hatch="////", label="Reads not aligned")],
           loc="upper left", bbox_to_anchor=(0, 1.13))
 fs.panel(ax, "b")
 
@@ -101,7 +101,7 @@ for k, (m, lab) in mk.items():
     ax.scatter(x, qc[k] * 1e3, c=cols, marker=m, s=14, edgecolor="white", linewidth=0.4, zorder=2, label=lab)
 ax.set_xticks(x, labels)
 ax.set_ylabel("Errors per 1,000 aligned bases")
-leg = ax.legend(loc="upper left", markerscale=1)
+leg = ax.legend(loc="center right", markerscale=1, bbox_to_anchor=(1.0, 0.62))
 for hnd in leg.legend_handles:
     hnd.set_facecolor("#9a9a9a")
 fs.panel(ax, "c")
@@ -136,6 +136,9 @@ ax.axvspan(0, 18, color=fs.GRID, lw=0); ax.axvspan(182, 200, color=fs.GRID, lw=0
 ax.text(9, 0.04, "P1", ha="center", fontsize=5.5, color=fs.INK2)
 ax.text(191, 0.04, "P2", ha="center", fontsize=5.5, color=fs.INK2)
 ax.set_xlim(0, 200); ax.set_ylim(0, 1.05)
+ax.text(100, 1.03, "both mates", ha="center", va="bottom", fontsize=5, color=fs.INK2)
+ax.text(25, 0.44, "one mate", ha="center", va="top", fontsize=5, color=fs.INK2)
+ax.text(175, 0.44, "one mate", ha="center", va="top", fontsize=5, color=fs.INK2)
 ax.set_xlabel("Position along 200-nt strand")
 ax.set_ylabel("Relative read depth")
 fs.panel(ax, "e")

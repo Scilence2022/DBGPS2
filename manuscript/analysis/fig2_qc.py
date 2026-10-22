@@ -12,7 +12,7 @@ QC = os.path.join(fs.RESULTS, "qc")
 TYPES = ["C>T", "G>A", "A>G", "T>C", "C>A", "G>T", "A>C", "T>G", "C>G", "G>C", "A>T", "T>A"]
 
 rows, subs, pos, ins_len, per_strand, edit = [], {}, {}, {}, {}, {}
-for s in fs.SAMPLES:
+for s in fs.ALL:
     js = [json.load(open(f"{QC}/{s}_{r}.json")) for r in (1, 2)]
     agg = {k: sum(j[k] for j in js) for k in ("reads", "mapped", "aligned_bases", "mismatches",
                                                "ins_bases", "del_bases")}
@@ -52,6 +52,7 @@ for s in fs.SAMPLES:
 qc = pd.DataFrame(rows)
 qc.to_csv(os.path.join(fs.DATADIR, "qc_summary.csv"), index=False)
 print(qc.round(5).to_string())
+qc = qc.iloc[:len(fs.SAMPLES)]   # HT176 is in the table only; the figure shows the HT1-HT5 series
 
 fig = plt.figure(figsize=(fs.DOUBLE, 112 * fs.MM))
 gs = fig.add_gridspec(2, 3, hspace=0.62, wspace=0.42, left=0.07, right=0.985, top=0.95, bottom=0.09)

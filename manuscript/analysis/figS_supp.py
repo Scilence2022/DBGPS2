@@ -13,17 +13,18 @@ N = 210000
 cmap = LinearSegmentedColormap.from_list("blu", ["#f5f9fe", "#9ec5f4", "#3987e5", "#184f95", "#0d366b"])
 
 # ---- Supplementary Fig. 1: recovery landscapes (r x c), all samples, k = 31 ----
-fig, axs = plt.subplots(2, 3, figsize=(fs.DOUBLE, 105 * fs.MM), sharex=True, sharey=True)
-fig.subplots_adjust(left=0.1, right=0.9, top=0.94, bottom=0.12, wspace=0.08, hspace=0.25)
-for ax, s in zip(axs.flat, fs.SAMPLES):
+fig, axs = plt.subplots(2, 4, figsize=(fs.DOUBLE, 92 * fs.MM), sharex=True, sharey=True)
+fig.subplots_adjust(left=0.075, right=0.915, top=0.94, bottom=0.14, wspace=0.08, hspace=0.3)
+axs.flat[-1].axis("off")
+for ax, s in zip(axs.flat, fs.ALL):
     g = pd.read_csv(f"{FULL}/{s}.grid.tsv", sep="\t")
     rs = sorted(g.r.unique(), key=lambda v: (v == 0, v)); cs = sorted(g.c.unique())
     mat = np.array([[g[(g.r == r) & (g.c == c)].correct.iloc[0] / N * 100 for c in cs] for r in rs])
     im = ax.imshow(mat, aspect="auto", cmap=cmap, vmin=0, vmax=100, origin="lower")
     for i in range(mat.shape[0]):
         for j in range(mat.shape[1]):
-            if j % 2 == 0:
-                ax.text(j, i, f"{mat[i, j]:.0f}", ha="center", va="center", fontsize=3.8,
+            if j % 3 == 0:
+                ax.text(j, i, f"{mat[i, j]:.0f}", ha="center", va="center", fontsize=3.2,
                         color="white" if mat[i, j] > 55 else fs.INK)
     ax.set_title(fs.LABEL[s], fontsize=6.3, pad=2)
     ax.set_xticks(range(len(cs)), [str(c) for c in cs], rotation=90, fontsize=5)
@@ -33,16 +34,16 @@ for ax in axs[1]:
     ax.set_xlabel("Coverage cutoff c")
 for ax in axs[:, 0]:
     ax.set_ylabel("Ratio bound r")
-cax = fig.add_axes([0.92, 0.25, 0.012, 0.5])
+cax = fig.add_axes([0.93, 0.25, 0.01, 0.5])
 cb = fig.colorbar(im, cax=cax); cb.set_label("Strands recovered (%)", fontsize=6)
 cb.ax.tick_params(labelsize=5.5, length=1.5); cb.outline.set_linewidth(0.4)
 fs.save(fig, "FigS1_landscapes")
 
 # ---- Supplementary Table 1: per-sample summary ----
 qc = pd.read_csv(os.path.join(fs.DATADIR, "qc_summary.csv"))
-reads = {"HT_con": 61656962, "HT1": 57505049, "HT2": 58970885, "HT3": 66224448, "HT4": 78239619, "HT5": 58635539}
+reads = {"HT176": 60642860, "HT_con": 61656962, "HT1": 57505049, "HT2": 58970885, "HT3": 66224448, "HT4": 78239619, "HT5": 58635539}
 rows = []
-for s in fs.SAMPLES:
+for s in fs.ALL:
     inf = dict(l.rstrip("\n").split("\t") for l in open(f"{FULL}/{s}.info.tsv") if "\t" in l)
     head = open(f"{FULL}/{s}.spectrum.tsv").readline()
     meta = dict(x.split("=") for x in head[2:].split())
@@ -64,7 +65,7 @@ print(t1.round(2).T.to_string())
 
 # ---- Supplementary Table 2: decoding fidelity over the full grid ----
 rows = []
-for s in fs.SAMPLES:
+for s in fs.ALL:
     g = pd.read_csv(f"{FULL}/{s}.grid.tsv", sep="\t")
     for lab, d in (("DBGPS (r → ∞)", g[g.r == 0]), ("DBGPS2 (r = 1.5–6)", g[g.r > 0]),
                    ("DBGPS2 (r = 2.55)", g[g.r == 2.55])):

@@ -37,7 +37,7 @@ def info_for(s, k):
 
 KLIST = [17, 19, 21, 23, 25, 27, 31]
 rows = []
-for s in fs.SAMPLES:
+for s in fs.ALL:
     for k in KLIST:
         g = grid_for(s, k)
         if g is None:
@@ -108,7 +108,7 @@ for f in glob.glob(f"{DEP}/*_p*.grid.tsv"):
     for r in (0, R_DEF, 3):
         d = g[g.r == r]
         dep.append(dict(sample=s, k=int(kk[1:]), pct=int(pp[1:]), r=r, best=d.correct.max()))
-for s in fs.SAMPLES:  # 100% from the full-depth runs
+for s in fs.ALL:  # 100% from the full-depth runs
     for k in (31, 21):
         g = grid_for(s, k)
         if g is None:

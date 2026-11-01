@@ -11,7 +11,8 @@ scripts still point to the original working directories.
 | `benchmarks/resource_control` | serial and three-primary-worker adapters, CPU records | same |
 | `simulations/reconstruction_boundary` | exploratory simulations | `657c8ee:output/exploration/2026-10-20` |
 | `simulations/boundary_deep_validation` | locked validation, bounds and policy results | same |
-| `photolithographic` | adapters, decoding reports, File 1-3 evidence | `9eef8d1c:output/antkowiak2020_reports` |
+| `photolithographic` | decoding reports and File 1-3 evidence | `9eef8d1c:output/antkowiak2020_reports` |
+| `photolithographic/code` | adapters, download and decoding scripts | `9eef8d1c:benchmarks/antkowiak2020` |
 | `organick` | adapter, validation, optimisation evidence | `4a7c7f2a:experiments/nbt4079/deliverables/2026-10-18/build/DBGPS2_nbt4079_code` |
 
 Short commit ids refer to `657c8ee` and to `refs/codex/snapshots/9eef8d1c65383b026ce6c2e8617545fd8d9e89bd`

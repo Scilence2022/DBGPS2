@@ -154,8 +154,9 @@ save(fig,3,'degraded_recovery')
 
 # Figure 4 separates strand yield, the per-block outer-code requirement and the weak block of File 3.
 d=js(EXT/'figure_data.json');photo_bench=csv(BENCH/'reconstruction_speed/Table5_reconstruction_speed.csv')
-blk=csv(DATA/'photolith_file3_blocks.csv');NEED=10977;PALE='#7BB6DF'
-fig,ax=grid()
+blk=csv(DATA/'photolith_file3_blocks.csv');pos=csv(DATA/'photolith_file3_position.csv');NEED=10977;PALE='#7BB6DF'
+fig=plt.figure(figsize=(7.2,6.25));gs=fig.add_gridspec(3,6,left=.085,right=.985,top=.95,bottom=.085,hspace=.85,wspace=1.75)
+ax=[fig.add_subplot(g) for g in (gs[0,:3],gs[0,3:],gs[1,:3],gs[1,3:],gs[2,:2],gs[2,2:4],gs[2,4:])]
 correct=np.array([z['correct']/z['designed']*100 for z in d['photolithographic']]);wrong=np.array([z['wrong']/z['designed']*100 for z in d['photolithographic']]);xx=np.arange(3)
 ax[0].bar(xx,correct,.58,color=BLUE,label='Exact');ax[0].bar(xx,wrong,.58,bottom=correct,color=RED,label='Wrong');ax[0].bar(xx,100-correct-wrong,.58,bottom=correct+wrong,color=LIGHT,label='Missing')
 for i,z in enumerate(d['photolithographic']):ax[0].text(i,correct[i]/2,f'{correct[i]:.2f}%',ha='center',color='white',fontsize=7);ax[0].text(i,103,f"{z['wrong']} wrong",ha='center',fontsize=6)
@@ -170,12 +171,16 @@ ax[2].set(yticks=ys,yticklabels=['Code requires','Pooled output','Routed output'
 bx=blk.block.to_numpy();ax[3].bar(bx-.2,blk.pooled_correct,.38,color=PALE,label='Pooled');ax[3].bar(bx+.2,blk.routed_correct,.38,color=[BLUE]*11+[RED],label='Routed');ax[3].axhline(NEED,color=RED,ls='--',lw=.8,label='Required per block (10,977)')
 ax[3].text(12.2,NEED+450,'−1,004',ha='center',fontsize=5.8,color=RED)
 ax[3].set(xticks=bx,xlim=(.2,13),ylim=(0,21000),xlabel='File 3 outer-code block',ylabel='Exact strands');ax[3].yaxis.set_major_formatter(FuncFormatter(lambda x,p:f'{x/1000:.0f}k'));ax[3].legend(ncol=3,loc='upper center',fontsize=5.6,frameon=False,columnspacing=.9,handlelength=1.2);title(ax[3],'d','Redundancy cannot cross blocks')
-ax[4].bar(bx,blk.assigned_reads/1e6,.7,color=[GRAY]*11+[RED]);ax[4].set(xticks=bx,ylim=(0,5.4),xlabel='File 3 outer-code block',ylabel='Assigned reads (million)');title(ax[4],'e','Block 12 has abnormally few reads')
+ax[4].bar(bx,blk.assigned_reads/1e6,.7,color=[GRAY]*11+[RED]);ax[4].set(xticks=[1,4,8,12],ylim=(0,5.4),xlabel='File 3 block',ylabel='Assigned reads (million)');title(ax[4],'e','Few reads in block 12')
 ax[4].text(12,float(blk.assigned_reads.iloc[11])/1e6+.15,'1.68',ha='center',fontsize=6,color=RED)
+px=(pos.block-1+(pos.tenth-.5)/10).to_numpy();py=pos.percent.to_numpy();ax[5].axvspan(11,12,color=RED,alpha=.1,lw=0)
+for b in range(1,12):ax[5].axvline(b,color=LIGHT,lw=.4)
+ax[5].plot(px[:111],py[:111],color=BLUE,lw=.9);ax[5].plot(px[110:],py[110:],color=RED,lw=1.2)
+ax[5].set(xticks=[.5,3.5,7.5,11.5],xticklabels=['1','4','8','12'],xlim=(0,12),ylim=(0,100),xlabel='File 3 block, in index order',ylabel='Correct candidates (%)');title(ax[5],'f','Decline along the index')
 show=blk[blk.block.isin([1,6,11,12])];base=np.zeros(4);lab=[str(b) for b in show.block]
 for field,col,name in [('absent_kmer',GRAY,'True k-mer absent'),('singleton_only',LIGHT,'Singleton support'),('overflow',ORANGE,'Path overflow'),('ratio_rejected',BLUE,'Ratio rejected')]:
-    ax[5].bar(lab,show[field],.6,bottom=base,color=col,label=name);base+=show[field].to_numpy()
-ax[5].set(ylim=(0,13800),yticks=[0,5000,10000],xlabel='Blocks below the bound in the pooled output',ylabel='Indices lacking a candidate');ax[5].yaxis.set_major_formatter(FuncFormatter(lambda x,p:f'{x/1000:.0f}k'));ax[5].legend(ncol=2,loc='upper center',fontsize=5.6,frameon=False,columnspacing=.9,handlelength=1);title(ax[5],'f','Block 12 lacks sequence evidence')
+    ax[6].bar(lab,show[field],.6,bottom=base,color=col,label=name);base+=show[field].to_numpy()
+ax[6].set(ylim=(0,17500),yticks=[0,5000,10000],xlabel='Pooled blocks below bound',ylabel='Indices lacking a candidate');ax[6].yaxis.set_major_formatter(FuncFormatter(lambda x,p:f'{x/1000:.0f}k'));ax[6].legend(ncol=2,loc='upper center',fontsize=4.8,frameon=False,columnspacing=.6,handlelength=.9,handletextpad=.3);title(ax[6],'g','Block 12 lacks evidence')
 save(fig,4,'high_error_reconstruction')
 
 # Figure 5 reports exact DNA Fountain and Organick strands; file recovery is a separate endpoint.

@@ -2,9 +2,11 @@
 """Per-block table of photolithographic File 3 behind Fig. 4c-f.
 
 Joins read assignment, k-mer coverage, pooled and routed outputs, the 179-setting
-candidate union and the loss causes at the best pooled setting (k19/c1/r3.5).
+candidate union and the loss causes at the best pooled setting (k19/c1/r3.5), and
+summarises correct-candidate coverage per tenth of each block in design order.
 """
 import csv
+import gzip
 import json
 import os
 import re
@@ -41,3 +43,18 @@ with open(OUT, "w", newline="") as f:
                     c["all_kmers_zero"], *pooled[b], r["correct"], r["wrong"], r["erasures"], r["budget"], union[b],
                     l["failed_after_rs"], l["missing_kmer"], l["singleton_bottleneck"], l["rounded_ratio_rejected"], l["feasible_but_overflow"]])
 print("wrote", OUT)
+
+STRANDS = 16383
+per_index = os.path.join(EV, "evidence", "File3", "inner_rs", "parameter_union", "per_index.tsv.gz")
+counts = {}
+for r in csv.DictReader(gzip.open(per_index, "rt"), delimiter="\t"):
+    key = (int(r["block_1based"]), min(9, int(r["offset_0based"]) * 10 // STRANDS))
+    n, ok = counts.get(key, (0, 0))
+    counts[key] = (n + 1, ok + int(r["candidate_success"]))
+position = OUT.replace("_blocks.csv", "_position.csv")
+with open(position, "w", newline="") as f:
+    w = csv.writer(f)
+    w.writerow(["block", "tenth", "strands", "correct_candidates", "percent"])
+    for (b, d), (n, ok) in sorted(counts.items()):
+        w.writerow([b, d + 1, n, ok, round(100 * ok / n, 2)])
+print("wrote", position)

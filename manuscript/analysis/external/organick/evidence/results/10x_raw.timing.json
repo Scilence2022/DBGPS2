@@ -1,0 +1,15 @@
+{
+  "sample": "10x_raw",
+  "completed_configs": [
+    "c0_r2.55",
+    "c1_r2.55"
+  ],
+  "graph_cpu_seconds": 32.969306,
+  "search_cpu_seconds": {
+    "c0_r2.55": 46.945162,
+    "c1_r2.55": 31.6612
+  },
+  "optional_no_ratio_status": "Stopped after both primary configurations completed; incomplete outputs excluded from scoring. Path search without ratio was much slower.",
+  "wall_seconds": null,
+  "wall_time_note": "The original process continued into the optional diagnostic; no isolated wall time was recorded for just the completed configurations."
+}

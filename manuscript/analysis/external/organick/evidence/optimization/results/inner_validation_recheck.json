@@ -1,0 +1,10 @@
+{
+  "references_checked": 607150,
+  "valid": 607150,
+  "invalid": 0,
+  "rotation_cycle": "AGCT",
+  "six_bit_blocks": 27,
+  "terminal_trit": 0,
+  "unique_13_nt_headers": 607150,
+  "calibration": "rotation/phase fitted globally on 512 sampled designs; no per-target repair or lookup in validator"
+}

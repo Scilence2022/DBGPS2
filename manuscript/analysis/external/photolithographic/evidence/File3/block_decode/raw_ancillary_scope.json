@@ -1,0 +1,12 @@
+{
+  "reason": "Optional unfiltered raw controls narrowed after k18/c1/r2.55 required 700.778 search seconds and overflowed 196322/196596 indices; matched re-pooled versus separate assigned-read controls remain required and continue",
+  "stopped_pids": [
+    93320,
+    93823,
+    93808,
+    93807,
+    94597,
+    94596
+  ],
+  "incomplete_settings": "Not counted as zero; complete diagnostic files are retained as ancillary measured results"
+}

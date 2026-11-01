@@ -1,0 +1,12 @@
+{
+  "File2": {
+    "bytes": 320949,
+    "sha256": "4664730829f1a61003a18dd276db736bc13cc2de647bff012cdb1493895b0cd5",
+    "zip_error": null
+  },
+  "File3": {
+    "bytes": 1268026,
+    "sha256": "a7d53ade64bab3f60252e75b28e1741d85fdd7b5b393ffddc95fd141466d8cbb",
+    "zip_error": null
+  }
+}

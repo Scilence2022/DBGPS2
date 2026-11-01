@@ -1,0 +1,110 @@
+[
+  {
+    "format": "fountain",
+    "config": "none",
+    "exact": 100,
+    "expected": 100
+  },
+  {
+    "format": "fountain",
+    "config": "B8",
+    "exact": 100,
+    "expected": 100
+  },
+  {
+    "format": "fountain",
+    "config": "B16",
+    "exact": 100,
+    "expected": 100
+  },
+  {
+    "format": "fountain",
+    "config": "F32",
+    "exact": 100,
+    "expected": 100
+  },
+  {
+    "format": "fountain",
+    "config": "F34",
+    "exact": 100,
+    "expected": 100
+  },
+  {
+    "format": "fountain",
+    "config": "B12_F34",
+    "exact": 100,
+    "expected": 100
+  },
+  {
+    "format": "nbt",
+    "config": "none",
+    "exact": 100,
+    "expected": 100
+  },
+  {
+    "format": "nbt",
+    "config": "B8",
+    "exact": 100,
+    "expected": 100
+  },
+  {
+    "format": "nbt",
+    "config": "B16",
+    "exact": 100,
+    "expected": 100
+  },
+  {
+    "format": "nbt",
+    "config": "F32",
+    "exact": 100,
+    "expected": 100
+  },
+  {
+    "format": "nbt",
+    "config": "F34",
+    "exact": 100,
+    "expected": 100
+  },
+  {
+    "format": "nbt",
+    "config": "B12_F34",
+    "exact": 100,
+    "expected": 100
+  },
+  {
+    "format": "song",
+    "config": "none",
+    "exact": 100,
+    "expected": 100
+  },
+  {
+    "format": "song",
+    "config": "B8",
+    "exact": 100,
+    "expected": 100
+  },
+  {
+    "format": "song",
+    "config": "B16",
+    "exact": 100,
+    "expected": 100
+  },
+  {
+    "format": "song",
+    "config": "F32",
+    "exact": 100,
+    "expected": 100
+  },
+  {
+    "format": "song",
+    "config": "F34",
+    "exact": 100,
+    "expected": 100
+  },
+  {
+    "format": "song",
+    "config": "B12_F34",
+    "exact": 100,
+    "expected": 100
+  }
+]

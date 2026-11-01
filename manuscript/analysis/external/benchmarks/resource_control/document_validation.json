@@ -1,0 +1,12 @@
+{
+  "output": "/Users/song/.codex/worktrees/cab4/DBGPS2/output/docx/DBGPS2_manuscript_speed_comparison_serial_3workers.docx",
+  "source_sha256": "caaef177bcb3d1788393f921a40cc6b86cc43c2989989b995543c1ad8b10b52a",
+  "output_sha256": "0756cd06875b268aeaaf8ccbc733505feb6bf7f3702fd9eaf499332cce187d6e",
+  "figures": 13,
+  "tables": 7,
+  "new_measurements": 162,
+  "preserved_old_media_and_equations": true,
+  "rendered_pages": 50,
+  "visual_qa_complete": true,
+  "all_pages_verified_by_visual_inspection_or_pixel_identical_baseline": true
+}

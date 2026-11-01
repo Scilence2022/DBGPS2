@@ -1,0 +1,36 @@
+{
+  "all_passed": true,
+  "checked_utc": "2026-10-20T08:21:33.034517+00:00",
+  "figures": [
+    {
+      "name": "Fig14_effective_coverage_model",
+      "png_visually_inspected": true,
+      "issues": [],
+      "files": {
+        "png": "8725723b24a9b9bc86498777ea684adbbbe5c70a2a3368f8cfea5624bc9e0c69",
+        "pdf": "bfa23e988f9b70eed4d6241680654ce6b2b20e560596169c273e54d309c9e445",
+        "svg": "2c3df35c489dfb9864b82975353df2dcd5ea10ce1b893370e5ccde590f8a83a1"
+      }
+    },
+    {
+      "name": "Fig15_error_structure",
+      "png_visually_inspected": true,
+      "issues": [],
+      "files": {
+        "png": "880eed9d11168fa25340324a3a6ffc5316b420239870d4534903adde00f7d787",
+        "pdf": "886e8aaa29ef5e7e315f66fa4d07e0ca0c09457d8996bbe414390483b9293cfd",
+        "svg": "f95ca943cd2337edeff84693163528c9e1aa3861c2d5e0cb9f46d3ed3daf6037"
+      }
+    },
+    {
+      "name": "Fig16_blind_selection_scale",
+      "png_visually_inspected": true,
+      "issues": [],
+      "files": {
+        "png": "63682ab3e9f21bb74f88cefc5faa56887c7a49a6205f62003ebdddf9abbaadc5",
+        "pdf": "4e7cd6afb481c5882669ac0bc07a3164599272d29b4ed19a4d9f828ad9b30ded",
+        "svg": "7b2604e2258a3bedbbd08a3ddc20c95e1ddec12e444d91645012b8d40f4109ca"
+      }
+    }
+  ]
+}

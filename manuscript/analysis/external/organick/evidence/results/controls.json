@@ -1,0 +1,31 @@
+{
+  "c0_r2.55": {
+    "exact": 20,
+    "tested": 20,
+    "sequence_length": 110,
+    "input": "20 author reference sequences repeated three times as perfect reads; control only"
+  },
+  "c1_r2.55": {
+    "exact": 20,
+    "tested": 20,
+    "sequence_length": 110,
+    "input": "20 author reference sequences repeated three times as perfect reads; control only"
+  },
+  "c0_no_ratio": {
+    "exact": 20,
+    "tested": 20,
+    "sequence_length": 110,
+    "input": "20 author reference sequences repeated three times as perfect reads; control only"
+  },
+  "native_cli": {
+    "returned": 0,
+    "tested": 1,
+    "reason": "Hard-coded primer differs from the author data; see native_control.json and .log"
+  },
+  "noisy_control_c1_r2.55": {
+    "exact": 20,
+    "tested": 20,
+    "sequence_length": 110,
+    "input": "5 independently substituted reads per strand, one substitution each at distinct positions; no exact complete reference read supplied; control only"
+  }
+}

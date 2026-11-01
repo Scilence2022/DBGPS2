@@ -1,0 +1,20 @@
+{
+  "inputs": [
+    {
+      "dataset": "file1",
+      "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/processed/file1.fa.gz",
+      "bytes": 346709834,
+      "mtime_ns": 1792231060237902333,
+      "sha256": "87914a4096583d23ffdefbde1473b534020c9e97c88b90b57e34ac122994b82e"
+    },
+    {
+      "dataset": "file2",
+      "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/processed/file2.fa.gz",
+      "bytes": 812755514,
+      "mtime_ns": 1792231701485706310,
+      "sha256": "9c7a1473bd72cc5b4b5b34c2d46de0861a26c95430406f8eae09c7dc5dc520ae"
+    }
+  ],
+  "compiler": "Apple clang version 17.0.0 (clang-1700.4.4.1)\nTarget: arm64-apple-darwin25.4.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+  "muscle_source_sha256": "43c5966a82133bd7da5921e8142f2f592c2b5f53d802f0527a2801783af809ad"
+}

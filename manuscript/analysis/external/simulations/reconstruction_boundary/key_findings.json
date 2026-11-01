@@ -1,0 +1,22 @@
+{
+  "bias_example": {
+    "correct_pct": 80.46875,
+    "ceil_cov_pct": 91.92708333333333,
+    "ratio_losses_pct": 11.458333333333334
+  },
+  "bias_confirmation": {
+    "correct_pct": 81.57552083333333,
+    "ceil_cov_pct": 94.140625,
+    "ratio_losses_pct": 12.565104166666666
+  },
+  "regular_geometry": {
+    "correct_pct": 0.0,
+    "ceil_cov_pct": 0.0,
+    "mean_fragment_length": 22.32288855013191
+  },
+  "bernoulli_geometry": {
+    "correct_pct": 100.0,
+    "ceil_cov_pct": 100.0,
+    "mean_fragment_length": 22.311007238240467
+  }
+}

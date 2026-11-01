@@ -1,0 +1,178 @@
+[
+  {
+    "tag": "k29_c0_r1.900_s0",
+    "k": 29,
+    "cutoff": 0,
+    "ratio": 1.9,
+    "skip": 0,
+    "queries": 24373,
+    "raw_outputs": 8162,
+    "search_cpu_seconds": 0.625661,
+    "wall_seconds": 0.6259562920000121,
+    "output": "/Users/song/.codex/worktrees/bd05/DBGPS2/experiments/nbt4079/optimization/tmp/inner_screen.k29_c0_r1.900_s0.tsv",
+    "phase": "inner_screen",
+    "source_rows_after_nohp": 8162,
+    "F": {
+      "exact": 4721,
+      "wrong": 0,
+      "wrong_known_address": 0,
+      "unknown_address": 0,
+      "returned": 4721,
+      "conflict_addresses": 0,
+      "precision": 1.0,
+      "exact_rate": 0.0077756732273737954
+    },
+    "R": {
+      "exact": 3441,
+      "wrong": 0,
+      "wrong_known_address": 0,
+      "unknown_address": 0,
+      "returned": 3441,
+      "conflict_addresses": 0,
+      "precision": 1.0,
+      "exact_rate": 0.005667462735732521
+    },
+    "both": {
+      "exact": 8133,
+      "wrong": 0,
+      "wrong_known_address": 0,
+      "unknown_address": 0,
+      "returned": 8133,
+      "conflict_addresses": 0,
+      "precision": 1.0,
+      "exact_rate": 0.013395371819155068
+    }
+  },
+  {
+    "tag": "k29_c0_r1.950_s0",
+    "k": 29,
+    "cutoff": 0,
+    "ratio": 1.95,
+    "skip": 0,
+    "queries": 24373,
+    "raw_outputs": 8163,
+    "search_cpu_seconds": 0.665818,
+    "wall_seconds": 0.6754256659999953,
+    "output": "/Users/song/.codex/worktrees/bd05/DBGPS2/experiments/nbt4079/optimization/tmp/inner_screen.k29_c0_r1.950_s0.tsv",
+    "phase": "inner_screen",
+    "source_rows_after_nohp": 8163,
+    "F": {
+      "exact": 4721,
+      "wrong": 0,
+      "wrong_known_address": 0,
+      "unknown_address": 0,
+      "returned": 4721,
+      "conflict_addresses": 0,
+      "precision": 1.0,
+      "exact_rate": 0.0077756732273737954
+    },
+    "R": {
+      "exact": 3442,
+      "wrong": 0,
+      "wrong_known_address": 0,
+      "unknown_address": 0,
+      "returned": 3442,
+      "conflict_addresses": 0,
+      "precision": 1.0,
+      "exact_rate": 0.005669109775179116
+    },
+    "both": {
+      "exact": 8133,
+      "wrong": 0,
+      "wrong_known_address": 0,
+      "unknown_address": 0,
+      "returned": 8133,
+      "conflict_addresses": 0,
+      "precision": 1.0,
+      "exact_rate": 0.013395371819155068
+    }
+  },
+  {
+    "tag": "k29_c1_r1.900_s0",
+    "k": 29,
+    "cutoff": 1,
+    "ratio": 1.9,
+    "skip": 0,
+    "queries": 24373,
+    "raw_outputs": 8158,
+    "search_cpu_seconds": 0.389271,
+    "wall_seconds": 0.38968520800000306,
+    "output": "/Users/song/.codex/worktrees/bd05/DBGPS2/experiments/nbt4079/optimization/tmp/inner_screen.k29_c1_r1.900_s0.tsv",
+    "phase": "inner_screen",
+    "source_rows_after_nohp": 8158,
+    "F": {
+      "exact": 4720,
+      "wrong": 0,
+      "wrong_known_address": 0,
+      "unknown_address": 0,
+      "returned": 4720,
+      "conflict_addresses": 0,
+      "precision": 1.0,
+      "exact_rate": 0.0077740261879272006
+    },
+    "R": {
+      "exact": 3438,
+      "wrong": 0,
+      "wrong_known_address": 0,
+      "unknown_address": 0,
+      "returned": 3438,
+      "conflict_addresses": 0,
+      "precision": 1.0,
+      "exact_rate": 0.005662521617392737
+    },
+    "both": {
+      "exact": 8129,
+      "wrong": 0,
+      "wrong_known_address": 0,
+      "unknown_address": 0,
+      "returned": 8129,
+      "conflict_addresses": 0,
+      "precision": 1.0,
+      "exact_rate": 0.01338878366136869
+    }
+  },
+  {
+    "tag": "k31_c0_r2.000_s0",
+    "k": 31,
+    "cutoff": 0,
+    "ratio": 2.0,
+    "skip": 0,
+    "queries": 24373,
+    "raw_outputs": 8142,
+    "search_cpu_seconds": 0.85962,
+    "wall_seconds": 0.8617931249999913,
+    "output": "/Users/song/.codex/worktrees/bd05/DBGPS2/experiments/nbt4079/optimization/tmp/inner_screen.k31_c0_r2.000_s0.tsv",
+    "phase": "inner_screen",
+    "source_rows_after_nohp": 8142,
+    "F": {
+      "exact": 4726,
+      "wrong": 1,
+      "wrong_known_address": 1,
+      "unknown_address": 0,
+      "returned": 4727,
+      "conflict_addresses": 0,
+      "precision": 0.9997884493336154,
+      "exact_rate": 0.007783908424606769
+    },
+    "R": {
+      "exact": 3414,
+      "wrong": 1,
+      "wrong_known_address": 1,
+      "unknown_address": 0,
+      "returned": 3415,
+      "conflict_addresses": 0,
+      "precision": 0.9997071742313324,
+      "exact_rate": 0.005622992670674462
+    },
+    "both": {
+      "exact": 8110,
+      "wrong": 2,
+      "wrong_known_address": 2,
+      "unknown_address": 0,
+      "returned": 8112,
+      "conflict_addresses": 0,
+      "precision": 0.9997534516765286,
+      "exact_rate": 0.01335748991188339
+    }
+  }
+]

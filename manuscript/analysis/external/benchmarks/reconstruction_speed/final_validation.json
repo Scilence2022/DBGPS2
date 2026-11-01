@@ -1,0 +1,21 @@
+{
+  "pages": 38,
+  "figures": 9,
+  "tables": 5,
+  "references": 32,
+  "abstract_unchanged": true,
+  "all_original_equations_preserved": true,
+  "unchanged_original_paragraphs_preserved": 190,
+  "intentionally_updated_original_paragraphs": [
+    11,
+    48,
+    102,
+    130,
+    132,
+    139
+  ],
+  "unchanged_original_zip_parts": true,
+  "all_original_media_preserved": true,
+  "rendered_pages_visually_reviewed": true,
+  "final_docx_sha256": "b3125b15c82b5d71de247050ade1d489ad3922766102fdf72c066c43a4c5c081"
+}

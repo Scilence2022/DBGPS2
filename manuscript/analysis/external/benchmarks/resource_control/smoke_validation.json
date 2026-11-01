@@ -1,0 +1,308 @@
+[
+  {
+    "format": "fountain",
+    "workers": 1,
+    "method": "none",
+    "exact": 100
+  },
+  {
+    "format": "fountain",
+    "workers": 1,
+    "method": "B8",
+    "exact": 100
+  },
+  {
+    "format": "fountain",
+    "workers": 1,
+    "method": "B16",
+    "exact": 100
+  },
+  {
+    "format": "fountain",
+    "workers": 1,
+    "method": "F32",
+    "exact": 100
+  },
+  {
+    "format": "fountain",
+    "workers": 1,
+    "method": "F34",
+    "exact": 100
+  },
+  {
+    "format": "fountain",
+    "workers": 1,
+    "method": "B12_F34",
+    "exact": 100
+  },
+  {
+    "format": "fountain",
+    "workers": 1,
+    "method": "msa",
+    "exact": 100,
+    "cpu_seconds": 0.332823
+  },
+  {
+    "format": "nbt",
+    "workers": 1,
+    "method": "none",
+    "exact": 100
+  },
+  {
+    "format": "nbt",
+    "workers": 1,
+    "method": "B8",
+    "exact": 100
+  },
+  {
+    "format": "nbt",
+    "workers": 1,
+    "method": "B16",
+    "exact": 100
+  },
+  {
+    "format": "nbt",
+    "workers": 1,
+    "method": "F32",
+    "exact": 100
+  },
+  {
+    "format": "nbt",
+    "workers": 1,
+    "method": "F34",
+    "exact": 100
+  },
+  {
+    "format": "nbt",
+    "workers": 1,
+    "method": "B12_F34",
+    "exact": 100
+  },
+  {
+    "format": "nbt",
+    "workers": 1,
+    "method": "msa",
+    "exact": 100,
+    "cpu_seconds": 0.24235500000000001
+  },
+  {
+    "format": "song",
+    "workers": 1,
+    "method": "none",
+    "exact": 100
+  },
+  {
+    "format": "song",
+    "workers": 1,
+    "method": "B8",
+    "exact": 100
+  },
+  {
+    "format": "song",
+    "workers": 1,
+    "method": "B16",
+    "exact": 100
+  },
+  {
+    "format": "song",
+    "workers": 1,
+    "method": "F32",
+    "exact": 100
+  },
+  {
+    "format": "song",
+    "workers": 1,
+    "method": "F34",
+    "exact": 100
+  },
+  {
+    "format": "song",
+    "workers": 1,
+    "method": "B12_F34",
+    "exact": 100
+  },
+  {
+    "format": "song",
+    "workers": 1,
+    "method": "msa",
+    "exact": 100,
+    "cpu_seconds": 0.32983999999999997
+  },
+  {
+    "format": "fountain",
+    "workers": 3,
+    "method": "none",
+    "exact": 100
+  },
+  {
+    "format": "fountain",
+    "workers": 3,
+    "method": "B8",
+    "exact": 100
+  },
+  {
+    "format": "fountain",
+    "workers": 3,
+    "method": "B16",
+    "exact": 100
+  },
+  {
+    "format": "fountain",
+    "workers": 3,
+    "method": "F32",
+    "exact": 100
+  },
+  {
+    "format": "fountain",
+    "workers": 3,
+    "method": "F34",
+    "exact": 100
+  },
+  {
+    "format": "fountain",
+    "workers": 3,
+    "method": "B12_F34",
+    "exact": 100
+  },
+  {
+    "format": "fountain",
+    "workers": 3,
+    "method": "msa",
+    "exact": 100,
+    "cpu_seconds": 0.39707899999999996
+  },
+  {
+    "format": "nbt",
+    "workers": 3,
+    "method": "none",
+    "exact": 100
+  },
+  {
+    "format": "nbt",
+    "workers": 3,
+    "method": "B8",
+    "exact": 100
+  },
+  {
+    "format": "nbt",
+    "workers": 3,
+    "method": "B16",
+    "exact": 100
+  },
+  {
+    "format": "nbt",
+    "workers": 3,
+    "method": "F32",
+    "exact": 100
+  },
+  {
+    "format": "nbt",
+    "workers": 3,
+    "method": "F34",
+    "exact": 100
+  },
+  {
+    "format": "nbt",
+    "workers": 3,
+    "method": "B12_F34",
+    "exact": 100
+  },
+  {
+    "format": "nbt",
+    "workers": 3,
+    "method": "msa",
+    "exact": 100,
+    "cpu_seconds": 0.323059
+  },
+  {
+    "format": "song",
+    "workers": 3,
+    "method": "none",
+    "exact": 100
+  },
+  {
+    "format": "song",
+    "workers": 3,
+    "method": "B8",
+    "exact": 100
+  },
+  {
+    "format": "song",
+    "workers": 3,
+    "method": "B16",
+    "exact": 100
+  },
+  {
+    "format": "song",
+    "workers": 3,
+    "method": "F32",
+    "exact": 100
+  },
+  {
+    "format": "song",
+    "workers": 3,
+    "method": "F34",
+    "exact": 100
+  },
+  {
+    "format": "song",
+    "workers": 3,
+    "method": "B12_F34",
+    "exact": 100
+  },
+  {
+    "format": "song",
+    "workers": 3,
+    "method": "msa",
+    "exact": 100,
+    "cpu_seconds": 0.42247
+  },
+  {
+    "format": "fountain",
+    "workers": 1,
+    "method": "base_graph",
+    "exact": 100
+  },
+  {
+    "format": "nbt",
+    "workers": 1,
+    "method": "base_graph",
+    "exact": 100
+  },
+  {
+    "format": "song",
+    "workers": 1,
+    "method": "base_graph",
+    "exact": 100
+  },
+  {
+    "format": "fragmented_song",
+    "workers": 1,
+    "method": "msa",
+    "exact": 100
+  },
+  {
+    "format": "fountain",
+    "workers": 3,
+    "method": "base_graph",
+    "exact": 100
+  },
+  {
+    "format": "nbt",
+    "workers": 3,
+    "method": "base_graph",
+    "exact": 100
+  },
+  {
+    "format": "song",
+    "workers": 3,
+    "method": "base_graph",
+    "exact": 100
+  },
+  {
+    "format": "fragmented_song",
+    "workers": 3,
+    "method": "msa",
+    "exact": 100
+  }
+]

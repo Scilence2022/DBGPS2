@@ -1,0 +1,716 @@
+{
+  "name": "oracle_union_plus_318",
+  "folder": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file3_supplement_simulation/oracle_union_plus_318",
+  "interpretation": "Truth-select the 10659 indices with an exact candidate under at least one of 353 parameters, then inject correct design strands at 318 missing indices.",
+  "simulated": true,
+  "before": {
+    "block": 12,
+    "emitted": 10659,
+    "correct": 10659,
+    "wrong": 0,
+    "erasures": 5724,
+    "lane_errors": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "lane_budgets": [
+      5724,
+      5724,
+      5724,
+      5724,
+      5724,
+      5724
+    ],
+    "max_lane_budget": 5724,
+    "within_rs_bound": false
+  },
+  "injected_correct": 318,
+  "injection_rule": "Ascending missing numeric index; never replace an existing strand.",
+  "injected_indices": [
+    180221,
+    180246,
+    180259,
+    180262,
+    180269,
+    180279,
+    180287,
+    180312,
+    180406,
+    180417,
+    180422,
+    180438,
+    180454,
+    180461,
+    180472,
+    180474,
+    180477,
+    180478,
+    180480,
+    180481,
+    180482,
+    180483,
+    180484,
+    180485,
+    180486,
+    180487,
+    180489,
+    180490,
+    180491,
+    180492,
+    180493,
+    180494,
+    180495,
+    180496,
+    180497,
+    180498,
+    180499,
+    180500,
+    180501,
+    180502,
+    180503,
+    180505,
+    180508,
+    180514,
+    180515,
+    180517,
+    180518,
+    180525,
+    180528,
+    180530,
+    180538,
+    180542,
+    180547,
+    180549,
+    180550,
+    180551,
+    180564,
+    180567,
+    180574,
+    180580,
+    180582,
+    180583,
+    180584,
+    180592,
+    180605,
+    180618,
+    180645,
+    180655,
+    180694,
+    180695,
+    180762,
+    180768,
+    180787,
+    180844,
+    180851,
+    180852,
+    180854,
+    180855,
+    180857,
+    180858,
+    180859,
+    180862,
+    180863,
+    180864,
+    180865,
+    180866,
+    180867,
+    180868,
+    180869,
+    180870,
+    180871,
+    180872,
+    180873,
+    180874,
+    180875,
+    180876,
+    180877,
+    180878,
+    180879,
+    180880,
+    180881,
+    180882,
+    180883,
+    180884,
+    180885,
+    180886,
+    180887,
+    180888,
+    180892,
+    180899,
+    180900,
+    180903,
+    180910,
+    180911,
+    180914,
+    180921,
+    180931,
+    180939,
+    180942,
+    180945,
+    180951,
+    180954,
+    180958,
+    180974,
+    180983,
+    181033,
+    181066,
+    181181,
+    181189,
+    181204,
+    181238,
+    181239,
+    181240,
+    181242,
+    181244,
+    181246,
+    181247,
+    181248,
+    181249,
+    181250,
+    181251,
+    181252,
+    181253,
+    181254,
+    181255,
+    181256,
+    181257,
+    181258,
+    181259,
+    181260,
+    181261,
+    181262,
+    181263,
+    181264,
+    181265,
+    181266,
+    181267,
+    181268,
+    181269,
+    181270,
+    181271,
+    181272,
+    181273,
+    181276,
+    181277,
+    181280,
+    181281,
+    181282,
+    181284,
+    181285,
+    181287,
+    181297,
+    181298,
+    181302,
+    181306,
+    181322,
+    181328,
+    181329,
+    181331,
+    181338,
+    181343,
+    181352,
+    181354,
+    181360,
+    181364,
+    181369,
+    181374,
+    181385,
+    181390,
+    181401,
+    181426,
+    181496,
+    181498,
+    181506,
+    181536,
+    181553,
+    181569,
+    181571,
+    181588,
+    181600,
+    181612,
+    181616,
+    181619,
+    181620,
+    181621,
+    181622,
+    181623,
+    181625,
+    181626,
+    181628,
+    181629,
+    181630,
+    181632,
+    181633,
+    181634,
+    181635,
+    181636,
+    181637,
+    181638,
+    181639,
+    181640,
+    181641,
+    181642,
+    181643,
+    181644,
+    181645,
+    181646,
+    181647,
+    181648,
+    181649,
+    181650,
+    181651,
+    181652,
+    181653,
+    181654,
+    181655,
+    181656,
+    181658,
+    181661,
+    181662,
+    181665,
+    181666,
+    181669,
+    181670,
+    181674,
+    181679,
+    181680,
+    181682,
+    181686,
+    181690,
+    181698,
+    181703,
+    181710,
+    181718,
+    181724,
+    181737,
+    181742,
+    181743,
+    181747,
+    181752,
+    181760,
+    181775,
+    181801,
+    181802,
+    181810,
+    181818,
+    181837,
+    181838,
+    181862,
+    181864,
+    181875,
+    181941,
+    181945,
+    181969,
+    181973,
+    181983,
+    182003,
+    182006,
+    182010,
+    182011,
+    182012,
+    182013,
+    182014,
+    182015,
+    182016,
+    182017,
+    182018,
+    182019,
+    182020,
+    182021,
+    182022,
+    182023,
+    182024,
+    182025,
+    182026,
+    182027,
+    182028,
+    182029,
+    182030,
+    182031,
+    182032,
+    182034,
+    182035,
+    182036,
+    182037,
+    182038,
+    182039,
+    182040,
+    182046,
+    182048,
+    182049,
+    182050,
+    182051,
+    182060,
+    182062,
+    182063,
+    182067,
+    182075
+  ],
+  "after": {
+    "block": 12,
+    "emitted": 10977,
+    "correct": 10977,
+    "wrong": 0,
+    "erasures": 5406,
+    "lane_errors": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "lane_budgets": [
+      5406,
+      5406,
+      5406,
+      5406,
+      5406,
+      5406
+    ],
+    "max_lane_budget": 5406,
+    "within_rs_bound": true
+  },
+  "one_fewer_would_have": {
+    "block": 12,
+    "emitted": 10976,
+    "correct": 10976,
+    "wrong": 0,
+    "erasures": 5407,
+    "lane_errors": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "lane_budgets": [
+      5407,
+      5407,
+      5407,
+      5407,
+      5407,
+      5407
+    ],
+    "max_lane_budget": 5407,
+    "within_rs_bound": false
+  },
+  "combined_input": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file3_supplement_simulation/oracle_union_plus_318/all12blocks.strands",
+  "combined_input_sha256": "bb6a82aab5eef1a585166b2a8e0271a9b0c886cff1c0ecdbf43cfc8b15d25a67",
+  "initial_wrong_strands_preserved": true,
+  "first_11_blocks_unchanged": true,
+  "decode": {
+    "command": [
+      "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/bin/rs_driver_fast",
+      "decode",
+      "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file3_supplement_simulation/oracle_union_plus_318/all12blocks.strands",
+      "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file3_supplement_simulation/oracle_union_plus_318/simulated_recovered.zip",
+      "12"
+    ],
+    "exit_code": 0,
+    "seconds": 13.221354250000001,
+    "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file3_supplement_simulation/oracle_union_plus_318/simulated_recovered.zip",
+    "simulated": true,
+    "bytes": 1268026,
+    "sha256": "a7d53ade64bab3f60252e75b28e1741d85fdd7b5b393ffddc95fd141466d8cbb",
+    "byte_identical_to_reference": true,
+    "zip_crc_error": null,
+    "zip_entries": [
+      {
+        "name": "File3/",
+        "bytes": 0,
+        "crc32": "00000000"
+      },
+      {
+        "name": "File3/.DS_Store",
+        "bytes": 6148,
+        "crc32": "af2fbb72"
+      },
+      {
+        "name": "__MACOSX/",
+        "bytes": 0,
+        "crc32": "00000000"
+      },
+      {
+        "name": "__MACOSX/File3/",
+        "bytes": 0,
+        "crc32": "00000000"
+      },
+      {
+        "name": "__MACOSX/File3/._.DS_Store",
+        "bytes": 120,
+        "crc32": "38c0880b"
+      },
+      {
+        "name": "File3/LVB_OP59_NO1/",
+        "bytes": 0,
+        "crc32": "00000000"
+      },
+      {
+        "name": "File3/LVB_OP59_NO1/LVB_Op59_no1_3.xml",
+        "bytes": 1476843,
+        "crc32": "decf3023"
+      },
+      {
+        "name": "__MACOSX/File3/LVB_OP59_NO1/",
+        "bytes": 0,
+        "crc32": "00000000"
+      },
+      {
+        "name": "__MACOSX/File3/LVB_OP59_NO1/._LVB_Op59_no1_3.xml",
+        "bytes": 732,
+        "crc32": "3f2bc89c"
+      },
+      {
+        "name": "File3/LVB_OP59_NO1/LVB_Op59_no1_2.xml",
+        "bytes": 2333528,
+        "crc32": "70e3aeab"
+      },
+      {
+        "name": "__MACOSX/File3/LVB_OP59_NO1/._LVB_Op59_no1_2.xml",
+        "bytes": 732,
+        "crc32": "4bb75d27"
+      },
+      {
+        "name": "File3/LVB_OP59_NO1/LVB_Op59_no1_1.xml",
+        "bytes": 1972028,
+        "crc32": "b8f19b66"
+      },
+      {
+        "name": "__MACOSX/File3/LVB_OP59_NO1/._LVB_Op59_no1_1.xml",
+        "bytes": 732,
+        "crc32": "f862693a"
+      },
+      {
+        "name": "File3/LVB_OP59_NO1/LVB_Op59_no1_4.xml",
+        "bytes": 2177352,
+        "crc32": "765f85ab"
+      },
+      {
+        "name": "__MACOSX/File3/LVB_OP59_NO1/._LVB_Op59_no1_4.xml",
+        "bytes": 732,
+        "crc32": "0c2743a1"
+      },
+      {
+        "name": "__MACOSX/File3/._LVB_OP59_NO1",
+        "bytes": 329,
+        "crc32": "54471985"
+      },
+      {
+        "name": "File3/LVB_OP18_NO3.xml",
+        "bytes": 7333748,
+        "crc32": "83f62ce5"
+      },
+      {
+        "name": "__MACOSX/File3/._LVB_OP18_NO3.xml",
+        "bytes": 650,
+        "crc32": "ce2b5f32"
+      },
+      {
+        "name": "File3/LVB_OP18_No5.xml",
+        "bytes": 6280980,
+        "crc32": "a3e885f0"
+      },
+      {
+        "name": "__MACOSX/File3/._LVB_OP18_No5.xml",
+        "bytes": 740,
+        "crc32": "d4a43e4d"
+      },
+      {
+        "name": "File3/LVB_OP18_NO4.xml",
+        "bytes": 6625842,
+        "crc32": "6275de76"
+      },
+      {
+        "name": "__MACOSX/File3/._LVB_OP18_NO4.xml",
+        "bytes": 740,
+        "crc32": "f2855dfa"
+      },
+      {
+        "name": "File3/LVB_OP18_NO6.xml",
+        "bytes": 6090628,
+        "crc32": "f85fbf04"
+      },
+      {
+        "name": "__MACOSX/File3/._LVB_OP18_NO6.xml",
+        "bytes": 735,
+        "crc32": "df8ca74a"
+      },
+      {
+        "name": "File3/LVB_OP59_NO2/",
+        "bytes": 0,
+        "crc32": "00000000"
+      },
+      {
+        "name": "File3/LVB_OP59_NO2/Op59_no2_4.xml",
+        "bytes": 1820325,
+        "crc32": "c9e621af"
+      },
+      {
+        "name": "__MACOSX/File3/LVB_OP59_NO2/",
+        "bytes": 0,
+        "crc32": "00000000"
+      },
+      {
+        "name": "__MACOSX/File3/LVB_OP59_NO2/._Op59_no2_4.xml",
+        "bytes": 732,
+        "crc32": "35600083"
+      },
+      {
+        "name": "File3/LVB_OP59_NO2/Op59_no2_3.xml",
+        "bytes": 663559,
+        "crc32": "76ac3174"
+      },
+      {
+        "name": "__MACOSX/File3/LVB_OP59_NO2/._Op59_no2_3.xml",
+        "bytes": 732,
+        "crc32": "6fe08ac5"
+      },
+      {
+        "name": "File3/LVB_OP59_NO2/Op59_no2_2.xml",
+        "bytes": 1232668,
+        "crc32": "1de1f68d"
+      },
+      {
+        "name": "__MACOSX/File3/LVB_OP59_NO2/._Op59_no2_2.xml",
+        "bytes": 732,
+        "crc32": "4b478e51"
+      },
+      {
+        "name": "File3/LVB_OP59_NO2/Op59_no2_1.xml",
+        "bytes": 1994551,
+        "crc32": "c4f6d07e"
+      },
+      {
+        "name": "__MACOSX/File3/LVB_OP59_NO2/._Op59_no2_1.xml",
+        "bytes": 732,
+        "crc32": "f2ee861a"
+      },
+      {
+        "name": "__MACOSX/File3/._LVB_OP59_NO2",
+        "bytes": 329,
+        "crc32": "80d3a0b6"
+      },
+      {
+        "name": "File3/LVB_OP18_NO1/",
+        "bytes": 0,
+        "crc32": "00000000"
+      },
+      {
+        "name": "File3/LVB_OP18_NO1/LVB_OP18_NO1_M4.xml",
+        "bytes": 2077585,
+        "crc32": "58d2b0ce"
+      },
+      {
+        "name": "__MACOSX/File3/LVB_OP18_NO1/",
+        "bytes": 0,
+        "crc32": "00000000"
+      },
+      {
+        "name": "__MACOSX/File3/LVB_OP18_NO1/._LVB_OP18_NO1_M4.xml",
+        "bytes": 737,
+        "crc32": "50506bb1"
+      },
+      {
+        "name": "File3/LVB_OP18_NO1/LVB_OP18_NO1_M3.xml",
+        "bytes": 440370,
+        "crc32": "6ed4a66e"
+      },
+      {
+        "name": "__MACOSX/File3/LVB_OP18_NO1/._LVB_OP18_NO1_M3.xml",
+        "bytes": 737,
+        "crc32": "cbe26ff2"
+      },
+      {
+        "name": "File3/LVB_OP18_NO1/LVB_OP18_NO1_M2.xml",
+        "bytes": 1032177,
+        "crc32": "d6bfa001"
+      },
+      {
+        "name": "__MACOSX/File3/LVB_OP18_NO1/._LVB_OP18_NO1_M2.xml",
+        "bytes": 737,
+        "crc32": "37de350f"
+      },
+      {
+        "name": "File3/LVB_OP18_NO1/LVB_OP18_NO1_M1.xml",
+        "bytes": 1437613,
+        "crc32": "dd2b263b"
+      },
+      {
+        "name": "__MACOSX/File3/LVB_OP18_NO1/._LVB_OP18_NO1_M1.xml",
+        "bytes": 737,
+        "crc32": "cd46229b"
+      },
+      {
+        "name": "__MACOSX/File3/._LVB_OP18_NO1",
+        "bytes": 329,
+        "crc32": "70b8de87"
+      },
+      {
+        "name": "File3/LVB_OP59_NO3/",
+        "bytes": 0,
+        "crc32": "00000000"
+      },
+      {
+        "name": "File3/LVB_OP59_NO3/LVB_Op59_no3_1.xml",
+        "bytes": 1705311,
+        "crc32": "110e45f8"
+      },
+      {
+        "name": "__MACOSX/File3/LVB_OP59_NO3/",
+        "bytes": 0,
+        "crc32": "00000000"
+      },
+      {
+        "name": "__MACOSX/File3/LVB_OP59_NO3/._LVB_Op59_no3_1.xml",
+        "bytes": 736,
+        "crc32": "d3cd9f31"
+      },
+      {
+        "name": "File3/LVB_OP59_NO3/LVB_Op59_no3_2.xml",
+        "bytes": 1136822,
+        "crc32": "9655cd4e"
+      },
+      {
+        "name": "__MACOSX/File3/LVB_OP59_NO3/._LVB_Op59_no3_2.xml",
+        "bytes": 736,
+        "crc32": "6a91f93d"
+      },
+      {
+        "name": "File3/LVB_OP59_NO3/LVB_Op59_no3_3.xml",
+        "bytes": 584265,
+        "crc32": "345a37ef"
+      },
+      {
+        "name": "__MACOSX/File3/LVB_OP59_NO3/._LVB_Op59_no3_3.xml",
+        "bytes": 646,
+        "crc32": "4ca22234"
+      },
+      {
+        "name": "File3/LVB_OP59_NO3/LVB_Op59_no3_4.xml",
+        "bytes": 5736052,
+        "crc32": "db413459"
+      },
+      {
+        "name": "__MACOSX/File3/LVB_OP59_NO3/._LVB_Op59_no3_4.xml",
+        "bytes": 736,
+        "crc32": "fb6aa1e9"
+      },
+      {
+        "name": "__MACOSX/File3/._LVB_OP59_NO3",
+        "bytes": 329,
+        "crc32": "11763fa1"
+      },
+      {
+        "name": "__MACOSX/._File3",
+        "bytes": 329,
+        "crc32": "579f38ae"
+      }
+    ]
+  }
+}

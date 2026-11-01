@@ -1,0 +1,8 @@
+{
+  "reason": "User replaced HT5 with HT176; completed unchanged measurements retained",
+  "terminated_pids": [
+    29895,
+    29896,
+    73808
+  ]
+}

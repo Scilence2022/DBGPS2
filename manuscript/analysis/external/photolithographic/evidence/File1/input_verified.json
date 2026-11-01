@@ -1,0 +1,10 @@
+{
+  "file_id": 22305708,
+  "name": "I16_S2_R1_001.fastq.gz",
+  "bytes": 994447128,
+  "md5": "6d48dee09e7cbe3f11bc749c9a7839c6",
+  "expected_md5": "6d48dee09e7cbe3f11bc749c9a7839c6",
+  "sha256": "25b70f73fcb4582666541f5379a74dc86d38e5e4ec690d8fad002986b03dad48",
+  "url": "https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/22305708/I16_S2_R1_001.fastq.gz",
+  "seconds": 1231.8216534169999
+}

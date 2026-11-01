@@ -1,0 +1,150 @@
+{
+  "purpose": "diagnostic only, not used to repair or rank per-strand candidates",
+  "sampled_references": 512,
+  "best": [
+    {
+      "base_cycle": "AGCT",
+      "permutation": [
+        0,
+        1,
+        2
+      ],
+      "phase": 1,
+      "endian": "big",
+      "bad": 0,
+      "total": 11776
+    },
+    {
+      "base_cycle": "ATCG",
+      "permutation": [
+        2,
+        1,
+        0
+      ],
+      "phase": 1,
+      "endian": "big",
+      "bad": 0,
+      "total": 11776
+    },
+    {
+      "base_cycle": "AGCT",
+      "permutation": [
+        0,
+        1,
+        2
+      ],
+      "phase": 2,
+      "endian": "little",
+      "bad": 1050,
+      "total": 11264
+    },
+    {
+      "base_cycle": "ATCG",
+      "permutation": [
+        2,
+        1,
+        0
+      ],
+      "phase": 2,
+      "endian": "little",
+      "bad": 1050,
+      "total": 11264
+    },
+    {
+      "base_cycle": "AGCT",
+      "permutation": [
+        1,
+        0,
+        2
+      ],
+      "phase": 2,
+      "endian": "little",
+      "bad": 1103,
+      "total": 11264
+    },
+    {
+      "base_cycle": "ATCG",
+      "permutation": [
+        2,
+        0,
+        1
+      ],
+      "phase": 2,
+      "endian": "little",
+      "bad": 1103,
+      "total": 11264
+    },
+    {
+      "base_cycle": "AGCT",
+      "permutation": [
+        0,
+        1,
+        2
+      ],
+      "phase": 3,
+      "endian": "little",
+      "bad": 1315,
+      "total": 11264
+    },
+    {
+      "base_cycle": "ATCG",
+      "permutation": [
+        2,
+        1,
+        0
+      ],
+      "phase": 3,
+      "endian": "little",
+      "bad": 1315,
+      "total": 11264
+    },
+    {
+      "base_cycle": "AGCT",
+      "permutation": [
+        1,
+        0,
+        2
+      ],
+      "phase": 3,
+      "endian": "little",
+      "bad": 1366,
+      "total": 11264
+    },
+    {
+      "base_cycle": "ATCG",
+      "permutation": [
+        2,
+        0,
+        1
+      ],
+      "phase": 3,
+      "endian": "little",
+      "bad": 1366,
+      "total": 11264
+    },
+    {
+      "base_cycle": "AGCT",
+      "permutation": [
+        1,
+        0,
+        2
+      ],
+      "phase": 1,
+      "endian": "big",
+      "bad": 1432,
+      "total": 11776
+    },
+    {
+      "base_cycle": "ATCG",
+      "permutation": [
+        2,
+        0,
+        1
+      ],
+      "phase": 1,
+      "endian": "big",
+      "bad": 1432,
+      "total": 11776
+    }
+  ]
+}

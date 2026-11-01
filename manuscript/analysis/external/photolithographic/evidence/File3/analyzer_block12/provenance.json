@@ -1,0 +1,25 @@
+{
+  "repository": "/Users/song/.codex/worktrees/dabb/DBGPS-analyzer",
+  "commit": "32353659e2f3b404f514e8bc015633fa633723e4",
+  "source_sha256": {
+    "DBGPS-analyzer.c": "491aff264384057a532e70db1f3c76cebbfc1a53d99d08cadb7e3c0920c69061",
+    "DBGPS-links.c": "c2b44cc3917ca2eb6627e246c4ebadb7680ca29b611e54f87a72b5cce81e765e",
+    "dbgps_core.h": "afe7da4d75b038de08f55fca17dbc286ef2a653ee5c213ddf8c554ed5d85bc6b",
+    "khashl.h": "4efc9bc14f256c6d067d150f2a820294069974022a77f9cb5ca241baa0030e55",
+    "kseq.h": "889a8c0c44e2329b1e7257ee60d0b2d43a3688065a2ad84474982dcadd144a3f",
+    "kthread.c": "d9b18fcb9412a05e2e235274ade871154640366208073577e5a353514e5825fe",
+    "vendor/bfc/bbf.c": "cac9844784e1652a4e29424c79aafda129c374fff6558293ee6a62d3af094cbd",
+    "vendor/bfc/bbf.h": "c78cbc2350552d9fdf1088c34fc9641901f2e0943d69d47cc694cb4f40d7b13c"
+  },
+  "binary_sha256": {
+    "DBGPS-analyzer": "b1e55b34726c42c5fed179c3dfa7e677acf713f23d04de697ac6556856009d8d",
+    "DBGPS-links": "85dc1aa3cf62c0125eeb970346b5cd233f307096b85ab33485a7a4adceb16957"
+  },
+  "reference": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/sources/File3_synthesized.fasta",
+  "reference_sha256": "249d224726afb173903009f1ed9fcced5908c22787a75d760600c5e0a0afa30d",
+  "build_flags": "cc -g -Wall -Wextra -O3; -lz -lpthread",
+  "primer_trim_front": 0,
+  "primer_trim_back": 0,
+  "count_cap": 16383,
+  "reference_only_contract": "Exact target counts; global off-target noise is unavailable for Bloom runs"
+}

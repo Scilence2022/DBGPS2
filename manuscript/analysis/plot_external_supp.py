@@ -11,7 +11,7 @@ from matplotlib.patches import Rectangle
 from matplotlib.ticker import FuncFormatter
 
 ROOT=Path(__file__).resolve().parents[1]
-D=json.loads((ROOT/'data/source_data/figure_data.json').read_text())
+D=json.loads((ROOT/'analysis/data/source_data/figure_data.json').read_text())
 OUT=ROOT/'figures'
 BLUE='#2573B5';ORANGE='#D46A36';GREEN='#268478';RED='#B44D43';GRAY='#D5DADF';DARK='#26363E';PURPLE='#8272B2'
 plt.rcParams.update({'font.family':'DejaVu Sans','font.size':8.2,'axes.titlesize':9.2,'axes.labelsize':8.3,'xtick.labelsize':7.6,'ytick.labelsize':7.6,'axes.spines.top':False,'axes.spines.right':False,'axes.linewidth':0.65,'lines.linewidth':1.2,'pdf.fonttype':42,'svg.fonttype':'none','savefig.facecolor':'white'})
@@ -110,7 +110,7 @@ for i,(v,label) in enumerate(zip(values,labels)):
  ax.text(v+70,i,f'{v:,}',va='center',fontsize=8)
 ax.set_yticks(range(3),labels,fontsize=7.6);ax.invert_yaxis();ax.set_xlim(0,7300);ax.set_xlabel(r'Worst-lane $2E_j + S$');ax.axvline(5406,color=RED,ls='--',lw=1)
 ax.text(5406,-.65,'5,406',color=RED,ha='center',fontsize=7.5);clean(ax)
-save(fig,'FigS4_photolithographic_decoding')
+save(fig,'FigS2_photolithographic_decoding')
 
 # S5: actual operating points and truth-dependent graph diagnostics.
 fig=plt.figure(figsize=(7.35,5.7));gs=fig.add_gridspec(3,2,height_ratios=[.8,1.4,1.35],hspace=.85,wspace=.65)
@@ -130,5 +130,5 @@ ax.plot(cx,cy,'o-',color=DARK,ms=4,label='Truth-path diagnostic')
 ax.scatter([1],[rows[3]['recovery_pct']],marker='*',color=BLUE,s=90,zorder=4,label='Best exact output')
 ax.annotate('596,189 true paths\n596,006 exact outputs\nGap: 183 strands',(1,cy[0]),xytext=(1.7,96.5),fontsize=7.4,va='top',arrowprops={'arrowstyle':'-','lw':.65,'color':DARK})
 ax.set_xlim(.7,7.3);ax.set_ylim(94,98.65);ax.set_xticks(range(1,8));ax.set_xlabel('Minimum k-mer count');ax.set_ylabel('Designed bodies with a true path (%)');ax.legend(frameon=False,loc='lower left',fontsize=7.2,handlelength=1.1);clean(ax)
-save(fig,'FigS5_Organick_operating_points')
+save(fig,'FigS4_Organick_operating_points')
 print('Generated',len(list(OUT.glob('*.png'))),'figures in PNG, PDF and SVG')

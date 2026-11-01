@@ -1,0 +1,64 @@
+{
+  "checked_at_utc": "2026-10-20T07:02:26.537528+00:00",
+  "all_passed": true,
+  "method": "Visual inspection of the delivered PNGs; vector files present.",
+  "figures": [
+    {
+      "name": "Fig_boundary_phase_maps",
+      "png_visually_inspected": true,
+      "formats": {
+        "png": {
+          "bytes": 392118,
+          "sha256": "e2afbde29bb07e2780b137d4326c616bb7e8ba990ba9fd6ffec5a02c2532e471"
+        },
+        "pdf": {
+          "bytes": 34816,
+          "sha256": "44b55d904aa65409ec380703bb136e485edf8e2bb1dbfc1ae9f83eaf962b581e"
+        },
+        "svg": {
+          "bytes": 91619,
+          "sha256": "f497e71eaa336fbeca2aecb3c8b432ce7f79448abb6cc8cf3c055971235bc60c"
+        }
+      },
+      "unresolved_layout_issues": []
+    },
+    {
+      "name": "Fig_boundary_ratio_window",
+      "png_visually_inspected": true,
+      "formats": {
+        "png": {
+          "bytes": 233908,
+          "sha256": "5ae46cddc290b49022250a7c01dd676aa0ac71f6a3cb6c8ad481731ec61891d6"
+        },
+        "pdf": {
+          "bytes": 33437,
+          "sha256": "c26a22b61f2f8920cef9091844b1b186d7ad64a6c100795c37b43290370f5c3c"
+        },
+        "svg": {
+          "bytes": 44300,
+          "sha256": "b77ef332165fd9c6cec2d55a9d9318752a947a71db808c12509385c6311cde9a"
+        }
+      },
+      "unresolved_layout_issues": []
+    },
+    {
+      "name": "Fig_boundary_fragment_geometry",
+      "png_visually_inspected": true,
+      "formats": {
+        "png": {
+          "bytes": 192941,
+          "sha256": "9f8dc1d945d0276371f3c37b72f8ec74f6daa8f993e35db2a716d40663d76329"
+        },
+        "pdf": {
+          "bytes": 39858,
+          "sha256": "15b103bf434fb3264ee4c33334d49b4df2771c47c4cb9fb4fed2613abaa3c8bc"
+        },
+        "svg": {
+          "bytes": 198249,
+          "sha256": "385b75afe67291aa34f111e1f7628490e86977feab8f6977ead082d61cb35458"
+        }
+      },
+      "unresolved_layout_issues": []
+    }
+  ]
+}

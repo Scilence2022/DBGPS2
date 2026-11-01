@@ -1,0 +1,21 @@
+{
+  "core": {
+    "DBGPS2.c": "39dbf9fa2ec338756a3e3599350a4d6805eda0095ccccd6d8141980777de9308",
+    "dbgps_codec.c": "b13059e3bb9ca132c0da7e0fc659083f138f53b1a9e321f37e73c04b8d7d679d",
+    "dbgps_codec.h": "f00a77221362d34a60ff8cd26913c6f9dba04f8c9a00e0e593aa2b1fa48056b3",
+    "dbgps_redundancy.c": "3229baff40e31c7b64d7a5c7198ba884ba18af21dc578fba2c4e709c46fec9ef",
+    "dbgps_redundancy.h": "eb61445077eaa80e16a6fb8ae29c27f0377e977a897dfb27ebd35466f096b7a8",
+    "dbgps_strand.c": "1f146a1e861a7bdf838f50b8b197e81eb4fe26f4955d72c9f34f5f1a05295716",
+    "dbgps_strand.h": "a2c86a9de07acc36182afafb337c58bc5ca92a367283a337200816c97142479f",
+    "dbgps_bloom.h": "11ad752e9ac12db18ba2833375b357e5155092050536b57dec167f8b35dddf4e",
+    "dbgps_bloom_graph.h": "cda7a5341384a07d53cb14a15cbade70dfbbd0cb21a6fc219735552f36925a08",
+    "khashl.h": "4fe9abffbe34bc30bd33ceefa46116a37291034f76b4820f6412c1f9ee347532",
+    "kseq.h": "889a8c0c44e2329b1e7257ee60d0b2d43a3688065a2ad84474982dcadd144a3f",
+    "ketopt.h": "f1f4aea1e269d7327e87c6bdf536c1008cefb55a4ef102f67d234bba642b985c",
+    "kthread.c": "d9b18fcb9412a05e2e235274ade871154640366208073577e5a353514e5825fe",
+    "kthread.h": "ed92aa2bd8692741cbf787adace74ba72583a2bb18a450e07ef03fc9ce1fc9a9",
+    "LICENSE": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+  },
+  "original_profiler": "/Users/song/Github-Repos/DBGPS2/.claude/worktrees/dbgps2-thermal-aging-manuscript-b04b19/manuscript/analysis/dbgps2_profile.c",
+  "original_profiler_sha256": "c99c3f51518cf3b41a099cb8d5185f04fb5ef71ab5175331f7f4301344fcc517"
+}

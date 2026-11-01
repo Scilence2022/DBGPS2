@@ -1,0 +1,222 @@
+[
+  {
+    "tag": "k31_c1_r1.900_s0",
+    "k": 31,
+    "cutoff": 1,
+    "ratio": 1.9,
+    "skip": 0,
+    "queries": 3063745,
+    "raw_outputs": 1036604,
+    "search_cpu_seconds": 56.400227,
+    "wall_seconds": 56.78554350000002,
+    "output": "/Users/song/.codex/worktrees/bd05/DBGPS2/experiments/nbt4079/optimization/results/full.k31_c1_r1.900_s0.tsv",
+    "phase": "full",
+    "source_rows_after_nohp": 1036536,
+    "F": {
+      "exact": 594864,
+      "wrong": 8,
+      "wrong_known_address": 7,
+      "unknown_address": 1,
+      "returned": 594872,
+      "conflict_addresses": 0,
+      "precision": 0.9999865517287753,
+      "exact_rate": 0.979764473359137
+    },
+    "R": {
+      "exact": 441654,
+      "wrong": 8,
+      "wrong_known_address": 4,
+      "unknown_address": 4,
+      "returned": 441662,
+      "conflict_addresses": 1,
+      "precision": 0.999981886601066,
+      "exact_rate": 0.7274215597463559
+    },
+    "both": {
+      "exact": 595013,
+      "wrong": 14,
+      "wrong_known_address": 9,
+      "unknown_address": 5,
+      "returned": 595027,
+      "conflict_addresses": 1,
+      "precision": 0.9999764716559081,
+      "exact_rate": 0.9800098822366796
+    }
+  },
+  {
+    "tag": "k31_c1_r2.000_s4",
+    "k": 31,
+    "cutoff": 1,
+    "ratio": 2.0,
+    "skip": 4,
+    "queries": 3063745,
+    "raw_outputs": 933066,
+    "search_cpu_seconds": 63.947589,
+    "wall_seconds": 64.100018917,
+    "output": "/Users/song/.codex/worktrees/bd05/DBGPS2/experiments/nbt4079/optimization/results/full.k31_c1_r2.000_s4.tsv",
+    "phase": "full",
+    "source_rows_after_nohp": 932973,
+    "F": {
+      "exact": 594980,
+      "wrong": 16,
+      "wrong_known_address": 10,
+      "unknown_address": 6,
+      "returned": 594996,
+      "conflict_addresses": 0,
+      "precision": 0.999973109062918,
+      "exact_rate": 0.979955529934942
+    },
+    "R": {
+      "exact": 337961,
+      "wrong": 12,
+      "wrong_known_address": 5,
+      "unknown_address": 7,
+      "returned": 337973,
+      "conflict_addresses": 2,
+      "precision": 0.9999644942051584,
+      "exact_rate": 0.556635098410607
+    },
+    "both": {
+      "exact": 595082,
+      "wrong": 23,
+      "wrong_known_address": 10,
+      "unknown_address": 13,
+      "returned": 595105,
+      "conflict_addresses": 2,
+      "precision": 0.9999613513581637,
+      "exact_rate": 0.9801235279584946
+    }
+  },
+  {
+    "tag": "k31_c1_r2.550_s0",
+    "k": 31,
+    "cutoff": 1,
+    "ratio": 2.55,
+    "skip": 0,
+    "queries": 3063745,
+    "raw_outputs": 972483,
+    "search_cpu_seconds": 57.649052,
+    "wall_seconds": 57.728986416,
+    "output": "/Users/song/.codex/worktrees/bd05/DBGPS2/experiments/nbt4079/optimization/results/full.k31_c1_r2.550_s0.tsv",
+    "phase": "full",
+    "source_rows_after_nohp": 972364,
+    "F": {
+      "exact": 594630,
+      "wrong": 25,
+      "wrong_known_address": 10,
+      "unknown_address": 15,
+      "returned": 594655,
+      "conflict_addresses": 0,
+      "precision": 0.9999579588164565,
+      "exact_rate": 0.9793790661286338
+    },
+    "R": {
+      "exact": 377686,
+      "wrong": 15,
+      "wrong_known_address": 5,
+      "unknown_address": 10,
+      "returned": 377701,
+      "conflict_addresses": 4,
+      "precision": 0.99996028604637,
+      "exact_rate": 0.6220637404265832
+    },
+    "both": {
+      "exact": 594881,
+      "wrong": 35,
+      "wrong_known_address": 10,
+      "unknown_address": 25,
+      "returned": 594916,
+      "conflict_addresses": 4,
+      "precision": 0.9999411681649174,
+      "exact_rate": 0.979792473029729
+    }
+  },
+  {
+    "tag": "k29_c1_r1.900_s0",
+    "k": 29,
+    "cutoff": 1,
+    "ratio": 1.9,
+    "skip": 0,
+    "queries": 3063745,
+    "raw_outputs": 1036469,
+    "search_cpu_seconds": 52.446041,
+    "wall_seconds": 52.72521604100001,
+    "output": "/Users/song/.codex/worktrees/bd05/DBGPS2/experiments/nbt4079/optimization/results/full.k29_c1_r1.900_s0.tsv",
+    "phase": "full",
+    "source_rows_after_nohp": 1036414,
+    "F": {
+      "exact": 594838,
+      "wrong": 8,
+      "wrong_known_address": 7,
+      "unknown_address": 1,
+      "returned": 594846,
+      "conflict_addresses": 0,
+      "precision": 0.9999865511409676,
+      "exact_rate": 0.9797216503335255
+    },
+    "R": {
+      "exact": 441560,
+      "wrong": 8,
+      "wrong_known_address": 4,
+      "unknown_address": 4,
+      "returned": 441568,
+      "conflict_addresses": 0,
+      "precision": 0.9999818827451264,
+      "exact_rate": 0.727266738038376
+    },
+    "both": {
+      "exact": 594982,
+      "wrong": 14,
+      "wrong_known_address": 9,
+      "unknown_address": 5,
+      "returned": 594996,
+      "conflict_addresses": 0,
+      "precision": 0.9999764704300533,
+      "exact_rate": 0.9799588240138352
+    }
+  },
+  {
+    "tag": "k29_c1_r1.950_s0",
+    "k": 29,
+    "cutoff": 1,
+    "ratio": 1.95,
+    "skip": 0,
+    "queries": 3063745,
+    "raw_outputs": 1036801,
+    "search_cpu_seconds": 51.987963,
+    "wall_seconds": 52.137923124999986,
+    "output": "/Users/song/.codex/worktrees/bd05/DBGPS2/experiments/nbt4079/optimization/results/full.k29_c1_r1.950_s0.tsv",
+    "phase": "full",
+    "source_rows_after_nohp": 1036746,
+    "F": {
+      "exact": 594847,
+      "wrong": 8,
+      "wrong_known_address": 7,
+      "unknown_address": 1,
+      "returned": 594855,
+      "conflict_addresses": 0,
+      "precision": 0.9999865513444453,
+      "exact_rate": 0.9797364736885449
+    },
+    "R": {
+      "exact": 441884,
+      "wrong": 7,
+      "wrong_known_address": 4,
+      "unknown_address": 3,
+      "returned": 441891,
+      "conflict_addresses": 0,
+      "precision": 0.999984158989434,
+      "exact_rate": 0.7278003788190727
+    },
+    "both": {
+      "exact": 594989,
+      "wrong": 13,
+      "wrong_known_address": 9,
+      "unknown_address": 4,
+      "returned": 595002,
+      "conflict_addresses": 0,
+      "precision": 0.9999781513339451,
+      "exact_rate": 0.9799703532899613
+    }
+  }
+]

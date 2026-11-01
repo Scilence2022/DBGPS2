@@ -4,7 +4,7 @@ Figures 2-7. Reads the snapshots in ../data/source_data and writes to ../figures
 Figure 1 comes from fig1_concept.py and Figure 8 from fig8_ht176.py.
 """
 from pathlib import Path
-import hashlib,json,shutil
+import gzip,hashlib,json,shutil
 import numpy as np
 import pandas as pd
 import matplotlib
@@ -14,9 +14,9 @@ from matplotlib.lines import Line2D
 from matplotlib.ticker import MaxNLocator,FuncFormatter
 
 M=Path(__file__).resolve().parents[1];R=M/'figures';O=M
-DATA=M/'data/source_data'
+DATA=M/'analysis/data/source_data'
 T=Path('/Users/song/dbgps2_ht/results')
-TD=Path('/Users/song/Github-Repos/DBGPS2/.claude/worktrees/dbgps2-thermal-aging-manuscript-b04b19/manuscript/data')
+TD=M/'analysis/data'
 B=O/'exploration/2026-10-20/boundary_deep_validation'
 EXT=O/'figures/2026-10-19/DBGPS2_external_figures/data'
 BENCH=O/'benchmarks/2026-10-19'
@@ -45,7 +45,7 @@ def grid(rows=3,cols=2,heights=None):
     fig.subplots_adjust(left=.10,right=.98,top=.94,bottom=.10,hspace=.85,wspace=.43)
     return fig,np.asarray(axs).ravel()
 
-# Figure 2 combines the three simulation figures into six mechanistic panels.
+# Figure 6 combines the three simulation figures into six mechanistic panels.
 p=csv(B/'policy_results.csv');bound=csv(B/'crossing_bounds_validation.csv')
 fig,ax=grid()
 for geom,col,lab in [('regular',BLUE,'Regular'),('bernoulli',GREEN,'Bernoulli')]:
@@ -89,9 +89,9 @@ ax[4].plot(range(3),ceiling,':',color=GRAY,label='Output-support ceiling');ax[4]
 ax[5].set(ylim=(-.15,5.6),ylabel='Erroneous accepted outputs');ax[5].yaxis.set_major_locator(MaxNLocator(integer=True))
 for a in ax[4:]:a.set(xticks=range(3),xticklabels=['1,024','8,192','65,536'],xlabel='Designs per library')
 title(ax[4],'e','Blind tuning increases correct yield');title(ax[5],'f','CRC agreement retains false paths')
-save(fig,2,'simulation_boundaries')
+save(fig,6,'simulation_boundaries')
 
-# Figure 3 connects physical fragmentation, graph interference and rescued strands.
+# Figure 2 connects physical fragmentation, graph interference and rescued strands.
 fig,ax=grid()
 for samp,lab in zip(SAMPLES,LABELS):
     fr=csv(T/f'qc/{samp}.frag.tsv',f'thermal_{samp}.frag.tsv',sep='\t').to_numpy();h=fr[:,1]
@@ -108,21 +108,21 @@ for samp in ['HT_con','HT5']:
 ax[2].set(xscale='log',yscale='log',xlim=(1,3000),ylim=(1,2e9),xlabel='k-mer coverage',ylabel='Distinct k-mers');ax[2].legend(fontsize=5.9);title(ax[2],'c','Absolute counts overlap with noise')
 for v in [-np.log2(2.55),np.log2(2.55)]:ax[3].axvline(v,color=BLUE,lw=.7)
 ax[3].set(yscale='log',xlim=(-10,3),ylim=(1e-4,3000),xlabel='log₂(child count / parent count)',ylabel='Transitions (%)');ax[3].text(.97,.97,'Solid: true transitions\nDashed: eligible noise',transform=ax[3].transAxes,ha='right',va='top',fontsize=6);title(ax[3],'d','Local ratios separate true transitions')
-stats=csv(T/'full/HT5.strandstats.tsv','thermal_HT5.strandstats.tsv',sep='\t')
+stats=csv(T/'full/HT5.strandstats.tsv','thermal_HT5.strandstats.tsv.gz',sep='\t')
 trace=csv(T/'full/HT5.trace.tsv','thermal_HT5.trace.tsv',sep='\t');ss=stats.set_index('id');cand=[i for i in trace.id.unique() if ss.loc[i,'min_cov']>=3 and ss.loc[i,'n_alt_ge2']>=3];ex=cand[0] if cand else trace.id.iloc[0];tr=trace[trace.id==ex]
 ax[4].plot(tr.step,tr.true_cov,color=INK,label='True path');ax[4].fill_between(tr.step,tr.parent_cov/2.55,tr.parent_cov*2.55,color=BLUE,alpha=.15,label='r = 2.55 window')
 for i,c in enumerate(['alt1','alt2','alt3']):
     m=tr[c]>0;ax[4].scatter(tr.step[m],tr[c][m],s=5,color=ORANGE,label='Noise' if i==0 else None)
 ax[4].set(yscale='log',ylim=(.7,3000),xlabel='Extension step',ylabel='k-mer coverage');ax[4].legend(fontsize=5.8);title(ax[4],'e','Local windows follow a weak true path')
-out=snapshot(T/'full/HT5.outcomes.tsv','thermal_HT5.outcomes.tsv');hdr=out.open().readline().strip().split('\t')[1:];oc=pd.read_csv(out,sep='\t',skiprows=1,header=None,names=['id','o'])
+out=snapshot(T/'full/HT5.outcomes.tsv','thermal_HT5.outcomes.tsv.gz');hdr=gzip.open(out,'rt').readline().strip().split('\t')[1:];oc=pd.read_csv(out,sep='\t',skiprows=1,header=None,names=['id','o'])
 g=csv(T/'full/HT5.grid.tsv','thermal_HT5.grid.tsv',sep='\t');d=g[g.r==0].sort_values('correct',ascending=False).iloc[0]
 o1=oc.o.str[hdr.index(f'c{int(d.c)}_r0')].to_numpy();o2=oc.o.str[hdr.index('c1_r2.55')].to_numpy();mc=ss.loc[oc.id,'min_cov'].to_numpy()
 for lab,mask,col in [('Both',(o1=='S')&(o2=='S'),'#7BB6DF'),('DBGPS2 only',(o1!='S')&(o2=='S'),BLUE),('Neither',(o1!='S')&(o2!='S'),GRAY)]:
     vals=np.sort(np.maximum(mc[mask],.5));ax[5].plot(vals,np.arange(1,len(vals)+1)/len(vals)*100,color=col,label=lab)
 ax[5].axvline(float(d.c)+.5,color=ORANGE,ls='--',lw=.8);ax[5].set(xscale='log',xlim=(.5,300),ylim=(0,102),xlabel='Minimum reference-path count',ylabel='Strands in group (cumulative %)');ax[5].legend(loc='lower right',fontsize=5.8);title(ax[5],'f','DBGPS2 rescues weakly covered strands')
-save(fig,3,'degradation_mechanism')
+save(fig,2,'degradation_mechanism')
 
-# Figure 4 combines recovery, parameter choice and sequencing requirement.
+# Figure 3 combines recovery, parameter choice and sequencing requirement.
 grids={s:csv(T/f'full/{s}.grid.tsv',f'thermal_{s}.grid.tsv',sep='\t') for s in SAMPLES}
 kt=csv(TD/'ksize_sweep.csv','thermal_ksize_sweep.csv');dep=csv(TD/'depth_series.csv','thermal_depth_series.csv');need=csv(TD/'depth_needed_95.csv','thermal_depth_needed_95.csv')
 fig,ax=grid();x=np.arange(6);w=.36
@@ -150,27 +150,35 @@ for j,(lab,col) in enumerate([('DBGPS k31',ORANGE),('DBGPS2 k31',BLUE),('DBGPS2 
     for xx,v in zip(x+(j-1)*.25,vals):
         if np.isnan(v):ax[5].text(xx,1.2,'n.r.',rotation=90,ha='center',fontsize=5)
 ax[5].set(yscale='log',ylim=(1,8000),xticks=x,xticklabels=LABELS,ylabel='Reads per strand for 95% recovery');ax[5].legend(ncol=3,fontsize=5.6,loc='upper center',columnspacing=.8,handlelength=1,frameon=False);title(ax[5],'f','Lower sequencing requirement')
-save(fig,4,'degraded_recovery')
+save(fig,3,'degraded_recovery')
 
-# Figure 5 keeps the high-error challenge separate from other formats.
+# Figure 4 separates strand yield, the per-block outer-code requirement and the weak block of File 3.
 d=js(EXT/'figure_data.json');photo_bench=csv(BENCH/'reconstruction_speed/Table5_reconstruction_speed.csv')
-fig,ax=grid(2,2)
+blk=csv(DATA/'photolith_file3_blocks.csv');NEED=10977;PALE='#7BB6DF'
+fig,ax=grid()
 correct=np.array([z['correct']/z['designed']*100 for z in d['photolithographic']]);wrong=np.array([z['wrong']/z['designed']*100 for z in d['photolithographic']]);xx=np.arange(3)
 ax[0].bar(xx,correct,.58,color=BLUE,label='Exact');ax[0].bar(xx,wrong,.58,bottom=correct,color=RED,label='Wrong');ax[0].bar(xx,100-correct-wrong,.58,bottom=correct+wrong,color=LIGHT,label='Missing')
-for i,z in enumerate(d['photolithographic']):ax[0].text(i,correct[i]/2,f'{correct[i]:.2f}%',ha='center',color='white',fontsize=8);ax[0].text(i,103,f"{z['wrong']} wrong",ha='center',fontsize=6.4)
-ax[0].set(xticks=xx,xticklabels=['File 1','File 2','File 3'],ylim=(0,130),yticks=[0,25,50,75,100],ylabel='Designed strands (%)');ax[0].legend(ncol=3,loc='upper center',bbox_to_anchor=(.5,1.02),fontsize=6,frameon=False);title(ax[0],'a','Pooled reconstruction at high error rates')
+for i,z in enumerate(d['photolithographic']):ax[0].text(i,correct[i]/2,f'{correct[i]:.2f}%',ha='center',color='white',fontsize=7);ax[0].text(i,103,f"{z['wrong']} wrong",ha='center',fontsize=6)
+ax[0].set(xticks=xx,xticklabels=['File 1\nfile recovered','File 2\nfile recovered','File 3\nfile incomplete'],ylim=(0,130),yticks=[0,25,50,75,100],ylabel='Designed strands (%)');ax[0].legend(ncol=3,loc='upper center',bbox_to_anchor=(.5,1.04),fontsize=5.8,frameon=False);title(ax[0],'a','Pooled reconstruction at high error rates')
 for j,(method,col,label) in enumerate([('cluster_msa_vote',GRAY,'MSA'),('dbgps_rule',ORANGE,'DBGPS rule'),('dbgps2',BLUE,'DBGPS2')]):
     z=photo_bench[photo_bench.method==method].sort_values('dataset');ax[1].bar(np.arange(2)+(j-1)*.24,z.exact_recovery*100,.23,color=col,label=label)
 ax[1].set(xticks=[0,1],xticklabels=['File 1','File 2'],ylim=(0,125),yticks=[0,25,50,75,100],ylabel='Exact strands (%)');ax[1].legend(ncol=3,loc='upper center',fontsize=5.8,frameon=False);title(ax[1],'b','Matched graph and MSA reconstruction')
-blocks=d['photo_selected_blocks'];ax[2].bar(range(1,13),[z['budget'] for z in blocks],color=[BLUE]*11+[RED]);ax[2].axhline(5406,color=RED,ls='--',lw=.8);ax[2].text(1,5550,'RS limit 5,406',fontsize=6.5,color=RED);ax[2].text(12,6650,'6,425',ha='center',color=RED,fontsize=6.5)
-ax[2].set(xticks=[1,3,5,7,9,12],ylim=(0,7400),xlabel='File 3 outer-code block',ylabel='Worst-lane 2Eⱼ + S');title(ax[2],'c','Reference routing leaves a limiting block')
-ax[3].axis('off');title(ax[3],'d','Complete archive endpoints')
-for y,name,status,color in [( .80,'File 1','99,103 bytes verified',GREEN),(.53,'File 2','320,949 bytes verified',GREEN),(.26,'File 3','Incomplete',RED)]:
-    ax[3].text(0,y,name,fontweight='bold',fontsize=8);ax[3].text(.28,y,status,color=color,fontsize=7.5)
-ax[3].text(0,.02,'No design-strand supplementation\nis counted as sequencing-only recovery.',fontsize=6.5,color=INK)
-save(fig,5,'high_error_reconstruction')
+total=[12*NEED,int(blk.pooled_correct.sum()),int(blk.routed_correct.sum())];ys=[2,1,0]
+ax[2].barh(ys,total,.6,color=[GRAY,PALE,BLUE]);ax[2].axvline(12*NEED,color=RED,ls='--',lw=.8)
+for y,v in zip(ys,total):ax[2].text(v+2500,y,f'{v:,}',va='center',fontsize=6.5)
+ax[2].set(yticks=ys,yticklabels=['Code requires','Pooled output','Routed output'],xlim=(0,215000),xlabel='File 3 exact strands (all blocks)');ax[2].xaxis.set_major_formatter(FuncFormatter(lambda x,p:f'{x/1000:.0f}k'));title(ax[2],'c','Total yield exceeds the requirement')
+bx=blk.block.to_numpy();ax[3].bar(bx-.2,blk.pooled_correct,.38,color=PALE,label='Pooled');ax[3].bar(bx+.2,blk.routed_correct,.38,color=[BLUE]*11+[RED],label='Routed');ax[3].axhline(NEED,color=RED,ls='--',lw=.8,label='Required per block (10,977)')
+ax[3].text(12.2,NEED+450,'−1,004',ha='center',fontsize=5.8,color=RED)
+ax[3].set(xticks=bx,xlim=(.2,13),ylim=(0,21000),xlabel='File 3 outer-code block',ylabel='Exact strands');ax[3].yaxis.set_major_formatter(FuncFormatter(lambda x,p:f'{x/1000:.0f}k'));ax[3].legend(ncol=3,loc='upper center',fontsize=5.6,frameon=False,columnspacing=.9,handlelength=1.2);title(ax[3],'d','Redundancy cannot cross blocks')
+ax[4].bar(bx,blk.assigned_reads/1e6,.7,color=[GRAY]*11+[RED]);ax[4].set(xticks=bx,ylim=(0,5.4),xlabel='File 3 outer-code block',ylabel='Assigned reads (million)');title(ax[4],'e','Block 12 has abnormally few reads')
+ax[4].text(12,float(blk.assigned_reads.iloc[11])/1e6+.15,'1.68',ha='center',fontsize=6,color=RED)
+show=blk[blk.block.isin([1,6,11,12])];base=np.zeros(4);lab=[str(b) for b in show.block]
+for field,col,name in [('absent_kmer',GRAY,'True k-mer absent'),('singleton_only',LIGHT,'Singleton support'),('overflow',ORANGE,'Path overflow'),('ratio_rejected',BLUE,'Ratio rejected')]:
+    ax[5].bar(lab,show[field],.6,bottom=base,color=col,label=name);base+=show[field].to_numpy()
+ax[5].set(ylim=(0,13800),yticks=[0,5000,10000],xlabel='Blocks below the bound in the pooled output',ylabel='Indices lacking a candidate');ax[5].yaxis.set_major_formatter(FuncFormatter(lambda x,p:f'{x/1000:.0f}k'));ax[5].legend(ncol=2,loc='upper center',fontsize=5.6,frameon=False,columnspacing=.9,handlelength=1);title(ax[5],'f','Block 12 lacks sequence evidence')
+save(fig,4,'high_error_reconstruction')
 
-# Figure 6 reports exact DNA Fountain and Organick strands; file recovery is a separate endpoint.
+# Figure 5 reports exact DNA Fountain and Organick strands; file recovery is a separate endpoint.
 fig=plt.figure(figsize=(7.2,4.5));gs=fig.add_gridspec(2,2,height_ratios=[1,.45],hspace=.65,wspace=.45);fig.subplots_adjust(left=.10,right=.98,top=.93,bottom=.06)
 a=fig.add_subplot(gs[0,0]);bax=fig.add_subplot(gs[0,1]);cax=fig.add_subplot(gs[1,:]);xx=np.arange(2)
 for shift,key,col,label in [(-.17,'merge',ORANGE,'Read merging'),(.17,'DBGPS2',BLUE,'DBGPS2')]:
@@ -183,7 +191,7 @@ bax.set(xlim=(95,98.5),ylim=(-8,190),xlabel='Exact 110-nt bodies / all designs (
 cax.axis('off');title(cax,'c','File validation remains a separate endpoint')
 cax.text(0,.65,'DNA Fountain',fontweight='bold',fontsize=8);cax.text(.30,.65,'71,990 exact strands; 2,146,816-byte archive, published MD5 matched',color=GREEN,fontsize=7.5)
 cax.text(0,.18,'Organick File 16',fontweight='bold',fontsize=8);cax.text(.30,.18,'Outer-code decoding and original-file recovery not tested',color=INK,fontsize=7.5)
-save(fig,6,'format_transfer')
+save(fig,5,'format_transfer')
 
 # Figure 7 replaces six partly overlapping performance figures with four panels.
 rc=csv(BENCH/'resource_control/all_configurations_summary.csv');mem=csv(BENCH/'speed_extension/Table6_configuration_comparison.csv')

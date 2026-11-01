@@ -1,0 +1,1977 @@
+[
+  {
+    "dataset": "file1",
+    "k": 12,
+    "cutoff": 1,
+    "ratio": 10.0,
+    "truth": 16383,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 16383,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 16383,
+    "ambiguous": 0,
+    "graph_supported": 16383,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 12,
+    "cutoff": 1,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 16383,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 16381,
+    "ambiguous": 0,
+    "graph_supported": 16383,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 12,
+    "cutoff": 3,
+    "ratio": 10.0,
+    "truth": 16383,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 16383,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 16383,
+    "ambiguous": 0,
+    "graph_supported": 16382,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 12,
+    "cutoff": 3,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 16383,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 16381,
+    "ambiguous": 0,
+    "graph_supported": 16382,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 13,
+    "cutoff": 1,
+    "ratio": 10.0,
+    "truth": 16383,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 16383,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 16383,
+    "ambiguous": 0,
+    "graph_supported": 16381,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 13,
+    "cutoff": 1,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 16383,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 16383,
+    "ambiguous": 0,
+    "graph_supported": 16381,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 13,
+    "cutoff": 19,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 16383,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 16382,
+    "ambiguous": 0,
+    "graph_supported": 15843,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 13,
+    "cutoff": 199,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 66,
+    "correct": 65,
+    "errors": 1,
+    "erasures": 16317,
+    "exact_recall": 0.003967527314899591,
+    "precision": 0.9848484848484849,
+    "overflow": 7480,
+    "ambiguous": 1,
+    "graph_supported": 461,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 1,
+        "erasures": 16317,
+        "budget": 16319,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 13,
+    "cutoff": 3,
+    "ratio": 10.0,
+    "truth": 16383,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 16383,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 16383,
+    "ambiguous": 0,
+    "graph_supported": 16367,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 13,
+    "cutoff": 3,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 16383,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 16383,
+    "ambiguous": 0,
+    "graph_supported": 16367,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 13,
+    "cutoff": 49,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 16383,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 16347,
+    "ambiguous": 0,
+    "graph_supported": 12345,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 13,
+    "cutoff": 9,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 16383,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 16383,
+    "ambiguous": 0,
+    "graph_supported": 16290,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 13,
+    "cutoff": 99,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 2,
+    "correct": 2,
+    "errors": 0,
+    "erasures": 16381,
+    "exact_recall": 0.00012207776353537203,
+    "precision": 1.0,
+    "overflow": 15486,
+    "ambiguous": 0,
+    "graph_supported": 5534,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16381,
+        "budget": 16381,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 15,
+    "cutoff": 1,
+    "ratio": 10.0,
+    "truth": 16383,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 16383,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 16383,
+    "ambiguous": 0,
+    "graph_supported": 16353,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 15,
+    "cutoff": 1,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 16383,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 16383,
+    "ambiguous": 0,
+    "graph_supported": 16353,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 15,
+    "cutoff": 19,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 11092,
+    "correct": 11091,
+    "errors": 1,
+    "erasures": 5291,
+    "exact_recall": 0.6769822376854056,
+    "precision": 0.9999098449332853,
+    "overflow": 3440,
+    "ambiguous": 3,
+    "graph_supported": 14694,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 1,
+        "erasures": 5291,
+        "budget": 5293,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 15,
+    "cutoff": 199,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 69,
+    "correct": 69,
+    "errors": 0,
+    "erasures": 16314,
+    "exact_recall": 0.004211682841970335,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 69,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16314,
+        "budget": 16314,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 15,
+    "cutoff": 3,
+    "ratio": 10.0,
+    "truth": 16383,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 16383,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 16383,
+    "ambiguous": 0,
+    "graph_supported": 16285,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 15,
+    "cutoff": 3,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 16383,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 16383,
+    "ambiguous": 0,
+    "graph_supported": 16285,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 15,
+    "cutoff": 4,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 16383,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 16382,
+    "ambiguous": 0,
+    "graph_supported": 16245,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 15,
+    "cutoff": 49,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 8917,
+    "correct": 8917,
+    "errors": 0,
+    "erasures": 7466,
+    "exact_recall": 0.5442837087224562,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 9056,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 7466,
+        "budget": 7466,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 15,
+    "cutoff": 5,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 2,
+    "correct": 2,
+    "errors": 0,
+    "erasures": 16381,
+    "exact_recall": 0.00012207776353537203,
+    "precision": 1.0,
+    "overflow": 16379,
+    "ambiguous": 0,
+    "graph_supported": 16205,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16381,
+        "budget": 16381,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 15,
+    "cutoff": 6,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 20,
+    "correct": 20,
+    "errors": 0,
+    "erasures": 16363,
+    "exact_recall": 0.0012207776353537203,
+    "precision": 1.0,
+    "overflow": 16357,
+    "ambiguous": 0,
+    "graph_supported": 16158,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16363,
+        "budget": 16363,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 15,
+    "cutoff": 9,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 503,
+    "correct": 503,
+    "errors": 0,
+    "erasures": 15880,
+    "exact_recall": 0.030702557529146066,
+    "precision": 1.0,
+    "overflow": 15761,
+    "ambiguous": 0,
+    "graph_supported": 15939,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 15880,
+        "budget": 15880,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 15,
+    "cutoff": 99,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 2540,
+    "correct": 2540,
+    "errors": 0,
+    "erasures": 13843,
+    "exact_recall": 0.15503875968992248,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 2554,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 13843,
+        "budget": 13843,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 17,
+    "cutoff": 1,
+    "ratio": 10.0,
+    "truth": 16383,
+    "emitted": 2,
+    "correct": 2,
+    "errors": 0,
+    "erasures": 16381,
+    "exact_recall": 0.00012207776353537203,
+    "precision": 1.0,
+    "overflow": 16380,
+    "ambiguous": 0,
+    "graph_supported": 16306,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16381,
+        "budget": 16381,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 17,
+    "cutoff": 1,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 2752,
+    "correct": 2748,
+    "errors": 4,
+    "erasures": 13631,
+    "exact_recall": 0.16773484709760117,
+    "precision": 0.998546511627907,
+    "overflow": 13397,
+    "ambiguous": 168,
+    "graph_supported": 16306,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 4,
+        "erasures": 13631,
+        "budget": 13639,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 17,
+    "cutoff": 19,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 13388,
+    "correct": 13388,
+    "errors": 0,
+    "erasures": 2995,
+    "exact_recall": 0.8171885491057804,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 13413,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 2995,
+        "budget": 2995,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 17,
+    "cutoff": 199,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 9,
+    "correct": 9,
+    "errors": 0,
+    "erasures": 16374,
+    "exact_recall": 0.0005493499359091741,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 9,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16374,
+        "budget": 16374,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 17,
+    "cutoff": 3,
+    "ratio": 10.0,
+    "truth": 16383,
+    "emitted": 11141,
+    "correct": 11136,
+    "errors": 5,
+    "erasures": 5242,
+    "exact_recall": 0.6797289873649515,
+    "precision": 0.9995512072524908,
+    "overflow": 4308,
+    "ambiguous": 737,
+    "graph_supported": 16166,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 5,
+        "erasures": 5242,
+        "budget": 5252,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 17,
+    "cutoff": 3,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 16047,
+    "correct": 16047,
+    "errors": 0,
+    "erasures": 336,
+    "exact_recall": 0.9794909357260575,
+    "precision": 1.0,
+    "overflow": 24,
+    "ambiguous": 20,
+    "graph_supported": 16166,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 336,
+        "budget": 336,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 17,
+    "cutoff": 4,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 16018,
+    "correct": 16018,
+    "errors": 0,
+    "erasures": 365,
+    "exact_recall": 0.9777208081547946,
+    "precision": 1.0,
+    "overflow": 2,
+    "ambiguous": 5,
+    "graph_supported": 16095,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 365,
+        "budget": 365,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 17,
+    "cutoff": 49,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 6247,
+    "correct": 6247,
+    "errors": 0,
+    "erasures": 10136,
+    "exact_recall": 0.38130989440273455,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 6250,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 10136,
+        "budget": 10136,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 17,
+    "cutoff": 5,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 15930,
+    "correct": 15930,
+    "errors": 0,
+    "erasures": 453,
+    "exact_recall": 0.9723493865592382,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 1,
+    "graph_supported": 15996,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 453,
+        "budget": 453,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 17,
+    "cutoff": 6,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 15833,
+    "correct": 15833,
+    "errors": 0,
+    "erasures": 550,
+    "exact_recall": 0.9664286150277727,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 15893,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 550,
+        "budget": 550,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 17,
+    "cutoff": 9,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 15395,
+    "correct": 15395,
+    "errors": 0,
+    "erasures": 988,
+    "exact_recall": 0.9396935848135262,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 15437,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 988,
+        "budget": 988,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 17,
+    "cutoff": 99,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 993,
+    "correct": 993,
+    "errors": 0,
+    "erasures": 15390,
+    "exact_recall": 0.06061160959531221,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 993,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 15390,
+        "budget": 15390,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 19,
+    "cutoff": 1,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 16125,
+    "correct": 16125,
+    "errors": 0,
+    "erasures": 258,
+    "exact_recall": 0.984251968503937,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 47,
+    "graph_supported": 16237,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 258,
+        "budget": 258,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 19,
+    "cutoff": 19,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 11806,
+    "correct": 11806,
+    "errors": 0,
+    "erasures": 4577,
+    "exact_recall": 0.7206250381493011,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 11807,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 4577,
+        "budget": 4577,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 19,
+    "cutoff": 199,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 16383,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 0,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 19,
+    "cutoff": 3,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 15966,
+    "correct": 15966,
+    "errors": 0,
+    "erasures": 417,
+    "exact_recall": 0.974546786302875,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 15996,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 417,
+        "budget": 417,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 19,
+    "cutoff": 4,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 15834,
+    "correct": 15834,
+    "errors": 0,
+    "erasures": 549,
+    "exact_recall": 0.9664896539095403,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 15859,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 549,
+        "budget": 549,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 19,
+    "cutoff": 49,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 4039,
+    "correct": 4039,
+    "errors": 0,
+    "erasures": 12344,
+    "exact_recall": 0.24653604345968383,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 4039,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 12344,
+        "budget": 12344,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 19,
+    "cutoff": 5,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 15677,
+    "correct": 15677,
+    "errors": 0,
+    "erasures": 706,
+    "exact_recall": 0.9569065494720137,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 15693,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 706,
+        "budget": 706,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 19,
+    "cutoff": 6,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 15470,
+    "correct": 15470,
+    "errors": 0,
+    "erasures": 913,
+    "exact_recall": 0.9442715009461027,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 15480,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 913,
+        "budget": 913,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 19,
+    "cutoff": 9,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 14786,
+    "correct": 14786,
+    "errors": 0,
+    "erasures": 1597,
+    "exact_recall": 0.9025209058170054,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 14790,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 1597,
+        "budget": 1597,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 19,
+    "cutoff": 99,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 369,
+    "correct": 369,
+    "errors": 0,
+    "erasures": 16014,
+    "exact_recall": 0.02252334737227614,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 369,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16014,
+        "budget": 16014,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 21,
+    "cutoff": 1,
+    "ratio": 10.0,
+    "truth": 16383,
+    "emitted": 14723,
+    "correct": 14719,
+    "errors": 4,
+    "erasures": 1660,
+    "exact_recall": 0.8984313007385705,
+    "precision": 0.9997283162398968,
+    "overflow": 635,
+    "ambiguous": 751,
+    "graph_supported": 16105,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 4,
+        "erasures": 1660,
+        "budget": 1668,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 21,
+    "cutoff": 1,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 16006,
+    "correct": 16006,
+    "errors": 0,
+    "erasures": 377,
+    "exact_recall": 0.9769883415735824,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 22,
+    "graph_supported": 16105,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 377,
+        "budget": 377,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 21,
+    "cutoff": 19,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 9710,
+    "correct": 9710,
+    "errors": 0,
+    "erasures": 6673,
+    "exact_recall": 0.5926875419642312,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 9711,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 6673,
+        "budget": 6673,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 21,
+    "cutoff": 199,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 16383,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 0,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 21,
+    "cutoff": 3,
+    "ratio": 10.0,
+    "truth": 16383,
+    "emitted": 15662,
+    "correct": 15661,
+    "errors": 1,
+    "erasures": 721,
+    "exact_recall": 0.9559299273637307,
+    "precision": 0.9999361511939727,
+    "overflow": 0,
+    "ambiguous": 44,
+    "graph_supported": 15705,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 1,
+        "erasures": 721,
+        "budget": 723,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 21,
+    "cutoff": 3,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 15669,
+    "correct": 15669,
+    "errors": 0,
+    "erasures": 714,
+    "exact_recall": 0.9564182384178722,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 15705,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 714,
+        "budget": 714,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 21,
+    "cutoff": 4,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 15383,
+    "correct": 15383,
+    "errors": 0,
+    "erasures": 1000,
+    "exact_recall": 0.938961118232314,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 15408,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 1000,
+        "budget": 1000,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 21,
+    "cutoff": 49,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 2159,
+    "correct": 2159,
+    "errors": 0,
+    "erasures": 14224,
+    "exact_recall": 0.13178294573643412,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 2159,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 14224,
+        "budget": 14224,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 21,
+    "cutoff": 5,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 15102,
+    "correct": 15102,
+    "errors": 0,
+    "erasures": 1281,
+    "exact_recall": 0.9218091924555942,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 15119,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 1281,
+        "budget": 1281,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 21,
+    "cutoff": 6,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 14789,
+    "correct": 14789,
+    "errors": 0,
+    "erasures": 1594,
+    "exact_recall": 0.9027040224623085,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 14803,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 1594,
+        "budget": 1594,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 21,
+    "cutoff": 9,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 13783,
+    "correct": 13783,
+    "errors": 0,
+    "erasures": 2600,
+    "exact_recall": 0.8412989074040164,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 13790,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 2600,
+        "budget": 2600,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 21,
+    "cutoff": 99,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 81,
+    "correct": 81,
+    "errors": 0,
+    "erasures": 16302,
+    "exact_recall": 0.004944149423182567,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 81,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16302,
+        "budget": 16302,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 25,
+    "cutoff": 1,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 15495,
+    "correct": 15495,
+    "errors": 0,
+    "erasures": 888,
+    "exact_recall": 0.9457974729902948,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 14,
+    "graph_supported": 15611,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 888,
+        "budget": 888,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 25,
+    "cutoff": 19,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 5117,
+    "correct": 5117,
+    "errors": 0,
+    "erasures": 11266,
+    "exact_recall": 0.3123359580052493,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 5117,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 11266,
+        "budget": 11266,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 25,
+    "cutoff": 199,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 16383,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 0,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 25,
+    "cutoff": 3,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 14556,
+    "correct": 14556,
+    "errors": 0,
+    "erasures": 1827,
+    "exact_recall": 0.8884819630104377,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 14588,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 1827,
+        "budget": 1827,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 25,
+    "cutoff": 4,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 13952,
+    "correct": 13952,
+    "errors": 0,
+    "erasures": 2431,
+    "exact_recall": 0.8516144784227553,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 13971,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 2431,
+        "budget": 2431,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 25,
+    "cutoff": 49,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 318,
+    "correct": 318,
+    "errors": 0,
+    "erasures": 16065,
+    "exact_recall": 0.019410364402124153,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 318,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16065,
+        "budget": 16065,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 25,
+    "cutoff": 5,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 13313,
+    "correct": 13313,
+    "errors": 0,
+    "erasures": 3070,
+    "exact_recall": 0.8126106329732039,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 13330,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 3070,
+        "budget": 3070,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 25,
+    "cutoff": 6,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 12645,
+    "correct": 12645,
+    "errors": 0,
+    "erasures": 3738,
+    "exact_recall": 0.7718366599523897,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 12655,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 3738,
+        "budget": 3738,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 25,
+    "cutoff": 9,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 10700,
+    "correct": 10700,
+    "errors": 0,
+    "erasures": 5683,
+    "exact_recall": 0.6531160349142404,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 10703,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 5683,
+        "budget": 5683,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 25,
+    "cutoff": 99,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 16383,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 0,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 31,
+    "cutoff": 1,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 13983,
+    "correct": 13983,
+    "errors": 0,
+    "erasures": 2400,
+    "exact_recall": 0.8535066837575536,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 5,
+    "graph_supported": 14127,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 2400,
+        "budget": 2400,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 31,
+    "cutoff": 19,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 1180,
+    "correct": 1180,
+    "errors": 0,
+    "erasures": 15203,
+    "exact_recall": 0.0720258804858695,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 1180,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 15203,
+        "budget": 15203,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 31,
+    "cutoff": 199,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 16383,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 0,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 31,
+    "cutoff": 3,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 11617,
+    "correct": 11617,
+    "errors": 0,
+    "erasures": 4766,
+    "exact_recall": 0.7090886894952084,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 11638,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 4766,
+        "budget": 4766,
+        "within_rs_bound": true
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 31,
+    "cutoff": 4,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 10393,
+    "correct": 10393,
+    "errors": 0,
+    "erasures": 5990,
+    "exact_recall": 0.6343770982115607,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 10400,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 5990,
+        "budget": 5990,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 31,
+    "cutoff": 49,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 2,
+    "correct": 2,
+    "errors": 0,
+    "erasures": 16381,
+    "exact_recall": 0.00012207776353537203,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 2,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16381,
+        "budget": 16381,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 31,
+    "cutoff": 5,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 9247,
+    "correct": 9247,
+    "errors": 0,
+    "erasures": 7136,
+    "exact_recall": 0.5644265397057926,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 9251,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 7136,
+        "budget": 7136,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 31,
+    "cutoff": 6,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 8168,
+    "correct": 8168,
+    "errors": 0,
+    "erasures": 8215,
+    "exact_recall": 0.49856558627845937,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 8171,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 8215,
+        "budget": 8215,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 31,
+    "cutoff": 9,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 5495,
+    "correct": 5495,
+    "errors": 0,
+    "erasures": 10888,
+    "exact_recall": 0.33540865531343467,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 5495,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 10888,
+        "budget": 10888,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file1",
+    "k": 31,
+    "cutoff": 99,
+    "ratio": 2.55,
+    "truth": 16383,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 16383,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 0,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  }
+]

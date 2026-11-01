@@ -1,0 +1,20 @@
+[
+  {
+    "format": "nbt",
+    "designs": 100,
+    "graph_exact": 100,
+    "msa_exact": 100
+  },
+  {
+    "format": "song",
+    "designs": 100,
+    "graph_exact": 100,
+    "msa_exact": 100
+  },
+  {
+    "format": "fountain",
+    "designs": 100,
+    "graph_exact": 100,
+    "msa_exact": 100
+  }
+]

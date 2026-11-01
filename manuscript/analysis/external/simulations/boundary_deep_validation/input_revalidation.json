@@ -1,0 +1,24 @@
+{
+  "all_match": true,
+  "checked_at_utc": "2026-10-20T08:28:20.495773+00:00",
+  "files": [
+    {
+      "path": "/Users/song/Documents/123/HT176_FDDP220002706-1a_1.fq.gz",
+      "bytes": 3766690843,
+      "sha256": "f37f22273be97121c0d83b915586f86ecf87098f6cf6fb9dd2d3658f46713902",
+      "matches_prior": true
+    },
+    {
+      "path": "/Users/song/Documents/123/HT176_FDDP220002706-1a_2.fq.gz",
+      "bytes": 3733718702,
+      "sha256": "5008d8d0e29440cbb7f7e94aa9cae56c43fee1332c668dc167d72099e391f0a9",
+      "matches_prior": true
+    },
+    {
+      "path": "/Users/song/dbgps2_ht/ref.fa",
+      "bytes": 44520000,
+      "sha256": "fbfa73ef96a4bbab92b7bd8d11b593113792189ca73b14ea2186db6793112259",
+      "matches_prior": true
+    }
+  ]
+}

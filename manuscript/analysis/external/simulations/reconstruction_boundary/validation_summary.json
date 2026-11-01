@@ -1,0 +1,24 @@
+{
+  "synthetic_graphs": 1368,
+  "synthetic_operating_points": 43776,
+  "real_operating_points": 16,
+  "native_search_comparisons": 53552,
+  "all_native_sample_comparisons_passed": true,
+  "exact_bound_inequalities_passed": true,
+  "loss_decomposition_passed": true,
+  "admissible_search_losses_equal_overflow_plus_ambiguity": true,
+  "previous_real_profile_points_matched": 12,
+  "default_nontrivial_main_contexts": 83,
+  "default_nontrivial_contexts_within_2pp": 73,
+  "max_default_main_mean_gap_pp": 14.322916666666666,
+  "default_wrong_outputs": 0,
+  "all_settings_max_wrong_per_library": 4,
+  "cohorts": {
+    "abundance_shift": 96,
+    "geometric_breaks": 144,
+    "geometry_matched_regular": 144,
+    "independent_confirmation": 144,
+    "main": 720,
+    "mixed_errors": 120
+  }
+}

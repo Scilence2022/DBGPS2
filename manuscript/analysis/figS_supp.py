@@ -89,5 +89,5 @@ t3 = pd.DataFrame({"Sample": kt["sample"].map(fs.LABEL), "k": kt.k,
                    "Wrong strands, r → ∞ (sum over c)": kt.wrong_r_inf,
                    "Wrong strands, r = 2.55": kt.wrong_dbgps2, "Wrong strands, r = 3": kt.wrong_r3,
                    "Wrong strands, r = 4": kt.wrong_r4})
-t3.to_csv(os.path.join(fs.DATADIR, "SupplementaryTable3_ksize.csv"), index=False)
+t3.to_csv(os.path.join(fs.DATADIR, "SupplementaryTable4_ksize.csv"), index=False)
 print(t3.to_string())

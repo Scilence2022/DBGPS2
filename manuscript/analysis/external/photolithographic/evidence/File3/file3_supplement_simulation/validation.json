@@ -1,0 +1,31 @@
+{
+  "source_sha256": "e7543e2b2496c628f3bd356f11bd393d3780ba7ba7bb12f502d425900fea315d",
+  "all_cases_byte_identical": true,
+  "artifact_sha256": {
+    "summary.json": "d74ba1ed9d8d52a0d83c91d02eb7793d3c74f37ff1a8acdd6b5412d6ee8793e7",
+    "provenance.json": "bc89d86feeadc476bdcb4e24ee25cf98534abda2c87ca560cefd5749daa06034",
+    "REPORT.zh-CN.md": "d8689b9de4b1b0f6d8a6bc55c49a25b2125deebf2a022ade17aa29d295b1315a",
+    "actual_plus_1019/block12.before.strands": "02868e25bd45e0d2062e32fe2a3321e422b71a490815bb428ca2d549cb66ac08",
+    "actual_plus_1019/result.json": "ed9ea5ed0cda09bea7f0b2dd61f528d00bc82ce7d585e61c78556d4701c15557",
+    "actual_plus_1019/injected_design_strands.tsv": "b02c85d9755069683191d52eac28c365e6430f3cc5e3ab9cfd57af8a5699aea3",
+    "actual_plus_1019/outer_decode.log": "91805afcad30be18731fc0d0d79a3770c9b43d20a8b5409259dd73043a8282ce",
+    "actual_plus_1019/all12blocks.strands": "85244390cd25f4e52a1cde3030789c7d5cfcbfff9a50934fb252fbebd29cdcce",
+    "actual_plus_1019/simulated_recovered.zip": "a7d53ade64bab3f60252e75b28e1741d85fdd7b5b393ffddc95fd141466d8cbb",
+    "actual_plus_1019/block12.supplemented.strands": "f8c61e731b6badbecf25f1d3a9e13b0ad1da5949eed5e8b7f16297ffbc878a06",
+    "oracle_union_plus_318/block12.before.strands": "113c62dce07f27487eaca66af83c7e6f46dbd58bafdf3ccb712bf524ccaa0e1b",
+    "oracle_union_plus_318/result.json": "96fcdbcd2cd21da908a11c219206afb5da1972e3f6553dacbebe4c51ed3585e3",
+    "oracle_union_plus_318/injected_design_strands.tsv": "caeb78ad3c6827ace90c9ac70880e862c1953045a50a1b37320c20e5f9d4b296",
+    "oracle_union_plus_318/outer_decode.log": "b24052aefc09e820f73fb0a2b2276e00fa4aa09ca2ec64d87d873dc1850f385c",
+    "oracle_union_plus_318/all12blocks.strands": "bb6a82aab5eef1a585166b2a8e0271a9b0c886cff1c0ecdbf43cfc8b15d25a67",
+    "oracle_union_plus_318/simulated_recovered.zip": "a7d53ade64bab3f60252e75b28e1741d85fdd7b5b393ffddc95fd141466d8cbb",
+    "oracle_union_plus_318/block12.supplemented.strands": "c5d19a6846a0e97a550905f2688b7acea4c2b7734c37b706f888b52bab027890"
+  },
+  "independent_audit": {
+    "injections_at_missing_indices_only": true,
+    "all_original_strands_retained": true,
+    "first_11_blocks_unchanged": true,
+    "both_archives_byte_identical": true,
+    "both_archives_crc_pass": true,
+    "all_artifact_hashes_verified": true
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "graphs": 330,
+  "synthetic_operating_points": 7920,
+  "real_operating_points": 24,
+  "policy_evaluations": 1655,
+  "new_native_search_comparisons": 39168,
+  "independent_python_candidate_scores_match_native": true,
+  "all_source_locks_match": true,
+  "crc_count_objective_regret_bound_verified": true,
+  "truth_permutation_blind_output_invariant": true,
+  "native_counts_dominate_origin_clean_counts": true,
+  "theoretical_conditions": 216,
+  "theory_intersections": 216,
+  "conditional_abundance_conditions": 12,
+  "conditional_abundance_intersections": 12,
+  "simultaneous_family_error": 0.05,
+  "interval_method": "Bonferroni Clopper-Pearson exact binomial",
+  "policy_false_accepts_over_distinct_runs": {
+    "default": 8,
+    "global_crc_cr": 3,
+    "global_crc_r": 3,
+    "two_support_consensus": 6,
+    "union_consensus": 16
+  },
+  "maximum_library_size": 65536,
+  "cohorts": {
+    "abundance_holdout": 12,
+    "error_structure": 36,
+    "holdout": 36,
+    "mixed_holdout": 12,
+    "poisson_theory": 216,
+    "scale": 18
+  }
+}

@@ -1,0 +1,13 @@
+metric,value
+lfsr_states,575777
+queried_seeds,72808
+queried_seeds_outside_design,808
+designs_not_returned,10
+designs_not_returned_unqueried,0
+shared_full,66972
+graph_only_full,5018
+merge_only_full,9
+shared_one_tile,58200
+graph_only_one_tile,5127
+merge_only_one_tile,7143
+union_one_tile,70470

@@ -1,0 +1,21 @@
+{
+  "primary_File1_reencoded_exact": 16383,
+  "index_xor": 1071068,
+  "inner_field_polynomial": 91,
+  "inner_generator_roots": [
+    1,
+    2
+  ],
+  "File2": {
+    "original_sha256": "aeb6bdb02a943147d03178a5887a5513a7b6eb8ea3194718620e16a8d4be463b",
+    "evaluation_sha256": "3fc18d37cac8eaabbd650547297e2d62da863fb24fa86f8cd831bc502a4522f2",
+    "sequences": 49149,
+    "transform": "reverse bases; preserve 42 nt payload; reserialize randomized index and inner RS parity"
+  },
+  "File3": {
+    "original_sha256": "d35f25a5ef0e780b553f93cac137b6363c09f8b456b611f37fa2a88f2ec899d2",
+    "evaluation_sha256": "249d224726afb173903009f1ed9fcced5908c22787a75d760600c5e0a0afa30d",
+    "sequences": 196596,
+    "transform": "reverse bases; preserve 42 nt payload; reserialize randomized index and inner RS parity"
+  }
+}

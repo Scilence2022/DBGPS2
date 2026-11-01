@@ -1,0 +1,36 @@
+{
+  "datasets": [
+    "fountain",
+    "nbt_file16",
+    "song_ht176"
+  ],
+  "cases": [
+    "cluster_msa_vote",
+    "dbgps_rule",
+    "dbgps2",
+    "dbgps2_alt_c",
+    "dbgps2_B8",
+    "dbgps2_B16",
+    "dbgps2_F32",
+    "dbgps2_F34",
+    "dbgps2_B12_F34"
+  ],
+  "repeats": 3,
+  "worker_settings": [
+    1,
+    3
+  ],
+  "target_runs": 162,
+  "inputs": "same complete retained molecules as previous 81-run matrix; all parameters and validators unchanged",
+  "serial_protocol": "count_workers=1,pipeline_threads=1; no overlapping graph pipeline stages; MSA direct sequential map with no Python process pool",
+  "three_worker_protocol": "count_workers=3,pipeline_threads=3; MSA workers=3; primary worker counts matched, not a strict three-core limit",
+  "timing": "start through native reconstruction, format validation, reference-free conflict rejection and sorted output writing; reference truth scoring and outer decoding follow the timer",
+  "cpu": "time(1) user+system plus calling-harness self CPU over the same interval; getrusage stage times include graph threads or completed MSA worker/child usage",
+  "threading": "numerical library parallelism capped at one; MUSCLE3 calls single-threaded",
+  "order": "all measured jobs serial; cyclic method order and alternating resource-setting order within each dataset/repeat; no previous timings reused",
+  "host": "macOS-26.4.1-arm64-arm-64bit",
+  "dedicated_host": false,
+  "cpu_affinity": false,
+  "background_applications": "present; pre-run snapshots retained",
+  "reference_evaluation": "same design scoring as original; original outputs used only after timing to check scheduler invariance"
+}

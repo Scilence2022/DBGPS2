@@ -1,0 +1,14 @@
+{
+  "perfect_c0_r2.55": {
+    "exact": 20,
+    "returned": 20
+  },
+  "perfect_c1_r2.55": {
+    "exact": 20,
+    "returned": 20
+  },
+  "noisy_c1_r2.55": {
+    "exact": 20,
+    "returned": 20
+  }
+}

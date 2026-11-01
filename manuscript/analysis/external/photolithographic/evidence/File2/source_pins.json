@@ -1,0 +1,21 @@
+{
+  "dt4dds_commit": "861d3b95b52d1b121e9d85040f20c8ecf0cda2d4",
+  "files": [
+    {
+      "name": "File1_design.fasta",
+      "git_blob": "a153631e55da60945215e8666a5aeb30512a9045",
+      "sha256": "784d345f1d21348b2cff607f11ecb759a6347d9763a7638db15a3ca425ec7f1d"
+    },
+    {
+      "name": "File2_design.fasta",
+      "git_blob": "e277bebe5cf06eb1db035b9e69acfe70bb2f1578",
+      "sha256": "aeb6bdb02a943147d03178a5887a5513a7b6eb8ea3194718620e16a8d4be463b"
+    },
+    {
+      "name": "File3_design.fasta",
+      "git_blob": "6eac874fe4b43dc83d4e97ca2ccc4dceeef1682f",
+      "sha256": "d35f25a5ef0e780b553f93cac137b6363c09f8b456b611f37fa2a88f2ec899d2"
+    }
+  ],
+  "File1_secondary_equals_primary": true
+}

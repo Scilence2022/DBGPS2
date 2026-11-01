@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "source": {
+    "reads": 195619515,
+    "bases": 9975774833,
+    "sha256_record_sum": "8b1b5db325a2f231699baa520222f994345f6020b6bf8cb0f4c0e15107a1f05a",
+    "sha256_record_xor": "2f5049e4218e79314b404b22e44620767b2e8fa49952d0143646b38a9bd6a2ca",
+    "seconds": 86.88154858300001
+  },
+  "partitioned": {
+    "reads": 195619515,
+    "bases": 9975774833,
+    "sha256_record_sum": "8b1b5db325a2f231699baa520222f994345f6020b6bf8cb0f4c0e15107a1f05a",
+    "sha256_record_xor": "2f5049e4218e79314b404b22e44620767b2e8fa49952d0143646b38a9bd6a2ca",
+    "seconds": 85.947348375
+  },
+  "method": "SHA-256 per (read name, original sequence, original quality), zero-delimited; order-independent four-limb sums and XORs plus read/base totals",
+  "scope": "Broad blocks plus ambiguous and unassigned form a complete disjoint read multiset; strict/inclusive are overlapping subsets"
+}

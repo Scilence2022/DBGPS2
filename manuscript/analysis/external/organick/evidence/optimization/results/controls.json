@@ -1,0 +1,38 @@
+{
+  "31": {
+    "forward_exact": 20,
+    "reverse_exact": 20,
+    "tested": 40,
+    "entire_body_length": 110
+  },
+  "29": {
+    "forward_exact": 20,
+    "reverse_exact": 20,
+    "tested": 40,
+    "entire_body_length": 110
+  },
+  "27": {
+    "forward_exact": 20,
+    "reverse_exact": 20,
+    "tested": 40,
+    "entire_body_length": 110
+  },
+  "25": {
+    "forward_exact": 20,
+    "reverse_exact": 20,
+    "tested": 40,
+    "entire_body_length": 110
+  },
+  "23": {
+    "forward_exact": 20,
+    "reverse_exact": 20,
+    "tested": 40,
+    "entire_body_length": 110
+  },
+  "21": {
+    "forward_exact": 20,
+    "reverse_exact": 20,
+    "tested": 40,
+    "entire_body_length": 110
+  }
+}

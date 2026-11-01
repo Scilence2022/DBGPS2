@@ -1,0 +1,57 @@
+{
+  "processed_counter_checks": [
+    {
+      "name": "processed.k19.L60",
+      "all_reference_min_counts_match_original_filtered_counter": true
+    },
+    {
+      "name": "processed.k20.L60",
+      "all_reference_min_counts_match_original_filtered_counter": true
+    },
+    {
+      "name": "processed.k17.L60",
+      "all_reference_min_counts_match_original_filtered_counter": true
+    },
+    {
+      "name": "processed.k18.L60",
+      "all_reference_min_counts_match_original_filtered_counter": true
+    },
+    {
+      "name": "processed.k13.L60",
+      "all_reference_min_counts_match_original_filtered_counter": true
+    },
+    {
+      "name": "processed.k15.L60",
+      "all_reference_min_counts_match_original_filtered_counter": true
+    },
+    {
+      "name": "processed.k21.L60",
+      "all_reference_min_counts_match_original_filtered_counter": true
+    },
+    {
+      "name": "processed.k25.L60",
+      "all_reference_min_counts_match_original_filtered_counter": true
+    },
+    {
+      "name": "processed.k31.L60",
+      "all_reference_min_counts_match_original_filtered_counter": true
+    }
+  ],
+  "exact_reference_path_configurations": 179,
+  "exact_reference_path_predictions_equal_observed_zero_error_candidates": true,
+  "all_13_cli_sm_and_distinct_kd_counts_match_expanded_profiles": true,
+  "raw_counts_dominate_processed": true,
+  "raw_full_counts_dominate_raw_capped": true,
+  "sha256": {
+    "summary.json": "49640e1270fc624412c24438c5a3017a60dc191bf0781ac0133b69d57f20c219",
+    "REPORT.zh-CN.md": "f612af9b326d21a3c318ca1a4ada06727345abb56ead5a32b8b0b63f784388f7",
+    "all_blocks.tsv": "fe5cb49245e3fce37dda1f7ad5fc0c36d80c6d64ddc301c882ec04a49082e8fe",
+    "position_profiles.k19.tsv": "df53530bf8390c6a4d784aeb7f10f6719df33ff4a69f41c33d1ce00bc4f8ed74",
+    "block12_per_index.tsv": "0fac0b1934bda9b77290db92142975049f4287ed995dcdddfcc30212a973c0a6",
+    "best_parameter_loss_breakdown.tsv": "cf03db385166b2f523a3adfa1c264d714a6055612c08a824d66732e7227367af",
+    "union_loss_breakdown.tsv": "49cce2802d2baef6e51715719f391a06a43aa91531d18b47a028eb8dedad1612",
+    "graph_parameter_diagnostics.json": "10c0c0e1641047a21bdb3ec75a59dc022db03f404b02b293de7f54a3284aff0f",
+    "diagnostics.png": "f73be29d3633a16c8f87adec005ad94f5896f0869edacdc8816c0eb75a405f61",
+    "diagnostics.svg": "f0a4d9cb1e0fe6f2187e60218209e6fe4d9dfaabdae1684edf95e2930a15d921"
+  }
+}

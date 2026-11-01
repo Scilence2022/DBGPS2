@@ -1,0 +1,7 @@
+{
+  "prior_stable_headers": 595272,
+  "included": 711923,
+  "excluded": 839301,
+  "policy": "forward observed seeds whose 13 nt encoded header lacks a unanimous prediction supported by >=3 previous parameter/direction sources",
+  "reference_sequences_used_to_select_queries": false
+}

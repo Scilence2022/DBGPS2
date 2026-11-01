@@ -1,0 +1,16 @@
+{
+  "all_queries": {
+    "F": 1551224,
+    "R": 1512521
+  },
+  "screen_queries": {
+    "F": 12345,
+    "R": 12028
+  },
+  "sampling_probability": 0.0078125,
+  "reference_sequences_used": false,
+  "raw_records": 15719903,
+  "forward_anchor": "GCAACAAGTCAATCCGT",
+  "reverse_anchor": "CAAGCAAGCATTCAATT",
+  "elapsed_seconds": 162.97935437499999
+}

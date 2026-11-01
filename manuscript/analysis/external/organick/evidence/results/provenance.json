@@ -1,0 +1,41 @@
+{
+  "git_commit": "f7b1373ec68bc6518af91b7427eda53699a3c73d",
+  "compile_command": [
+    "cc",
+    "-O3",
+    "-Wall",
+    "-I.",
+    "-o",
+    "/Users/song/.codex/worktrees/bd05/DBGPS2/experiments/nbt4079/tmp/dbgps2_adapter",
+    "/Users/song/.codex/worktrees/bd05/DBGPS2/experiments/nbt4079/scripts/dbgps2_adapter.c",
+    "dbgps_codec.c",
+    "dbgps_redundancy.c",
+    "dbgps_strand.c",
+    "kthread.c",
+    "-lz",
+    "-lpthread"
+  ],
+  "platform": "macOS-26.4.1-arm64-arm-64bit",
+  "compiler": "Apple clang version 17.0.0 (clang-1700.4.4.1)",
+  "sources_modified": false,
+  "adapter": "scripts/dbgps2_adapter.c",
+  "source_sha256": {
+    "DBGPS2.c": "39dbf9fa2ec338756a3e3599350a4d6805eda0095ccccd6d8141980777de9308",
+    "dbgps_codec.c": "b13059e3bb9ca132c0da7e0fc659083f138f53b1a9e321f37e73c04b8d7d679d",
+    "dbgps_redundancy.c": "3229baff40e31c7b64d7a5c7198ba884ba18af21dc578fba2c4e709c46fec9ef",
+    "dbgps_strand.c": "1f146a1e861a7bdf838f50b8b197e81eb4fe26f4955d72c9f34f5f1a05295716",
+    "kthread.c": "d9b18fcb9412a05e2e235274ade871154640366208073577e5a353514e5825fe"
+  },
+  "graph_k": 31,
+  "index_bases_internal": 16,
+  "path_bases_internal": 96,
+  "output": "2 observed forward-primer bases plus 110 nt encoded region; strip first 2 bases",
+  "seed": "last 17 forward-primer bases + first 14 encoded bases, discovered only from reads",
+  "redundancy": "none",
+  "threads_per_graph": 4,
+  "completed_configs": [
+    "c0_r2.55",
+    "c1_r2.55"
+  ],
+  "optional_no_ratio_status": "Stopped; incomplete files are named *.tsv.incomplete and are not scored."
+}

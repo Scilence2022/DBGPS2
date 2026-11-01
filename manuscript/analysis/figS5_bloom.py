@@ -77,4 +77,4 @@ axs[2].set_xticks([32, 34, 36]); axs[3].set_xticks([32, 34, 36])
 axs[0].legend(loc="lower left")
 for a, l in zip(axs, "abcd"):
     fs.panel(a, l, x=-0.3, y=1.08)
-fs.save(fig, "FigS2_bloom")
+fs.save(fig, "FigS5_bloom")

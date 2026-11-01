@@ -1,0 +1,77 @@
+{
+  "platform": "macOS-26.4.1-arm64-arm-64bit",
+  "files": {
+    "simulate.py": "c9d09d5973993f9b828c544d3358baf8322385f6f2fb4f8e36c8d242602109ac",
+    "run_exploration.py": "a168ddea0f35336369c2efc0617a926d69d5c76db7e3ab20966355fcc89553a9",
+    "extend_profiler.py": "ee3028580f00bc6e2e22008ef34fb001d054a16a8c609d99386ff4307e4689f3",
+    "smoke.py": "5e32a6240f1c28c8ab93cb42ccbac3c4661ba20f5bdef64d26534c291c4793f3",
+    "src/boundary_profile.c": "ad2a864b0cb2422837d88412cae44bb5a801a0186c55fdde663cbe2db7cddf78",
+    "bin/boundary_profile": "d1970f580f0b347b5bf3cee9e64c86023077659c069e0727dafcea8b0513c94e"
+  },
+  "smoke_validation": {
+    "passed": true,
+    "independent_native_search_comparisons": 1920,
+    "checks": [
+      {
+        "length": 200,
+        "k": 21,
+        "channel": "substitution",
+        "native_search_checks": 192
+      },
+      {
+        "length": 200,
+        "k": 31,
+        "channel": "substitution",
+        "native_search_checks": 192
+      },
+      {
+        "length": 45,
+        "k": 21,
+        "channel": "substitution",
+        "native_search_checks": 192
+      },
+      {
+        "length": 45,
+        "k": 31,
+        "channel": "substitution",
+        "native_search_checks": 192
+      },
+      {
+        "length": 80,
+        "k": 21,
+        "channel": "substitution",
+        "native_search_checks": 192
+      },
+      {
+        "length": 80,
+        "k": 31,
+        "channel": "substitution",
+        "native_search_checks": 192
+      },
+      {
+        "length": 25,
+        "k": 21,
+        "channel": "substitution",
+        "native_search_checks": 192
+      },
+      {
+        "length": 25,
+        "k": 31,
+        "channel": "substitution",
+        "native_search_checks": 192
+      },
+      {
+        "length": 45,
+        "k": 21,
+        "channel": "mixed",
+        "native_search_checks": 192
+      },
+      {
+        "length": 45,
+        "k": 31,
+        "channel": "mixed",
+        "native_search_checks": 192
+      }
+    ]
+  }
+}

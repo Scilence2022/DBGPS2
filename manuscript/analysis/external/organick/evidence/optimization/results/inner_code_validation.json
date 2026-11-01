@@ -1,0 +1,12 @@
+{
+  "references_checked": 607150,
+  "valid": 607150,
+  "invalid": 0,
+  "rotation_cycle": "AGCT",
+  "initial_base": "free A/C/G/T",
+  "six_bit_blocks": 27,
+  "quartet_transition_positions": "1..108 (zero-based DNA positions)",
+  "final_transition_trit": 0,
+  "calibration": "mapping/phase identified from 512 regularly sampled design sequences; validated against every supplied design sequence; no per-reference repair or lookup used in predicate",
+  "elapsed_seconds": 0.6900771249784157
+}

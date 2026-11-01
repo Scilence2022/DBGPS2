@@ -1,0 +1,800 @@
+{
+  "passed": true,
+  "inputs": 132,
+  "all_origin_counts_fit_uint16": true,
+  "max_molecules": 14586,
+  "checks": [
+    {
+      "case_id": "a0d034c5dc330e61",
+      "max_molecules": 133,
+      "sum_molecules": 102424,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "47833803feca923d",
+      "max_molecules": 131,
+      "sum_molecules": 102114,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "1daa6a7a8869feb6",
+      "max_molecules": 58,
+      "sum_molecules": 35897,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "f5f8a620fac7d666",
+      "max_molecules": 133,
+      "sum_molecules": 102751,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "e8ada34dc601687c",
+      "max_molecules": 139,
+      "sum_molecules": 101927,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "0c74acb89fa8ba56",
+      "max_molecules": 13557,
+      "sum_molecules": 218480,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "726328293c0d286b",
+      "max_molecules": 276,
+      "sum_molecules": 235784,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "3525ca0bcfa2ff44",
+      "max_molecules": 37,
+      "sum_molecules": 23710,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "ca268070d0be97cf",
+      "max_molecules": 653,
+      "sum_molecules": 590236,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "4c6e1f4671c2869f",
+      "max_molecules": 21,
+      "sum_molecules": 10438,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "00e6bf52db756a81",
+      "max_molecules": 80,
+      "sum_molecules": 59136,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "a7767f5e98cef90c",
+      "max_molecules": 25,
+      "sum_molecules": 10353,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "23b11f2d1045651d",
+      "max_molecules": 21,
+      "sum_molecules": 10097,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "816ed4c6e9edc1d1",
+      "max_molecules": 147,
+      "sum_molecules": 114493,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "4368d2c86f8a0fa3",
+      "max_molecules": 21,
+      "sum_molecules": 10227,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "5bcf8fd46f529924",
+      "max_molecules": 81,
+      "sum_molecules": 58860,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "d52b5f7ffe47e6e8",
+      "max_molecules": 51,
+      "sum_molecules": 30931,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "eeb3686fa0ebe231",
+      "max_molecules": 132,
+      "sum_molecules": 102266,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "65c9979b44000f6e",
+      "max_molecules": 408,
+      "sum_molecules": 356252,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "4f8fa3a49c0d83e5",
+      "max_molecules": 97,
+      "sum_molecules": 66603,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "107420a7b7a6b475",
+      "max_molecules": 24,
+      "sum_molecules": 10242,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "e2652684c833b7eb",
+      "max_molecules": 21,
+      "sum_molecules": 10259,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "39afec80a692b9c1",
+      "max_molecules": 58,
+      "sum_molecules": 38201,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "9a449c796cff10de",
+      "max_molecules": 95,
+      "sum_molecules": 66048,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "a8c9868c50ef464f",
+      "max_molecules": 22,
+      "sum_molecules": 10187,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "4317496af3fcf05a",
+      "max_molecules": 644,
+      "sum_molecules": 590254,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "b4425a5704a6739b",
+      "max_molecules": 274,
+      "sum_molecules": 222064,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "c52eb8f2f0b6f499",
+      "max_molecules": 213,
+      "sum_molecules": 177275,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "47c83801d0a8cb9e",
+      "max_molecules": 57,
+      "sum_molecules": 35549,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "1b536563560a60d5",
+      "max_molecules": 62,
+      "sum_molecules": 38054,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "d5eaf64710a24811",
+      "max_molecules": 195,
+      "sum_molecules": 152109,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "4d30b1c253de4de0",
+      "max_molecules": 137,
+      "sum_molecules": 102260,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "58ea9fe7352cdb45",
+      "max_molecules": 9765,
+      "sum_molecules": 155745,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "b7c22f8f42c0c70c",
+      "max_molecules": 47,
+      "sum_molecules": 30832,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "fba7a65c16f45852",
+      "max_molecules": 647,
+      "sum_molecules": 590550,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "0e5be1cf294a9470",
+      "max_molecules": 53,
+      "sum_molecules": 35565,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "2382ea6707188f9a",
+      "max_molecules": 210,
+      "sum_molecules": 176921,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "d65cb3f632b21082",
+      "max_molecules": 29,
+      "sum_molecules": 15116,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "1e6c68d0f2ae59d0",
+      "max_molecules": 70,
+      "sum_molecules": 45431,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "75a98a967840a2da",
+      "max_molecules": 438,
+      "sum_molecules": 381280,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "1d65d857456096ec",
+      "max_molecules": 138,
+      "sum_molecules": 102087,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "b2428328ed703b4b",
+      "max_molecules": 21,
+      "sum_molecules": 10223,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "f5d0e4ed7e0c3727",
+      "max_molecules": 50,
+      "sum_molecules": 30741,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "e99f73ca2e1febc1",
+      "max_molecules": 156,
+      "sum_molecules": 114403,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "d337282e98bacbdf",
+      "max_molecules": 49,
+      "sum_molecules": 30813,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "3a5fff26acc71d25",
+      "max_molecules": 50,
+      "sum_molecules": 30852,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "c60aea0f825149dd",
+      "max_molecules": 145,
+      "sum_molecules": 114124,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "64115b9b96b69786",
+      "max_molecules": 286,
+      "sum_molecules": 235251,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "17c4e9792e446627",
+      "max_molecules": 51,
+      "sum_molecules": 30786,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "85340a5a0908cea4",
+      "max_molecules": 67,
+      "sum_molecules": 45837,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "73910bc64d9e28d7",
+      "max_molecules": 50,
+      "sum_molecules": 30621,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "bf2bc701d00507a7",
+      "max_molecules": 34,
+      "sum_molecules": 15448,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "93e6e4d5791e1a8a",
+      "max_molecules": 38,
+      "sum_molecules": 21798,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "1b79e7daeeeb88cd",
+      "max_molecules": 142,
+      "sum_molecules": 102191,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "f3041d9aeb326dc9",
+      "max_molecules": 101,
+      "sum_molecules": 70393,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "acd8d2f96bfac4bf",
+      "max_molecules": 94,
+      "sum_molecules": 70755,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "a9df907a8b1ecab4",
+      "max_molecules": 138,
+      "sum_molecules": 102406,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "9d6d202fc6641b73",
+      "max_molecules": 21,
+      "sum_molecules": 10157,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "f70fcd86031e4934",
+      "max_molecules": 39,
+      "sum_molecules": 22326,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "89c16a9a249a4ee7",
+      "max_molecules": 47,
+      "sum_molecules": 30773,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "c9d4dc73148e5c1b",
+      "max_molecules": 145,
+      "sum_molecules": 107425,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "97acabeaa6dffaf8",
+      "max_molecules": 66,
+      "sum_molecules": 45893,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "325fef873d6b960c",
+      "max_molecules": 21,
+      "sum_molecules": 10190,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "1542866602a1ab24",
+      "max_molecules": 22,
+      "sum_molecules": 10340,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "4f4c7b17da9048b1",
+      "max_molecules": 21,
+      "sum_molecules": 10131,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "bf9194e84811c5cf",
+      "max_molecules": 22,
+      "sum_molecules": 10278,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "442ad9e7530c33bf",
+      "max_molecules": 21,
+      "sum_molecules": 10283,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "c17c866db346b208",
+      "max_molecules": 135,
+      "sum_molecules": 106953,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "bf5a544ba6c190b1",
+      "max_molecules": 434,
+      "sum_molecules": 381145,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "4bfb83d284ae2ba0",
+      "max_molecules": 39,
+      "sum_molecules": 22204,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "f1386b5a9bf0db95",
+      "max_molecules": 137,
+      "sum_molecules": 106814,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "d3660c74e1603ede",
+      "max_molecules": 31,
+      "sum_molecules": 15310,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "75ac45c2e71ca7a1",
+      "max_molecules": 189,
+      "sum_molecules": 153046,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "54eed099a750bf2f",
+      "max_molecules": 140,
+      "sum_molecules": 102564,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "63b04c41b9ba23ff",
+      "max_molecules": 190,
+      "sum_molecules": 152723,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "d67fe8b3bdb7abb4",
+      "max_molecules": 130,
+      "sum_molecules": 102555,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "703e4dba44e3f980",
+      "max_molecules": 23,
+      "sum_molecules": 10220,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "b10b8fe4b7d8f5d7",
+      "max_molecules": 455,
+      "sum_molecules": 381262,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "4dc2ae8fb43780f1",
+      "max_molecules": 46,
+      "sum_molecules": 30866,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "3c365694d395e522",
+      "max_molecules": 48,
+      "sum_molecules": 30685,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "469563f2e4d64acb",
+      "max_molecules": 272,
+      "sum_molecules": 220743,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "a98438385519b64f",
+      "max_molecules": 51,
+      "sum_molecules": 30958,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "31a39ff9b38cd84e",
+      "max_molecules": 96,
+      "sum_molecules": 66852,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "20113165f1580142",
+      "max_molecules": 215,
+      "sum_molecules": 177137,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "59a6287021e98cd6",
+      "max_molecules": 47,
+      "sum_molecules": 30859,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "8a4e9b76eec43295",
+      "max_molecules": 40,
+      "sum_molecules": 23496,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "c3d2b04d286d9a85",
+      "max_molecules": 47,
+      "sum_molecules": 30497,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "8feda2040cf510ab",
+      "max_molecules": 140,
+      "sum_molecules": 102740,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "67e3417369cf0cc2",
+      "max_molecules": 56,
+      "sum_molecules": 37844,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "a1fe045095904f4d",
+      "max_molecules": 9194,
+      "sum_molecules": 151168,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "319f6ee7ae40d26f",
+      "max_molecules": 50,
+      "sum_molecules": 30455,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "e5d5f10be0e0f2a3",
+      "max_molecules": 7195,
+      "sum_molecules": 204404,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "1c69a70f3b410069",
+      "max_molecules": 21,
+      "sum_molecules": 10011,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "17af5562b8386c40",
+      "max_molecules": 139,
+      "sum_molecules": 102743,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "eee742a5419328fa",
+      "max_molecules": 424,
+      "sum_molecules": 357507,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "f716255d74173bdc",
+      "max_molecules": 14586,
+      "sum_molecules": 226002,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "209572b353f26b10",
+      "max_molecules": 99,
+      "sum_molecules": 70574,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "b0f3652f980973db",
+      "max_molecules": 130,
+      "sum_molecules": 102640,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "6fdd417793ad0f23",
+      "max_molecules": 131,
+      "sum_molecules": 102425,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "2e8a86f119a81326",
+      "max_molecules": 52,
+      "sum_molecules": 30616,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "ccf4e8a9fcd76d5b",
+      "max_molecules": 4904,
+      "sum_molecules": 140938,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "fc87bcb0de0e4e88",
+      "max_molecules": 132,
+      "sum_molecules": 102513,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "3e3549bab5134e62",
+      "max_molecules": 289,
+      "sum_molecules": 234952,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "4c3df982f8b4daef",
+      "max_molecules": 275,
+      "sum_molecules": 222159,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "d0e03933e59bb79d",
+      "max_molecules": 405,
+      "sum_molecules": 356658,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "c8c857bd8664cac5",
+      "max_molecules": 22,
+      "sum_molecules": 10121,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "53023e3a3b014a20",
+      "max_molecules": 42,
+      "sum_molecules": 23444,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "8d96cc35e6396eb0",
+      "max_molecules": 50,
+      "sum_molecules": 30494,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "3309c8b6cc1e2a4b",
+      "max_molecules": 137,
+      "sum_molecules": 101848,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "d31833ca0b3bbdc2",
+      "max_molecules": 52,
+      "sum_molecules": 30663,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "05a4786c1173a080",
+      "max_molecules": 20,
+      "sum_molecules": 10306,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "0eb4695b3175c42a",
+      "max_molecules": 48,
+      "sum_molecules": 30926,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "4cb1e375bcad7765",
+      "max_molecules": 81,
+      "sum_molecules": 59045,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "65f4cb9ad33e4206",
+      "max_molecules": 134,
+      "sum_molecules": 102496,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "5d70a3940ea917a1",
+      "max_molecules": 97,
+      "sum_molecules": 265872,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "0413fd92dab821bc",
+      "max_molecules": 156,
+      "sum_molecules": 457920,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "c76ec13c5a41b180",
+      "max_molecules": 440,
+      "sum_molecules": 1523119,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "802821bb4c27c762",
+      "max_molecules": 56,
+      "sum_molecules": 123018,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "3424dc57ac89f7a8",
+      "max_molecules": 23,
+      "sum_molecules": 40867,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "7a3fa70d1b51a695",
+      "max_molecules": 30,
+      "sum_molecules": 61336,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "6d5fd426adabfdba",
+      "max_molecules": 51,
+      "sum_molecules": 122927,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "dbc0c1fa254f884e",
+      "max_molecules": 450,
+      "sum_molecules": 1524011,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "595962192dc3e9d6",
+      "max_molecules": 31,
+      "sum_molecules": 61035,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "66d4ac2ecbc976e1",
+      "max_molecules": 148,
+      "sum_molecules": 456378,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "031d979b9ff2d2c5",
+      "max_molecules": 51,
+      "sum_molecules": 122794,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "53fd74b80da70628",
+      "max_molecules": 24,
+      "sum_molecules": 41273,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "e7ada20d7dc399c5",
+      "max_molecules": 454,
+      "sum_molecules": 1526234,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "3fe727b7d6342b9a",
+      "max_molecules": 102,
+      "sum_molecules": 266435,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "4b808755e8a6d6d0",
+      "max_molecules": 95,
+      "sum_molecules": 265557,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "fa4f5bd600b2eff6",
+      "max_molecules": 26,
+      "sum_molecules": 40703,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "985247f391c76e23",
+      "max_molecules": 31,
+      "sum_molecules": 60673,
+      "matches_saved_metadata": true
+    },
+    {
+      "case_id": "9a6111b3ee22b280",
+      "max_molecules": 154,
+      "sum_molecules": 456830,
+      "matches_saved_metadata": true
+    }
+  ]
+}

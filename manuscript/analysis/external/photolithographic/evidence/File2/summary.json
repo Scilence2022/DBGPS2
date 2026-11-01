@@ -1,0 +1,938 @@
+{
+  "file1": {
+    "graph": {
+      "dataset": "file1",
+      "k": 19,
+      "cutoff": 1,
+      "ratio": 2.55,
+      "truth": 16383,
+      "emitted": 16125,
+      "correct": 16125,
+      "errors": 0,
+      "erasures": 258,
+      "exact_recall": 0.984251968503937,
+      "precision": 1.0,
+      "overflow": 0,
+      "ambiguous": 47,
+      "graph_supported": 16237,
+      "per_block": [
+        {
+          "block": 0,
+          "errors": 0,
+          "erasures": 258,
+          "budget": 258,
+          "within_rs_bound": true
+        }
+      ]
+    },
+    "msa": {
+      "method": "prefix16_muscle3_vote04",
+      "reads": 14299688,
+      "truth": 16383,
+      "clusters": 215090,
+      "raw_exact_recovered": 4439,
+      "candidates_generated": 350470,
+      "candidates_60nt": 346253,
+      "exact_candidates": 22181,
+      "recovered": 10779,
+      "recall": 0.6579381065738875,
+      "seed": 20261017,
+      "cluster_seconds": 23.565212125,
+      "msa_seconds": 257.441774291,
+      "total_seconds": 281.007108125
+    },
+    "msa_inner": {
+      "strict": {
+        "emitted": 10782,
+        "correct": 10778,
+        "errors": 4,
+        "erasures": 5601,
+        "recall": 0.6578770676921198,
+        "per_block": [
+          {
+            "block": 0,
+            "errors": 4,
+            "erasures": 5601,
+            "budget": 5609,
+            "within_rs_bound": false
+          }
+        ]
+      },
+      "corrected": {
+        "emitted": 13958,
+        "correct": 13179,
+        "errors": 779,
+        "erasures": 2425,
+        "recall": 0.804431422816334,
+        "per_block": [
+          {
+            "block": 0,
+            "errors": 779,
+            "erasures": 2425,
+            "budget": 3983,
+            "within_rs_bound": true
+          }
+        ]
+      }
+    },
+    "reads": {
+      "total_reads": 29303855,
+      "filtered_reads": 14299688,
+      "sample_reads": 1430206,
+      "length_histogram": {
+        "10": 1097018,
+        "11": 25164,
+        "12": 32991,
+        "13": 39728,
+        "14": 47016,
+        "15": 53399,
+        "16": 62333,
+        "17": 69779,
+        "18": 77944,
+        "19": 86033,
+        "20": 98131,
+        "21": 114051,
+        "22": 128865,
+        "23": 147323,
+        "24": 164434,
+        "25": 193180,
+        "26": 223285,
+        "27": 251551,
+        "28": 272017,
+        "29": 297366,
+        "30": 296369,
+        "31": 286899,
+        "32": 274048,
+        "33": 261879,
+        "34": 255588,
+        "35": 251910,
+        "36": 256500,
+        "37": 265556,
+        "38": 277284,
+        "39": 288364,
+        "40": 303915,
+        "41": 320176,
+        "42": 335514,
+        "43": 356183,
+        "44": 376796,
+        "45": 401672,
+        "46": 427569,
+        "47": 457207,
+        "48": 488975,
+        "49": 521474,
+        "50": 555890,
+        "51": 592977,
+        "52": 634008,
+        "53": 675863,
+        "54": 719242,
+        "55": 770761,
+        "56": 822538,
+        "57": 887979,
+        "58": 956192,
+        "59": 1025321,
+        "60": 1083637,
+        "61": 1133615,
+        "62": 1156564,
+        "63": 1147249,
+        "64": 1092865,
+        "65": 1006871,
+        "66": 885251,
+        "67": 762901,
+        "68": 638674,
+        "69": 519436,
+        "70": 409834,
+        "71": 317531,
+        "72": 248305,
+        "73": 198467,
+        "74": 205672,
+        "75": 670726
+      }
+    },
+    "decode": {
+      "attempted": true,
+      "exit_code": 0,
+      "seconds": 0.291608624975197,
+      "bytes": 99103,
+      "sha256": "05295bc085b243e16aafa18a63a7b5fad944037f68667a7ac60bff691ac15945",
+      "byte_identical": true,
+      "zip_error": null,
+      "parameters": {
+        "k": 19,
+        "cutoff": 1,
+        "ratio": 2.55
+      }
+    },
+    "configurations_with_all_blocks_in_bound": 30,
+    "notebook": {
+      "method": "prefix14_muscle3_vote0.5",
+      "reads": 14299688,
+      "truth": 16383,
+      "prefix_length": 14,
+      "min_cluster": 4,
+      "gap_weight": 0.5,
+      "raw_fastq": true,
+      "clusters": 369425,
+      "raw_exact_recovered": 4439,
+      "candidates_generated": 552085,
+      "candidates_60nt": 545317,
+      "exact_candidates": 25680,
+      "recovered": 11938,
+      "recall": 0.7286821705426356,
+      "seed": 20261017,
+      "cluster_seconds": 54.037108125,
+      "msa_seconds": 687.499973917,
+      "total_seconds": 741.538025375
+    },
+    "notebook_inner": {
+      "strict": {
+        "emitted": 11937,
+        "correct": 11934,
+        "errors": 3,
+        "erasures": 4446,
+        "recall": 0.7284380150155649,
+        "per_block": [
+          {
+            "block": 0,
+            "errors": 3,
+            "erasures": 4446,
+            "budget": 4452,
+            "within_rs_bound": true
+          }
+        ]
+      },
+      "corrected": {
+        "emitted": 14308,
+        "correct": 13602,
+        "errors": 706,
+        "erasures": 2075,
+        "recall": 0.8302508698040652,
+        "per_block": [
+          {
+            "block": 0,
+            "errors": 706,
+            "erasures": 2075,
+            "budget": 3487,
+            "within_rs_bound": true
+          }
+        ]
+      }
+    },
+    "notebook_decode": {
+      "attempted": true,
+      "exit_code": 0,
+      "seconds": 2.2430079999612644,
+      "bytes": 99103,
+      "sha256": "05295bc085b243e16aafa18a63a7b5fad944037f68667a7ac60bff691ac15945",
+      "byte_identical": true,
+      "zip_error": null
+    }
+  },
+  "file2": {
+    "graph": {
+      "dataset": "file2",
+      "k": 21,
+      "cutoff": 1,
+      "ratio": 2.55,
+      "truth": 49149,
+      "emitted": 43475,
+      "correct": 43472,
+      "errors": 3,
+      "erasures": 5674,
+      "exact_recall": 0.8844940894016154,
+      "precision": 0.9999309948246119,
+      "overflow": 0,
+      "ambiguous": 48,
+      "graph_supported": 44216,
+      "per_block": [
+        {
+          "block": 0,
+          "errors": 2,
+          "erasures": 1952,
+          "budget": 1956,
+          "within_rs_bound": true
+        },
+        {
+          "block": 1,
+          "errors": 1,
+          "erasures": 939,
+          "budget": 941,
+          "within_rs_bound": true
+        },
+        {
+          "block": 2,
+          "errors": 0,
+          "erasures": 2783,
+          "budget": 2783,
+          "within_rs_bound": true
+        }
+      ]
+    },
+    "msa": {
+      "method": "prefix16_muscle3_vote0.4",
+      "reads": 33404713,
+      "truth": 49149,
+      "prefix_length": 16,
+      "min_cluster": 5,
+      "gap_weight": 0.4,
+      "raw_fastq": false,
+      "clusters": 388269,
+      "raw_exact_recovered": 2802,
+      "candidates_generated": 617541,
+      "candidates_60nt": 601364,
+      "exact_candidates": 16126,
+      "recovered": 11270,
+      "recall": 0.2293027325072738,
+      "seed": 20261017,
+      "cluster_seconds": 127.76590999999999,
+      "msa_seconds": 957.6042064169999,
+      "total_seconds": 1085.370250333
+    },
+    "msa_inner": {
+      "strict": {
+        "emitted": 11277,
+        "correct": 11264,
+        "errors": 13,
+        "erasures": 37872,
+        "recall": 0.22918065474373842,
+        "per_block": [
+          {
+            "block": 0,
+            "errors": 5,
+            "erasures": 12216,
+            "budget": 12226,
+            "within_rs_bound": false
+          },
+          {
+            "block": 1,
+            "errors": 5,
+            "erasures": 11975,
+            "budget": 11985,
+            "within_rs_bound": false
+          },
+          {
+            "block": 2,
+            "errors": 3,
+            "erasures": 13681,
+            "budget": 13687,
+            "within_rs_bound": false
+          }
+        ]
+      },
+      "corrected": {
+        "emitted": 26288,
+        "correct": 18287,
+        "errors": 8001,
+        "erasures": 22861,
+        "recall": 0.3720726769618914,
+        "per_block": [
+          {
+            "block": 0,
+            "errors": 2547,
+            "erasures": 7154,
+            "budget": 12248,
+            "within_rs_bound": false
+          },
+          {
+            "block": 1,
+            "errors": 2615,
+            "erasures": 6877,
+            "budget": 12107,
+            "within_rs_bound": false
+          },
+          {
+            "block": 2,
+            "errors": 2839,
+            "erasures": 8830,
+            "budget": 14508,
+            "within_rs_bound": false
+          }
+        ]
+      }
+    },
+    "reads": {
+      "total_reads": 100706815,
+      "filtered_reads": 33404713,
+      "sample_reads": 3340838,
+      "length_histogram": {
+        "10": 5247525,
+        "11": 241167,
+        "12": 301493,
+        "13": 351866,
+        "14": 397614,
+        "15": 432185,
+        "16": 481188,
+        "17": 513973,
+        "18": 559449,
+        "19": 599761,
+        "20": 658991,
+        "21": 733095,
+        "22": 799035,
+        "23": 885386,
+        "24": 965979,
+        "25": 1091216,
+        "26": 1222901,
+        "27": 1353187,
+        "28": 1439708,
+        "29": 1525493,
+        "30": 1494714,
+        "31": 1457883,
+        "32": 1402633,
+        "33": 1357176,
+        "34": 1326081,
+        "35": 1315018,
+        "36": 1328283,
+        "37": 1355224,
+        "38": 1386874,
+        "39": 1418821,
+        "40": 1456309,
+        "41": 1494328,
+        "42": 1531017,
+        "43": 1575614,
+        "44": 1617543,
+        "45": 1668042,
+        "46": 1712816,
+        "47": 1761790,
+        "48": 1810996,
+        "49": 1851349,
+        "50": 1898453,
+        "51": 1938513,
+        "52": 1978721,
+        "53": 2013663,
+        "54": 2045690,
+        "55": 2078171,
+        "56": 2103204,
+        "57": 2142841,
+        "58": 2185180,
+        "59": 2222710,
+        "60": 2256264,
+        "61": 2285469,
+        "62": 2306047,
+        "63": 2306714,
+        "64": 2281562,
+        "65": 2227828,
+        "66": 2119373,
+        "67": 1997037,
+        "68": 1833610,
+        "69": 1640105,
+        "70": 1418598,
+        "71": 1207564,
+        "72": 1016762,
+        "73": 870493,
+        "74": 921576,
+        "75": 3286944
+      }
+    },
+    "decode": {
+      "attempted": true,
+      "exit_code": 0,
+      "seconds": 2.827646999969147,
+      "bytes": 320949,
+      "sha256": "4664730829f1a61003a18dd276db736bc13cc2de647bff012cdb1493895b0cd5",
+      "byte_identical": true,
+      "zip_error": null,
+      "parameters": {
+        "k": 21,
+        "cutoff": 1,
+        "ratio": 2.55
+      }
+    },
+    "configurations_with_all_blocks_in_bound": 6
+  },
+  "file3": {
+    "graph": {
+      "dataset": "file3",
+      "k": 19,
+      "cutoff": 1,
+      "ratio": 3.5,
+      "truth": 196596,
+      "emitted": 137805,
+      "correct": 137662,
+      "errors": 143,
+      "erasures": 58791,
+      "exact_recall": 0.7002278784919327,
+      "precision": 0.9989623018032727,
+      "overflow": 9150,
+      "ambiguous": 641,
+      "graph_supported": 146244,
+      "per_block": [
+        {
+          "block": 0,
+          "errors": 17,
+          "erasures": 5672,
+          "budget": 5706,
+          "within_rs_bound": false
+        },
+        {
+          "block": 1,
+          "errors": 6,
+          "erasures": 3405,
+          "budget": 3417,
+          "within_rs_bound": true
+        },
+        {
+          "block": 2,
+          "errors": 7,
+          "erasures": 3111,
+          "budget": 3125,
+          "within_rs_bound": true
+        },
+        {
+          "block": 3,
+          "errors": 10,
+          "erasures": 3737,
+          "budget": 3757,
+          "within_rs_bound": true
+        },
+        {
+          "block": 4,
+          "errors": 6,
+          "erasures": 3009,
+          "budget": 3021,
+          "within_rs_bound": true
+        },
+        {
+          "block": 5,
+          "errors": 18,
+          "erasures": 5940,
+          "budget": 5976,
+          "within_rs_bound": false
+        },
+        {
+          "block": 6,
+          "errors": 9,
+          "erasures": 3479,
+          "budget": 3497,
+          "within_rs_bound": true
+        },
+        {
+          "block": 7,
+          "errors": 12,
+          "erasures": 4348,
+          "budget": 4372,
+          "within_rs_bound": true
+        },
+        {
+          "block": 8,
+          "errors": 11,
+          "erasures": 5203,
+          "budget": 5225,
+          "within_rs_bound": true
+        },
+        {
+          "block": 9,
+          "errors": 12,
+          "erasures": 5173,
+          "budget": 5197,
+          "within_rs_bound": true
+        },
+        {
+          "block": 10,
+          "errors": 13,
+          "erasures": 5546,
+          "budget": 5572,
+          "within_rs_bound": false
+        },
+        {
+          "block": 11,
+          "errors": 22,
+          "erasures": 10168,
+          "budget": 10212,
+          "within_rs_bound": false
+        }
+      ]
+    },
+    "msa": {
+      "method": "prefix16_muscle3_vote0.4",
+      "reads": 92337721,
+      "truth": 196596,
+      "prefix_length": 16,
+      "min_cluster": 5,
+      "gap_weight": 0.4,
+      "raw_fastq": false,
+      "clusters": 365025,
+      "raw_exact_recovered": 8199,
+      "candidates_generated": 654277,
+      "candidates_60nt": 641449,
+      "exact_candidates": 73500,
+      "recovered": 41564,
+      "recall": 0.2114183401493418,
+      "seed": 20261017,
+      "cluster_seconds": 288.30072770799995,
+      "msa_seconds": 606.92935825,
+      "total_seconds": 895.2302590830001
+    },
+    "msa_inner": {
+      "strict": {
+        "emitted": 41579,
+        "correct": 41560,
+        "errors": 19,
+        "erasures": 155017,
+        "recall": 0.21139799385541924,
+        "per_block": [
+          {
+            "block": 0,
+            "errors": 0,
+            "erasures": 13053,
+            "budget": 13053,
+            "within_rs_bound": false
+          },
+          {
+            "block": 1,
+            "errors": 1,
+            "erasures": 12597,
+            "budget": 12599,
+            "within_rs_bound": false
+          },
+          {
+            "block": 2,
+            "errors": 1,
+            "erasures": 12340,
+            "budget": 12342,
+            "within_rs_bound": false
+          },
+          {
+            "block": 3,
+            "errors": 1,
+            "erasures": 13141,
+            "budget": 13143,
+            "within_rs_bound": false
+          },
+          {
+            "block": 4,
+            "errors": 4,
+            "erasures": 12225,
+            "budget": 12233,
+            "within_rs_bound": false
+          },
+          {
+            "block": 5,
+            "errors": 4,
+            "erasures": 12344,
+            "budget": 12352,
+            "within_rs_bound": false
+          },
+          {
+            "block": 6,
+            "errors": 3,
+            "erasures": 12431,
+            "budget": 12437,
+            "within_rs_bound": false
+          },
+          {
+            "block": 7,
+            "errors": 0,
+            "erasures": 12830,
+            "budget": 12830,
+            "within_rs_bound": false
+          },
+          {
+            "block": 8,
+            "errors": 1,
+            "erasures": 12509,
+            "budget": 12511,
+            "within_rs_bound": false
+          },
+          {
+            "block": 9,
+            "errors": 3,
+            "erasures": 12919,
+            "budget": 12925,
+            "within_rs_bound": false
+          },
+          {
+            "block": 10,
+            "errors": 1,
+            "erasures": 13452,
+            "budget": 13454,
+            "within_rs_bound": false
+          },
+          {
+            "block": 11,
+            "errors": 0,
+            "erasures": 15176,
+            "budget": 15176,
+            "within_rs_bound": false
+          }
+        ]
+      },
+      "corrected": {
+        "emitted": 67357,
+        "correct": 52893,
+        "errors": 14464,
+        "erasures": 129239,
+        "recall": 0.26904413111151804,
+        "per_block": [
+          {
+            "block": 0,
+            "errors": 1086,
+            "erasures": 11048,
+            "budget": 13220,
+            "within_rs_bound": false
+          },
+          {
+            "block": 1,
+            "errors": 1330,
+            "erasures": 10265,
+            "budget": 12925,
+            "within_rs_bound": false
+          },
+          {
+            "block": 2,
+            "errors": 1047,
+            "erasures": 10203,
+            "budget": 12297,
+            "within_rs_bound": false
+          },
+          {
+            "block": 3,
+            "errors": 1044,
+            "erasures": 11116,
+            "budget": 13204,
+            "within_rs_bound": false
+          },
+          {
+            "block": 4,
+            "errors": 1285,
+            "erasures": 9954,
+            "budget": 12524,
+            "within_rs_bound": false
+          },
+          {
+            "block": 5,
+            "errors": 2332,
+            "erasures": 9140,
+            "budget": 13804,
+            "within_rs_bound": false
+          },
+          {
+            "block": 6,
+            "errors": 1102,
+            "erasures": 10344,
+            "budget": 12548,
+            "within_rs_bound": false
+          },
+          {
+            "block": 7,
+            "errors": 1048,
+            "erasures": 10854,
+            "budget": 12950,
+            "within_rs_bound": false
+          },
+          {
+            "block": 8,
+            "errors": 1160,
+            "erasures": 10406,
+            "budget": 12726,
+            "within_rs_bound": false
+          },
+          {
+            "block": 9,
+            "errors": 1153,
+            "erasures": 10713,
+            "budget": 13019,
+            "within_rs_bound": false
+          },
+          {
+            "block": 10,
+            "errors": 1102,
+            "erasures": 11389,
+            "budget": 13593,
+            "within_rs_bound": false
+          },
+          {
+            "block": 11,
+            "errors": 775,
+            "erasures": 13807,
+            "budget": 15357,
+            "within_rs_bound": false
+          }
+        ]
+      }
+    },
+    "reads": {
+      "total_reads": 195619515,
+      "filtered_reads": 92337721,
+      "sample_reads": 9236083,
+      "length_histogram": {
+        "10": 17896793,
+        "11": 200662,
+        "12": 256811,
+        "13": 276287,
+        "14": 317480,
+        "15": 344007,
+        "16": 427679,
+        "17": 474693,
+        "18": 553681,
+        "19": 608708,
+        "20": 708221,
+        "21": 937323,
+        "22": 979490,
+        "23": 1109914,
+        "24": 1296574,
+        "25": 1614346,
+        "26": 1954060,
+        "27": 2202128,
+        "28": 2370496,
+        "29": 2542744,
+        "30": 2336388,
+        "31": 2055475,
+        "32": 1739993,
+        "33": 1509938,
+        "34": 1372010,
+        "35": 1308552,
+        "36": 1301578,
+        "37": 1328032,
+        "38": 1375609,
+        "39": 1432701,
+        "40": 1501323,
+        "41": 1567924,
+        "42": 1640635,
+        "43": 1721306,
+        "44": 1801653,
+        "45": 1894275,
+        "46": 1979888,
+        "47": 2077638,
+        "48": 2189977,
+        "49": 2307353,
+        "50": 2440690,
+        "51": 2573812,
+        "52": 2695259,
+        "53": 2839116,
+        "54": 2994757,
+        "55": 3150981,
+        "56": 3300643,
+        "57": 3465295,
+        "58": 3666154,
+        "59": 3909110,
+        "60": 4191172,
+        "61": 4489778,
+        "62": 4806841,
+        "63": 5097196,
+        "64": 5396565,
+        "65": 5942784,
+        "66": 6981599,
+        "67": 11062869,
+        "68": 11705335,
+        "69": 9040090,
+        "70": 6131309,
+        "71": 4372544,
+        "72": 3149428,
+        "73": 2329047,
+        "74": 2330869,
+        "75": 6041927
+      }
+    },
+    "decode": {
+      "attempted": false,
+      "reason": "one or more blocks exceed the conventional RS errors/erasures bound",
+      "parameters": {
+        "k": 19,
+        "cutoff": 1,
+        "ratio": 3.5
+      }
+    },
+    "configurations_with_all_blocks_in_bound": 0,
+    "best_block_feasibility": {
+      "dataset": "file3",
+      "k": 20,
+      "cutoff": 1,
+      "ratio": 3.5,
+      "truth": 196596,
+      "emitted": 136506,
+      "correct": 136445,
+      "errors": 61,
+      "erasures": 60090,
+      "exact_recall": 0.6940375185659932,
+      "precision": 0.9995531331956105,
+      "overflow": 67,
+      "ambiguous": 242,
+      "graph_supported": 137054,
+      "per_block": [
+        {
+          "block": 0,
+          "errors": 5,
+          "erasures": 6231,
+          "budget": 6241,
+          "within_rs_bound": false
+        },
+        {
+          "block": 1,
+          "errors": 3,
+          "erasures": 3907,
+          "budget": 3913,
+          "within_rs_bound": true
+        },
+        {
+          "block": 2,
+          "errors": 4,
+          "erasures": 3471,
+          "budget": 3479,
+          "within_rs_bound": true
+        },
+        {
+          "block": 3,
+          "errors": 5,
+          "erasures": 4402,
+          "budget": 4412,
+          "within_rs_bound": true
+        },
+        {
+          "block": 4,
+          "errors": 3,
+          "erasures": 3281,
+          "budget": 3287,
+          "within_rs_bound": true
+        },
+        {
+          "block": 5,
+          "errors": 6,
+          "erasures": 3168,
+          "budget": 3180,
+          "within_rs_bound": true
+        },
+        {
+          "block": 6,
+          "errors": 3,
+          "erasures": 3505,
+          "budget": 3511,
+          "within_rs_bound": true
+        },
+        {
+          "block": 7,
+          "errors": 3,
+          "erasures": 4874,
+          "budget": 4880,
+          "within_rs_bound": true
+        },
+        {
+          "block": 8,
+          "errors": 7,
+          "erasures": 4653,
+          "budget": 4667,
+          "within_rs_bound": true
+        },
+        {
+          "block": 9,
+          "errors": 10,
+          "erasures": 5318,
+          "budget": 5338,
+          "within_rs_bound": true
+        },
+        {
+          "block": 10,
+          "errors": 4,
+          "erasures": 6259,
+          "budget": 6267,
+          "within_rs_bound": false
+        },
+        {
+          "block": 11,
+          "errors": 8,
+          "erasures": 11021,
+          "budget": 11037,
+          "within_rs_bound": false
+        }
+      ]
+    }
+  }
+}

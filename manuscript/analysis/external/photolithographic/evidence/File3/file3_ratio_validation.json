@@ -1,0 +1,21 @@
+{
+  "original_35_configurations_unchanged": true,
+  "new_configurations": 144,
+  "file3_configurations": 179,
+  "total_configurations": 293,
+  "all_expected_configurations_present": true,
+  "complete_statuses_checked": true,
+  "all_nine_graph_jobs_exit_code_zero": true,
+  "source_and_artifact_sha256": {
+    "DBGPS2.c": "39dbf9fa2ec338756a3e3599350a4d6805eda0095ccccd6d8141980777de9308",
+    "benchmarks/antkowiak2020/graph_adapter.c": "10758ded63eb9df0829793fe5d42a89bcf9f9c8871df0d6fe21268229bc5d38d",
+    "benchmarks/antkowiak2020/run_graphs.py": "b87cc02f6c777f5d59e532592ec9774656993e5d398411f57c3d5fc4d3976a3a",
+    "benchmarks/antkowiak2020/file3_ratio_report.py": "5179f8d89d0e5454ccf7908d8f0910c0fc0ce81b4898a7dddb4a2d166efa8c7b",
+    "input/antkowiak2020/bin/graph_adapter": "f73c152f108ea976bf8db7ea0c651b1290e8d9b07a4a72eb57d5a3e99086f07a",
+    "input/antkowiak2020/sources/File3_synthesized.fasta": "249d224726afb173903009f1ed9fcced5908c22787a75d760600c5e0a0afa30d",
+    "input/antkowiak2020/results/file3_before_ratio_sweep.json": "20f07e251af3c83d53a06d843356f5d8dc7ba174467f8104257c1cc21aa8637b",
+    "input/antkowiak2020/results/file3.k19.c1.r3.50.strands": "d39706f809501ca32e805ae1a2b0b0379ea363c560fc4f5e194071ff03ab04ba",
+    "benchmarks/antkowiak2020/report.py": "8d04310c8d4477731846b79860082c67096bbc2bbdaf9b2a4bab36582b65a082"
+  },
+  "head": "f7b1373ec68bc6518af91b7427eda53699a3c73d"
+}

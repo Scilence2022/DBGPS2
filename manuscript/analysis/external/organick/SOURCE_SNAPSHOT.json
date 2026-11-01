@@ -1,0 +1,14 @@
+{
+  "source_commit": "f7b1373ec68bc6518af91b7427eda53699a3c73d",
+  "source_sha256": {
+    "DBGPS2.c": "39dbf9fa2ec338756a3e3599350a4d6805eda0095ccccd6d8141980777de9308",
+    "dbgps_codec.c": "b13059e3bb9ca132c0da7e0fc659083f138f53b1a9e321f37e73c04b8d7d679d",
+    "dbgps_redundancy.c": "3229baff40e31c7b64d7a5c7198ba884ba18af21dc578fba2c4e709c46fec9ef",
+    "dbgps_strand.c": "1f146a1e861a7bdf838f50b8b197e81eb4fe26f4955d72c9f34f5f1a05295716",
+    "kthread.c": "d9b18fcb9412a05e2e235274ade871154640366208073577e5a353514e5825fe"
+  },
+  "author_data_commit": "1077c74a0e002be83ab832e69bfd560e94d4d202",
+  "prepared": "2026-10-18",
+  "rs_validation": "not_performed",
+  "portability_changes": "Only git-dependent provenance queries in run_experiment.py and optimize.py use the snapshot helper. Original scripts are preserved in historical_scripts. No graph, traversal, seed, scoring, or validator algorithm changes."
+}

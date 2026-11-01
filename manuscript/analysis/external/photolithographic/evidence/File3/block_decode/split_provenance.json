@@ -1,0 +1,154 @@
+{
+  "mapper_command": [
+    "minimap2",
+    "-a",
+    "-x",
+    "sr",
+    "-k",
+    "11",
+    "-w",
+    "2",
+    "-n",
+    "2",
+    "-m",
+    "15",
+    "-s",
+    "20",
+    "-A",
+    "2",
+    "-B",
+    "3",
+    "-O",
+    "4,12",
+    "-E",
+    "2,1",
+    "-N",
+    "5",
+    "-p",
+    "0.8",
+    "--secondary=yes",
+    "--eqx",
+    "-t",
+    "12",
+    "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/sources/File3_synthesized.fasta",
+    "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/raw/File3.fq.gz"
+  ],
+  "splitter_command": [
+    "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/bin/split_aligned_blocks",
+    "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/reads"
+  ],
+  "mapper_version": "2.31-r1302",
+  "seconds": 489.465633084,
+  "mapper_exit": 0,
+  "router_exit": 0,
+  "reference_sha256": "249d224726afb173903009f1ed9fcced5908c22787a75d760600c5e0a0afa30d",
+  "router_source_sha256": "5572128522d25450b6cc6a9819f8340710d1b4f5e5b95547228435fc38ccede2",
+  "router_binary_sha256": "9fb1ca431e2348ac3a60aa5ba66e54c3a024791417d95778440f451d1c265205",
+  "reference_assistance": "Read assignment uses the known full design payload; this is not a reference-free end-to-end reconstruction experiment",
+  "broad": "Reported alignments: matches>=20, query-aligned bases>=30, payload overlap>=20, AS>=25, match fraction>=0.6; every qualifying hit with AS>=0.8 of best qualifying score must name the same block",
+  "strict": "Subset of broad: primary MAPQ>=10, matches>=24, query-aligned bases>=35, payload overlap>=25, AS>=40, match fraction>=0.7",
+  "ambiguous": "Qualifying near-best reported alignments name multiple blocks; at most five secondary alignments are reported",
+  "inclusive": "Block 12 broad reads plus ambiguous reads with a qualifying near-best block 12 alignment",
+  "sequence_handling": "Original full sequences and qualities, reverse-complement/reversal undone on reverse-strand SAM primaries",
+  "outputs": {
+    "reads/block12.inclusive.fq.gz": 69337554,
+    "reads/ambiguous.fq.gz": 619685,
+    "reads/unassigned.fq.gz": 4419589553,
+    "reads/strict/block01.fq.gz": 92499986,
+    "reads/strict/block03.fq.gz": 123520059,
+    "reads/strict/block07.fq.gz": 131182098,
+    "reads/strict/block05.fq.gz": 136201837,
+    "reads/strict/block02.fq.gz": 116181450,
+    "reads/strict/block04.fq.gz": 112617927,
+    "reads/strict/block06.fq.gz": 137760132,
+    "reads/strict/block08.fq.gz": 111363565,
+    "reads/strict/block11.fq.gz": 84925171,
+    "reads/strict/block09.fq.gz": 106292026,
+    "reads/strict/block10.fq.gz": 96817754,
+    "reads/strict/block12.fq.gz": 45323511,
+    "reads/broad/block01.fq.gz": 132825846,
+    "reads/broad/block03.fq.gz": 175287009,
+    "reads/broad/block07.fq.gz": 185591537,
+    "reads/broad/block05.fq.gz": 192363400,
+    "reads/broad/block02.fq.gz": 164310816,
+    "reads/broad/block04.fq.gz": 160965218,
+    "reads/broad/block06.fq.gz": 192006077,
+    "reads/broad/block08.fq.gz": 158894582,
+    "reads/broad/block11.fq.gz": 125165212,
+    "reads/broad/block09.fq.gz": 152453421,
+    "reads/broad/block10.fq.gz": 141300961,
+    "reads/broad/block12.fq.gz": 69278011
+  },
+  "counts": {
+    "total_reads": 195619515,
+    "sam_alignment_records": 219187525,
+    "secondary_records": 18248016,
+    "reverse_restored_reads": 8955985,
+    "ambiguous_reads": 15770,
+    "unassigned_reads": 151022076,
+    "block12_inclusive_reads": 1683429,
+    "strict_rejected_from_broad": 13976548,
+    "blocks": [
+      {
+        "block": 1,
+        "broad_reads": 3215472,
+        "strict_reads": 2192787
+      },
+      {
+        "block": 2,
+        "broad_reads": 3969582,
+        "strict_reads": 2757288
+      },
+      {
+        "block": 3,
+        "broad_reads": 4223139,
+        "strict_reads": 2922854
+      },
+      {
+        "block": 4,
+        "broad_reads": 3868619,
+        "strict_reads": 2656759
+      },
+      {
+        "block": 5,
+        "broad_reads": 4603514,
+        "strict_reads": 3198310
+      },
+      {
+        "block": 6,
+        "broad_reads": 4612348,
+        "strict_reads": 3250690
+      },
+      {
+        "block": 7,
+        "broad_reads": 4457274,
+        "strict_reads": 3093977
+      },
+      {
+        "block": 8,
+        "broad_reads": 3814517,
+        "strict_reads": 2624399
+      },
+      {
+        "block": 9,
+        "broad_reads": 3674724,
+        "strict_reads": 2513901
+      },
+      {
+        "block": 10,
+        "broad_reads": 3423665,
+        "strict_reads": 2298154
+      },
+      {
+        "block": 11,
+        "broad_reads": 3036872,
+        "strict_reads": 2019313
+      },
+      {
+        "block": 12,
+        "broad_reads": 1681943,
+        "strict_reads": 1076689
+      }
+    ]
+  }
+}

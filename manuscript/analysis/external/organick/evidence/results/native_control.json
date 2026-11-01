@@ -1,0 +1,22 @@
+{
+  "command": [
+    "./DBGPS2",
+    "-k",
+    "31",
+    "-i",
+    "16",
+    "-l",
+    "96",
+    "-E",
+    "none",
+    "-a",
+    "3026667833",
+    "-b",
+    "3026667833",
+    "-o",
+    "experiments/nbt4079/tmp/native_control",
+    "experiments/nbt4079/tmp/perfect.fa"
+  ],
+  "returncode": 0,
+  "intent": "Native CLI uses hard-coded unrelated primer; perfect author sequences test direct incompatibility only."
+}

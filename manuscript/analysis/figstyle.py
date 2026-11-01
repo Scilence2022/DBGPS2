@@ -23,7 +23,7 @@ GRID = "#e4e3df"
 RESULTS = os.environ.get("DBGPS_RESULTS", "/Users/song/dbgps2_ht/results")
 HERE = os.path.dirname(os.path.abspath(__file__))
 FIGDIR = os.path.join(HERE, "..", "figures")
-DATADIR = os.path.join(HERE, "..", "data")
+DATADIR = os.path.join(HERE, "data")
 
 
 def setup():

@@ -1,0 +1,12 @@
+{
+  "run_records": 8,
+  "completed_new_configurations": 174,
+  "matrix_columns": 354,
+  "matrix_indices": 16383,
+  "baseline_union": 10033,
+  "combined_union": 10659,
+  "newly_recovered": 626,
+  "all_artifact_hashes_verified": true,
+  "input_hash_verified": true,
+  "reference_blind_decision_control": true
+}

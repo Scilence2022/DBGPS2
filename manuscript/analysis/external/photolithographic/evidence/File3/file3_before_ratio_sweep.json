@@ -1,0 +1,3572 @@
+[
+  {
+    "dataset": "file3",
+    "k": 13,
+    "cutoff": 1,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 196596,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 196584,
+    "ambiguous": 0,
+    "graph_supported": 196546,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 13,
+    "cutoff": 19,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 196596,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 196531,
+    "ambiguous": 0,
+    "graph_supported": 161332,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 13,
+    "cutoff": 3,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 196596,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 196584,
+    "ambiguous": 0,
+    "graph_supported": 196203,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 13,
+    "cutoff": 49,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 196596,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 193349,
+    "ambiguous": 0,
+    "graph_supported": 54793,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 13,
+    "cutoff": 9,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 196596,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 196582,
+    "ambiguous": 0,
+    "graph_supported": 190233,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 15,
+    "cutoff": 1,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 196596,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 196596,
+    "ambiguous": 0,
+    "graph_supported": 181272,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 15,
+    "cutoff": 19,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 5175,
+    "correct": 5158,
+    "errors": 17,
+    "erasures": 191421,
+    "exact_recall": 0.026236546013143704,
+    "precision": 0.9967149758454106,
+    "overflow": 146874,
+    "ambiguous": 39,
+    "graph_supported": 50442,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 1,
+        "erasures": 15862,
+        "budget": 15864,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 1,
+        "erasures": 15677,
+        "budget": 15679,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 3,
+        "erasures": 15842,
+        "budget": 15848,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 2,
+        "erasures": 15780,
+        "budget": 15784,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 3,
+        "erasures": 15503,
+        "budget": 15509,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 0,
+        "erasures": 16344,
+        "budget": 16344,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 3,
+        "erasures": 15895,
+        "budget": 15901,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 15894,
+        "budget": 15894,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 0,
+        "erasures": 16130,
+        "budget": 16130,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 0,
+        "erasures": 16160,
+        "budget": 16160,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 2,
+        "erasures": 16053,
+        "budget": 16057,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 2,
+        "erasures": 16281,
+        "budget": 16285,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 15,
+    "cutoff": 3,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 196596,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 196561,
+    "ambiguous": 0,
+    "graph_supported": 163007,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 15,
+    "cutoff": 49,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 2374,
+    "correct": 2368,
+    "errors": 6,
+    "erasures": 194222,
+    "exact_recall": 0.012045006002156708,
+    "precision": 0.9974726200505476,
+    "overflow": 20550,
+    "ambiguous": 5,
+    "graph_supported": 3252,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16216,
+        "budget": 16216,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 1,
+        "erasures": 16064,
+        "budget": 16066,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 2,
+        "erasures": 16090,
+        "budget": 16094,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 0,
+        "erasures": 16203,
+        "budget": 16203,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 0,
+        "erasures": 16028,
+        "budget": 16028,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 1,
+        "erasures": 16151,
+        "budget": 16153,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 16050,
+        "budget": 16050,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 16162,
+        "budget": 16162,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 0,
+        "erasures": 16245,
+        "budget": 16245,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 1,
+        "erasures": 16289,
+        "budget": 16291,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 1,
+        "erasures": 16344,
+        "budget": 16346,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 0,
+        "erasures": 16380,
+        "budget": 16380,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 15,
+    "cutoff": 9,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 129,
+    "correct": 128,
+    "errors": 1,
+    "erasures": 196467,
+    "exact_recall": 0.0006510814055219841,
+    "precision": 0.9922480620155039,
+    "overflow": 192230,
+    "ambiguous": 4,
+    "graph_supported": 109615,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16358,
+        "budget": 16358,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 0,
+        "erasures": 16366,
+        "budget": 16366,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 0,
+        "erasures": 16375,
+        "budget": 16375,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 0,
+        "erasures": 16363,
+        "budget": 16363,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 0,
+        "erasures": 16359,
+        "budget": 16359,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 16377,
+        "budget": 16377,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 16371,
+        "budget": 16371,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 0,
+        "erasures": 16381,
+        "budget": 16381,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 0,
+        "erasures": 16381,
+        "budget": 16381,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 0,
+        "erasures": 16377,
+        "budget": 16377,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 1,
+        "erasures": 16376,
+        "budget": 16378,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 17,
+    "cutoff": 1,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 3,
+    "correct": 3,
+    "errors": 0,
+    "erasures": 196593,
+    "exact_recall": 1.5259720441921504e-05,
+    "precision": 1.0,
+    "overflow": 196561,
+    "ambiguous": 0,
+    "graph_supported": 162462,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16382,
+        "budget": 16382,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 0,
+        "erasures": 16382,
+        "budget": 16382,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 0,
+        "erasures": 16382,
+        "budget": 16382,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 17,
+    "cutoff": 19,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 24322,
+    "correct": 24318,
+    "errors": 4,
+    "erasures": 172274,
+    "exact_recall": 0.12369529390221572,
+    "precision": 0.9998355398404737,
+    "overflow": 66,
+    "ambiguous": 3,
+    "graph_supported": 24385,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 1,
+        "erasures": 14786,
+        "budget": 14788,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 0,
+        "erasures": 14087,
+        "budget": 14087,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 1,
+        "erasures": 13827,
+        "budget": 13829,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 0,
+        "erasures": 14548,
+        "budget": 14548,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 0,
+        "erasures": 13285,
+        "budget": 13285,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 0,
+        "erasures": 13147,
+        "budget": 13147,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 13442,
+        "budget": 13442,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 14206,
+        "budget": 14206,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 2,
+        "erasures": 14371,
+        "budget": 14375,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 0,
+        "erasures": 14891,
+        "budget": 14891,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 0,
+        "erasures": 15422,
+        "budget": 15422,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 0,
+        "erasures": 16262,
+        "budget": 16262,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 17,
+    "cutoff": 3,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 36611,
+    "correct": 36594,
+    "errors": 17,
+    "erasures": 159985,
+    "exact_recall": 0.1861380699505585,
+    "precision": 0.9995356586818169,
+    "overflow": 131619,
+    "ambiguous": 60,
+    "graph_supported": 134326,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 3,
+        "erasures": 12553,
+        "budget": 12559,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 1,
+        "erasures": 11889,
+        "budget": 11891,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 0,
+        "erasures": 13190,
+        "budget": 13190,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 2,
+        "erasures": 11894,
+        "budget": 11898,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 1,
+        "erasures": 12455,
+        "budget": 12457,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 1,
+        "erasures": 16063,
+        "budget": 16065,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 13877,
+        "budget": 13877,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 1,
+        "erasures": 12738,
+        "budget": 12740,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 0,
+        "erasures": 14542,
+        "budget": 14542,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 1,
+        "erasures": 14373,
+        "budget": 14375,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 5,
+        "erasures": 12888,
+        "budget": 12898,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 2,
+        "erasures": 13523,
+        "budget": 13527,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 17,
+    "cutoff": 49,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 532,
+    "correct": 532,
+    "errors": 0,
+    "erasures": 196064,
+    "exact_recall": 0.002706057091700747,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 532,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16367,
+        "budget": 16367,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 0,
+        "erasures": 16341,
+        "budget": 16341,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 0,
+        "erasures": 16345,
+        "budget": 16345,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 0,
+        "erasures": 16366,
+        "budget": 16366,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 0,
+        "erasures": 16301,
+        "budget": 16301,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 0,
+        "erasures": 16273,
+        "budget": 16273,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 16271,
+        "budget": 16271,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 16323,
+        "budget": 16323,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 0,
+        "erasures": 16351,
+        "budget": 16351,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 0,
+        "erasures": 16364,
+        "budget": 16364,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 0,
+        "erasures": 16379,
+        "budget": 16379,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 17,
+    "cutoff": 9,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 69677,
+    "correct": 69665,
+    "errors": 12,
+    "erasures": 126919,
+    "exact_recall": 0.3543561415288205,
+    "precision": 0.9998277767412489,
+    "overflow": 4955,
+    "ambiguous": 12,
+    "graph_supported": 72631,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 3,
+        "erasures": 11319,
+        "budget": 11325,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 1,
+        "erasures": 9669,
+        "budget": 9671,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 0,
+        "erasures": 9155,
+        "budget": 9155,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 1,
+        "erasures": 10243,
+        "budget": 10245,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 1,
+        "erasures": 8582,
+        "budget": 8584,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 2,
+        "erasures": 9815,
+        "budget": 9819,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 9043,
+        "budget": 9043,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 10245,
+        "budget": 10245,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 3,
+        "erasures": 10595,
+        "budget": 10601,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 0,
+        "erasures": 11164,
+        "budget": 11164,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 0,
+        "erasures": 12029,
+        "budget": 12029,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 1,
+        "erasures": 15060,
+        "budget": 15062,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 19,
+    "cutoff": 1,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 135686,
+    "correct": 135575,
+    "errors": 111,
+    "erasures": 60910,
+    "exact_recall": 0.6896121996378359,
+    "precision": 0.9991819347611397,
+    "overflow": 7200,
+    "ambiguous": 423,
+    "graph_supported": 146244,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 11,
+        "erasures": 5925,
+        "budget": 5947,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 6,
+        "erasures": 3624,
+        "budget": 3636,
+        "within_rs_bound": true
+      },
+      {
+        "block": 2,
+        "errors": 9,
+        "erasures": 3335,
+        "budget": 3353,
+        "within_rs_bound": true
+      },
+      {
+        "block": 3,
+        "errors": 4,
+        "erasures": 4016,
+        "budget": 4024,
+        "within_rs_bound": true
+      },
+      {
+        "block": 4,
+        "errors": 3,
+        "erasures": 3214,
+        "budget": 3220,
+        "within_rs_bound": true
+      },
+      {
+        "block": 5,
+        "errors": 16,
+        "erasures": 5662,
+        "budget": 5694,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 5,
+        "erasures": 3597,
+        "budget": 3607,
+        "within_rs_bound": true
+      },
+      {
+        "block": 7,
+        "errors": 10,
+        "erasures": 4551,
+        "budget": 4571,
+        "within_rs_bound": true
+      },
+      {
+        "block": 8,
+        "errors": 9,
+        "erasures": 5269,
+        "budget": 5287,
+        "within_rs_bound": true
+      },
+      {
+        "block": 9,
+        "errors": 11,
+        "erasures": 5386,
+        "budget": 5408,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 7,
+        "erasures": 5865,
+        "budget": 5879,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 20,
+        "erasures": 10466,
+        "budget": 10506,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 19,
+    "cutoff": 19,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 11330,
+    "correct": 11328,
+    "errors": 2,
+    "erasures": 185266,
+    "exact_recall": 0.0576207043886956,
+    "precision": 0.9998234774933804,
+    "overflow": 0,
+    "ambiguous": 1,
+    "graph_supported": 11332,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 15620,
+        "budget": 15620,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 0,
+        "erasures": 15341,
+        "budget": 15341,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 1,
+        "erasures": 15189,
+        "budget": 15191,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 0,
+        "erasures": 15612,
+        "budget": 15612,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 0,
+        "erasures": 14786,
+        "budget": 14786,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 0,
+        "erasures": 14721,
+        "budget": 14721,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 14899,
+        "budget": 14899,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 15361,
+        "budget": 15361,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 0,
+        "erasures": 15473,
+        "budget": 15473,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 1,
+        "erasures": 15796,
+        "budget": 15798,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 0,
+        "erasures": 16103,
+        "budget": 16103,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 0,
+        "erasures": 16365,
+        "budget": 16365,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 19,
+    "cutoff": 3,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 110211,
+    "correct": 110198,
+    "errors": 13,
+    "erasures": 86385,
+    "exact_recall": 0.560530224419622,
+    "precision": 0.9998820444420249,
+    "overflow": 6,
+    "ambiguous": 24,
+    "graph_supported": 111057,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 8400,
+        "budget": 8400,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 0,
+        "erasures": 6134,
+        "budget": 6134,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 1,
+        "erasures": 5616,
+        "budget": 5618,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 1,
+        "erasures": 6772,
+        "budget": 6774,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 1,
+        "erasures": 5236,
+        "budget": 5238,
+        "within_rs_bound": true
+      },
+      {
+        "block": 5,
+        "errors": 3,
+        "erasures": 5160,
+        "budget": 5166,
+        "within_rs_bound": true
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 5581,
+        "budget": 5581,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 1,
+        "erasures": 7021,
+        "budget": 7023,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 2,
+        "erasures": 6937,
+        "budget": 6941,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 2,
+        "erasures": 7701,
+        "budget": 7705,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 0,
+        "erasures": 8758,
+        "budget": 8758,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 2,
+        "erasures": 13069,
+        "budget": 13073,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 19,
+    "cutoff": 49,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 74,
+    "correct": 74,
+    "errors": 0,
+    "erasures": 196522,
+    "exact_recall": 0.0003764064375673971,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 74,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16382,
+        "budget": 16382,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 0,
+        "erasures": 16378,
+        "budget": 16378,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 0,
+        "erasures": 16377,
+        "budget": 16377,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 0,
+        "erasures": 16382,
+        "budget": 16382,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 0,
+        "erasures": 16366,
+        "budget": 16366,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 0,
+        "erasures": 16367,
+        "budget": 16367,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 16365,
+        "budget": 16365,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 16376,
+        "budget": 16376,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 0,
+        "erasures": 16381,
+        "budget": 16381,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 0,
+        "erasures": 16382,
+        "budget": 16382,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 19,
+    "cutoff": 9,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 48148,
+    "correct": 48142,
+    "errors": 6,
+    "erasures": 148448,
+    "exact_recall": 0.24487782050499501,
+    "precision": 0.9998753842319514,
+    "overflow": 0,
+    "ambiguous": 8,
+    "graph_supported": 48183,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 1,
+        "erasures": 12997,
+        "budget": 12999,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 0,
+        "erasures": 11893,
+        "budget": 11893,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 1,
+        "erasures": 11389,
+        "budget": 11391,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 0,
+        "erasures": 12331,
+        "budget": 12331,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 1,
+        "erasures": 10742,
+        "budget": 10744,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 0,
+        "erasures": 10629,
+        "budget": 10629,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 1,
+        "erasures": 11105,
+        "budget": 11107,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 12140,
+        "budget": 12140,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 1,
+        "erasures": 12361,
+        "budget": 12363,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 0,
+        "erasures": 13006,
+        "budget": 13006,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 1,
+        "erasures": 13961,
+        "budget": 13963,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 0,
+        "erasures": 15894,
+        "budget": 15894,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 21,
+    "cutoff": 1,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 123292,
+    "correct": 123252,
+    "errors": 40,
+    "erasures": 73304,
+    "exact_recall": 0.6269303546359031,
+    "precision": 0.9996755669467605,
+    "overflow": 1,
+    "ambiguous": 95,
+    "graph_supported": 127269,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 1,
+        "erasures": 7259,
+        "budget": 7261,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 1,
+        "erasures": 4998,
+        "budget": 5000,
+        "within_rs_bound": true
+      },
+      {
+        "block": 2,
+        "errors": 3,
+        "erasures": 4540,
+        "budget": 4546,
+        "within_rs_bound": true
+      },
+      {
+        "block": 3,
+        "errors": 3,
+        "erasures": 5529,
+        "budget": 5535,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 2,
+        "erasures": 4287,
+        "budget": 4291,
+        "within_rs_bound": true
+      },
+      {
+        "block": 5,
+        "errors": 8,
+        "erasures": 4155,
+        "budget": 4171,
+        "within_rs_bound": true
+      },
+      {
+        "block": 6,
+        "errors": 3,
+        "erasures": 4601,
+        "budget": 4607,
+        "within_rs_bound": true
+      },
+      {
+        "block": 7,
+        "errors": 2,
+        "erasures": 5943,
+        "budget": 5947,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 8,
+        "erasures": 5785,
+        "budget": 5801,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 5,
+        "erasures": 6543,
+        "budget": 6553,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 1,
+        "erasures": 7603,
+        "budget": 7605,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 3,
+        "erasures": 12061,
+        "budget": 12067,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 21,
+    "cutoff": 19,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 4299,
+    "correct": 4299,
+    "errors": 0,
+    "erasures": 192297,
+    "exact_recall": 0.021867179393273515,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 4299,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16143,
+        "budget": 16143,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 0,
+        "erasures": 15992,
+        "budget": 15992,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 0,
+        "erasures": 15949,
+        "budget": 15949,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 0,
+        "erasures": 16137,
+        "budget": 16137,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 0,
+        "erasures": 15729,
+        "budget": 15729,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 0,
+        "erasures": 15676,
+        "budget": 15676,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 15731,
+        "budget": 15731,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 15968,
+        "budget": 15968,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 0,
+        "erasures": 16064,
+        "budget": 16064,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 0,
+        "erasures": 16205,
+        "budget": 16205,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 0,
+        "erasures": 16325,
+        "budget": 16325,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 0,
+        "erasures": 16378,
+        "budget": 16378,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 21,
+    "cutoff": 3,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 86729,
+    "correct": 86716,
+    "errors": 13,
+    "erasures": 109867,
+    "exact_recall": 0.44108730594722173,
+    "precision": 0.9998501078070772,
+    "overflow": 0,
+    "ambiguous": 16,
+    "graph_supported": 87294,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 1,
+        "erasures": 10066,
+        "budget": 10068,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 0,
+        "erasures": 8176,
+        "budget": 8176,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 0,
+        "erasures": 7637,
+        "budget": 7637,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 0,
+        "erasures": 8840,
+        "budget": 8840,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 1,
+        "erasures": 7161,
+        "budget": 7163,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 2,
+        "erasures": 7143,
+        "budget": 7147,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 1,
+        "erasures": 7618,
+        "budget": 7620,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 1,
+        "erasures": 8944,
+        "budget": 8946,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 3,
+        "erasures": 8991,
+        "budget": 8997,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 1,
+        "erasures": 9828,
+        "budget": 9830,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 1,
+        "erasures": 10976,
+        "budget": 10978,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 2,
+        "erasures": 14487,
+        "budget": 14491,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 21,
+    "cutoff": 49,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 6,
+    "correct": 6,
+    "errors": 0,
+    "erasures": 196590,
+    "exact_recall": 3.051944088384301e-05,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 6,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 0,
+        "erasures": 16382,
+        "budget": 16382,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 0,
+        "erasures": 16382,
+        "budget": 16382,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 0,
+        "erasures": 16380,
+        "budget": 16380,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 16382,
+        "budget": 16382,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 21,
+    "cutoff": 9,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 28904,
+    "correct": 28898,
+    "errors": 6,
+    "erasures": 167692,
+    "exact_recall": 0.1469918004435492,
+    "precision": 0.999792416274564,
+    "overflow": 0,
+    "ambiguous": 4,
+    "graph_supported": 28913,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 1,
+        "erasures": 14401,
+        "budget": 14403,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 0,
+        "erasures": 13680,
+        "budget": 13680,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 1,
+        "erasures": 13316,
+        "budget": 13318,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 0,
+        "erasures": 14086,
+        "budget": 14086,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 1,
+        "erasures": 12789,
+        "budget": 12791,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 0,
+        "erasures": 12624,
+        "budget": 12624,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 12934,
+        "budget": 12934,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 13787,
+        "budget": 13787,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 2,
+        "erasures": 13988,
+        "budget": 13992,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 0,
+        "erasures": 14560,
+        "budget": 14560,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 1,
+        "erasures": 15290,
+        "budget": 15292,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 0,
+        "erasures": 16237,
+        "budget": 16237,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 25,
+    "cutoff": 1,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 83690,
+    "correct": 83651,
+    "errors": 39,
+    "erasures": 112906,
+    "exact_recall": 0.4254969582290586,
+    "precision": 0.9995339945035249,
+    "overflow": 1,
+    "ambiguous": 49,
+    "graph_supported": 86352,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 2,
+        "erasures": 10176,
+        "budget": 10180,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 1,
+        "erasures": 8475,
+        "budget": 8477,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 4,
+        "erasures": 7943,
+        "budget": 7951,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 1,
+        "erasures": 9075,
+        "budget": 9077,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 3,
+        "erasures": 7502,
+        "budget": 7508,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 5,
+        "erasures": 7433,
+        "budget": 7443,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 4,
+        "erasures": 7961,
+        "budget": 7969,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 3,
+        "erasures": 9194,
+        "budget": 9200,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 4,
+        "erasures": 9215,
+        "budget": 9223,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 8,
+        "erasures": 10069,
+        "budget": 10085,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 2,
+        "erasures": 11293,
+        "budget": 11297,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 2,
+        "erasures": 14570,
+        "budget": 14574,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 25,
+    "cutoff": 19,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 307,
+    "correct": 307,
+    "errors": 0,
+    "erasures": 196289,
+    "exact_recall": 0.0015615780585566338,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 307,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16372,
+        "budget": 16372,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 0,
+        "erasures": 16363,
+        "budget": 16363,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 0,
+        "erasures": 16362,
+        "budget": 16362,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 0,
+        "erasures": 16374,
+        "budget": 16374,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 0,
+        "erasures": 16336,
+        "budget": 16336,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 0,
+        "erasures": 16315,
+        "budget": 16315,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 16307,
+        "budget": 16307,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 16354,
+        "budget": 16354,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 0,
+        "erasures": 16363,
+        "budget": 16363,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 0,
+        "erasures": 16378,
+        "budget": 16378,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 0,
+        "erasures": 16382,
+        "budget": 16382,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 25,
+    "cutoff": 3,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 45380,
+    "correct": 45374,
+    "errors": 6,
+    "erasures": 151216,
+    "exact_recall": 0.23079818511058212,
+    "precision": 0.9998677831643896,
+    "overflow": 0,
+    "ambiguous": 5,
+    "graph_supported": 45647,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 13098,
+        "budget": 13098,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 1,
+        "erasures": 12168,
+        "budget": 12170,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 1,
+        "erasures": 11669,
+        "budget": 11671,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 0,
+        "erasures": 12591,
+        "budget": 12591,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 0,
+        "erasures": 11034,
+        "budget": 11034,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 0,
+        "erasures": 10918,
+        "budget": 10918,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 11326,
+        "budget": 11326,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 12305,
+        "budget": 12305,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 3,
+        "erasures": 12584,
+        "budget": 12590,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 0,
+        "erasures": 13258,
+        "budget": 13258,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 1,
+        "erasures": 14323,
+        "budget": 14325,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 0,
+        "erasures": 15942,
+        "budget": 15942,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 25,
+    "cutoff": 49,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 1,
+    "correct": 1,
+    "errors": 0,
+    "erasures": 196595,
+    "exact_recall": 5.086573480640501e-06,
+    "precision": 1.0,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 1,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 0,
+        "erasures": 16382,
+        "budget": 16382,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 25,
+    "cutoff": 9,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 7358,
+    "correct": 7357,
+    "errors": 1,
+    "erasures": 189238,
+    "exact_recall": 0.03742192109707217,
+    "precision": 0.9998640935036694,
+    "overflow": 0,
+    "ambiguous": 0,
+    "graph_supported": 7358,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 15911,
+        "budget": 15911,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 0,
+        "erasures": 15720,
+        "budget": 15720,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 1,
+        "erasures": 15624,
+        "budget": 15626,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 0,
+        "erasures": 15884,
+        "budget": 15884,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 0,
+        "erasures": 15324,
+        "budget": 15324,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 0,
+        "erasures": 15246,
+        "budget": 15246,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 15348,
+        "budget": 15348,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 15679,
+        "budget": 15679,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 0,
+        "erasures": 15812,
+        "budget": 15812,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 0,
+        "erasures": 16054,
+        "budget": 16054,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 0,
+        "erasures": 16259,
+        "budget": 16259,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 0,
+        "erasures": 16377,
+        "budget": 16377,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 31,
+    "cutoff": 1,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 35559,
+    "correct": 35522,
+    "errors": 37,
+    "erasures": 161037,
+    "exact_recall": 0.18068526317931188,
+    "precision": 0.9989594758007818,
+    "overflow": 21,
+    "ambiguous": 23,
+    "graph_supported": 36389,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 2,
+        "erasures": 13747,
+        "budget": 13751,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 4,
+        "erasures": 13059,
+        "budget": 13067,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 6,
+        "erasures": 12721,
+        "budget": 12733,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 2,
+        "erasures": 13391,
+        "budget": 13395,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 3,
+        "erasures": 12131,
+        "budget": 12137,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 5,
+        "erasures": 11967,
+        "budget": 11977,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 1,
+        "erasures": 12346,
+        "budget": 12348,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 5,
+        "erasures": 13195,
+        "budget": 13205,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 3,
+        "erasures": 13448,
+        "budget": 13454,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 5,
+        "erasures": 14070,
+        "budget": 14080,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 0,
+        "erasures": 14903,
+        "budget": 14903,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 1,
+        "erasures": 16059,
+        "budget": 16061,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 31,
+    "cutoff": 19,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 3,
+    "correct": 3,
+    "errors": 0,
+    "erasures": 196593,
+    "exact_recall": 1.5259720441921504e-05,
+    "precision": 1.0,
+    "overflow": 7,
+    "ambiguous": 0,
+    "graph_supported": 3,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 0,
+        "erasures": 16382,
+        "budget": 16382,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 0,
+        "erasures": 16382,
+        "budget": 16382,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 16382,
+        "budget": 16382,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 31,
+    "cutoff": 3,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 10606,
+    "correct": 10604,
+    "errors": 2,
+    "erasures": 185990,
+    "exact_recall": 0.05393802518871187,
+    "precision": 0.9998114274938714,
+    "overflow": 15,
+    "ambiguous": 3,
+    "graph_supported": 10638,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 15672,
+        "budget": 15672,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 1,
+        "erasures": 15432,
+        "budget": 15434,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 1,
+        "erasures": 15299,
+        "budget": 15301,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 0,
+        "erasures": 15599,
+        "budget": 15599,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 0,
+        "erasures": 14923,
+        "budget": 14923,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 0,
+        "erasures": 14829,
+        "budget": 14829,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 14950,
+        "budget": 14950,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 15349,
+        "budget": 15349,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 0,
+        "erasures": 15561,
+        "budget": 15561,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 0,
+        "erasures": 15848,
+        "budget": 15848,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 0,
+        "erasures": 16171,
+        "budget": 16171,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 0,
+        "erasures": 16357,
+        "budget": 16357,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 31,
+    "cutoff": 49,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 0,
+    "correct": 0,
+    "errors": 0,
+    "erasures": 196596,
+    "exact_recall": 0.0,
+    "precision": null,
+    "overflow": 2,
+    "ambiguous": 0,
+    "graph_supported": 0,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  },
+  {
+    "dataset": "file3",
+    "k": 31,
+    "cutoff": 9,
+    "ratio": 2.55,
+    "truth": 196596,
+    "emitted": 337,
+    "correct": 337,
+    "errors": 0,
+    "erasures": 196259,
+    "exact_recall": 0.0017141752629758489,
+    "precision": 1.0,
+    "overflow": 11,
+    "ambiguous": 0,
+    "graph_supported": 337,
+    "per_block": [
+      {
+        "block": 0,
+        "errors": 0,
+        "erasures": 16372,
+        "budget": 16372,
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "errors": 0,
+        "erasures": 16358,
+        "budget": 16358,
+        "within_rs_bound": false
+      },
+      {
+        "block": 2,
+        "errors": 0,
+        "erasures": 16362,
+        "budget": 16362,
+        "within_rs_bound": false
+      },
+      {
+        "block": 3,
+        "errors": 0,
+        "erasures": 16371,
+        "budget": 16371,
+        "within_rs_bound": false
+      },
+      {
+        "block": 4,
+        "errors": 0,
+        "erasures": 16331,
+        "budget": 16331,
+        "within_rs_bound": false
+      },
+      {
+        "block": 5,
+        "errors": 0,
+        "erasures": 16317,
+        "budget": 16317,
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "errors": 0,
+        "erasures": 16300,
+        "budget": 16300,
+        "within_rs_bound": false
+      },
+      {
+        "block": 7,
+        "errors": 0,
+        "erasures": 16346,
+        "budget": 16346,
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "errors": 0,
+        "erasures": 16362,
+        "budget": 16362,
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "errors": 0,
+        "erasures": 16375,
+        "budget": 16375,
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "errors": 0,
+        "erasures": 16382,
+        "budget": 16382,
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "errors": 0,
+        "erasures": 16383,
+        "budget": 16383,
+        "within_rs_bound": false
+      }
+    ]
+  }
+]

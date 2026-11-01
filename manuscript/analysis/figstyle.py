@@ -8,7 +8,7 @@ SINGLE = 89 * MM
 DOUBLE = 183 * MM
 
 SAMPLES = ["HT_con", "HT1", "HT2", "HT3", "HT4", "HT5"]
-ALL = SAMPLES + ["HT176"]   # HT176: 176 days at 70 C (final section; not part of the HT1-HT5 series)
+ALL = SAMPLES + ["HT176"]   # HT176: 176 days at 70 C (not part of the HT1-HT5 series)
 LABEL = {"HT_con": "Control", "HT1": "HT1", "HT2": "HT2", "HT3": "HT3", "HT4": "HT4", "HT5": "HT5", "HT176": "HT176"}
 # control: neutral ink; heat series: validated single-hue ordinal ramp (light -> dark)
 COLOR = {"HT176": "#6250d6", "HT_con": "#3b3b3b", "HT1": "#f2a07b", "HT2": "#e57850", "HT3": "#d1502f",

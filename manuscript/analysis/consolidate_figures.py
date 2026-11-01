@@ -1,7 +1,7 @@
 """Seven main figures from preserved measurements; no new reconstruction runs.
 
-Figures 2-7. Reads the snapshots in ../data/source_data and writes to ../figures;
-Figure 1 comes from fig1_concept.py and Figure 8 from fig8_ht176.py.
+Figures 2-6 and 8. Reads the snapshots in ../data/source_data and writes to ../figures;
+Figure 1 comes from fig1_concept.py and Figure 7 from fig7_ht176.py.
 """
 from pathlib import Path
 import gzip,hashlib,json,shutil
@@ -193,7 +193,7 @@ cax.text(0,.65,'DNA Fountain',fontweight='bold',fontsize=8);cax.text(.30,.65,'71
 cax.text(0,.18,'Organick File 16',fontweight='bold',fontsize=8);cax.text(.30,.18,'Outer-code decoding and original-file recovery not tested',color=INK,fontsize=7.5)
 save(fig,5,'format_transfer')
 
-# Figure 7 replaces six partly overlapping performance figures with four panels.
+# Figure 8 replaces six partly overlapping performance figures with four panels.
 rc=csv(BENCH/'resource_control/all_configurations_summary.csv');mem=csv(BENCH/'speed_extension/Table6_configuration_comparison.csv')
 ds=['fountain','nbt_file16','song_ht176'];dl=['DNA\nFountain','Organick\nFile 16','HT176']
 cases=['dbgps_rule','dbgps2','dbgps2_alt_c','dbgps2_B8','dbgps2_B16','dbgps2_F32','dbgps2_F34','dbgps2_B12_F34']
@@ -217,6 +217,6 @@ for dd,prefix,col,lab in zip(ds,['F','O','H'],[BLUE,ORANGE,GREEN],['Fountain','O
         ax[3].annotate(tag,(row.wall_speedup,row.cpu_ratio_vs_msa),xytext=offsets[tag],textcoords='offset points',fontsize=6)
 ax[3].plot([0,35],[0,35],color=GRAY,ls=':',lw=.8);ax[3].set(xlim=(0,35),ylim=(0,35),xlabel='MSA wall time / DBGPS2 wall time',ylabel='MSA CPU time / DBGPS2 CPU time');ax[3].legend(loc='lower right',fontsize=6,frameon=False);title(ax[3],'d','Wall and CPU time gains differ')
 fig.subplots_adjust(left=.21,right=.98,wspace=.93,hspace=.45,top=.94,bottom=.10)
-save(fig,7,'speed_and_bloom')
+save(fig,8,'speed_and_bloom')
 
 print('SEVEN_MAIN_FIGURES_COMPLETE',flush=True)

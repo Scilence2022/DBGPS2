@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Figure 8: DBGPS2 on a sample aged for 176 days at 70 degrees C (HT176)."""
+"""Figure 7: DBGPS2 on a sample aged for 176 days at 70 degrees C (HT176)."""
 import os, glob
 import numpy as np
 import pandas as pd
@@ -126,5 +126,5 @@ ax.set_xlabel("k-mer size k"); ax.set_ylabel("Best strand recovery (%)")
 ax.legend(loc="center right", fontsize=5.2)
 fs.panel(ax, "f")
 
-fs.save(fig, "Fig8_HT176")
+fs.save(fig, "Fig7_HT176")
 print(kt.round(0).to_string() if len(kt) else "no k-sweep yet")

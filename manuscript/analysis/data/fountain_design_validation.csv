@@ -1,8 +1,8 @@
 depth,method,reported,zero_syndrome,exact_designs,not_design
 full,DBGPS2 raw reads,71990,71990,71990,0
-full,read merging,67105,66981,66981,0
+full,read merging,71998,71998,71998,0
 one_tile,DBGPS2 raw reads,63327,63327,63327,0
-one_tile,read merging,65428,65343,65343,0
+one_tile,read merging,70283,70283,70283,0
 full,benchmark cluster_msa_vote,71983,71983,71983,0
 full,benchmark dbgps2,71999,71999,71999,0
 full,benchmark dbgps2_B12_F34,71997,71997,71997,0

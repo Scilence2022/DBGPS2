@@ -29,7 +29,7 @@ ax.set_xlim(-0.01, 1.01); ax.set_ylim(0, 1); ax.axis("off")
 steps = [
     ("6.5 MB digital file\n(DBGPS encoding)", "#f3f2ef"),
     ("210,000 oligos\n200 nt each", "#f3f2ef"),
-    ("Thermal aging\ncontrol, HT1–HT5", "#fbe3d6"),
+    ("Thermal aging\ncontrol, HT1–HT5, HT176", "#fbe3d6"),
     ("Illumina PE150\n58–78 M pairs/sample", "#f3f2ef"),
     ("k-mer counting\n(optional Bloom filters)", "#e3eefb"),
     ("Path search from\neach index seed", "#e3eefb"),
@@ -45,7 +45,7 @@ for i, (t, c) in enumerate(steps):
 for j, s in enumerate(fs.SAMPLES):
     x = 2 * (w + gap) + 0.006 + j * (w - 0.012) / 6
     ax.add_patch(Rectangle((x, 0.2), (w - 0.012) / 6 - 0.003, 0.1, color=fs.COLOR[s], lw=0))
-ax.text(2 * (w + gap) + w / 2, 0.02, "increasing heat exposure →", ha="center", fontsize=5, color=fs.INK2)
+ax.text(2 * (w + gap) + w / 2, 0.02, "unheated control and aged samples", ha="center", fontsize=5, color=fs.INK2)
 ax.text(4 * (w + gap), 0.92, "DBGPS2 (this work)", fontsize=6, color=fs.DBGPS2_C, fontweight="bold")
 fs.panel(ax, "a", x=-0.045, y=0.85)
 

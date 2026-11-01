@@ -660,12 +660,15 @@ static int find_paths_protected(kc_c4x_t *h, unsigned char *paths[], uint64_t km
     unsigned char corrected[sizeof(candidate)], raw[sizeof(candidate)];
 
     int c_index = -1;
+    int detect_only = getenv("DBGPS_DETECT_ONLY") != NULL;
     for (int i = 0; i < term_node_num; i++) {
+        int repaired;
         if (path_len % 4 == 0 && index_len % 4 == 0)
             nodes_path(term_nodes[i], candidate, path_len, k, index_len / 4);
         else nodes_path_packed(term_nodes[i], candidate, path_len, index_len);
-        if (dbgps_strand_check(codec, redundancy, &layout, candidate, corrected, raw) < 0)
-            continue;
+        repaired = dbgps_strand_check(codec, redundancy, &layout, candidate, corrected, raw);
+        if (repaired < 0) continue;
+        if (detect_only && repaired > 0) continue;
         if (c_index >= 0) {
             if (!memcmp(paths[c_index], corrected, seq_len)) continue;
             free(paths[c_index]);
@@ -765,6 +768,35 @@ static void packed_dna_string(const unsigned char *packed, unsigned char *dna, i
     dna[bases] = '\0';
 }
 
+/* Search one index, print or log the reconstructed strand; returns 1 on success. */
+static int decode_one_index(kc_c4x_t *h, uint64_t id, uint64_t pr_uint64, uint64_t mask,
+                            int cov_cut, int payload_len, int k, int index_len, double ratio,
+                            int skip_ratios, const dbgps_codec_t *codec,
+                            const dbgps_redundancy_t *redundancy, int path_len,
+                            FILE *strands_file)
+{
+    unsigned char *path[Max_Path_Num];
+    uint64_t eid;
+    int c_index;
+    if (codec) dbgps_codec_encode_index(codec, id, index_len, &eid);
+    else eid = index_encode(id, index_len);
+
+    c_index = find_paths_protected(h, path, pr_uint64 | eid, mask, cov_cut, payload_len, k,
+                                   index_len, ratio, skip_ratios, codec, redundancy);
+    if (c_index > -1) {
+        unsigned char DNA_seq[Max_Path_Len];
+        packed_dna_string(path[c_index], DNA_seq, path_len + index_len);
+        if (strands_file != NULL)
+            fprintf(strands_file, "%"PRIu64"\t%s\n", id, DNA_seq);
+        else
+            printf("%"PRIu64"\t%s\n", id, DNA_seq);
+        free(path[c_index]);
+        return 1;
+    }
+    return 0;
+}
+
+
 
 int main(int argc, char *argv[])
 {
@@ -781,6 +813,9 @@ int main(int argc, char *argv[])
     char *output_prefix = NULL; // Output prefix for log file
     const char *mapping_file = NULL;
     const char *redundancy_spec = "crc16";
+    const char *index_file = NULL; // Optional file listing indices, one decimal per line
+    uint64_t *index_list = NULL;
+    size_t index_count = 0;
     dbgps_redundancy_t redundancy = {0};
     dbgps_strand_layout_t layout;
     dbgps_codec_t mapping = {0};
@@ -790,17 +825,36 @@ int main(int argc, char *argv[])
     unsigned int max_cov = 0;
     uint64_t mask, pr_uint64;
 
-    char p1[] = "CCTGCAGAGTAGCATGTC"; //p2[18] = 'CTGACACTGATGCATCCG';
+    char p1[128] = "CCTGCAGAGTAGCATGTC"; //p2[18] = 'CTGACACTGATGCATCCG';
     int pr_len = 18;
 
 
     ketopt_t o = KETOPT_INIT;
-    while ((c = ketopt(&o, argc, argv, 1, "k:p:b:t:c:l:a:b:i:C:r:R:m:s:o:M:E:B:F:", 0)) >= 0) {
+    while ((c = ketopt(&o, argc, argv, 1, "k:p:b:t:c:l:a:b:i:C:r:R:m:s:o:M:E:B:F:A:I:", 0)) >= 0) {
         if (c == 'k') k = atoi(o.arg);
         else if (c == 'p') p = atoi(o.arg);
         else if (c == 't') n_thread = atoi(o.arg);
         else if (c == 'c') min_cov = atoi(o.arg);
         else if (c == 'C') max_cov = atoi(o.arg);
+        else if (c == 'A') {
+            size_t n = 0;
+            while (o.arg[n] && n < sizeof(p1) - 1) {
+                int b = seq_nt4_table[(uint8_t)o.arg[n]];
+                if (b < 0 || b > 3) {
+                    fprintf(stderr, "ERROR: -A primer must contain only A, C, G, T\n");
+                    return 1;
+                }
+                p1[n] = o.arg[n];
+                n++;
+            }
+            if (o.arg[n] || n == 0) {
+                fprintf(stderr, "ERROR: -A primer must be 1 to %zu ACGT bases\n", sizeof(p1) - 1);
+                return 1;
+            }
+            p1[n] = '\0';
+            pr_len = (int)n;
+        }
+        else if (c == 'I') index_file = o.arg;
 
         else if (c == 'a' || c == 'b') {
             if (parse_index(o.arg, c == 'a' ? &min_index : &max_index) < 0) {
@@ -864,6 +918,8 @@ int main(int argc, char *argv[])
         fprintf(stderr, "  -E CODE    Redundancy: " DBGPS_REDUNDANCY_OPTIONS " [crc16]\n");
         fprintf(stderr, "  -B INT     Bloom query prefilter bits/key (1..64; 0 disables) [0]\n");
         fprintf(stderr, "  -F INT     Two-pass singleton filter log2 bits (23..40; 0 disables) [0]\n");
+        fprintf(stderr, "  -A STR     Forward primer sequence (ACGT only) [%s]\n", p1);
+        fprintf(stderr, "  -I FILE    File listing indices, one unsigned decimal per line; overrides -a/-b iteration\n");
 
         fprintf(stderr, "\n");
         return 1;
@@ -908,6 +964,70 @@ int main(int argc, char *argv[])
     }
     mask = (1ULL<<k*2) - 1;
     pr_uint64 = primer_uint64(p1, pr_len, index_len, k);
+
+    if (index_file) {
+        FILE *list_fp = fopen(index_file, "r");
+        char line[256];
+        size_t cap = 1024;
+        if (!list_fp) {
+            fprintf(stderr, "ERROR: cannot open index list file %s\n", index_file);
+            dbgps_codec_destroy(&mapping);
+            return 1;
+        }
+        index_list = (uint64_t*)malloc(cap * sizeof(uint64_t));
+        if (!index_list) {
+            fclose(list_fp);
+            fprintf(stderr, "ERROR: out of memory loading index list\n");
+            dbgps_codec_destroy(&mapping);
+            return 1;
+        }
+        while (fgets(line, sizeof(line), list_fp)) {
+            uint64_t value;
+            char *end = line, *trim;
+            while (*end == ' ' || *end == '\t') end++;
+            if (*end == '\0' || *end == '\n' || *end == '\r' || *end == '#') continue;
+            trim = end + strlen(end);
+            while (trim > end && (trim[-1] == '\n' || trim[-1] == '\r' ||
+                                  trim[-1] == ' ' || trim[-1] == '\t'))
+                *(--trim) = '\0';
+            if (parse_index(end, &value) < 0) {
+                fprintf(stderr, "ERROR: invalid index line in %s: %s", index_file, line);
+                free(index_list);
+                fclose(list_fp);
+                dbgps_codec_destroy(&mapping);
+                return 1;
+            }
+            if (value >> (index_len / bases * bits)) {
+                fprintf(stderr, "ERROR: index %"PRIu64" in %s exceeds %d bases of index capacity\n",
+                        value, index_file, index_len);
+                free(index_list);
+                fclose(list_fp);
+                dbgps_codec_destroy(&mapping);
+                return 1;
+            }
+            if (index_count == cap) {
+                uint64_t *grown;
+                cap *= 2;
+                grown = (uint64_t*)realloc(index_list, cap * sizeof(uint64_t));
+                if (!grown) {
+                    free(index_list);
+                    fclose(list_fp);
+                    fprintf(stderr, "ERROR: out of memory loading index list\n");
+                    dbgps_codec_destroy(&mapping);
+                    return 1;
+                }
+                index_list = grown;
+            }
+            index_list[index_count++] = value;
+        }
+        fclose(list_fp);
+        if (index_count == 0) {
+            fprintf(stderr, "ERROR: index list file %s contains no indices\n", index_file);
+            free(index_list);
+            dbgps_codec_destroy(&mapping);
+            return 1;
+        }
+    }
 
     path_len = layout.path_bases;
     if (codec || 2 * pr_len + index_len + path_len > read_len)
@@ -973,6 +1093,8 @@ int main(int argc, char *argv[])
     }
     PRINT_BOTH("Redundancy (-E): %s; %u parity bytes; %u bp; zero padding: %u bits\n",
                redundancy_label, layout.parity_bytes, layout.parity_bases, layout.padding_bits);
+    PRINT_BOTH("Forward primer (-A): %s (%d bp)\n", p1, pr_len);
+    PRINT_BOTH("Index list (-I): %s (%zu indices)\n", index_file ? index_file : "none", index_count);
     PRINT_BOTH("Output prefix: %s\n", output_prefix ? output_prefix : "none");
     PRINT_BOTH("======================================\n");
     
@@ -1028,9 +1150,8 @@ int main(int argc, char *argv[])
     fprintf(stderr, "Decoding strands from index %"PRIu64" to ",min_index);
     fprintf(stderr, "%"PRIu64" ......\n",max_index);
 
-    uint64_t id, eid;
+    uint64_t id;
     unsigned int cov_cut;
-    int c_index;
     int dec_strand_num=0;
     
     // Check if ratio range iteration is enabled
@@ -1040,27 +1161,17 @@ int main(int argc, char *argv[])
             start = clock();
             dec_strand_num = 0;
 
-            for(id=min_index; id<=max_index; id++) {
-                unsigned char *path[Max_Path_Num];
-                if (codec) dbgps_codec_encode_index(codec, id, index_len, &eid);
-                else eid = index_encode(id, index_len);
-
-                c_index = find_paths_protected(h, path, pr_uint64 | eid, mask, cov_cut, payload_len, k, index_len, max_cov_ratio, skip_ratios, codec, &redundancy);
-                if(c_index > -1) {
-                    dec_strand_num++;
-                    unsigned char DNA_seq[Max_Path_Len];
-
-                    packed_dna_string(path[c_index], DNA_seq, path_len + index_len);
-                    
-                    if (output_prefix != NULL && strands_file != NULL) {
-                        // Output to strands file if -o is specified
-                        fprintf(strands_file, "%"PRIu64"\t%s\n", id, DNA_seq);
-                    } else {
-                        // Output to stdout if no output file is specified
-                        printf("%"PRIu64"\t%s\n", id, DNA_seq);
-                    }
-                    free(path[c_index]);
-                }
+            if (index_list) {
+                size_t li;
+                for(li=0; li<index_count; li++)
+                    dec_strand_num += decode_one_index(h, index_list[li], pr_uint64, mask,
+                        cov_cut, payload_len, k, index_len, max_cov_ratio, skip_ratios,
+                        codec, &redundancy, path_len, strands_file);
+            } else {
+                for(id=min_index; id<=max_index; id++)
+                    dec_strand_num += decode_one_index(h, id, pr_uint64, mask,
+                        cov_cut, payload_len, k, index_len, max_cov_ratio, skip_ratios,
+                        codec, &redundancy, path_len, strands_file);
             }
 
             end = clock();
@@ -1077,27 +1188,17 @@ int main(int argc, char *argv[])
                 start = clock();
                 dec_strand_num = 0;
 
-                for(id=min_index; id<=max_index; id++) {
-                    unsigned char *path[Max_Path_Num];
-                    if (codec) dbgps_codec_encode_index(codec, id, index_len, &eid);
-                    else eid = index_encode(id, index_len);
-
-                    c_index = find_paths_protected(h, path, pr_uint64 | eid, mask, cov_cut, payload_len, k, index_len, r, skip_ratios, codec, &redundancy);
-                    if(c_index > -1) {
-                        dec_strand_num++;
-                        unsigned char DNA_seq[Max_Path_Len];
-
-                        packed_dna_string(path[c_index], DNA_seq, path_len + index_len);
-                        
-                        if (output_prefix != NULL && strands_file != NULL) {
-                            // Output to strands file if -o is specified
-                            fprintf(strands_file, "%"PRIu64"\t%s\n", id, DNA_seq);
-                        } else {
-                            // Output to stdout if no output file is specified
-                            printf("%"PRIu64"\t%s\n", id, DNA_seq);
-                        }
-                        free(path[c_index]);
-                    }
+                if (index_list) {
+                    size_t li;
+                    for(li=0; li<index_count; li++)
+                        dec_strand_num += decode_one_index(h, index_list[li], pr_uint64, mask,
+                            cov_cut, payload_len, k, index_len, r, skip_ratios,
+                            codec, &redundancy, path_len, strands_file);
+                } else {
+                    for(id=min_index; id<=max_index; id++)
+                        dec_strand_num += decode_one_index(h, id, pr_uint64, mask,
+                            cov_cut, payload_len, k, index_len, r, skip_ratios,
+                            codec, &redundancy, path_len, strands_file);
                 }
 
                 end = clock();
@@ -1112,6 +1213,7 @@ int main(int argc, char *argv[])
 
 cleanup:
     c4x_destroy(h);
+    free(index_list);
     
     // Close output files if they were opened
     if (log_file != NULL) {

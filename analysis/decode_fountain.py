@@ -84,7 +84,7 @@ def main():
             corrected = rs.check(word)
             if corrected is None:
                 continue
-            if corrected != list(word[:36]):
+            if not rs.is_codeword(word):
                 if not args.accept_corrected:
                     continue
                 n_corrected += 1

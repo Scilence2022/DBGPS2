@@ -55,7 +55,7 @@ def main():
             seed, dna = line.strip().split('\t')
             n_rec += 1
             word = dna_to_bytes(dna)
-            if rs.check(word) is not None:
+            if rs.is_codeword(word):
                 n_rs += 1
             if int(seed) in cons:
                 n_cons += 1

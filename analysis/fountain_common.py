@@ -146,5 +146,12 @@ class ReedSolomon2:
         except Exception:
             return None
 
+    def is_codeword(self, word38):
+        """True only for an exact RS(38,36) codeword. check() also returns data
+        for words in which only the parity needs correction, so comparing its
+        result with word[:36] is not a detect-only test."""
+        word = bytes(word38)
+        return bytes(self.codec.encode(word[:36])) == word
+
     def encode(self, data36):
         return list(self.codec.encode(bytes(data36)))

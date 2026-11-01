@@ -52,14 +52,13 @@ def main():
     with open(args.out, 'w') as out:
         for seq, cnt in merged.most_common():
             word = dna_to_bytes(seq)
-            dec = rs.check(word)
-            if dec is None or dec != list(word[:36]):
+            if not rs.is_codeword(word):
                 continue
             valid += 1
             seed = int.from_bytes(word[:4], 'big')
             if seed in seen_seeds:
                 continue
-            if not screen_dna(seq[:136]):
+            if not screen_dna(seq):  # the encoder screens the full 152-nt block
                 screen_rej += 1
                 continue
             seen_seeds.add(seed)

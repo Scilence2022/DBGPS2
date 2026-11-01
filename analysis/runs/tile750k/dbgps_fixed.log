@@ -1,0 +1,31 @@
+========== DBGPS Parameters ==========
+k-mer size (-k): 21
+Prefix length (-p): 14
+Number of threads (-t): 8
+Bloom counting filter (-F): 0 (0 disables; singletons removed when enabled)
+Minimum coverage cutoff (-c): 0
+Maximum coverage for testing (-C): 0
+Index length (-i): 16 bp
+Data encoding length (-l): 128 bp
+Read length for k-mer counting: 200
+Skip ratio checks for first (-s): 0 positions
+Initial index (-a): 101010102
+End index (-b): 101295684
+Maximum coverage ratio (-r): 6.00
+Ratio range upper bound (-R): 0.00
+Memory test mode: disabled
+Path length (payload + redundancy): 136
+Index byte number: 4
+Mapping: none (built-in A=00,C=01,G=10,T=11; direct 2-bit packing)
+Redundancy (-E): rs:2B; 2 parity bytes; 8 bp; zero padding: 0 bits
+Forward primer (-A): CCTGCAGAGT (10 bp)
+Index list (-I): analysis/runs/tile750k/seedlist.txt (70207 indices)
+Output prefix: analysis/runs/tile750k/dbgps_fixed
+======================================
+Bloom query filter (-B): 0 bits/key; 0 bitmap bytes
+
+K-mer counting time: 3.865925 seconds
+
+Coverage cutoff: 0, Ratio: 6.00
+Strands decoded: 63327 
+Strand decoding time: 6.398659 seconds

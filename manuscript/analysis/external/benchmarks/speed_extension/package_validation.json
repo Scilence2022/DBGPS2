@@ -1,0 +1,14 @@
+{
+  "path": "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/DBGPS2_speed_matrix_HT176_Bloom.zip",
+  "bytes": 203629987,
+  "sha256": "af8d3d2aaff515a6c0ee72a5bc460a87bdc35789bb562f88f98515137c644544",
+  "matrix_entries": 81,
+  "canonical_unique_outputs": 12,
+  "excluded": [
+    "raw reads",
+    "processed FASTA",
+    "HT5 measurements",
+    "development and rejected runs",
+    "document QA renders"
+  ]
+}

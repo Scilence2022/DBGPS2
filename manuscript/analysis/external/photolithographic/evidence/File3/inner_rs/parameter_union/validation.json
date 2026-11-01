@@ -1,0 +1,51 @@
+{
+  "completed_mask": "0x7ffffffffffffffffffffffffffffffffffffffffffff",
+  "strict_controls": 179,
+  "files": {
+    "REPORT.zh-CN.md": {
+      "bytes": 6314,
+      "sha256": "cbe64f4214aa71be672b961eeb476487d884b35d36b6bf286227dfffbe17ea9f"
+    },
+    "candidate_success_matrix.tsv.gz": {
+      "bytes": 1952182,
+      "sha256": "4ad207950af97790b415b2f5a616b490430f120122cd8ed609f1ffc218e8a612"
+    },
+    "configurations.json": {
+      "bytes": 302944,
+      "sha256": "6559937a2cd9e3b2df412abefc611b94a3a67c67c101e1b4c99f9078b423fc91"
+    },
+    "never_recovered_indices.txt": {
+      "bytes": 296187,
+      "sha256": "1278acada211ff137bb8c6cd9eaffa00868140cd5f340f1dd5a66d98325e8af4"
+    },
+    "parameters.tsv": {
+      "bytes": 6289,
+      "sha256": "b4efbb28a6ee506d3cf2469484fefe93842168a51a052731b911307a5ef3abfa"
+    },
+    "per_index.tsv": {
+      "bytes": 7265345,
+      "sha256": "d808819d2dab421238aa5384f6e88f57c24534a77cfb7d67d174c25fe3b3770f"
+    },
+    "policy_success_masks.tsv.gz": {
+      "bytes": 3498924,
+      "sha256": "c8c037ec8b8a8d17c3b77807350300dc10f56b1a188212420cacb6f6b8ede259"
+    },
+    "successful_parameter_pairs.tsv.gz": {
+      "bytes": 20174383,
+      "sha256": "16e09b7d8d07ab8971fd3567d6ab3970dd16bd73224aae4c86e2dabe268de873"
+    },
+    "summary.json": {
+      "bytes": 13384,
+      "sha256": "593cf6755319c36d4c198a30b59c2684bb451c722cfa03b2c152c12540b2ded9"
+    }
+  },
+  "source_sha256": {
+    "benchmarks/antkowiak2020/report_parameter_union.py": "89d54d4b6d102d9668acbaa99c0a0cbb3e934ad34a6d5fcb368e8d1e03f60ef2",
+    "DBGPS2.c": "39dbf9fa2ec338756a3e3599350a4d6805eda0095ccccd6d8141980777de9308",
+    "benchmarks/antkowiak2020/graph_inner_rs.cpp": "ebf0cfea3d8587d71a8ab582093bac4ad70d1c41a7c48ae0a4c82caf63849450",
+    "benchmarks/antkowiak2020/graph_adapter.c": "10758ded63eb9df0829793fe5d42a89bcf9f9c8871df0d6fe21268229bc5d38d",
+    "input/antkowiak2020/bin/graph_inner_rs": "8f6675cb199f17a313a3d11563fa7452ad18cc400a6a81840fc14927135fa4cf",
+    "input/antkowiak2020/sources/File3_synthesized.fasta": "249d224726afb173903009f1ed9fcced5908c22787a75d760600c5e0a0afa30d",
+    "input/antkowiak2020/results/inner_rs/file3_candidate_path_bounds.json": "cf9372d76f8c5c169bcb37092ef6ac7250a8732fcbfed877e2d00e47f16a7b67"
+  }
+}

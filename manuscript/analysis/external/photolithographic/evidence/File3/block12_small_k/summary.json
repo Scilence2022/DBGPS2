@@ -1,0 +1,1942 @@
+{
+  "plan": {
+    "input": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/reads/broad/block12.fq.gz",
+    "input_reads": 1681943,
+    "input_sha256": "d54896545e165493f667d27b3e5fe5da642d4df25e6119edb7ab1f83caaae16e",
+    "global_index_domain": 196596,
+    "block": 12,
+    "block_size": 16383,
+    "read_limit": 200,
+    "live_path_limit": 1050,
+    "reference_assisted_read_assignment": true,
+    "reference_use": "Design assigns reads; graph search and inner-RS decisions are reference-blind; truth scores finalized outputs.",
+    "plans": [
+      {
+        "k": 13,
+        "grid": [
+          [
+            13,
+            1.5
+          ],
+          [
+            19,
+            1.5
+          ],
+          [
+            29,
+            1.5
+          ],
+          [
+            13,
+            2.1
+          ],
+          [
+            19,
+            2.1
+          ],
+          [
+            29,
+            2.1
+          ],
+          [
+            13,
+            3.5
+          ],
+          [
+            19,
+            3.5
+          ],
+          [
+            29,
+            3.5
+          ]
+        ]
+      },
+      {
+        "k": 14,
+        "grid": [
+          [
+            6,
+            1.8
+          ],
+          [
+            7,
+            1.8
+          ],
+          [
+            8,
+            1.8
+          ],
+          [
+            10,
+            1.8
+          ],
+          [
+            11,
+            1.8
+          ],
+          [
+            6,
+            2.1
+          ],
+          [
+            7,
+            2.1
+          ],
+          [
+            8,
+            2.1
+          ],
+          [
+            10,
+            2.1
+          ],
+          [
+            11,
+            2.1
+          ],
+          [
+            6,
+            2.55
+          ],
+          [
+            7,
+            2.55
+          ],
+          [
+            8,
+            2.55
+          ],
+          [
+            10,
+            2.55
+          ],
+          [
+            11,
+            2.55
+          ],
+          [
+            6,
+            3.0
+          ],
+          [
+            7,
+            3.0
+          ],
+          [
+            8,
+            3.0
+          ],
+          [
+            10,
+            3.0
+          ],
+          [
+            11,
+            3.0
+          ],
+          [
+            6,
+            3.5
+          ],
+          [
+            7,
+            3.5
+          ],
+          [
+            8,
+            3.5
+          ],
+          [
+            10,
+            3.5
+          ],
+          [
+            11,
+            3.5
+          ],
+          [
+            1,
+            1.2
+          ],
+          [
+            3,
+            1.2
+          ],
+          [
+            5,
+            1.2
+          ],
+          [
+            9,
+            1.2
+          ],
+          [
+            13,
+            1.2
+          ],
+          [
+            19,
+            1.2
+          ],
+          [
+            29,
+            1.2
+          ],
+          [
+            1,
+            1.5
+          ],
+          [
+            3,
+            1.5
+          ],
+          [
+            5,
+            1.5
+          ],
+          [
+            9,
+            1.5
+          ],
+          [
+            13,
+            1.5
+          ],
+          [
+            19,
+            1.5
+          ],
+          [
+            29,
+            1.5
+          ],
+          [
+            1,
+            1.8
+          ],
+          [
+            3,
+            1.8
+          ],
+          [
+            5,
+            1.8
+          ],
+          [
+            9,
+            1.8
+          ],
+          [
+            13,
+            1.8
+          ],
+          [
+            19,
+            1.8
+          ],
+          [
+            29,
+            1.8
+          ],
+          [
+            1,
+            2.1
+          ],
+          [
+            3,
+            2.1
+          ],
+          [
+            5,
+            2.1
+          ],
+          [
+            9,
+            2.1
+          ],
+          [
+            13,
+            2.1
+          ],
+          [
+            19,
+            2.1
+          ],
+          [
+            29,
+            2.1
+          ],
+          [
+            1,
+            2.55
+          ],
+          [
+            3,
+            2.55
+          ],
+          [
+            5,
+            2.55
+          ],
+          [
+            9,
+            2.55
+          ],
+          [
+            13,
+            2.55
+          ],
+          [
+            19,
+            2.55
+          ],
+          [
+            29,
+            2.55
+          ],
+          [
+            1,
+            3.5
+          ],
+          [
+            3,
+            3.5
+          ],
+          [
+            5,
+            3.5
+          ],
+          [
+            9,
+            3.5
+          ],
+          [
+            13,
+            3.5
+          ],
+          [
+            19,
+            3.5
+          ],
+          [
+            29,
+            3.5
+          ]
+        ]
+      },
+      {
+        "k": 15,
+        "grid": [
+          [
+            1,
+            1.9
+          ],
+          [
+            2,
+            1.9
+          ],
+          [
+            1,
+            2.0
+          ],
+          [
+            2,
+            2.0
+          ],
+          [
+            1,
+            2.2
+          ],
+          [
+            2,
+            2.2
+          ],
+          [
+            1,
+            2.3
+          ],
+          [
+            2,
+            2.3
+          ],
+          [
+            1,
+            2.4
+          ],
+          [
+            2,
+            2.4
+          ],
+          [
+            2,
+            1.8
+          ],
+          [
+            4,
+            1.8
+          ],
+          [
+            5,
+            1.8
+          ],
+          [
+            7,
+            1.8
+          ],
+          [
+            2,
+            2.1
+          ],
+          [
+            4,
+            2.1
+          ],
+          [
+            5,
+            2.1
+          ],
+          [
+            7,
+            2.1
+          ],
+          [
+            2,
+            2.55
+          ],
+          [
+            4,
+            2.55
+          ],
+          [
+            5,
+            2.55
+          ],
+          [
+            7,
+            2.55
+          ],
+          [
+            2,
+            3.0
+          ],
+          [
+            4,
+            3.0
+          ],
+          [
+            5,
+            3.0
+          ],
+          [
+            7,
+            3.0
+          ],
+          [
+            2,
+            3.5
+          ],
+          [
+            4,
+            3.5
+          ],
+          [
+            5,
+            3.5
+          ],
+          [
+            7,
+            3.5
+          ],
+          [
+            2,
+            5.0
+          ],
+          [
+            4,
+            5.0
+          ],
+          [
+            5,
+            5.0
+          ],
+          [
+            7,
+            5.0
+          ]
+        ]
+      },
+      {
+        "k": 16,
+        "grid": [
+          [
+            1,
+            2.8
+          ],
+          [
+            1,
+            3.1
+          ],
+          [
+            1,
+            3.2
+          ],
+          [
+            1,
+            3.3
+          ],
+          [
+            1,
+            3.4
+          ],
+          [
+            1,
+            3.6
+          ],
+          [
+            1,
+            3.75
+          ],
+          [
+            1,
+            4.0
+          ],
+          [
+            1,
+            4.25
+          ],
+          [
+            1,
+            4.5
+          ],
+          [
+            1,
+            1.5
+          ],
+          [
+            2,
+            1.5
+          ],
+          [
+            3,
+            1.5
+          ],
+          [
+            5,
+            1.5
+          ],
+          [
+            9,
+            1.5
+          ],
+          [
+            1,
+            1.8
+          ],
+          [
+            2,
+            1.8
+          ],
+          [
+            3,
+            1.8
+          ],
+          [
+            5,
+            1.8
+          ],
+          [
+            9,
+            1.8
+          ],
+          [
+            1,
+            2.1
+          ],
+          [
+            2,
+            2.1
+          ],
+          [
+            3,
+            2.1
+          ],
+          [
+            5,
+            2.1
+          ],
+          [
+            9,
+            2.1
+          ],
+          [
+            1,
+            2.55
+          ],
+          [
+            2,
+            2.55
+          ],
+          [
+            3,
+            2.55
+          ],
+          [
+            5,
+            2.55
+          ],
+          [
+            9,
+            2.55
+          ],
+          [
+            1,
+            3.0
+          ],
+          [
+            2,
+            3.0
+          ],
+          [
+            3,
+            3.0
+          ],
+          [
+            5,
+            3.0
+          ],
+          [
+            9,
+            3.0
+          ],
+          [
+            1,
+            3.5
+          ],
+          [
+            2,
+            3.5
+          ],
+          [
+            3,
+            3.5
+          ],
+          [
+            5,
+            3.5
+          ],
+          [
+            9,
+            3.5
+          ],
+          [
+            1,
+            5.0
+          ],
+          [
+            2,
+            5.0
+          ],
+          [
+            3,
+            5.0
+          ],
+          [
+            5,
+            5.0
+          ],
+          [
+            9,
+            5.0
+          ],
+          [
+            1,
+            10.0
+          ],
+          [
+            2,
+            10.0
+          ],
+          [
+            3,
+            10.0
+          ],
+          [
+            5,
+            10.0
+          ],
+          [
+            9,
+            10.0
+          ]
+        ]
+      },
+      {
+        "k": 17,
+        "grid": [
+          [
+            2,
+            2.55
+          ],
+          [
+            1,
+            3.0
+          ],
+          [
+            2,
+            3.0
+          ],
+          [
+            3,
+            3.0
+          ],
+          [
+            2,
+            3.5
+          ],
+          [
+            1,
+            4.0
+          ],
+          [
+            2,
+            4.0
+          ],
+          [
+            3,
+            4.0
+          ],
+          [
+            1,
+            5.0
+          ],
+          [
+            2,
+            5.0
+          ],
+          [
+            3,
+            5.0
+          ],
+          [
+            1,
+            10.0
+          ],
+          [
+            2,
+            10.0
+          ],
+          [
+            3,
+            10.0
+          ]
+        ]
+      }
+    ],
+    "new_configurations": 174,
+    "baseline_configurations": 179,
+    "binary_sha256": "6a6cb9dcdcf2a98020c9373ce4336cabc2a0376a6623e284da7539220bd9ebfc"
+  },
+  "complete": true,
+  "completed_new_configurations": 174,
+  "baseline_candidate_union": 10033,
+  "new_candidate_union": 10644,
+  "combined_candidate_union": 10659,
+  "combined_recall": 0.6506134407617652,
+  "newly_recovered": 626,
+  "still_missing": 5724,
+  "zero_candidate_union": 10454,
+  "only_inner_rs": 205,
+  "best_single_candidate": {
+    "experiment": "small_k",
+    "k": 16,
+    "cutoff": 1,
+    "ratio": 3.5,
+    "candidate_correct": 10237,
+    "zero_candidate_correct": 10029,
+    "candidate_path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/decodes/broad/block12/file3.k16.c1.r3.50.truth_candidates.tsv"
+  },
+  "best_single_unique": {
+    "experiment": "small_k",
+    "mode": "broad",
+    "k": 16,
+    "cutoff": 1,
+    "ratio": 3.5,
+    "policy": "pooled_weight16",
+    "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/decodes/broad/block12/file3.k16.c1.r3.50.pooled_weight16.strands",
+    "block": 12,
+    "emitted": 11617,
+    "correct": 10077,
+    "errors": 1540,
+    "lane_errors": [
+      1447,
+      1492,
+      1500,
+      1514,
+      1530,
+      1530
+    ],
+    "erasures": 4766,
+    "lane_budgets": [
+      7660,
+      7750,
+      7766,
+      7794,
+      7826,
+      7826
+    ],
+    "max_lane_budget": 7826,
+    "within_rs_bound": false,
+    "precision": 0.8674356546440561,
+    "recall": 0.615088811572972,
+    "outside_target_block_outputs": 16961
+  },
+  "best_outer_budget": {
+    "experiment": "small_k",
+    "mode": "broad",
+    "k": 16,
+    "cutoff": 1,
+    "ratio": 3.5,
+    "policy": "strict",
+    "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/decodes/broad/block12/file3.k16.c1.r3.50.strict.strands",
+    "block": 12,
+    "emitted": 9988,
+    "correct": 9973,
+    "errors": 15,
+    "lane_errors": [
+      13,
+      14,
+      15,
+      15,
+      15,
+      15
+    ],
+    "erasures": 6395,
+    "lane_budgets": [
+      6421,
+      6423,
+      6425,
+      6425,
+      6425,
+      6425
+    ],
+    "max_lane_budget": 6425,
+    "within_rs_bound": false,
+    "precision": 0.9984981978374049,
+    "recall": 0.6087407678691327,
+    "outside_target_block_outputs": 65
+  },
+  "baseline_best_candidate": {
+    "k": 17,
+    "cutoff": 1,
+    "ratio": 3.5,
+    "correct": 9521,
+    "zero_correct": 9323
+  },
+  "baseline_best_unique": {
+    "mode": "broad",
+    "k": 17,
+    "cutoff": 1,
+    "ratio": 3.5,
+    "policy": "pooled_weight16",
+    "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/decodes/broad/block12/file3.k17.c1.r3.50.pooled_weight16.strands",
+    "block": 12,
+    "emitted": 10648,
+    "correct": 9439,
+    "errors": 1209,
+    "lane_errors": [
+      1087,
+      1125,
+      1151,
+      1168,
+      1193,
+      1185
+    ],
+    "erasures": 5735,
+    "lane_budgets": [
+      7909,
+      7985,
+      8037,
+      8071,
+      8121,
+      8105
+    ],
+    "max_lane_budget": 8121,
+    "within_rs_bound": false,
+    "precision": 0.8864575507137491,
+    "recall": 0.5761460050051883,
+    "outside_target_block_outputs": 5507
+  },
+  "baseline_best_outer_budget": {
+    "mode": "broad",
+    "k": 17,
+    "cutoff": 1,
+    "ratio": 3.5,
+    "policy": "corrected_vote2",
+    "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/decodes/broad/block12/file3.k17.c1.r3.50.corrected_vote2.strands",
+    "block": 12,
+    "emitted": 9409,
+    "correct": 9366,
+    "errors": 43,
+    "lane_errors": [
+      33,
+      38,
+      40,
+      40,
+      41,
+      43
+    ],
+    "erasures": 6974,
+    "lane_budgets": [
+      7040,
+      7050,
+      7054,
+      7054,
+      7056,
+      7060
+    ],
+    "max_lane_budget": 7060,
+    "within_rs_bound": false,
+    "precision": 0.9954299075353386,
+    "recall": 0.5716901666361472,
+    "outside_target_block_outputs": 272,
+    "selected_strands": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/selected_outputs/block12.strands",
+    "selected_fasta": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/selected_outputs/block12.fasta"
+  },
+  "by_k": [
+    {
+      "k": 13,
+      "parameters": 23,
+      "baseline_union": 533,
+      "new_union": 1517,
+      "combined_union": 1603,
+      "newly_recovered_vs_all_baseline": 0,
+      "best_candidate": {
+        "experiment": "small_k",
+        "k": 13,
+        "cutoff": 29,
+        "ratio": 2.1,
+        "candidate_correct": 746,
+        "zero_candidate_correct": 737,
+        "candidate_path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/decodes/broad/block12/file3.k13.c29.r2.10.truth_candidates.tsv"
+      },
+      "best_unique": {
+        "experiment": "small_k",
+        "mode": "broad",
+        "k": 13,
+        "cutoff": 29,
+        "ratio": 2.1,
+        "policy": "corrected_vote1",
+        "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/decodes/broad/block12/file3.k13.c29.r2.10.corrected_vote1.strands",
+        "block": 12,
+        "emitted": 3278,
+        "correct": 727,
+        "errors": 2551,
+        "lane_errors": [
+          2525,
+          2541,
+          2547,
+          2548,
+          2550,
+          2551
+        ],
+        "erasures": 13105,
+        "lane_budgets": [
+          18155,
+          18187,
+          18199,
+          18201,
+          18205,
+          18207
+        ],
+        "max_lane_budget": 18207,
+        "within_rs_bound": false,
+        "precision": 0.22178157413056743,
+        "recall": 0.04437526704510773,
+        "outside_target_block_outputs": 2786
+      },
+      "best_budget": {
+        "experiment": "small_k",
+        "mode": "broad",
+        "k": 13,
+        "cutoff": 29,
+        "ratio": 2.1,
+        "policy": "strict",
+        "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/decodes/broad/block12/file3.k13.c29.r2.10.strict.strands",
+        "block": 12,
+        "emitted": 747,
+        "correct": 725,
+        "errors": 22,
+        "lane_errors": [
+          21,
+          22,
+          22,
+          22,
+          22,
+          22
+        ],
+        "erasures": 15636,
+        "lane_budgets": [
+          15678,
+          15680,
+          15680,
+          15680,
+          15680,
+          15680
+        ],
+        "max_lane_budget": 15680,
+        "within_rs_bound": false,
+        "precision": 0.9705488621151271,
+        "recall": 0.04425318928157236,
+        "outside_target_block_outputs": 7
+      },
+      "best_candidate_source_status_counts": {
+        "no_valid_path": 15326,
+        "unique": 747,
+        "overflow": 297,
+        "ambiguous": 13
+      }
+    },
+    {
+      "k": 14,
+      "parameters": 67,
+      "baseline_union": 0,
+      "new_union": 7497,
+      "combined_union": 7497,
+      "newly_recovered_vs_all_baseline": 46,
+      "best_candidate": {
+        "experiment": "small_k",
+        "k": 14,
+        "cutoff": 7,
+        "ratio": 2.1,
+        "candidate_correct": 5394,
+        "zero_candidate_correct": 5334,
+        "candidate_path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/decodes/fine14/block12/file3.k14.c7.r2.10.truth_candidates.tsv"
+      },
+      "best_unique": {
+        "experiment": "small_k",
+        "mode": "broad",
+        "k": 14,
+        "cutoff": 7,
+        "ratio": 2.1,
+        "policy": "corrected_vote1",
+        "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/decodes/fine14/block12/file3.k14.c7.r2.10.corrected_vote1.strands",
+        "block": 12,
+        "emitted": 6864,
+        "correct": 5362,
+        "errors": 1502,
+        "lane_errors": [
+          1423,
+          1481,
+          1486,
+          1496,
+          1499,
+          1502
+        ],
+        "erasures": 9519,
+        "lane_budgets": [
+          12365,
+          12481,
+          12491,
+          12511,
+          12517,
+          12523
+        ],
+        "max_lane_budget": 12523,
+        "within_rs_bound": false,
+        "precision": 0.7811771561771562,
+        "recall": 0.32729048403833244,
+        "outside_target_block_outputs": 2574
+      },
+      "best_budget": {
+        "experiment": "small_k",
+        "mode": "broad",
+        "k": 14,
+        "cutoff": 7,
+        "ratio": 2.1,
+        "policy": "strict",
+        "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/decodes/fine14/block12/file3.k14.c7.r2.10.strict.strands",
+        "block": 12,
+        "emitted": 5341,
+        "correct": 5329,
+        "errors": 12,
+        "lane_errors": [
+          9,
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "erasures": 11042,
+        "lane_budgets": [
+          11060,
+          11066,
+          11066,
+          11066,
+          11066,
+          11066
+        ],
+        "max_lane_budget": 11066,
+        "within_rs_bound": false,
+        "precision": 0.9977532297322599,
+        "recall": 0.32527620093999876,
+        "outside_target_block_outputs": 12
+      },
+      "best_candidate_source_status_counts": {
+        "no_valid_path": 10785,
+        "unique": 5341,
+        "overflow": 252,
+        "ambiguous": 5
+      }
+    },
+    {
+      "k": 15,
+      "parameters": 59,
+      "baseline_union": 9233,
+      "new_union": 10004,
+      "combined_union": 10052,
+      "newly_recovered_vs_all_baseline": 316,
+      "best_candidate": {
+        "experiment": "small_k",
+        "k": 15,
+        "cutoff": 2,
+        "ratio": 2.3,
+        "candidate_correct": 8769,
+        "zero_candidate_correct": 8613,
+        "candidate_path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/decodes/fine/block12/file3.k15.c2.r2.30.truth_candidates.tsv"
+      },
+      "best_unique": {
+        "experiment": "small_k",
+        "mode": "broad",
+        "k": 15,
+        "cutoff": 2,
+        "ratio": 2.3,
+        "policy": "corrected_vote1",
+        "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/decodes/fine/block12/file3.k15.c2.r2.30.corrected_vote1.strands",
+        "block": 12,
+        "emitted": 9961,
+        "correct": 8663,
+        "errors": 1298,
+        "lane_errors": [
+          1243,
+          1270,
+          1277,
+          1285,
+          1289,
+          1293
+        ],
+        "erasures": 6422,
+        "lane_budgets": [
+          8908,
+          8962,
+          8976,
+          8992,
+          9000,
+          9008
+        ],
+        "max_lane_budget": 9008,
+        "within_rs_bound": false,
+        "precision": 0.8696917980122477,
+        "recall": 0.528779832753464,
+        "outside_target_block_outputs": 6002
+      },
+      "best_budget": {
+        "experiment": "small_k",
+        "mode": "broad",
+        "k": 15,
+        "cutoff": 2,
+        "ratio": 2.3,
+        "policy": "strict",
+        "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/decodes/fine/block12/file3.k15.c2.r2.30.strict.strands",
+        "block": 12,
+        "emitted": 8583,
+        "correct": 8577,
+        "errors": 6,
+        "lane_errors": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "erasures": 7800,
+        "lane_budgets": [
+          7812,
+          7812,
+          7812,
+          7812,
+          7812,
+          7812
+        ],
+        "max_lane_budget": 7812,
+        "within_rs_bound": false,
+        "precision": 0.9993009437259699,
+        "recall": 0.5235304889214429,
+        "outside_target_block_outputs": 32
+      },
+      "best_candidate_source_status_counts": {
+        "no_valid_path": 7470,
+        "unique": 8583,
+        "ambiguous": 36,
+        "overflow": 294
+      }
+    },
+    {
+      "k": 16,
+      "parameters": 50,
+      "baseline_union": 0,
+      "new_union": 10395,
+      "combined_union": 10395,
+      "newly_recovered_vs_all_baseline": 521,
+      "best_candidate": {
+        "experiment": "small_k",
+        "k": 16,
+        "cutoff": 1,
+        "ratio": 3.5,
+        "candidate_correct": 10237,
+        "zero_candidate_correct": 10029,
+        "candidate_path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/decodes/broad/block12/file3.k16.c1.r3.50.truth_candidates.tsv"
+      },
+      "best_unique": {
+        "experiment": "small_k",
+        "mode": "broad",
+        "k": 16,
+        "cutoff": 1,
+        "ratio": 3.5,
+        "policy": "pooled_weight16",
+        "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/decodes/broad/block12/file3.k16.c1.r3.50.pooled_weight16.strands",
+        "block": 12,
+        "emitted": 11617,
+        "correct": 10077,
+        "errors": 1540,
+        "lane_errors": [
+          1447,
+          1492,
+          1500,
+          1514,
+          1530,
+          1530
+        ],
+        "erasures": 4766,
+        "lane_budgets": [
+          7660,
+          7750,
+          7766,
+          7794,
+          7826,
+          7826
+        ],
+        "max_lane_budget": 7826,
+        "within_rs_bound": false,
+        "precision": 0.8674356546440561,
+        "recall": 0.615088811572972,
+        "outside_target_block_outputs": 16961
+      },
+      "best_budget": {
+        "experiment": "small_k",
+        "mode": "broad",
+        "k": 16,
+        "cutoff": 1,
+        "ratio": 3.5,
+        "policy": "strict",
+        "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/decodes/broad/block12/file3.k16.c1.r3.50.strict.strands",
+        "block": 12,
+        "emitted": 9988,
+        "correct": 9973,
+        "errors": 15,
+        "lane_errors": [
+          13,
+          14,
+          15,
+          15,
+          15,
+          15
+        ],
+        "erasures": 6395,
+        "lane_budgets": [
+          6421,
+          6423,
+          6425,
+          6425,
+          6425,
+          6425
+        ],
+        "max_lane_budget": 6425,
+        "within_rs_bound": false,
+        "precision": 0.9984981978374049,
+        "recall": 0.6087407678691327,
+        "outside_target_block_outputs": 65
+      },
+      "best_candidate_source_status_counts": {
+        "no_valid_path": 6235,
+        "unique": 9988,
+        "ambiguous": 56,
+        "overflow": 104
+      }
+    },
+    {
+      "k": 17,
+      "parameters": 39,
+      "baseline_union": 9521,
+      "new_union": 9571,
+      "combined_union": 9571,
+      "newly_recovered_vs_all_baseline": 10,
+      "best_candidate": {
+        "experiment": "small_k",
+        "k": 17,
+        "cutoff": 1,
+        "ratio": 5.0,
+        "candidate_correct": 9567,
+        "zero_candidate_correct": 9368,
+        "candidate_path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/decodes/broad/block12/file3.k17.c1.r5.00.truth_candidates.tsv"
+      },
+      "best_unique": {
+        "experiment": "small_k",
+        "mode": "broad",
+        "k": 17,
+        "cutoff": 1,
+        "ratio": 4.0,
+        "policy": "pooled_weight16",
+        "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/decodes/broad/block12/file3.k17.c1.r4.00.pooled_weight16.strands",
+        "block": 12,
+        "emitted": 10882,
+        "correct": 9457,
+        "errors": 1425,
+        "lane_errors": [
+          1302,
+          1345,
+          1374,
+          1388,
+          1411,
+          1401
+        ],
+        "erasures": 5501,
+        "lane_budgets": [
+          8105,
+          8191,
+          8249,
+          8277,
+          8323,
+          8303
+        ],
+        "max_lane_budget": 8323,
+        "within_rs_bound": false,
+        "precision": 0.8690498070207683,
+        "recall": 0.5772447048770066,
+        "outside_target_block_outputs": 7077
+      },
+      "best_budget": {
+        "experiment": "small_k",
+        "mode": "broad",
+        "k": 17,
+        "cutoff": 1,
+        "ratio": 4.0,
+        "policy": "corrected_vote5",
+        "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/decodes/broad/block12/file3.k17.c1.r4.00.corrected_vote5.strands",
+        "block": 12,
+        "emitted": 9346,
+        "correct": 9337,
+        "errors": 9,
+        "lane_errors": [
+          7,
+          9,
+          9,
+          9,
+          9,
+          9
+        ],
+        "erasures": 7037,
+        "lane_budgets": [
+          7051,
+          7055,
+          7055,
+          7055,
+          7055,
+          7055
+        ],
+        "max_lane_budget": 7055,
+        "within_rs_bound": false,
+        "precision": 0.999037021185534,
+        "recall": 0.5699200390648843,
+        "outside_target_block_outputs": 42
+      },
+      "best_candidate_source_status_counts": {
+        "no_valid_path": 7005,
+        "unique": 9338,
+        "ambiguous": 40
+      }
+    },
+    {
+      "k": 18,
+      "parameters": 25,
+      "baseline_union": 8746,
+      "new_union": 0,
+      "combined_union": 8746,
+      "newly_recovered_vs_all_baseline": 0,
+      "best_candidate": {
+        "experiment": "baseline",
+        "k": 18,
+        "cutoff": 1,
+        "ratio": 5.0,
+        "candidate_correct": 8743,
+        "zero_candidate_correct": 8546,
+        "candidate_path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/decodes/broad/block12/file3.k18.c1.r5.00.truth_candidates.tsv"
+      },
+      "best_unique": {
+        "mode": "broad",
+        "k": 18,
+        "cutoff": 1,
+        "ratio": 5.0,
+        "policy": "pooled_weight16",
+        "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/decodes/broad/block12/file3.k18.c1.r5.00.pooled_weight16.strands",
+        "block": 12,
+        "emitted": 10200,
+        "correct": 8637,
+        "errors": 1563,
+        "lane_errors": [
+          1436,
+          1484,
+          1502,
+          1518,
+          1542,
+          1539
+        ],
+        "erasures": 6183,
+        "lane_budgets": [
+          9055,
+          9151,
+          9187,
+          9219,
+          9267,
+          9261
+        ],
+        "max_lane_budget": 9267,
+        "within_rs_bound": false,
+        "precision": 0.846764705882353,
+        "recall": 0.5271928218275042,
+        "outside_target_block_outputs": 7484
+      },
+      "best_budget": {
+        "mode": "broad",
+        "k": 18,
+        "cutoff": 1,
+        "ratio": 3.5,
+        "policy": "corrected_vote2",
+        "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/decodes/broad/block12/file3.k18.c1.r3.50.corrected_vote2.strands",
+        "block": 12,
+        "emitted": 8578,
+        "correct": 8552,
+        "errors": 26,
+        "lane_errors": [
+          16,
+          20,
+          21,
+          23,
+          25,
+          26
+        ],
+        "erasures": 7805,
+        "lane_budgets": [
+          7837,
+          7845,
+          7847,
+          7851,
+          7855,
+          7857
+        ],
+        "max_lane_budget": 7857,
+        "within_rs_bound": false,
+        "precision": 0.9969689904406621,
+        "recall": 0.5220045168772508,
+        "outside_target_block_outputs": 176
+      },
+      "best_candidate_source_status_counts": {
+        "no_valid_path": 7829,
+        "unique": 8534,
+        "ambiguous": 20
+      }
+    },
+    {
+      "k": 19,
+      "parameters": 34,
+      "baseline_union": 7875,
+      "new_union": 0,
+      "combined_union": 7875,
+      "newly_recovered_vs_all_baseline": 0,
+      "best_candidate": {
+        "experiment": "baseline",
+        "k": 19,
+        "cutoff": 1,
+        "ratio": 10.0,
+        "candidate_correct": 7875,
+        "zero_candidate_correct": 7677,
+        "candidate_path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/decodes/broad/block12/file3.k19.c1.r10.00.truth_candidates.tsv"
+      },
+      "best_unique": {
+        "mode": "broad",
+        "k": 19,
+        "cutoff": 1,
+        "ratio": 5.0,
+        "policy": "pooled_weight16",
+        "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/decodes/broad/block12/file3.k19.c1.r5.00.pooled_weight16.strands",
+        "block": 12,
+        "emitted": 9495,
+        "correct": 7786,
+        "errors": 1709,
+        "lane_errors": [
+          1574,
+          1622,
+          1649,
+          1670,
+          1690,
+          1682
+        ],
+        "erasures": 6888,
+        "lane_budgets": [
+          10036,
+          10132,
+          10186,
+          10228,
+          10268,
+          10252
+        ],
+        "max_lane_budget": 10268,
+        "within_rs_bound": false,
+        "precision": 0.8200105318588731,
+        "recall": 0.47524873344320334,
+        "outside_target_block_outputs": 6026
+      },
+      "best_budget": {
+        "mode": "broad",
+        "k": 19,
+        "cutoff": 1,
+        "ratio": 3.5,
+        "policy": "corrected_vote2",
+        "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/decodes/broad/block12/file3.k19.c1.r3.50.corrected_vote2.strands",
+        "block": 12,
+        "emitted": 7699,
+        "correct": 7681,
+        "errors": 18,
+        "lane_errors": [
+          13,
+          15,
+          16,
+          17,
+          18,
+          18
+        ],
+        "erasures": 8684,
+        "lane_budgets": [
+          8710,
+          8714,
+          8716,
+          8718,
+          8720,
+          8720
+        ],
+        "max_lane_budget": 8720,
+        "within_rs_bound": false,
+        "precision": 0.9976620340303936,
+        "recall": 0.46883965085759627,
+        "outside_target_block_outputs": 124
+      },
+      "best_candidate_source_status_counts": {
+        "no_valid_path": 8691,
+        "unique": 7645,
+        "ambiguous": 47
+      }
+    },
+    {
+      "k": 20,
+      "parameters": 21,
+      "baseline_union": 6996,
+      "new_union": 0,
+      "combined_union": 6996,
+      "newly_recovered_vs_all_baseline": 0,
+      "best_candidate": {
+        "experiment": "baseline",
+        "k": 20,
+        "cutoff": 1,
+        "ratio": 10.0,
+        "candidate_correct": 6996,
+        "zero_candidate_correct": 6809,
+        "candidate_path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/decodes/broad/block12/file3.k20.c1.r10.00.truth_candidates.tsv"
+      },
+      "best_unique": {
+        "mode": "broad",
+        "k": 20,
+        "cutoff": 1,
+        "ratio": 5.0,
+        "policy": "pooled_weight16",
+        "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/decodes/broad/block12/file3.k20.c1.r5.00.pooled_weight16.strands",
+        "block": 12,
+        "emitted": 8597,
+        "correct": 6913,
+        "errors": 1684,
+        "lane_errors": [
+          1534,
+          1586,
+          1617,
+          1635,
+          1648,
+          1653
+        ],
+        "erasures": 7786,
+        "lane_budgets": [
+          10854,
+          10958,
+          11020,
+          11056,
+          11082,
+          11092
+        ],
+        "max_lane_budget": 11092,
+        "within_rs_bound": false,
+        "precision": 0.804117715482145,
+        "recall": 0.4219617896600134,
+        "outside_target_block_outputs": 5043
+      },
+      "best_budget": {
+        "mode": "broad",
+        "k": 20,
+        "cutoff": 1,
+        "ratio": 5.0,
+        "policy": "corrected_vote2",
+        "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/decodes/broad/block12/file3.k20.c1.r5.00.corrected_vote2.strands",
+        "block": 12,
+        "emitted": 6884,
+        "correct": 6847,
+        "errors": 37,
+        "lane_errors": [
+          28,
+          32,
+          32,
+          34,
+          34,
+          37
+        ],
+        "erasures": 9499,
+        "lane_budgets": [
+          9555,
+          9563,
+          9563,
+          9567,
+          9567,
+          9573
+        ],
+        "max_lane_budget": 9573,
+        "within_rs_bound": false,
+        "precision": 0.9946252178965718,
+        "recall": 0.41793322346334616,
+        "outside_target_block_outputs": 197
+      },
+      "best_candidate_source_status_counts": {
+        "no_valid_path": 9567,
+        "unique": 6789,
+        "ambiguous": 27
+      }
+    },
+    {
+      "k": 21,
+      "parameters": 25,
+      "baseline_union": 6143,
+      "new_union": 0,
+      "combined_union": 6143,
+      "newly_recovered_vs_all_baseline": 0,
+      "best_candidate": {
+        "experiment": "baseline",
+        "k": 21,
+        "cutoff": 1,
+        "ratio": 3.5,
+        "candidate_correct": 6143,
+        "zero_candidate_correct": 5945,
+        "candidate_path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/decodes/broad/block12/file3.k21.c1.r3.50.truth_candidates.tsv"
+      },
+      "best_unique": {
+        "mode": "broad",
+        "k": 21,
+        "cutoff": 1,
+        "ratio": 3.5,
+        "policy": "pooled_weight4",
+        "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/decodes/broad/block12/file3.k21.c1.r3.50.pooled_weight4.strands",
+        "block": 12,
+        "emitted": 7504,
+        "correct": 6077,
+        "errors": 1427,
+        "lane_errors": [
+          1243,
+          1304,
+          1337,
+          1357,
+          1385,
+          1384
+        ],
+        "erasures": 8879,
+        "lane_budgets": [
+          11365,
+          11487,
+          11553,
+          11593,
+          11649,
+          11647
+        ],
+        "max_lane_budget": 11649,
+        "within_rs_bound": false,
+        "precision": 0.8098347547974414,
+        "recall": 0.3709332845022279,
+        "outside_target_block_outputs": 3170
+      },
+      "best_budget": {
+        "mode": "broad",
+        "k": 21,
+        "cutoff": 1,
+        "ratio": 3.5,
+        "policy": "corrected_vote2",
+        "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/decodes/broad/block12/file3.k21.c1.r3.50.corrected_vote2.strands",
+        "block": 12,
+        "emitted": 5994,
+        "correct": 5978,
+        "errors": 16,
+        "lane_errors": [
+          10,
+          12,
+          11,
+          13,
+          14,
+          16
+        ],
+        "erasures": 10389,
+        "lane_budgets": [
+          10409,
+          10413,
+          10411,
+          10415,
+          10417,
+          10421
+        ],
+        "max_lane_budget": 10421,
+        "within_rs_bound": false,
+        "precision": 0.9973306639973306,
+        "recall": 0.364890435207227,
+        "outside_target_block_outputs": 75
+      },
+      "best_candidate_source_status_counts": {
+        "no_valid_path": 10435,
+        "unique": 5946,
+        "ambiguous": 2
+      }
+    },
+    {
+      "k": 25,
+      "parameters": 5,
+      "baseline_union": 2881,
+      "new_union": 0,
+      "combined_union": 2881,
+      "newly_recovered_vs_all_baseline": 0,
+      "best_candidate": {
+        "experiment": "baseline",
+        "k": 25,
+        "cutoff": 1,
+        "ratio": 2.55,
+        "candidate_correct": 2881,
+        "zero_candidate_correct": 2737,
+        "candidate_path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/decodes/broad/block12/file3.k25.c1.r2.55.truth_candidates.tsv"
+      },
+      "best_unique": {
+        "mode": "broad",
+        "k": 25,
+        "cutoff": 1,
+        "ratio": 2.55,
+        "policy": "corrected_vote1",
+        "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/decodes/broad/block12/file3.k25.c1.r2.55.corrected_vote1.strands",
+        "block": 12,
+        "emitted": 4398,
+        "correct": 2856,
+        "errors": 1542,
+        "lane_errors": [
+          1338,
+          1409,
+          1445,
+          1474,
+          1487,
+          1481
+        ],
+        "erasures": 11985,
+        "lane_budgets": [
+          14661,
+          14803,
+          14875,
+          14933,
+          14959,
+          14947
+        ],
+        "max_lane_budget": 14959,
+        "within_rs_bound": false,
+        "precision": 0.6493860845839018,
+        "recall": 0.17432704632851126,
+        "outside_target_block_outputs": 2222
+      },
+      "best_budget": {
+        "mode": "broad",
+        "k": 25,
+        "cutoff": 1,
+        "ratio": 2.55,
+        "policy": "corrected_vote2",
+        "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/decodes/broad/block12/file3.k25.c1.r2.55.corrected_vote2.strands",
+        "block": 12,
+        "emitted": 2751,
+        "correct": 2747,
+        "errors": 4,
+        "lane_errors": [
+          1,
+          3,
+          4,
+          3,
+          4,
+          4
+        ],
+        "erasures": 13632,
+        "lane_budgets": [
+          13634,
+          13638,
+          13640,
+          13638,
+          13640,
+          13640
+        ],
+        "max_lane_budget": 13640,
+        "within_rs_bound": false,
+        "precision": 0.9985459832788077,
+        "recall": 0.1676738082158335,
+        "outside_target_block_outputs": 16
+      },
+      "best_candidate_source_status_counts": {
+        "no_valid_path": 13645,
+        "unique": 2738
+      }
+    },
+    {
+      "k": 31,
+      "parameters": 5,
+      "baseline_union": 630,
+      "new_union": 0,
+      "combined_union": 630,
+      "newly_recovered_vs_all_baseline": 0,
+      "best_candidate": {
+        "experiment": "baseline",
+        "k": 31,
+        "cutoff": 1,
+        "ratio": 2.55,
+        "candidate_correct": 630,
+        "zero_candidate_correct": 566,
+        "candidate_path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/decodes/broad/block12/file3.k31.c1.r2.55.truth_candidates.tsv"
+      },
+      "best_unique": {
+        "mode": "broad",
+        "k": 31,
+        "cutoff": 1,
+        "ratio": 2.55,
+        "policy": "corrected_vote1",
+        "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/decodes/broad/block12/file3.k31.c1.r2.55.corrected_vote1.strands",
+        "block": 12,
+        "emitted": 2421,
+        "correct": 607,
+        "errors": 1814,
+        "lane_errors": [
+          1611,
+          1722,
+          1749,
+          1756,
+          1760,
+          1752
+        ],
+        "erasures": 13962,
+        "lane_budgets": [
+          17184,
+          17406,
+          17460,
+          17474,
+          17482,
+          17466
+        ],
+        "max_lane_budget": 17482,
+        "within_rs_bound": false,
+        "precision": 0.2507228418009087,
+        "recall": 0.03705060123298541,
+        "outside_target_block_outputs": 2052
+      },
+      "best_budget": {
+        "mode": "broad",
+        "k": 31,
+        "cutoff": 1,
+        "ratio": 2.55,
+        "policy": "strict",
+        "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/decodes/broad/block12/file3.k31.c1.r2.55.strict.strands",
+        "block": 12,
+        "emitted": 567,
+        "correct": 566,
+        "errors": 1,
+        "lane_errors": [
+          0,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "erasures": 15816,
+        "lane_budgets": [
+          15816,
+          15818,
+          15818,
+          15818,
+          15818,
+          15818
+        ],
+        "max_lane_budget": 15818,
+        "within_rs_bound": false,
+        "precision": 0.9982363315696648,
+        "recall": 0.034548007080510285,
+        "outside_target_block_outputs": 2
+      },
+      "best_candidate_source_status_counts": {
+        "no_valid_path": 15816,
+        "unique": 567
+      }
+    }
+  ],
+  "interpretation": "Truth-labelled index-wise unions are evaluation upper coverage. They do not constitute one reference-blind decoder output. Read assignment used the full design.",
+  "metrics": "Each correct candidate equals the entire designed 60-nt strand after inner RS. One index counts once across all configurations.",
+  "reference_blind_control": {
+    "command": [
+      "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/bin/graph_block_rs",
+      "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/reads/broad/block12.fq.gz",
+      "196596",
+      "16",
+      "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/reference_blind_control/file3",
+      "-"
+    ],
+    "identical_sha256": {
+      ".strict.strands": "f062640f0eb165bfee438d372d623a7caae9d10377560654f5b1d9a8ec4e9654",
+      ".corrected_unique.strands": "f2c4f578b446f275e5dd16bc1dd4337850308e1a53d1098e3bd4e42b1297b4aa",
+      ".corrected_vote1.strands": "44a49c605505995031a7f83cf657664c457dea40c61db4fa3fa6ac4bef3a0413",
+      ".corrected_vote2.strands": "ad5bdf288587e2c8be1968d1b6d42f182c35c2eb5ead87d84cf240a62c5f7993",
+      ".corrected_vote3.strands": "76cb6b84eb053a0a6db4254ff23a439e73eb3ec4e6792203906636996b31f6eb",
+      ".corrected_vote5.strands": "c0105b713214388816d20b6352d202d863fa598749860dc8e745e14cea1e5c32",
+      ".corrected_vote10.strands": "f062640f0eb165bfee438d372d623a7caae9d10377560654f5b1d9a8ec4e9654",
+      ".corrected_vote20.strands": "f062640f0eb165bfee438d372d623a7caae9d10377560654f5b1d9a8ec4e9654",
+      ".pooled_weight1.strands": "706f5d5ef6239a44a3bb372fe608e51a78a8bfa200c8392e8d6dd7dda4c55815",
+      ".pooled_weight4.strands": "58e3e147d81754bd19ac16e1d017b146fba657b8e8e6fffd0cb521267c79d7b1",
+      ".pooled_weight16.strands": "74bf8c250311359b975279bb09ecde40e3630b4bda7112ffca84d343ba20bb87",
+      ".status.tsv": "ed0733ced291fbefa6b18f573c37dd6eab042419aafb0927e5d5718dfee741ca",
+      ".decisions.tsv": "db7703b886fee3b3436c4376a86b4b5c70eff06a411d57a7702de5ddfed391a5",
+      ".inner_stats.json": "5214d16b3759f0e7ea8441dc7e0f2c95da18fe3db5cd01812881eb18f88bf481"
+    },
+    "passed": true,
+    "scope": "Graph traversal and inner-RS decisions receive no design sequences. Earlier read assignment remains reference-assisted."
+  },
+  "selected_output": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/best_budget.strands",
+  "selected_fasta": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/best_budget.fasta"
+}

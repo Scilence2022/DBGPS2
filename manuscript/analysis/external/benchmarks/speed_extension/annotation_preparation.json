@@ -1,0 +1,11 @@
+{
+  "dataset": "fountain",
+  "synthetic_prefix": "CCTGCAGAGT",
+  "synthetic_terminal_lookahead": "T",
+  "wall_seconds": 3.5808657919988036,
+  "repeats": 1,
+  "measured_after_reconstruction_matrix": true,
+  "sha256_matches_original_graph_view": true,
+  "payload_sequence_unchanged": true,
+  "in_reconstruction_timer": false
+}

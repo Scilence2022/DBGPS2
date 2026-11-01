@@ -1,0 +1,11 @@
+{
+  "source": "/Users/song/.codex/worktrees/cab4/DBGPS2/output/docx/DBGPS2_manuscript_speed_comparison.docx",
+  "output": "/Users/song/.codex/worktrees/cab4/DBGPS2/output/docx/DBGPS2_manuscript_speed_comparison_HT176_Bloom.docx",
+  "source_sha256": "b3125b15c82b5d71de247050ade1d489ad3922766102fdf72c066c43a4c5c081",
+  "output_sha256": "caaef177bcb3d1788393f921a40cc6b86cc43c2989989b995543c1ad8b10b52a",
+  "figures": 11,
+  "tables": 6,
+  "matrix_measurements": 81,
+  "preserved_existing_media": true,
+  "preserved_equations": true
+}

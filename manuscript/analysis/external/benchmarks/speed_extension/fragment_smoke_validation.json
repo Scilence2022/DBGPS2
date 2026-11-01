@@ -1,0 +1,8 @@
+{
+  "designs": 100,
+  "full_observations_per_design": 1,
+  "short_prefix_fragments_per_design": 19,
+  "exact": 100,
+  "terminal_gaps": "missing observations",
+  "true_sequences_accessed_by_reconstruction": false
+}

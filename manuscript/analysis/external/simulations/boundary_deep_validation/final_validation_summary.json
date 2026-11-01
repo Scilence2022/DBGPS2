@@ -1,0 +1,17 @@
+{
+  "new_graphs": 366,
+  "new_synthetic_operating_points": 8784,
+  "real_operating_points": 24,
+  "policy_evaluations": 1835,
+  "native_search_comparisons": 43488,
+  "all_frozen_sources_match": true,
+  "all_output_scores_match": true,
+  "homogeneous_bound_conditions": 252,
+  "compatible_bound_conditions": 252,
+  "fresh_bound_conditions": 36,
+  "fresh_compatible_conditions": 36,
+  "manuscript_sha256": "d4937d11beda63259b0ed58f54145e3409bf50ae9f6f6518a30526e50b2c2f6c",
+  "manuscript_pages": 58,
+  "maximum_library_size": 65536,
+  "production_core_unchanged": true
+}

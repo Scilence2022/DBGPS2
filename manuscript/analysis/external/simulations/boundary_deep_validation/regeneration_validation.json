@@ -1,0 +1,55 @@
+{
+  "passed": true,
+  "representative_inputs": 7,
+  "checks": [
+    {
+      "case_id": "008f95131b602e13",
+      "geometry": "regular",
+      "channel": "persistent",
+      "sampling": "budget",
+      "input_reference_and_metadata_match": true
+    },
+    {
+      "case_id": "00e6bf52db756a81",
+      "geometry": "regular",
+      "channel": "substitution",
+      "sampling": "poisson",
+      "input_reference_and_metadata_match": true
+    },
+    {
+      "case_id": "0282204c584ed3b0",
+      "geometry": "regular",
+      "channel": "substitution",
+      "sampling": "budget",
+      "input_reference_and_metadata_match": true
+    },
+    {
+      "case_id": "0320c04f60d7bafa",
+      "geometry": "regular",
+      "channel": "mixed",
+      "sampling": "budget",
+      "input_reference_and_metadata_match": true
+    },
+    {
+      "case_id": "0e5be1cf294a9470",
+      "geometry": "bernoulli",
+      "channel": "substitution",
+      "sampling": "poisson",
+      "input_reference_and_metadata_match": true
+    },
+    {
+      "case_id": "2ccfa3d995340094",
+      "geometry": "regular",
+      "channel": "burst",
+      "sampling": "budget",
+      "input_reference_and_metadata_match": true
+    },
+    {
+      "case_id": "30f9243b2b68543e",
+      "geometry": "bernoulli",
+      "channel": "substitution",
+      "sampling": "budget",
+      "input_reference_and_metadata_match": true
+    }
+  ]
+}

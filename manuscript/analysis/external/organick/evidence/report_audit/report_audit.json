@@ -1,0 +1,12 @@
+{
+  "prepared": "2026-10-18",
+  "designed_strands": 607150,
+  "raw_reads": 15719903,
+  "screened_configurations": 480,
+  "full_confirmations": 9,
+  "residual_configurations": 19,
+  "rules_evaluated": 11340,
+  "rs_validation": "not_performed",
+  "reference_set_size": 607150,
+  "report_metric_audit": "Nine full-seed candidate files rescored with 13 nt conflict groups; native and inner winners match final_summary."
+}

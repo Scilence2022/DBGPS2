@@ -1,0 +1,41 @@
+{
+  "cases": [
+    "cluster_msa_vote",
+    "dbgps_rule",
+    "dbgps2",
+    "dbgps2_alt_c",
+    "dbgps2_B8",
+    "dbgps2_B16",
+    "dbgps2_F32",
+    "dbgps2_F34",
+    "dbgps2_B12_F34"
+  ],
+  "repeats": 3,
+  "datasets": [
+    "fountain",
+    "nbt_file16",
+    "song_ht176"
+  ],
+  "host": "same Apple M3 Max workstation",
+  "method_order": "cyclic order across cases and datasets; completed unchanged comparator measurements retained from the documented earlier rotated-order block",
+  "serial": true,
+  "unmodified_completed_measurements_reused": true,
+  "comparison": "elapsed full reconstruction after shared preprocessing; quality and resource use reported at every point",
+  "filters": {
+    "B": [
+      8,
+      16
+    ],
+    "F": [
+      32,
+      34
+    ],
+    "combined": {
+      "B": 12,
+      "F": 34
+    }
+  },
+  "parameter_control": "same k, ratio and primary cutoff across all Bloom modes within a dataset; extra no-Bloom point uses c1 for Fountain/Organick, and the selected DBGPS cutoff for HT176, retaining the DBGPS2 ratio",
+  "rss": "native graph process RSS only; MSA process-tree memory not inferred from time(1)",
+  "core": "same saved counter, Bloom implementations, bounded traversal and format validators; a separate caller enables existing Bloom APIs; production sources unchanged"
+}

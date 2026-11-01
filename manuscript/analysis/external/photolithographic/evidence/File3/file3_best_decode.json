@@ -1,0 +1,4 @@
+{
+  "attempted": false,
+  "reason": "one or more blocks exceed the conventional RS errors/erasures bound"
+}

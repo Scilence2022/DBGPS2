@@ -1,0 +1,5254 @@
+{
+  "completed_configurations": 60,
+  "evaluated_decision_policies": 660,
+  "metric_definitions": {
+    "candidate_coverage": "Distinct reference indices whose exact 60-nt sequence occurs among decoded candidates",
+    "unique_output_correct": "Exact 60-nt matches after retaining at most one sequence per decoded index",
+    "votes": "Counts of graph paths, not sequencing reads"
+  },
+  "best_single_configuration": {
+    "k": 19,
+    "cutoff": 1,
+    "ratio": 3.0,
+    "policy": "pooled_weight16",
+    "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/inner_rs/file3.k19.c1.r3.00.pooled_weight16.strands",
+    "correct_candidate_any": 140734,
+    "correct_candidate_zero": 138107,
+    "correct_candidate_new_from_rs": 2627,
+    "emitted": 155818,
+    "correct": 138674,
+    "errors": 17144,
+    "erasures": 40778,
+    "exact_recall": 0.7053754908543409,
+    "precision": 0.8899742006700124,
+    "blocks_in_bound": 5,
+    "per_block": [
+      {
+        "block": 0,
+        "emitted": 12443,
+        "correct": 10764,
+        "errors": 1679,
+        "lane_errors": [
+          1600,
+          1622,
+          1642,
+          1660,
+          1667,
+          1667
+        ],
+        "erasures": 3940,
+        "conservative_budget": 7298,
+        "within_conservative_bound": false,
+        "lane_budgets": [
+          7140,
+          7184,
+          7224,
+          7260,
+          7274,
+          7274
+        ],
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "emitted": 14023,
+        "correct": 13029,
+        "errors": 994,
+        "lane_errors": [
+          917,
+          948,
+          957,
+          963,
+          981,
+          980
+        ],
+        "erasures": 2360,
+        "conservative_budget": 4348,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          4194,
+          4256,
+          4274,
+          4286,
+          4322,
+          4320
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 2,
+        "emitted": 14182,
+        "correct": 13341,
+        "errors": 841,
+        "lane_errors": [
+          789,
+          804,
+          816,
+          823,
+          827,
+          829
+        ],
+        "erasures": 2201,
+        "conservative_budget": 3883,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          3779,
+          3809,
+          3833,
+          3847,
+          3855,
+          3859
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 3,
+        "emitted": 13837,
+        "correct": 12713,
+        "errors": 1124,
+        "lane_errors": [
+          1061,
+          1082,
+          1091,
+          1102,
+          1110,
+          1117
+        ],
+        "erasures": 2546,
+        "conservative_budget": 4794,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          4668,
+          4710,
+          4728,
+          4750,
+          4766,
+          4780
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 4,
+        "emitted": 14314,
+        "correct": 13441,
+        "errors": 873,
+        "lane_errors": [
+          816,
+          827,
+          842,
+          849,
+          860,
+          864
+        ],
+        "erasures": 2069,
+        "conservative_budget": 3815,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          3701,
+          3723,
+          3753,
+          3767,
+          3789,
+          3797
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 5,
+        "emitted": 12433,
+        "correct": 10636,
+        "errors": 1797,
+        "lane_errors": [
+          1784,
+          1785,
+          1788,
+          1790,
+          1792,
+          1793
+        ],
+        "erasures": 3950,
+        "conservative_budget": 7544,
+        "within_conservative_bound": false,
+        "lane_budgets": [
+          7518,
+          7520,
+          7526,
+          7530,
+          7534,
+          7536
+        ],
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "emitted": 13940,
+        "correct": 12983,
+        "errors": 957,
+        "lane_errors": [
+          921,
+          927,
+          936,
+          940,
+          949,
+          947
+        ],
+        "erasures": 2443,
+        "conservative_budget": 4357,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          4285,
+          4297,
+          4315,
+          4323,
+          4341,
+          4337
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 7,
+        "emitted": 13391,
+        "correct": 12112,
+        "errors": 1279,
+        "lane_errors": [
+          1203,
+          1231,
+          1242,
+          1260,
+          1274,
+          1264
+        ],
+        "erasures": 2992,
+        "conservative_budget": 5550,
+        "within_conservative_bound": false,
+        "lane_budgets": [
+          5398,
+          5454,
+          5476,
+          5512,
+          5540,
+          5520
+        ],
+        "within_rs_bound": false
+      },
+      {
+        "block": 8,
+        "emitted": 12780,
+        "correct": 11256,
+        "errors": 1524,
+        "lane_errors": [
+          1458,
+          1479,
+          1494,
+          1503,
+          1512,
+          1512
+        ],
+        "erasures": 3603,
+        "conservative_budget": 6651,
+        "within_conservative_bound": false,
+        "lane_budgets": [
+          6519,
+          6561,
+          6591,
+          6609,
+          6627,
+          6627
+        ],
+        "within_rs_bound": false
+      },
+      {
+        "block": 9,
+        "emitted": 12858,
+        "correct": 11266,
+        "errors": 1592,
+        "lane_errors": [
+          1533,
+          1547,
+          1563,
+          1569,
+          1580,
+          1586
+        ],
+        "erasures": 3525,
+        "conservative_budget": 6709,
+        "within_conservative_bound": false,
+        "lane_budgets": [
+          6591,
+          6619,
+          6651,
+          6663,
+          6685,
+          6697
+        ],
+        "within_rs_bound": false
+      },
+      {
+        "block": 10,
+        "emitted": 12486,
+        "correct": 10873,
+        "errors": 1613,
+        "lane_errors": [
+          1545,
+          1560,
+          1573,
+          1586,
+          1602,
+          1607
+        ],
+        "erasures": 3897,
+        "conservative_budget": 7123,
+        "within_conservative_bound": false,
+        "lane_budgets": [
+          6987,
+          7017,
+          7043,
+          7069,
+          7101,
+          7111
+        ],
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "emitted": 9131,
+        "correct": 6260,
+        "errors": 2871,
+        "lane_errors": [
+          2792,
+          2813,
+          2822,
+          2837,
+          2850,
+          2849
+        ],
+        "erasures": 7252,
+        "conservative_budget": 12994,
+        "within_conservative_bound": false,
+        "lane_budgets": [
+          12836,
+          12878,
+          12896,
+          12926,
+          12952,
+          12950
+        ],
+        "within_rs_bound": false
+      }
+    ]
+  },
+  "best_block_feasibility": {
+    "k": 20,
+    "cutoff": 1,
+    "ratio": 3.5,
+    "policy": "corrected_vote2",
+    "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/inner_rs/file3.k20.c1.r3.50.corrected_vote2.strands",
+    "correct_candidate_any": 139479,
+    "correct_candidate_zero": 136687,
+    "correct_candidate_new_from_rs": 2792,
+    "emitted": 137647,
+    "correct": 136983,
+    "errors": 664,
+    "erasures": 58949,
+    "exact_recall": 0.6967740950985778,
+    "precision": 0.9951760663145582,
+    "blocks_in_bound": 9,
+    "per_block": [
+      {
+        "block": 0,
+        "emitted": 10263,
+        "correct": 10185,
+        "errors": 78,
+        "lane_errors": [
+          66,
+          69,
+          75,
+          77,
+          77,
+          77
+        ],
+        "erasures": 6120,
+        "conservative_budget": 6276,
+        "within_conservative_bound": false,
+        "lane_budgets": [
+          6252,
+          6258,
+          6270,
+          6274,
+          6274,
+          6274
+        ],
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "emitted": 12564,
+        "correct": 12517,
+        "errors": 47,
+        "lane_errors": [
+          43,
+          43,
+          43,
+          45,
+          46,
+          46
+        ],
+        "erasures": 3819,
+        "conservative_budget": 3913,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          3905,
+          3905,
+          3905,
+          3909,
+          3911,
+          3911
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 2,
+        "emitted": 12993,
+        "correct": 12960,
+        "errors": 33,
+        "lane_errors": [
+          24,
+          28,
+          30,
+          31,
+          32,
+          33
+        ],
+        "erasures": 3390,
+        "conservative_budget": 3456,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          3438,
+          3446,
+          3450,
+          3452,
+          3454,
+          3456
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 3,
+        "emitted": 12070,
+        "correct": 12027,
+        "errors": 43,
+        "lane_errors": [
+          39,
+          39,
+          41,
+          43,
+          42,
+          42
+        ],
+        "erasures": 4313,
+        "conservative_budget": 4399,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          4391,
+          4391,
+          4395,
+          4399,
+          4397,
+          4397
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 4,
+        "emitted": 13178,
+        "correct": 13136,
+        "errors": 42,
+        "lane_errors": [
+          35,
+          36,
+          38,
+          37,
+          38,
+          40
+        ],
+        "erasures": 3205,
+        "conservative_budget": 3289,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          3275,
+          3277,
+          3281,
+          3279,
+          3281,
+          3285
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 5,
+        "emitted": 13327,
+        "correct": 13247,
+        "errors": 80,
+        "lane_errors": [
+          74,
+          76,
+          78,
+          78,
+          79,
+          80
+        ],
+        "erasures": 3056,
+        "conservative_budget": 3216,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          3204,
+          3208,
+          3212,
+          3212,
+          3214,
+          3216
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 6,
+        "emitted": 12964,
+        "correct": 12919,
+        "errors": 45,
+        "lane_errors": [
+          39,
+          40,
+          40,
+          43,
+          42,
+          43
+        ],
+        "erasures": 3419,
+        "conservative_budget": 3509,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          3497,
+          3499,
+          3499,
+          3505,
+          3503,
+          3505
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 7,
+        "emitted": 11603,
+        "correct": 11552,
+        "errors": 51,
+        "lane_errors": [
+          45,
+          48,
+          50,
+          49,
+          50,
+          51
+        ],
+        "erasures": 4780,
+        "conservative_budget": 4882,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          4870,
+          4876,
+          4880,
+          4878,
+          4880,
+          4882
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 8,
+        "emitted": 11836,
+        "correct": 11779,
+        "errors": 57,
+        "lane_errors": [
+          44,
+          49,
+          50,
+          51,
+          54,
+          57
+        ],
+        "erasures": 4547,
+        "conservative_budget": 4661,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          4635,
+          4645,
+          4647,
+          4649,
+          4655,
+          4661
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 9,
+        "emitted": 11164,
+        "correct": 11105,
+        "errors": 59,
+        "lane_errors": [
+          55,
+          56,
+          57,
+          59,
+          59,
+          58
+        ],
+        "erasures": 5219,
+        "conservative_budget": 5337,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          5329,
+          5331,
+          5333,
+          5337,
+          5337,
+          5335
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 10,
+        "emitted": 10230,
+        "correct": 10167,
+        "errors": 63,
+        "lane_errors": [
+          55,
+          58,
+          60,
+          61,
+          61,
+          62
+        ],
+        "erasures": 6153,
+        "conservative_budget": 6279,
+        "within_conservative_bound": false,
+        "lane_budgets": [
+          6263,
+          6269,
+          6273,
+          6275,
+          6275,
+          6277
+        ],
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "emitted": 5455,
+        "correct": 5389,
+        "errors": 66,
+        "lane_errors": [
+          56,
+          63,
+          62,
+          61,
+          63,
+          65
+        ],
+        "erasures": 10928,
+        "conservative_budget": 11060,
+        "within_conservative_bound": false,
+        "lane_budgets": [
+          11040,
+          11054,
+          11052,
+          11050,
+          11054,
+          11058
+        ],
+        "within_rs_bound": false
+      }
+    ]
+  },
+  "best_candidate_coverage_before_rs": {
+    "k": 19,
+    "cutoff": 1,
+    "ratio": 3.5,
+    "correct_candidate_any": 140797,
+    "correct_candidate_zero": 138301,
+    "correct_candidate_new_from_rs": 2496,
+    "exact_recall": 0.7161742863537407,
+    "other_distinct_codeword_candidates": 868734,
+    "per_block": [
+      {
+        "block": 0,
+        "correct_any": 10931,
+        "correct_zero": 10731,
+        "new_from_rs": 200
+      },
+      {
+        "block": 1,
+        "correct_any": 13233,
+        "correct_zero": 13026,
+        "new_from_rs": 207
+      },
+      {
+        "block": 2,
+        "correct_any": 13545,
+        "correct_zero": 13322,
+        "new_from_rs": 223
+      },
+      {
+        "block": 3,
+        "correct_any": 12905,
+        "correct_zero": 12675,
+        "new_from_rs": 230
+      },
+      {
+        "block": 4,
+        "correct_any": 13617,
+        "correct_zero": 13415,
+        "new_from_rs": 202
+      },
+      {
+        "block": 5,
+        "correct_any": 10703,
+        "correct_zero": 10544,
+        "new_from_rs": 159
+      },
+      {
+        "block": 6,
+        "correct_any": 13149,
+        "correct_zero": 12962,
+        "new_from_rs": 187
+      },
+      {
+        "block": 7,
+        "correct_any": 12287,
+        "correct_zero": 12068,
+        "new_from_rs": 219
+      },
+      {
+        "block": 8,
+        "correct_any": 11432,
+        "correct_zero": 11232,
+        "new_from_rs": 200
+      },
+      {
+        "block": 9,
+        "correct_any": 11443,
+        "correct_zero": 11252,
+        "new_from_rs": 191
+      },
+      {
+        "block": 10,
+        "correct_any": 11094,
+        "correct_zero": 10869,
+        "new_from_rs": 225
+      },
+      {
+        "block": 11,
+        "correct_any": 6458,
+        "correct_zero": 6205,
+        "new_from_rs": 253
+      }
+    ],
+    "stats": {
+      "complete_paths": 3361623,
+      "zero_error_paths": 139101,
+      "one_symbol_paths": 1000579,
+      "uncorrectable_paths": 2161363,
+      "outside_index_domain": 60580,
+      "index_reassigned_paths": 133084,
+      "distinct_decoded_codewords": 1009531,
+      "one_symbol_position_counts": [
+        119421,
+        50206,
+        48592,
+        48269,
+        36223,
+        0,
+        48372,
+        48139,
+        47760,
+        47567,
+        47873,
+        48226,
+        47958,
+        48008,
+        47980,
+        48810,
+        48541,
+        49194,
+        50520,
+        68920
+      ],
+      "emitted": {
+        "strict": 137805,
+        "corrected_unique": 153335,
+        "corrected_vote1": 155246,
+        "corrected_vote2": 139887,
+        "corrected_vote3": 138426,
+        "corrected_vote5": 137961,
+        "corrected_vote10": 137830,
+        "corrected_vote20": 137805,
+        "pooled_weight1": 96922,
+        "pooled_weight4": 155275,
+        "pooled_weight16": 155704
+      }
+    }
+  },
+  "candidate_coverage_upper_bound": {
+    "k": 19,
+    "cutoff": 1,
+    "ratio": 3.5,
+    "correct_candidate_any": 140797,
+    "correct_candidate_zero": 138301,
+    "correct_candidate_new_from_rs": 2496,
+    "exact_recall": 0.7161742863537407,
+    "other_distinct_codeword_candidates": 868734,
+    "per_block": [
+      {
+        "block": 0,
+        "correct_any": 10931,
+        "correct_zero": 10731,
+        "new_from_rs": 200
+      },
+      {
+        "block": 1,
+        "correct_any": 13233,
+        "correct_zero": 13026,
+        "new_from_rs": 207
+      },
+      {
+        "block": 2,
+        "correct_any": 13545,
+        "correct_zero": 13322,
+        "new_from_rs": 223
+      },
+      {
+        "block": 3,
+        "correct_any": 12905,
+        "correct_zero": 12675,
+        "new_from_rs": 230
+      },
+      {
+        "block": 4,
+        "correct_any": 13617,
+        "correct_zero": 13415,
+        "new_from_rs": 202
+      },
+      {
+        "block": 5,
+        "correct_any": 10703,
+        "correct_zero": 10544,
+        "new_from_rs": 159
+      },
+      {
+        "block": 6,
+        "correct_any": 13149,
+        "correct_zero": 12962,
+        "new_from_rs": 187
+      },
+      {
+        "block": 7,
+        "correct_any": 12287,
+        "correct_zero": 12068,
+        "new_from_rs": 219
+      },
+      {
+        "block": 8,
+        "correct_any": 11432,
+        "correct_zero": 11232,
+        "new_from_rs": 200
+      },
+      {
+        "block": 9,
+        "correct_any": 11443,
+        "correct_zero": 11252,
+        "new_from_rs": 191
+      },
+      {
+        "block": 10,
+        "correct_any": 11094,
+        "correct_zero": 10869,
+        "new_from_rs": 225
+      },
+      {
+        "block": 11,
+        "correct_any": 6458,
+        "correct_zero": 6205,
+        "new_from_rs": 253
+      }
+    ],
+    "stats": {
+      "complete_paths": 3361623,
+      "zero_error_paths": 139101,
+      "one_symbol_paths": 1000579,
+      "uncorrectable_paths": 2161363,
+      "outside_index_domain": 60580,
+      "index_reassigned_paths": 133084,
+      "distinct_decoded_codewords": 1009531,
+      "one_symbol_position_counts": [
+        119421,
+        50206,
+        48592,
+        48269,
+        36223,
+        0,
+        48372,
+        48139,
+        47760,
+        47567,
+        47873,
+        48226,
+        47958,
+        48008,
+        47980,
+        48810,
+        48541,
+        49194,
+        50520,
+        68920
+      ],
+      "emitted": {
+        "strict": 137805,
+        "corrected_unique": 153335,
+        "corrected_vote1": 155246,
+        "corrected_vote2": 139887,
+        "corrected_vote3": 138426,
+        "corrected_vote5": 137961,
+        "corrected_vote10": 137830,
+        "corrected_vote20": 137805,
+        "pooled_weight1": 96922,
+        "pooled_weight4": 155275,
+        "pooled_weight16": 155704
+      }
+    }
+  },
+  "total_original_configurations": 179,
+  "pruned_configurations": 119,
+  "pruning_lower_bound": 137662,
+  "largest_pruned_upper_bound": 136596,
+  "strict_control": {
+    "k": 19,
+    "cutoff": 1,
+    "ratio": 3.5,
+    "policy": "strict",
+    "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/inner_rs/file3.k19.c1.r3.50.strict.strands",
+    "correct_candidate_any": 140797,
+    "correct_candidate_zero": 138301,
+    "correct_candidate_new_from_rs": 2496,
+    "emitted": 137805,
+    "correct": 137662,
+    "errors": 143,
+    "erasures": 58791,
+    "exact_recall": 0.7002278784919327,
+    "precision": 0.9989623018032727,
+    "blocks_in_bound": 8,
+    "per_block": [
+      {
+        "block": 0,
+        "emitted": 10711,
+        "correct": 10694,
+        "errors": 17,
+        "lane_errors": [
+          16,
+          16,
+          17,
+          17,
+          17,
+          17
+        ],
+        "erasures": 5672,
+        "conservative_budget": 5706,
+        "within_conservative_bound": false,
+        "lane_budgets": [
+          5704,
+          5704,
+          5706,
+          5706,
+          5706,
+          5706
+        ],
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "emitted": 12978,
+        "correct": 12972,
+        "errors": 6,
+        "lane_errors": [
+          5,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "erasures": 3405,
+        "conservative_budget": 3417,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          3415,
+          3417,
+          3417,
+          3417,
+          3417,
+          3417
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 2,
+        "emitted": 13272,
+        "correct": 13265,
+        "errors": 7,
+        "lane_errors": [
+          7,
+          7,
+          7,
+          7,
+          7,
+          7
+        ],
+        "erasures": 3111,
+        "conservative_budget": 3125,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          3125,
+          3125,
+          3125,
+          3125,
+          3125,
+          3125
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 3,
+        "emitted": 12646,
+        "correct": 12636,
+        "errors": 10,
+        "lane_errors": [
+          10,
+          10,
+          10,
+          10,
+          10,
+          9
+        ],
+        "erasures": 3737,
+        "conservative_budget": 3757,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          3757,
+          3757,
+          3757,
+          3757,
+          3757,
+          3755
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 4,
+        "emitted": 13374,
+        "correct": 13368,
+        "errors": 6,
+        "lane_errors": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "erasures": 3009,
+        "conservative_budget": 3021,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          3021,
+          3021,
+          3021,
+          3021,
+          3021,
+          3021
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 5,
+        "emitted": 10443,
+        "correct": 10425,
+        "errors": 18,
+        "lane_errors": [
+          18,
+          18,
+          18,
+          18,
+          18,
+          18
+        ],
+        "erasures": 5940,
+        "conservative_budget": 5976,
+        "within_conservative_bound": false,
+        "lane_budgets": [
+          5976,
+          5976,
+          5976,
+          5976,
+          5976,
+          5976
+        ],
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "emitted": 12904,
+        "correct": 12895,
+        "errors": 9,
+        "lane_errors": [
+          8,
+          8,
+          8,
+          8,
+          9,
+          9
+        ],
+        "erasures": 3479,
+        "conservative_budget": 3497,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          3495,
+          3495,
+          3495,
+          3495,
+          3497,
+          3497
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 7,
+        "emitted": 12035,
+        "correct": 12023,
+        "errors": 12,
+        "lane_errors": [
+          12,
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "erasures": 4348,
+        "conservative_budget": 4372,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          4372,
+          4372,
+          4372,
+          4372,
+          4372,
+          4372
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 8,
+        "emitted": 11180,
+        "correct": 11169,
+        "errors": 11,
+        "lane_errors": [
+          7,
+          7,
+          8,
+          9,
+          11,
+          11
+        ],
+        "erasures": 5203,
+        "conservative_budget": 5225,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          5217,
+          5217,
+          5219,
+          5221,
+          5225,
+          5225
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 9,
+        "emitted": 11210,
+        "correct": 11198,
+        "errors": 12,
+        "lane_errors": [
+          11,
+          11,
+          11,
+          11,
+          12,
+          12
+        ],
+        "erasures": 5173,
+        "conservative_budget": 5197,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          5195,
+          5195,
+          5195,
+          5195,
+          5197,
+          5197
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 10,
+        "emitted": 10837,
+        "correct": 10824,
+        "errors": 13,
+        "lane_errors": [
+          13,
+          13,
+          13,
+          13,
+          13,
+          13
+        ],
+        "erasures": 5546,
+        "conservative_budget": 5572,
+        "within_conservative_bound": false,
+        "lane_budgets": [
+          5572,
+          5572,
+          5572,
+          5572,
+          5572,
+          5572
+        ],
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "emitted": 6215,
+        "correct": 6193,
+        "errors": 22,
+        "lane_errors": [
+          20,
+          21,
+          20,
+          20,
+          21,
+          22
+        ],
+        "erasures": 10168,
+        "conservative_budget": 10212,
+        "within_conservative_bound": false,
+        "lane_budgets": [
+          10208,
+          10210,
+          10208,
+          10208,
+          10210,
+          10212
+        ],
+        "within_rs_bound": false
+      }
+    ]
+  },
+  "gain_vs_previous_best": {
+    "gained_correct": 1721,
+    "lost_correct": 709,
+    "net_correct": 1012
+  },
+  "strict_same_configuration": {
+    "k": 19,
+    "cutoff": 1,
+    "ratio": 3.0,
+    "policy": "strict",
+    "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/inner_rs/file3.k19.c1.r3.00.strict.strands",
+    "correct_candidate_any": 140734,
+    "correct_candidate_zero": 138107,
+    "correct_candidate_new_from_rs": 2627,
+    "emitted": 137695,
+    "correct": 137579,
+    "errors": 116,
+    "erasures": 58901,
+    "exact_recall": 0.6998056928930395,
+    "precision": 0.9991575583717637,
+    "blocks_in_bound": 8,
+    "per_block": [
+      {
+        "block": 0,
+        "emitted": 10679,
+        "correct": 10665,
+        "errors": 14,
+        "lane_errors": [
+          13,
+          13,
+          14,
+          14,
+          14,
+          14
+        ],
+        "erasures": 5704,
+        "conservative_budget": 5732,
+        "within_conservative_bound": false,
+        "lane_budgets": [
+          5730,
+          5730,
+          5732,
+          5732,
+          5732,
+          5732
+        ],
+        "within_rs_bound": false
+      },
+      {
+        "block": 1,
+        "emitted": 12947,
+        "correct": 12941,
+        "errors": 6,
+        "lane_errors": [
+          5,
+          5,
+          6,
+          6,
+          6,
+          6
+        ],
+        "erasures": 3436,
+        "conservative_budget": 3448,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          3446,
+          3446,
+          3448,
+          3448,
+          3448,
+          3448
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 2,
+        "emitted": 13241,
+        "correct": 13234,
+        "errors": 7,
+        "lane_errors": [
+          7,
+          7,
+          7,
+          7,
+          7,
+          7
+        ],
+        "erasures": 3142,
+        "conservative_budget": 3156,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          3156,
+          3156,
+          3156,
+          3156,
+          3156,
+          3156
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 3,
+        "emitted": 12618,
+        "correct": 12611,
+        "errors": 7,
+        "lane_errors": [
+          7,
+          7,
+          7,
+          7,
+          7,
+          6
+        ],
+        "erasures": 3765,
+        "conservative_budget": 3779,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          3779,
+          3779,
+          3779,
+          3779,
+          3779,
+          3777
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 4,
+        "emitted": 13362,
+        "correct": 13359,
+        "errors": 3,
+        "lane_errors": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "erasures": 3021,
+        "conservative_budget": 3027,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          3027,
+          3027,
+          3027,
+          3027,
+          3027,
+          3027
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 5,
+        "emitted": 10589,
+        "correct": 10575,
+        "errors": 14,
+        "lane_errors": [
+          14,
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "erasures": 5794,
+        "conservative_budget": 5822,
+        "within_conservative_bound": false,
+        "lane_budgets": [
+          5822,
+          5822,
+          5822,
+          5822,
+          5822,
+          5822
+        ],
+        "within_rs_bound": false
+      },
+      {
+        "block": 6,
+        "emitted": 12914,
+        "correct": 12907,
+        "errors": 7,
+        "lane_errors": [
+          6,
+          6,
+          6,
+          6,
+          7,
+          7
+        ],
+        "erasures": 3469,
+        "conservative_budget": 3483,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          3481,
+          3481,
+          3481,
+          3481,
+          3483,
+          3483
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 7,
+        "emitted": 12024,
+        "correct": 12013,
+        "errors": 11,
+        "lane_errors": [
+          11,
+          11,
+          11,
+          11,
+          11,
+          11
+        ],
+        "erasures": 4359,
+        "conservative_budget": 4381,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          4381,
+          4381,
+          4381,
+          4381,
+          4381,
+          4381
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 8,
+        "emitted": 11192,
+        "correct": 11184,
+        "errors": 8,
+        "lane_errors": [
+          5,
+          5,
+          6,
+          7,
+          8,
+          8
+        ],
+        "erasures": 5191,
+        "conservative_budget": 5207,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          5201,
+          5201,
+          5203,
+          5205,
+          5207,
+          5207
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 9,
+        "emitted": 11188,
+        "correct": 11178,
+        "errors": 10,
+        "lane_errors": [
+          9,
+          9,
+          9,
+          9,
+          10,
+          10
+        ],
+        "erasures": 5195,
+        "conservative_budget": 5215,
+        "within_conservative_bound": true,
+        "lane_budgets": [
+          5213,
+          5213,
+          5213,
+          5213,
+          5215,
+          5215
+        ],
+        "within_rs_bound": true
+      },
+      {
+        "block": 10,
+        "emitted": 10779,
+        "correct": 10770,
+        "errors": 9,
+        "lane_errors": [
+          9,
+          9,
+          9,
+          9,
+          9,
+          9
+        ],
+        "erasures": 5604,
+        "conservative_budget": 5622,
+        "within_conservative_bound": false,
+        "lane_budgets": [
+          5622,
+          5622,
+          5622,
+          5622,
+          5622,
+          5622
+        ],
+        "within_rs_bound": false
+      },
+      {
+        "block": 11,
+        "emitted": 6162,
+        "correct": 6142,
+        "errors": 20,
+        "lane_errors": [
+          18,
+          19,
+          18,
+          18,
+          19,
+          20
+        ],
+        "erasures": 10221,
+        "conservative_budget": 10261,
+        "within_conservative_bound": false,
+        "lane_budgets": [
+          10257,
+          10259,
+          10257,
+          10257,
+          10259,
+          10261
+        ],
+        "within_rs_bound": false
+      }
+    ]
+  },
+  "same_configuration_breakdown": {
+    "strict_correct": 137579,
+    "newly_correct": 1101,
+    "previous_correct_lost": 6,
+    "newly_correct_with_one_symbol_required": 1037,
+    "newly_selected_existing_zero_error_candidate": 64,
+    "wrong_strict_outputs_now_correct": 0,
+    "final_correct": 138674
+  },
+  "per_policy_best": {
+    "corrected_unique": {
+      "k": 19,
+      "cutoff": 1,
+      "ratio": 3.0,
+      "policy": "corrected_unique",
+      "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/inner_rs/file3.k19.c1.r3.00.corrected_unique.strands",
+      "correct_candidate_any": 140734,
+      "correct_candidate_zero": 138107,
+      "correct_candidate_new_from_rs": 2627,
+      "emitted": 153971,
+      "correct": 138203,
+      "errors": 15768,
+      "erasures": 42625,
+      "exact_recall": 0.7029797147449592,
+      "precision": 0.8975911048184398,
+      "blocks_in_bound": 5,
+      "per_block": [
+        {
+          "block": 0,
+          "emitted": 12277,
+          "correct": 10728,
+          "errors": 1549,
+          "lane_errors": [
+            1477,
+            1496,
+            1515,
+            1532,
+            1537,
+            1538
+          ],
+          "erasures": 4106,
+          "conservative_budget": 7204,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            7060,
+            7098,
+            7136,
+            7170,
+            7180,
+            7182
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 1,
+          "emitted": 13899,
+          "correct": 12989,
+          "errors": 910,
+          "lane_errors": [
+            839,
+            869,
+            878,
+            883,
+            898,
+            897
+          ],
+          "erasures": 2484,
+          "conservative_budget": 4304,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            4162,
+            4222,
+            4240,
+            4250,
+            4280,
+            4278
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 2,
+          "emitted": 14044,
+          "correct": 13293,
+          "errors": 751,
+          "lane_errors": [
+            707,
+            721,
+            732,
+            738,
+            738,
+            741
+          ],
+          "erasures": 2339,
+          "conservative_budget": 3841,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3753,
+            3781,
+            3803,
+            3815,
+            3815,
+            3821
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 3,
+          "emitted": 13718,
+          "correct": 12673,
+          "errors": 1045,
+          "lane_errors": [
+            989,
+            1009,
+            1015,
+            1026,
+            1032,
+            1038
+          ],
+          "erasures": 2665,
+          "conservative_budget": 4755,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            4643,
+            4683,
+            4695,
+            4717,
+            4729,
+            4741
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 4,
+          "emitted": 14212,
+          "correct": 13407,
+          "errors": 805,
+          "lane_errors": [
+            751,
+            761,
+            776,
+            784,
+            793,
+            797
+          ],
+          "erasures": 2171,
+          "conservative_budget": 3781,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3673,
+            3693,
+            3723,
+            3739,
+            3757,
+            3765
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 5,
+          "emitted": 12222,
+          "correct": 10596,
+          "errors": 1626,
+          "lane_errors": [
+            1616,
+            1616,
+            1620,
+            1621,
+            1622,
+            1624
+          ],
+          "erasures": 4161,
+          "conservative_budget": 7413,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            7393,
+            7393,
+            7401,
+            7403,
+            7405,
+            7409
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 6,
+          "emitted": 13779,
+          "correct": 12941,
+          "errors": 838,
+          "lane_errors": [
+            809,
+            815,
+            822,
+            827,
+            835,
+            831
+          ],
+          "erasures": 2604,
+          "conservative_budget": 4280,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            4222,
+            4234,
+            4248,
+            4258,
+            4274,
+            4266
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 7,
+          "emitted": 13244,
+          "correct": 12069,
+          "errors": 1175,
+          "lane_errors": [
+            1112,
+            1132,
+            1141,
+            1159,
+            1170,
+            1160
+          ],
+          "erasures": 3139,
+          "conservative_budget": 5489,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            5363,
+            5403,
+            5421,
+            5457,
+            5479,
+            5459
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 8,
+          "emitted": 12608,
+          "correct": 11215,
+          "errors": 1393,
+          "lane_errors": [
+            1334,
+            1352,
+            1366,
+            1375,
+            1384,
+            1381
+          ],
+          "erasures": 3775,
+          "conservative_budget": 6561,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            6443,
+            6479,
+            6507,
+            6525,
+            6543,
+            6537
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 9,
+          "emitted": 12658,
+          "correct": 11224,
+          "errors": 1434,
+          "lane_errors": [
+            1384,
+            1395,
+            1410,
+            1416,
+            1427,
+            1428
+          ],
+          "erasures": 3725,
+          "conservative_budget": 6593,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            6493,
+            6515,
+            6545,
+            6557,
+            6579,
+            6581
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 10,
+          "emitted": 12314,
+          "correct": 10835,
+          "errors": 1479,
+          "lane_errors": [
+            1421,
+            1435,
+            1444,
+            1455,
+            1470,
+            1473
+          ],
+          "erasures": 4069,
+          "conservative_budget": 7027,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            6911,
+            6939,
+            6957,
+            6979,
+            7009,
+            7015
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 11,
+          "emitted": 8996,
+          "correct": 6233,
+          "errors": 2763,
+          "lane_errors": [
+            2689,
+            2708,
+            2717,
+            2730,
+            2742,
+            2742
+          ],
+          "erasures": 7387,
+          "conservative_budget": 12913,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            12765,
+            12803,
+            12821,
+            12847,
+            12871,
+            12871
+          ],
+          "within_rs_bound": false
+        }
+      ]
+    },
+    "corrected_vote1": {
+      "k": 19,
+      "cutoff": 1,
+      "ratio": 3.0,
+      "policy": "corrected_vote1",
+      "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/inner_rs/file3.k19.c1.r3.00.corrected_vote1.strands",
+      "correct_candidate_any": 140734,
+      "correct_candidate_zero": 138107,
+      "correct_candidate_new_from_rs": 2627,
+      "emitted": 155445,
+      "correct": 138616,
+      "errors": 16829,
+      "erasures": 41151,
+      "exact_recall": 0.7050804695924637,
+      "precision": 0.8917366271028337,
+      "blocks_in_bound": 5,
+      "per_block": [
+        {
+          "block": 0,
+          "emitted": 12423,
+          "correct": 10761,
+          "errors": 1662,
+          "lane_errors": [
+            1583,
+            1605,
+            1625,
+            1643,
+            1650,
+            1651
+          ],
+          "erasures": 3960,
+          "conservative_budget": 7284,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            7126,
+            7170,
+            7210,
+            7246,
+            7260,
+            7262
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 1,
+          "emitted": 13996,
+          "correct": 13025,
+          "errors": 971,
+          "lane_errors": [
+            894,
+            925,
+            934,
+            941,
+            958,
+            957
+          ],
+          "erasures": 2387,
+          "conservative_budget": 4329,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            4175,
+            4237,
+            4255,
+            4269,
+            4303,
+            4301
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 2,
+          "emitted": 14147,
+          "correct": 13333,
+          "errors": 814,
+          "lane_errors": [
+            762,
+            777,
+            789,
+            797,
+            801,
+            803
+          ],
+          "erasures": 2236,
+          "conservative_budget": 3864,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3760,
+            3790,
+            3814,
+            3830,
+            3838,
+            3842
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 3,
+          "emitted": 13818,
+          "correct": 12711,
+          "errors": 1107,
+          "lane_errors": [
+            1044,
+            1065,
+            1074,
+            1086,
+            1094,
+            1100
+          ],
+          "erasures": 2565,
+          "conservative_budget": 4779,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            4653,
+            4695,
+            4713,
+            4737,
+            4753,
+            4765
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 4,
+          "emitted": 14291,
+          "correct": 13438,
+          "errors": 853,
+          "lane_errors": [
+            797,
+            808,
+            823,
+            830,
+            840,
+            844
+          ],
+          "erasures": 2092,
+          "conservative_budget": 3798,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3686,
+            3708,
+            3738,
+            3752,
+            3772,
+            3780
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 5,
+          "emitted": 12361,
+          "correct": 10620,
+          "errors": 1741,
+          "lane_errors": [
+            1729,
+            1729,
+            1733,
+            1736,
+            1737,
+            1739
+          ],
+          "erasures": 4022,
+          "conservative_budget": 7504,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            7480,
+            7480,
+            7488,
+            7494,
+            7496,
+            7500
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 6,
+          "emitted": 13899,
+          "correct": 12980,
+          "errors": 919,
+          "lane_errors": [
+            883,
+            890,
+            899,
+            906,
+            914,
+            910
+          ],
+          "erasures": 2484,
+          "conservative_budget": 4322,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            4250,
+            4264,
+            4282,
+            4296,
+            4312,
+            4304
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 7,
+          "emitted": 13365,
+          "correct": 12110,
+          "errors": 1255,
+          "lane_errors": [
+            1181,
+            1207,
+            1218,
+            1236,
+            1250,
+            1240
+          ],
+          "erasures": 3018,
+          "conservative_budget": 5528,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            5380,
+            5432,
+            5454,
+            5490,
+            5518,
+            5498
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 8,
+          "emitted": 12733,
+          "correct": 11250,
+          "errors": 1483,
+          "lane_errors": [
+            1417,
+            1438,
+            1453,
+            1462,
+            1471,
+            1471
+          ],
+          "erasures": 3650,
+          "conservative_budget": 6616,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            6484,
+            6526,
+            6556,
+            6574,
+            6592,
+            6592
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 9,
+          "emitted": 12821,
+          "correct": 11262,
+          "errors": 1559,
+          "lane_errors": [
+            1500,
+            1514,
+            1530,
+            1537,
+            1548,
+            1553
+          ],
+          "erasures": 3562,
+          "conservative_budget": 6680,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            6562,
+            6590,
+            6622,
+            6636,
+            6658,
+            6668
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 10,
+          "emitted": 12463,
+          "correct": 10866,
+          "errors": 1597,
+          "lane_errors": [
+            1530,
+            1544,
+            1557,
+            1570,
+            1586,
+            1591
+          ],
+          "erasures": 3920,
+          "conservative_budget": 7114,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            6980,
+            7008,
+            7034,
+            7060,
+            7092,
+            7102
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 11,
+          "emitted": 9128,
+          "correct": 6260,
+          "errors": 2868,
+          "lane_errors": [
+            2789,
+            2810,
+            2819,
+            2834,
+            2847,
+            2846
+          ],
+          "erasures": 7255,
+          "conservative_budget": 12991,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            12833,
+            12875,
+            12893,
+            12923,
+            12949,
+            12947
+          ],
+          "within_rs_bound": false
+        }
+      ]
+    },
+    "corrected_vote10": {
+      "k": 19,
+      "cutoff": 1,
+      "ratio": 3.5,
+      "policy": "corrected_vote10",
+      "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/inner_rs/file3.k19.c1.r3.50.corrected_vote10.strands",
+      "correct_candidate_any": 140797,
+      "correct_candidate_zero": 138301,
+      "correct_candidate_new_from_rs": 2496,
+      "emitted": 137830,
+      "correct": 137662,
+      "errors": 168,
+      "erasures": 58766,
+      "exact_recall": 0.7002278784919327,
+      "precision": 0.9987811071609954,
+      "blocks_in_bound": 8,
+      "per_block": [
+        {
+          "block": 0,
+          "emitted": 10712,
+          "correct": 10694,
+          "errors": 18,
+          "lane_errors": [
+            17,
+            17,
+            18,
+            18,
+            18,
+            18
+          ],
+          "erasures": 5671,
+          "conservative_budget": 5707,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            5705,
+            5705,
+            5707,
+            5707,
+            5707,
+            5707
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 1,
+          "emitted": 12979,
+          "correct": 12972,
+          "errors": 7,
+          "lane_errors": [
+            6,
+            7,
+            7,
+            7,
+            7,
+            7
+          ],
+          "erasures": 3404,
+          "conservative_budget": 3418,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3416,
+            3418,
+            3418,
+            3418,
+            3418,
+            3418
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 2,
+          "emitted": 13272,
+          "correct": 13265,
+          "errors": 7,
+          "lane_errors": [
+            7,
+            7,
+            7,
+            7,
+            7,
+            7
+          ],
+          "erasures": 3111,
+          "conservative_budget": 3125,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3125,
+            3125,
+            3125,
+            3125,
+            3125,
+            3125
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 3,
+          "emitted": 12650,
+          "correct": 12636,
+          "errors": 14,
+          "lane_errors": [
+            14,
+            14,
+            14,
+            14,
+            14,
+            13
+          ],
+          "erasures": 3733,
+          "conservative_budget": 3761,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3761,
+            3761,
+            3761,
+            3761,
+            3761,
+            3759
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 4,
+          "emitted": 13376,
+          "correct": 13368,
+          "errors": 8,
+          "lane_errors": [
+            8,
+            8,
+            8,
+            8,
+            8,
+            8
+          ],
+          "erasures": 3007,
+          "conservative_budget": 3023,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3023,
+            3023,
+            3023,
+            3023,
+            3023,
+            3023
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 5,
+          "emitted": 10444,
+          "correct": 10425,
+          "errors": 19,
+          "lane_errors": [
+            19,
+            19,
+            19,
+            19,
+            19,
+            19
+          ],
+          "erasures": 5939,
+          "conservative_budget": 5977,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            5977,
+            5977,
+            5977,
+            5977,
+            5977,
+            5977
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 6,
+          "emitted": 12907,
+          "correct": 12895,
+          "errors": 12,
+          "lane_errors": [
+            11,
+            11,
+            11,
+            11,
+            12,
+            12
+          ],
+          "erasures": 3476,
+          "conservative_budget": 3500,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3498,
+            3498,
+            3498,
+            3498,
+            3500,
+            3500
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 7,
+          "emitted": 12038,
+          "correct": 12023,
+          "errors": 15,
+          "lane_errors": [
+            15,
+            15,
+            15,
+            15,
+            15,
+            15
+          ],
+          "erasures": 4345,
+          "conservative_budget": 4375,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            4375,
+            4375,
+            4375,
+            4375,
+            4375,
+            4375
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 8,
+          "emitted": 11182,
+          "correct": 11169,
+          "errors": 13,
+          "lane_errors": [
+            9,
+            9,
+            10,
+            11,
+            13,
+            13
+          ],
+          "erasures": 5201,
+          "conservative_budget": 5227,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            5219,
+            5219,
+            5221,
+            5223,
+            5227,
+            5227
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 9,
+          "emitted": 11214,
+          "correct": 11198,
+          "errors": 16,
+          "lane_errors": [
+            15,
+            15,
+            15,
+            15,
+            16,
+            16
+          ],
+          "erasures": 5169,
+          "conservative_budget": 5201,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            5199,
+            5199,
+            5199,
+            5199,
+            5201,
+            5201
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 10,
+          "emitted": 10840,
+          "correct": 10824,
+          "errors": 16,
+          "lane_errors": [
+            16,
+            16,
+            16,
+            16,
+            16,
+            16
+          ],
+          "erasures": 5543,
+          "conservative_budget": 5575,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            5575,
+            5575,
+            5575,
+            5575,
+            5575,
+            5575
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 11,
+          "emitted": 6216,
+          "correct": 6193,
+          "errors": 23,
+          "lane_errors": [
+            21,
+            22,
+            21,
+            21,
+            22,
+            23
+          ],
+          "erasures": 10167,
+          "conservative_budget": 10213,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            10209,
+            10211,
+            10209,
+            10209,
+            10211,
+            10213
+          ],
+          "within_rs_bound": false
+        }
+      ]
+    },
+    "corrected_vote2": {
+      "k": 19,
+      "cutoff": 1,
+      "ratio": 3.5,
+      "policy": "corrected_vote2",
+      "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/inner_rs/file3.k19.c1.r3.50.corrected_vote2.strands",
+      "correct_candidate_any": 140797,
+      "correct_candidate_zero": 138301,
+      "correct_candidate_new_from_rs": 2496,
+      "emitted": 139887,
+      "correct": 138188,
+      "errors": 1699,
+      "erasures": 56709,
+      "exact_recall": 0.7029034161427496,
+      "precision": 0.9878544825466269,
+      "blocks_in_bound": 8,
+      "per_block": [
+        {
+          "block": 0,
+          "emitted": 10916,
+          "correct": 10730,
+          "errors": 186,
+          "lane_errors": [
+            170,
+            175,
+            181,
+            182,
+            185,
+            186
+          ],
+          "erasures": 5467,
+          "conservative_budget": 5839,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            5807,
+            5817,
+            5829,
+            5831,
+            5837,
+            5839
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 1,
+          "emitted": 13137,
+          "correct": 13016,
+          "errors": 121,
+          "lane_errors": [
+            105,
+            112,
+            112,
+            115,
+            118,
+            120
+          ],
+          "erasures": 3246,
+          "conservative_budget": 3488,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3456,
+            3470,
+            3470,
+            3476,
+            3482,
+            3486
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 2,
+          "emitted": 13413,
+          "correct": 13320,
+          "errors": 93,
+          "lane_errors": [
+            82,
+            85,
+            86,
+            88,
+            92,
+            93
+          ],
+          "erasures": 2970,
+          "conservative_budget": 3156,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3134,
+            3140,
+            3142,
+            3146,
+            3154,
+            3156
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 3,
+          "emitted": 12781,
+          "correct": 12683,
+          "errors": 98,
+          "lane_errors": [
+            90,
+            91,
+            93,
+            96,
+            97,
+            97
+          ],
+          "erasures": 3602,
+          "conservative_budget": 3798,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3782,
+            3784,
+            3788,
+            3794,
+            3796,
+            3796
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 4,
+          "emitted": 13502,
+          "correct": 13417,
+          "errors": 85,
+          "lane_errors": [
+            77,
+            81,
+            81,
+            81,
+            83,
+            84
+          ],
+          "erasures": 2881,
+          "conservative_budget": 3051,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3035,
+            3043,
+            3043,
+            3043,
+            3047,
+            3049
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 5,
+          "emitted": 10624,
+          "correct": 10455,
+          "errors": 169,
+          "lane_errors": [
+            163,
+            166,
+            167,
+            169,
+            169,
+            169
+          ],
+          "erasures": 5759,
+          "conservative_budget": 6097,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            6085,
+            6091,
+            6093,
+            6097,
+            6097,
+            6097
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 6,
+          "emitted": 13049,
+          "correct": 12941,
+          "errors": 108,
+          "lane_errors": [
+            96,
+            99,
+            101,
+            105,
+            107,
+            104
+          ],
+          "erasures": 3334,
+          "conservative_budget": 3550,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3526,
+            3532,
+            3536,
+            3544,
+            3548,
+            3542
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 7,
+          "emitted": 12202,
+          "correct": 12072,
+          "errors": 130,
+          "lane_errors": [
+            116,
+            124,
+            127,
+            127,
+            130,
+            130
+          ],
+          "erasures": 4181,
+          "conservative_budget": 4441,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            4413,
+            4429,
+            4435,
+            4435,
+            4441,
+            4441
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 8,
+          "emitted": 11349,
+          "correct": 11205,
+          "errors": 144,
+          "lane_errors": [
+            128,
+            131,
+            137,
+            140,
+            142,
+            144
+          ],
+          "erasures": 5034,
+          "conservative_budget": 5322,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            5290,
+            5296,
+            5308,
+            5314,
+            5318,
+            5322
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 9,
+          "emitted": 11434,
+          "correct": 11245,
+          "errors": 189,
+          "lane_errors": [
+            178,
+            182,
+            183,
+            185,
+            187,
+            189
+          ],
+          "erasures": 4949,
+          "conservative_budget": 5327,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            5305,
+            5313,
+            5315,
+            5319,
+            5323,
+            5327
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 10,
+          "emitted": 11054,
+          "correct": 10873,
+          "errors": 181,
+          "lane_errors": [
+            166,
+            173,
+            177,
+            178,
+            179,
+            181
+          ],
+          "erasures": 5329,
+          "conservative_budget": 5691,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            5661,
+            5675,
+            5683,
+            5685,
+            5687,
+            5691
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 11,
+          "emitted": 6426,
+          "correct": 6231,
+          "errors": 195,
+          "lane_errors": [
+            184,
+            187,
+            188,
+            191,
+            193,
+            193
+          ],
+          "erasures": 9957,
+          "conservative_budget": 10347,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            10325,
+            10331,
+            10333,
+            10339,
+            10343,
+            10343
+          ],
+          "within_rs_bound": false
+        }
+      ]
+    },
+    "corrected_vote20": {
+      "k": 19,
+      "cutoff": 1,
+      "ratio": 3.5,
+      "policy": "corrected_vote20",
+      "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/inner_rs/file3.k19.c1.r3.50.corrected_vote20.strands",
+      "correct_candidate_any": 140797,
+      "correct_candidate_zero": 138301,
+      "correct_candidate_new_from_rs": 2496,
+      "emitted": 137805,
+      "correct": 137662,
+      "errors": 143,
+      "erasures": 58791,
+      "exact_recall": 0.7002278784919327,
+      "precision": 0.9989623018032727,
+      "blocks_in_bound": 8,
+      "per_block": [
+        {
+          "block": 0,
+          "emitted": 10711,
+          "correct": 10694,
+          "errors": 17,
+          "lane_errors": [
+            16,
+            16,
+            17,
+            17,
+            17,
+            17
+          ],
+          "erasures": 5672,
+          "conservative_budget": 5706,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            5704,
+            5704,
+            5706,
+            5706,
+            5706,
+            5706
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 1,
+          "emitted": 12978,
+          "correct": 12972,
+          "errors": 6,
+          "lane_errors": [
+            5,
+            6,
+            6,
+            6,
+            6,
+            6
+          ],
+          "erasures": 3405,
+          "conservative_budget": 3417,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3415,
+            3417,
+            3417,
+            3417,
+            3417,
+            3417
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 2,
+          "emitted": 13272,
+          "correct": 13265,
+          "errors": 7,
+          "lane_errors": [
+            7,
+            7,
+            7,
+            7,
+            7,
+            7
+          ],
+          "erasures": 3111,
+          "conservative_budget": 3125,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3125,
+            3125,
+            3125,
+            3125,
+            3125,
+            3125
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 3,
+          "emitted": 12646,
+          "correct": 12636,
+          "errors": 10,
+          "lane_errors": [
+            10,
+            10,
+            10,
+            10,
+            10,
+            9
+          ],
+          "erasures": 3737,
+          "conservative_budget": 3757,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3757,
+            3757,
+            3757,
+            3757,
+            3757,
+            3755
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 4,
+          "emitted": 13374,
+          "correct": 13368,
+          "errors": 6,
+          "lane_errors": [
+            6,
+            6,
+            6,
+            6,
+            6,
+            6
+          ],
+          "erasures": 3009,
+          "conservative_budget": 3021,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3021,
+            3021,
+            3021,
+            3021,
+            3021,
+            3021
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 5,
+          "emitted": 10443,
+          "correct": 10425,
+          "errors": 18,
+          "lane_errors": [
+            18,
+            18,
+            18,
+            18,
+            18,
+            18
+          ],
+          "erasures": 5940,
+          "conservative_budget": 5976,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            5976,
+            5976,
+            5976,
+            5976,
+            5976,
+            5976
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 6,
+          "emitted": 12904,
+          "correct": 12895,
+          "errors": 9,
+          "lane_errors": [
+            8,
+            8,
+            8,
+            8,
+            9,
+            9
+          ],
+          "erasures": 3479,
+          "conservative_budget": 3497,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3495,
+            3495,
+            3495,
+            3495,
+            3497,
+            3497
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 7,
+          "emitted": 12035,
+          "correct": 12023,
+          "errors": 12,
+          "lane_errors": [
+            12,
+            12,
+            12,
+            12,
+            12,
+            12
+          ],
+          "erasures": 4348,
+          "conservative_budget": 4372,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            4372,
+            4372,
+            4372,
+            4372,
+            4372,
+            4372
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 8,
+          "emitted": 11180,
+          "correct": 11169,
+          "errors": 11,
+          "lane_errors": [
+            7,
+            7,
+            8,
+            9,
+            11,
+            11
+          ],
+          "erasures": 5203,
+          "conservative_budget": 5225,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            5217,
+            5217,
+            5219,
+            5221,
+            5225,
+            5225
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 9,
+          "emitted": 11210,
+          "correct": 11198,
+          "errors": 12,
+          "lane_errors": [
+            11,
+            11,
+            11,
+            11,
+            12,
+            12
+          ],
+          "erasures": 5173,
+          "conservative_budget": 5197,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            5195,
+            5195,
+            5195,
+            5195,
+            5197,
+            5197
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 10,
+          "emitted": 10837,
+          "correct": 10824,
+          "errors": 13,
+          "lane_errors": [
+            13,
+            13,
+            13,
+            13,
+            13,
+            13
+          ],
+          "erasures": 5546,
+          "conservative_budget": 5572,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            5572,
+            5572,
+            5572,
+            5572,
+            5572,
+            5572
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 11,
+          "emitted": 6215,
+          "correct": 6193,
+          "errors": 22,
+          "lane_errors": [
+            20,
+            21,
+            20,
+            20,
+            21,
+            22
+          ],
+          "erasures": 10168,
+          "conservative_budget": 10212,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            10208,
+            10210,
+            10208,
+            10208,
+            10210,
+            10212
+          ],
+          "within_rs_bound": false
+        }
+      ]
+    },
+    "corrected_vote3": {
+      "k": 19,
+      "cutoff": 1,
+      "ratio": 3.5,
+      "policy": "corrected_vote3",
+      "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/inner_rs/file3.k19.c1.r3.50.corrected_vote3.strands",
+      "correct_candidate_any": 140797,
+      "correct_candidate_zero": 138301,
+      "correct_candidate_new_from_rs": 2496,
+      "emitted": 138426,
+      "correct": 137791,
+      "errors": 635,
+      "erasures": 58170,
+      "exact_recall": 0.7008840464709353,
+      "precision": 0.9954127114848367,
+      "blocks_in_bound": 8,
+      "per_block": [
+        {
+          "block": 0,
+          "emitted": 10778,
+          "correct": 10703,
+          "errors": 75,
+          "lane_errors": [
+            72,
+            73,
+            75,
+            75,
+            75,
+            75
+          ],
+          "erasures": 5605,
+          "conservative_budget": 5755,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            5749,
+            5751,
+            5755,
+            5755,
+            5755,
+            5755
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 1,
+          "emitted": 13020,
+          "correct": 12986,
+          "errors": 34,
+          "lane_errors": [
+            31,
+            31,
+            31,
+            32,
+            32,
+            34
+          ],
+          "erasures": 3363,
+          "conservative_budget": 3431,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3425,
+            3425,
+            3425,
+            3427,
+            3427,
+            3431
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 2,
+          "emitted": 13309,
+          "correct": 13281,
+          "errors": 28,
+          "lane_errors": [
+            27,
+            27,
+            27,
+            27,
+            27,
+            28
+          ],
+          "erasures": 3074,
+          "conservative_budget": 3130,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3128,
+            3128,
+            3128,
+            3128,
+            3128,
+            3130
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 3,
+          "emitted": 12681,
+          "correct": 12649,
+          "errors": 32,
+          "lane_errors": [
+            32,
+            32,
+            32,
+            32,
+            32,
+            31
+          ],
+          "erasures": 3702,
+          "conservative_budget": 3766,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3766,
+            3766,
+            3766,
+            3766,
+            3766,
+            3764
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 4,
+          "emitted": 13410,
+          "correct": 13380,
+          "errors": 30,
+          "lane_errors": [
+            28,
+            29,
+            29,
+            28,
+            30,
+            30
+          ],
+          "erasures": 2973,
+          "conservative_budget": 3033,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3029,
+            3031,
+            3031,
+            3029,
+            3033,
+            3033
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 5,
+          "emitted": 10499,
+          "correct": 10429,
+          "errors": 70,
+          "lane_errors": [
+            69,
+            69,
+            70,
+            70,
+            70,
+            70
+          ],
+          "erasures": 5884,
+          "conservative_budget": 6024,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            6022,
+            6022,
+            6024,
+            6024,
+            6024,
+            6024
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 6,
+          "emitted": 12945,
+          "correct": 12906,
+          "errors": 39,
+          "lane_errors": [
+            33,
+            34,
+            36,
+            38,
+            39,
+            38
+          ],
+          "erasures": 3438,
+          "conservative_budget": 3516,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3504,
+            3506,
+            3510,
+            3514,
+            3516,
+            3514
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 7,
+          "emitted": 12092,
+          "correct": 12037,
+          "errors": 55,
+          "lane_errors": [
+            50,
+            53,
+            54,
+            54,
+            55,
+            55
+          ],
+          "erasures": 4291,
+          "conservative_budget": 4401,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            4391,
+            4397,
+            4399,
+            4399,
+            4401,
+            4401
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 8,
+          "emitted": 11233,
+          "correct": 11176,
+          "errors": 57,
+          "lane_errors": [
+            49,
+            50,
+            52,
+            54,
+            56,
+            57
+          ],
+          "erasures": 5150,
+          "conservative_budget": 5264,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            5248,
+            5250,
+            5254,
+            5258,
+            5262,
+            5264
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 9,
+          "emitted": 11295,
+          "correct": 11210,
+          "errors": 85,
+          "lane_errors": [
+            83,
+            84,
+            83,
+            84,
+            85,
+            85
+          ],
+          "erasures": 5088,
+          "conservative_budget": 5258,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            5254,
+            5256,
+            5254,
+            5256,
+            5258,
+            5258
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 10,
+          "emitted": 10899,
+          "correct": 10834,
+          "errors": 65,
+          "lane_errors": [
+            63,
+            64,
+            64,
+            64,
+            65,
+            65
+          ],
+          "erasures": 5484,
+          "conservative_budget": 5614,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            5610,
+            5612,
+            5612,
+            5612,
+            5614,
+            5614
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 11,
+          "emitted": 6265,
+          "correct": 6200,
+          "errors": 65,
+          "lane_errors": [
+            62,
+            63,
+            62,
+            63,
+            64,
+            65
+          ],
+          "erasures": 10118,
+          "conservative_budget": 10248,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            10242,
+            10244,
+            10242,
+            10244,
+            10246,
+            10248
+          ],
+          "within_rs_bound": false
+        }
+      ]
+    },
+    "corrected_vote5": {
+      "k": 19,
+      "cutoff": 1,
+      "ratio": 3.5,
+      "policy": "corrected_vote5",
+      "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/inner_rs/file3.k19.c1.r3.50.corrected_vote5.strands",
+      "correct_candidate_any": 140797,
+      "correct_candidate_zero": 138301,
+      "correct_candidate_new_from_rs": 2496,
+      "emitted": 137961,
+      "correct": 137663,
+      "errors": 298,
+      "erasures": 58635,
+      "exact_recall": 0.7002329650654133,
+      "precision": 0.9978399692666768,
+      "blocks_in_bound": 8,
+      "per_block": [
+        {
+          "block": 0,
+          "emitted": 10727,
+          "correct": 10694,
+          "errors": 33,
+          "lane_errors": [
+            32,
+            32,
+            33,
+            33,
+            33,
+            33
+          ],
+          "erasures": 5656,
+          "conservative_budget": 5722,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            5720,
+            5720,
+            5722,
+            5722,
+            5722,
+            5722
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 1,
+          "emitted": 12986,
+          "correct": 12972,
+          "errors": 14,
+          "lane_errors": [
+            13,
+            14,
+            14,
+            14,
+            14,
+            14
+          ],
+          "erasures": 3397,
+          "conservative_budget": 3425,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3423,
+            3425,
+            3425,
+            3425,
+            3425,
+            3425
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 2,
+          "emitted": 13277,
+          "correct": 13265,
+          "errors": 12,
+          "lane_errors": [
+            12,
+            12,
+            12,
+            12,
+            12,
+            12
+          ],
+          "erasures": 3106,
+          "conservative_budget": 3130,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3130,
+            3130,
+            3130,
+            3130,
+            3130,
+            3130
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 3,
+          "emitted": 12657,
+          "correct": 12636,
+          "errors": 21,
+          "lane_errors": [
+            21,
+            21,
+            21,
+            21,
+            21,
+            20
+          ],
+          "erasures": 3726,
+          "conservative_budget": 3768,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3768,
+            3768,
+            3768,
+            3768,
+            3768,
+            3766
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 4,
+          "emitted": 13377,
+          "correct": 13368,
+          "errors": 9,
+          "lane_errors": [
+            9,
+            9,
+            9,
+            8,
+            9,
+            9
+          ],
+          "erasures": 3006,
+          "conservative_budget": 3024,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3024,
+            3024,
+            3024,
+            3022,
+            3024,
+            3024
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 5,
+          "emitted": 10456,
+          "correct": 10425,
+          "errors": 31,
+          "lane_errors": [
+            31,
+            31,
+            31,
+            31,
+            31,
+            31
+          ],
+          "erasures": 5927,
+          "conservative_budget": 5989,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            5989,
+            5989,
+            5989,
+            5989,
+            5989,
+            5989
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 6,
+          "emitted": 12911,
+          "correct": 12895,
+          "errors": 16,
+          "lane_errors": [
+            14,
+            15,
+            15,
+            15,
+            16,
+            16
+          ],
+          "erasures": 3472,
+          "conservative_budget": 3504,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3500,
+            3502,
+            3502,
+            3502,
+            3504,
+            3504
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 7,
+          "emitted": 12048,
+          "correct": 12024,
+          "errors": 24,
+          "lane_errors": [
+            23,
+            24,
+            24,
+            24,
+            24,
+            24
+          ],
+          "erasures": 4335,
+          "conservative_budget": 4383,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            4381,
+            4383,
+            4383,
+            4383,
+            4383,
+            4383
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 8,
+          "emitted": 11202,
+          "correct": 11169,
+          "errors": 33,
+          "lane_errors": [
+            27,
+            28,
+            30,
+            30,
+            32,
+            33
+          ],
+          "erasures": 5181,
+          "conservative_budget": 5247,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            5235,
+            5237,
+            5241,
+            5241,
+            5245,
+            5247
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 9,
+          "emitted": 11230,
+          "correct": 11198,
+          "errors": 32,
+          "lane_errors": [
+            31,
+            31,
+            31,
+            31,
+            32,
+            32
+          ],
+          "erasures": 5153,
+          "conservative_budget": 5217,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            5215,
+            5215,
+            5215,
+            5215,
+            5217,
+            5217
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 10,
+          "emitted": 10859,
+          "correct": 10824,
+          "errors": 35,
+          "lane_errors": [
+            35,
+            35,
+            35,
+            35,
+            35,
+            35
+          ],
+          "erasures": 5524,
+          "conservative_budget": 5594,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            5594,
+            5594,
+            5594,
+            5594,
+            5594,
+            5594
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 11,
+          "emitted": 6231,
+          "correct": 6193,
+          "errors": 38,
+          "lane_errors": [
+            35,
+            36,
+            35,
+            36,
+            37,
+            38
+          ],
+          "erasures": 10152,
+          "conservative_budget": 10228,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            10222,
+            10224,
+            10222,
+            10224,
+            10226,
+            10228
+          ],
+          "within_rs_bound": false
+        }
+      ]
+    },
+    "pooled_weight1": {
+      "k": 18,
+      "cutoff": 3,
+      "ratio": 2.55,
+      "policy": "pooled_weight1",
+      "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/inner_rs/file3.k18.c3.r2.55.pooled_weight1.strands",
+      "correct_candidate_any": 116603,
+      "correct_candidate_zero": 115463,
+      "correct_candidate_new_from_rs": 1140,
+      "emitted": 114058,
+      "correct": 111177,
+      "errors": 2881,
+      "erasures": 82538,
+      "exact_recall": 0.565509979857169,
+      "precision": 0.9747409212856617,
+      "blocks_in_bound": 1,
+      "per_block": [
+        {
+          "block": 0,
+          "emitted": 8709,
+          "correct": 8450,
+          "errors": 259,
+          "lane_errors": [
+            247,
+            253,
+            255,
+            258,
+            257,
+            258
+          ],
+          "erasures": 7674,
+          "conservative_budget": 8192,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            8168,
+            8180,
+            8184,
+            8190,
+            8188,
+            8190
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 1,
+          "emitted": 10861,
+          "correct": 10611,
+          "errors": 250,
+          "lane_errors": [
+            242,
+            242,
+            244,
+            248,
+            248,
+            249
+          ],
+          "erasures": 5522,
+          "conservative_budget": 6022,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            6006,
+            6006,
+            6010,
+            6018,
+            6018,
+            6020
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 2,
+          "emitted": 11233,
+          "correct": 11032,
+          "errors": 201,
+          "lane_errors": [
+            196,
+            200,
+            199,
+            199,
+            200,
+            200
+          ],
+          "erasures": 5150,
+          "conservative_budget": 5552,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            5542,
+            5550,
+            5548,
+            5548,
+            5550,
+            5550
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 3,
+          "emitted": 10474,
+          "correct": 10257,
+          "errors": 217,
+          "lane_errors": [
+            207,
+            210,
+            211,
+            210,
+            213,
+            213
+          ],
+          "erasures": 5909,
+          "conservative_budget": 6343,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            6323,
+            6329,
+            6331,
+            6329,
+            6335,
+            6335
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 4,
+          "emitted": 11491,
+          "correct": 11335,
+          "errors": 156,
+          "lane_errors": [
+            147,
+            149,
+            151,
+            152,
+            155,
+            155
+          ],
+          "erasures": 4892,
+          "conservative_budget": 5204,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            5186,
+            5190,
+            5194,
+            5196,
+            5202,
+            5202
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 5,
+          "emitted": 8905,
+          "correct": 8662,
+          "errors": 243,
+          "lane_errors": [
+            237,
+            240,
+            242,
+            242,
+            242,
+            243
+          ],
+          "erasures": 7478,
+          "conservative_budget": 7964,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            7952,
+            7958,
+            7962,
+            7962,
+            7962,
+            7964
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 6,
+          "emitted": 10972,
+          "correct": 10795,
+          "errors": 177,
+          "lane_errors": [
+            170,
+            173,
+            174,
+            174,
+            176,
+            176
+          ],
+          "erasures": 5411,
+          "conservative_budget": 5765,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            5751,
+            5757,
+            5759,
+            5759,
+            5763,
+            5763
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 7,
+          "emitted": 9937,
+          "correct": 9729,
+          "errors": 208,
+          "lane_errors": [
+            201,
+            202,
+            203,
+            203,
+            205,
+            207
+          ],
+          "erasures": 6446,
+          "conservative_budget": 6862,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            6848,
+            6850,
+            6852,
+            6852,
+            6856,
+            6860
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 8,
+          "emitted": 9298,
+          "correct": 9044,
+          "errors": 254,
+          "lane_errors": [
+            248,
+            249,
+            250,
+            250,
+            253,
+            253
+          ],
+          "erasures": 7085,
+          "conservative_budget": 7593,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            7581,
+            7583,
+            7585,
+            7585,
+            7591,
+            7591
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 9,
+          "emitted": 9115,
+          "correct": 8841,
+          "errors": 274,
+          "lane_errors": [
+            263,
+            263,
+            268,
+            270,
+            269,
+            272
+          ],
+          "erasures": 7268,
+          "conservative_budget": 7816,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            7794,
+            7794,
+            7804,
+            7808,
+            7806,
+            7812
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 10,
+          "emitted": 8634,
+          "correct": 8332,
+          "errors": 302,
+          "lane_errors": [
+            285,
+            289,
+            293,
+            293,
+            296,
+            298
+          ],
+          "erasures": 7749,
+          "conservative_budget": 8353,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            8319,
+            8327,
+            8335,
+            8335,
+            8341,
+            8345
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 11,
+          "emitted": 4429,
+          "correct": 4089,
+          "errors": 340,
+          "lane_errors": [
+            332,
+            334,
+            336,
+            339,
+            339,
+            338
+          ],
+          "erasures": 11954,
+          "conservative_budget": 12634,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            12618,
+            12622,
+            12626,
+            12632,
+            12632,
+            12630
+          ],
+          "within_rs_bound": false
+        }
+      ]
+    },
+    "pooled_weight16": {
+      "k": 19,
+      "cutoff": 1,
+      "ratio": 3.0,
+      "policy": "pooled_weight16",
+      "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/inner_rs/file3.k19.c1.r3.00.pooled_weight16.strands",
+      "correct_candidate_any": 140734,
+      "correct_candidate_zero": 138107,
+      "correct_candidate_new_from_rs": 2627,
+      "emitted": 155818,
+      "correct": 138674,
+      "errors": 17144,
+      "erasures": 40778,
+      "exact_recall": 0.7053754908543409,
+      "precision": 0.8899742006700124,
+      "blocks_in_bound": 5,
+      "per_block": [
+        {
+          "block": 0,
+          "emitted": 12443,
+          "correct": 10764,
+          "errors": 1679,
+          "lane_errors": [
+            1600,
+            1622,
+            1642,
+            1660,
+            1667,
+            1667
+          ],
+          "erasures": 3940,
+          "conservative_budget": 7298,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            7140,
+            7184,
+            7224,
+            7260,
+            7274,
+            7274
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 1,
+          "emitted": 14023,
+          "correct": 13029,
+          "errors": 994,
+          "lane_errors": [
+            917,
+            948,
+            957,
+            963,
+            981,
+            980
+          ],
+          "erasures": 2360,
+          "conservative_budget": 4348,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            4194,
+            4256,
+            4274,
+            4286,
+            4322,
+            4320
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 2,
+          "emitted": 14182,
+          "correct": 13341,
+          "errors": 841,
+          "lane_errors": [
+            789,
+            804,
+            816,
+            823,
+            827,
+            829
+          ],
+          "erasures": 2201,
+          "conservative_budget": 3883,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3779,
+            3809,
+            3833,
+            3847,
+            3855,
+            3859
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 3,
+          "emitted": 13837,
+          "correct": 12713,
+          "errors": 1124,
+          "lane_errors": [
+            1061,
+            1082,
+            1091,
+            1102,
+            1110,
+            1117
+          ],
+          "erasures": 2546,
+          "conservative_budget": 4794,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            4668,
+            4710,
+            4728,
+            4750,
+            4766,
+            4780
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 4,
+          "emitted": 14314,
+          "correct": 13441,
+          "errors": 873,
+          "lane_errors": [
+            816,
+            827,
+            842,
+            849,
+            860,
+            864
+          ],
+          "erasures": 2069,
+          "conservative_budget": 3815,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3701,
+            3723,
+            3753,
+            3767,
+            3789,
+            3797
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 5,
+          "emitted": 12433,
+          "correct": 10636,
+          "errors": 1797,
+          "lane_errors": [
+            1784,
+            1785,
+            1788,
+            1790,
+            1792,
+            1793
+          ],
+          "erasures": 3950,
+          "conservative_budget": 7544,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            7518,
+            7520,
+            7526,
+            7530,
+            7534,
+            7536
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 6,
+          "emitted": 13940,
+          "correct": 12983,
+          "errors": 957,
+          "lane_errors": [
+            921,
+            927,
+            936,
+            940,
+            949,
+            947
+          ],
+          "erasures": 2443,
+          "conservative_budget": 4357,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            4285,
+            4297,
+            4315,
+            4323,
+            4341,
+            4337
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 7,
+          "emitted": 13391,
+          "correct": 12112,
+          "errors": 1279,
+          "lane_errors": [
+            1203,
+            1231,
+            1242,
+            1260,
+            1274,
+            1264
+          ],
+          "erasures": 2992,
+          "conservative_budget": 5550,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            5398,
+            5454,
+            5476,
+            5512,
+            5540,
+            5520
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 8,
+          "emitted": 12780,
+          "correct": 11256,
+          "errors": 1524,
+          "lane_errors": [
+            1458,
+            1479,
+            1494,
+            1503,
+            1512,
+            1512
+          ],
+          "erasures": 3603,
+          "conservative_budget": 6651,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            6519,
+            6561,
+            6591,
+            6609,
+            6627,
+            6627
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 9,
+          "emitted": 12858,
+          "correct": 11266,
+          "errors": 1592,
+          "lane_errors": [
+            1533,
+            1547,
+            1563,
+            1569,
+            1580,
+            1586
+          ],
+          "erasures": 3525,
+          "conservative_budget": 6709,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            6591,
+            6619,
+            6651,
+            6663,
+            6685,
+            6697
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 10,
+          "emitted": 12486,
+          "correct": 10873,
+          "errors": 1613,
+          "lane_errors": [
+            1545,
+            1560,
+            1573,
+            1586,
+            1602,
+            1607
+          ],
+          "erasures": 3897,
+          "conservative_budget": 7123,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            6987,
+            7017,
+            7043,
+            7069,
+            7101,
+            7111
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 11,
+          "emitted": 9131,
+          "correct": 6260,
+          "errors": 2871,
+          "lane_errors": [
+            2792,
+            2813,
+            2822,
+            2837,
+            2850,
+            2849
+          ],
+          "erasures": 7252,
+          "conservative_budget": 12994,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            12836,
+            12878,
+            12896,
+            12926,
+            12952,
+            12950
+          ],
+          "within_rs_bound": false
+        }
+      ]
+    },
+    "pooled_weight4": {
+      "k": 19,
+      "cutoff": 1,
+      "ratio": 3.0,
+      "policy": "pooled_weight4",
+      "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/inner_rs/file3.k19.c1.r3.00.pooled_weight4.strands",
+      "correct_candidate_any": 140734,
+      "correct_candidate_zero": 138107,
+      "correct_candidate_new_from_rs": 2627,
+      "emitted": 155485,
+      "correct": 137833,
+      "errors": 17652,
+      "erasures": 41111,
+      "exact_recall": 0.7010976825571222,
+      "precision": 0.8864713637971509,
+      "blocks_in_bound": 5,
+      "per_block": [
+        {
+          "block": 0,
+          "emitted": 12420,
+          "correct": 10715,
+          "errors": 1705,
+          "lane_errors": [
+            1625,
+            1648,
+            1668,
+            1686,
+            1693,
+            1693
+          ],
+          "erasures": 3963,
+          "conservative_budget": 7373,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            7213,
+            7259,
+            7299,
+            7335,
+            7349,
+            7349
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 1,
+          "emitted": 13994,
+          "correct": 12976,
+          "errors": 1018,
+          "lane_errors": [
+            941,
+            972,
+            981,
+            987,
+            1005,
+            1004
+          ],
+          "erasures": 2389,
+          "conservative_budget": 4425,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            4271,
+            4333,
+            4351,
+            4363,
+            4399,
+            4397
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 2,
+          "emitted": 14154,
+          "correct": 13277,
+          "errors": 877,
+          "lane_errors": [
+            825,
+            840,
+            852,
+            859,
+            863,
+            865
+          ],
+          "erasures": 2229,
+          "conservative_budget": 3983,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3879,
+            3909,
+            3933,
+            3947,
+            3955,
+            3959
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 3,
+          "emitted": 13820,
+          "correct": 12663,
+          "errors": 1157,
+          "lane_errors": [
+            1093,
+            1115,
+            1124,
+            1134,
+            1142,
+            1150
+          ],
+          "erasures": 2563,
+          "conservative_budget": 4877,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            4749,
+            4793,
+            4811,
+            4831,
+            4847,
+            4863
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 4,
+          "emitted": 14292,
+          "correct": 13384,
+          "errors": 908,
+          "lane_errors": [
+            851,
+            861,
+            876,
+            884,
+            895,
+            899
+          ],
+          "erasures": 2091,
+          "conservative_budget": 3907,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3793,
+            3813,
+            3843,
+            3859,
+            3881,
+            3889
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 5,
+          "emitted": 12366,
+          "correct": 10481,
+          "errors": 1885,
+          "lane_errors": [
+            1872,
+            1873,
+            1876,
+            1877,
+            1879,
+            1881
+          ],
+          "erasures": 4017,
+          "conservative_budget": 7787,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            7761,
+            7763,
+            7769,
+            7771,
+            7775,
+            7779
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 6,
+          "emitted": 13913,
+          "correct": 12909,
+          "errors": 1004,
+          "lane_errors": [
+            967,
+            973,
+            982,
+            987,
+            996,
+            994
+          ],
+          "erasures": 2470,
+          "conservative_budget": 4478,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            4404,
+            4416,
+            4434,
+            4444,
+            4462,
+            4458
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 7,
+          "emitted": 13360,
+          "correct": 12040,
+          "errors": 1320,
+          "lane_errors": [
+            1243,
+            1272,
+            1283,
+            1301,
+            1315,
+            1304
+          ],
+          "erasures": 3023,
+          "conservative_budget": 5663,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            5509,
+            5567,
+            5589,
+            5625,
+            5653,
+            5631
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 8,
+          "emitted": 12747,
+          "correct": 11153,
+          "errors": 1594,
+          "lane_errors": [
+            1528,
+            1549,
+            1564,
+            1573,
+            1581,
+            1582
+          ],
+          "erasures": 3636,
+          "conservative_budget": 6824,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            6692,
+            6734,
+            6764,
+            6782,
+            6798,
+            6800
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 9,
+          "emitted": 12832,
+          "correct": 11178,
+          "errors": 1654,
+          "lane_errors": [
+            1594,
+            1609,
+            1625,
+            1630,
+            1641,
+            1648
+          ],
+          "erasures": 3551,
+          "conservative_budget": 6859,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            6739,
+            6769,
+            6801,
+            6811,
+            6833,
+            6847
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 10,
+          "emitted": 12461,
+          "correct": 10814,
+          "errors": 1647,
+          "lane_errors": [
+            1577,
+            1592,
+            1606,
+            1619,
+            1636,
+            1641
+          ],
+          "erasures": 3922,
+          "conservative_budget": 7216,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            7076,
+            7106,
+            7134,
+            7160,
+            7194,
+            7204
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 11,
+          "emitted": 9126,
+          "correct": 6243,
+          "errors": 2883,
+          "lane_errors": [
+            2804,
+            2825,
+            2834,
+            2849,
+            2862,
+            2861
+          ],
+          "erasures": 7257,
+          "conservative_budget": 13023,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            12865,
+            12907,
+            12925,
+            12955,
+            12981,
+            12979
+          ],
+          "within_rs_bound": false
+        }
+      ]
+    },
+    "strict": {
+      "k": 19,
+      "cutoff": 1,
+      "ratio": 3.5,
+      "policy": "strict",
+      "path": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/inner_rs/file3.k19.c1.r3.50.strict.strands",
+      "correct_candidate_any": 140797,
+      "correct_candidate_zero": 138301,
+      "correct_candidate_new_from_rs": 2496,
+      "emitted": 137805,
+      "correct": 137662,
+      "errors": 143,
+      "erasures": 58791,
+      "exact_recall": 0.7002278784919327,
+      "precision": 0.9989623018032727,
+      "blocks_in_bound": 8,
+      "per_block": [
+        {
+          "block": 0,
+          "emitted": 10711,
+          "correct": 10694,
+          "errors": 17,
+          "lane_errors": [
+            16,
+            16,
+            17,
+            17,
+            17,
+            17
+          ],
+          "erasures": 5672,
+          "conservative_budget": 5706,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            5704,
+            5704,
+            5706,
+            5706,
+            5706,
+            5706
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 1,
+          "emitted": 12978,
+          "correct": 12972,
+          "errors": 6,
+          "lane_errors": [
+            5,
+            6,
+            6,
+            6,
+            6,
+            6
+          ],
+          "erasures": 3405,
+          "conservative_budget": 3417,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3415,
+            3417,
+            3417,
+            3417,
+            3417,
+            3417
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 2,
+          "emitted": 13272,
+          "correct": 13265,
+          "errors": 7,
+          "lane_errors": [
+            7,
+            7,
+            7,
+            7,
+            7,
+            7
+          ],
+          "erasures": 3111,
+          "conservative_budget": 3125,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3125,
+            3125,
+            3125,
+            3125,
+            3125,
+            3125
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 3,
+          "emitted": 12646,
+          "correct": 12636,
+          "errors": 10,
+          "lane_errors": [
+            10,
+            10,
+            10,
+            10,
+            10,
+            9
+          ],
+          "erasures": 3737,
+          "conservative_budget": 3757,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3757,
+            3757,
+            3757,
+            3757,
+            3757,
+            3755
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 4,
+          "emitted": 13374,
+          "correct": 13368,
+          "errors": 6,
+          "lane_errors": [
+            6,
+            6,
+            6,
+            6,
+            6,
+            6
+          ],
+          "erasures": 3009,
+          "conservative_budget": 3021,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3021,
+            3021,
+            3021,
+            3021,
+            3021,
+            3021
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 5,
+          "emitted": 10443,
+          "correct": 10425,
+          "errors": 18,
+          "lane_errors": [
+            18,
+            18,
+            18,
+            18,
+            18,
+            18
+          ],
+          "erasures": 5940,
+          "conservative_budget": 5976,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            5976,
+            5976,
+            5976,
+            5976,
+            5976,
+            5976
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 6,
+          "emitted": 12904,
+          "correct": 12895,
+          "errors": 9,
+          "lane_errors": [
+            8,
+            8,
+            8,
+            8,
+            9,
+            9
+          ],
+          "erasures": 3479,
+          "conservative_budget": 3497,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            3495,
+            3495,
+            3495,
+            3495,
+            3497,
+            3497
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 7,
+          "emitted": 12035,
+          "correct": 12023,
+          "errors": 12,
+          "lane_errors": [
+            12,
+            12,
+            12,
+            12,
+            12,
+            12
+          ],
+          "erasures": 4348,
+          "conservative_budget": 4372,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            4372,
+            4372,
+            4372,
+            4372,
+            4372,
+            4372
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 8,
+          "emitted": 11180,
+          "correct": 11169,
+          "errors": 11,
+          "lane_errors": [
+            7,
+            7,
+            8,
+            9,
+            11,
+            11
+          ],
+          "erasures": 5203,
+          "conservative_budget": 5225,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            5217,
+            5217,
+            5219,
+            5221,
+            5225,
+            5225
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 9,
+          "emitted": 11210,
+          "correct": 11198,
+          "errors": 12,
+          "lane_errors": [
+            11,
+            11,
+            11,
+            11,
+            12,
+            12
+          ],
+          "erasures": 5173,
+          "conservative_budget": 5197,
+          "within_conservative_bound": true,
+          "lane_budgets": [
+            5195,
+            5195,
+            5195,
+            5195,
+            5197,
+            5197
+          ],
+          "within_rs_bound": true
+        },
+        {
+          "block": 10,
+          "emitted": 10837,
+          "correct": 10824,
+          "errors": 13,
+          "lane_errors": [
+            13,
+            13,
+            13,
+            13,
+            13,
+            13
+          ],
+          "erasures": 5546,
+          "conservative_budget": 5572,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            5572,
+            5572,
+            5572,
+            5572,
+            5572,
+            5572
+          ],
+          "within_rs_bound": false
+        },
+        {
+          "block": 11,
+          "emitted": 6215,
+          "correct": 6193,
+          "errors": 22,
+          "lane_errors": [
+            20,
+            21,
+            20,
+            20,
+            21,
+            22
+          ],
+          "erasures": 10168,
+          "conservative_budget": 10212,
+          "within_conservative_bound": false,
+          "lane_budgets": [
+            10208,
+            10210,
+            10208,
+            10208,
+            10210,
+            10212
+          ],
+          "within_rs_bound": false
+        }
+      ]
+    }
+  },
+  "file_decode": {
+    "attempted": false,
+    "reason": "no decision output has all 12 blocks within the exact six-lane RS bound"
+  }
+}

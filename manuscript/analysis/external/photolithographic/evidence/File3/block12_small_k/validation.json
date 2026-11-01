@@ -1,0 +1,51 @@
+{
+  "candidate_matrix_shape": [
+    16383,
+    353
+  ],
+  "baseline_union_verified": 10033,
+  "actual_output_rescored": {
+    "block": 12,
+    "emitted": 9988,
+    "correct": 9973,
+    "errors": 15,
+    "lane_errors": [
+      13,
+      14,
+      15,
+      15,
+      15,
+      15
+    ],
+    "erasures": 6395,
+    "lane_budgets": [
+      6421,
+      6423,
+      6425,
+      6425,
+      6425,
+      6425
+    ],
+    "max_lane_budget": 6425,
+    "within_rs_bound": false,
+    "precision": 0.9984981978374049,
+    "recall": 0.6087407678691327,
+    "outside_target_block_outputs": 0
+  },
+  "source_sha256": {
+    "/Users/song/.codex/worktrees/9a75/DBGPS2/benchmarks/antkowiak2020/report_block12_small_k.py": "b8513be451e361495f4d2baefe96112dfed12a12e3e6b437ac97f9d30bb26f6f",
+    "/Users/song/.codex/worktrees/9a75/DBGPS2/benchmarks/antkowiak2020/run_block12_small_k.py": "3ba8cf7cb56ad56483ff634e63f1dc5684ab557c22a84d9e9715d65f211c1635"
+  },
+  "artifact_sha256": {
+    "summary.json": "4983b00781417704d32274ce15f368aa3e5d35b0c00787359e17069ff54a1de1",
+    "parameters.tsv": "f00292c85ea26c794241c601282ec396d6d2672254204211ac6e2afb90964419",
+    "decision_metrics.tsv": "43b8996d3be385ead3ead4a80a7c6062b050e27cb340745a051639766689bca0",
+    "per_index.tsv": "0ff2eb8d9a665cf2b59f0adaa99b2cd839ccc67e59deac14f97be5ba2e0ca887",
+    "candidate_success_matrix.tsv.gz": "a82be39f73fa7a21fd5f980011948a13cc9ebd2e34d96c49c69eec4de89afe45",
+    "best_budget.strands": "02868e25bd45e0d2062e32fe2a3321e422b71a490815bb428ca2d549cb66ac08",
+    "best_budget.fasta": "bb542293f5781726d944a866a770333ee7041541cf63bbe7bd3efbbf5eccaa17",
+    "REPORT.zh-CN.md": "fc88245d8ddca797f3e84d302b774699498250e4ab16e4c44f1c122ea9a694b6",
+    "comparison.png": "bd835f0038a78bebb5ced73559b63887fad7f4df1593fb02e76001dd24a36072",
+    "comparison.svg": "802db38378c188f85e49e953bf7b3ab21330daeff54e1ede6f2b02f3a78f09ca"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "measured_runs": 18,
+  "all_exited_successfully": true,
+  "identical_strict_outputs_across_repeats": true,
+  "historical_baseline_compatibility": {
+    "file1": {
+      "strict_output_identical_to_historical": true,
+      "strict_sha256": "6b88bce63122e1b96f74066154a42155ff47409e5ea66d570988016da87bf272",
+      "reads": 14299688,
+      "clusters": 215090,
+      "candidates_60nt": 346253,
+      "dbgps2_strict_output_identical_to_historical": true
+    },
+    "file2": {
+      "strict_output_identical_to_historical": true,
+      "strict_sha256": "b4d9fb4c1ffc8f0c8b403b4fd679343d3e39bb06d2a0734e2c09e51b513500ff",
+      "reads": 33404713,
+      "clusters": 388269,
+      "candidates_60nt": 601364,
+      "dbgps2_strict_output_identical_to_historical": true
+    }
+  },
+  "source_and_executable_pins_valid": true
+}

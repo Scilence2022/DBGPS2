@@ -1,0 +1,32 @@
+{
+  "31": {
+    "forward_exact": 20,
+    "reverse_exact": 20,
+    "tested": 40
+  },
+  "29": {
+    "forward_exact": 20,
+    "reverse_exact": 20,
+    "tested": 40
+  },
+  "27": {
+    "forward_exact": 20,
+    "reverse_exact": 20,
+    "tested": 40
+  },
+  "25": {
+    "forward_exact": 20,
+    "reverse_exact": 20,
+    "tested": 40
+  },
+  "23": {
+    "forward_exact": 20,
+    "reverse_exact": 20,
+    "tested": 40
+  },
+  "21": {
+    "forward_exact": 20,
+    "reverse_exact": 20,
+    "tested": 40
+  }
+}

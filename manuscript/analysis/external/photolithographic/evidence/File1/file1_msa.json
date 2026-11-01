@@ -1,0 +1,16 @@
+{
+  "method": "prefix16_muscle3_vote04",
+  "reads": 14299688,
+  "truth": 16383,
+  "clusters": 215090,
+  "raw_exact_recovered": 4439,
+  "candidates_generated": 350470,
+  "candidates_60nt": 346253,
+  "exact_candidates": 22181,
+  "recovered": 10779,
+  "recall": 0.6579381065738875,
+  "seed": 20261017,
+  "cluster_seconds": 23.565212125,
+  "msa_seconds": 257.441774291,
+  "total_seconds": 281.007108125
+}

@@ -1,0 +1,69 @@
+{
+  "passed": true,
+  "native_search_comparisons": 4608,
+  "parent_equivalence_graphs": 10,
+  "reference_permutation_blind_output_invariant": true,
+  "policy_identity_relabeling_invariant": true,
+  "checks": [
+    {
+      "channel": "substitution",
+      "sampling": "budget",
+      "k": 21,
+      "native_and_parent_match": true
+    },
+    {
+      "channel": "substitution",
+      "sampling": "budget",
+      "k": 31,
+      "native_and_parent_match": true
+    },
+    {
+      "channel": "burst",
+      "sampling": "budget",
+      "k": 21,
+      "native_and_parent_match": true
+    },
+    {
+      "channel": "burst",
+      "sampling": "budget",
+      "k": 31,
+      "native_and_parent_match": true
+    },
+    {
+      "channel": "persistent",
+      "sampling": "budget",
+      "k": 21,
+      "native_and_parent_match": true
+    },
+    {
+      "channel": "persistent",
+      "sampling": "budget",
+      "k": 31,
+      "native_and_parent_match": true
+    },
+    {
+      "channel": "substitution",
+      "sampling": "poisson",
+      "k": 21,
+      "native_and_parent_match": true
+    },
+    {
+      "channel": "substitution",
+      "sampling": "poisson",
+      "k": 31,
+      "native_and_parent_match": true
+    },
+    {
+      "channel": "mixed",
+      "sampling": "budget",
+      "k": 21,
+      "native_and_parent_match": true
+    },
+    {
+      "channel": "mixed",
+      "sampling": "budget",
+      "k": 31,
+      "native_and_parent_match": true
+    }
+  ]
+}

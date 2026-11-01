@@ -1,0 +1,142 @@
+{
+  "file1": {
+    "dbgps_cutoff": 5,
+    "dbgps2_cutoff": 1,
+    "pilot_scores": [
+      {
+        "cutoff": 1,
+        "emitted": 363,
+        "correct": 361,
+        "incorrect": 2,
+        "exact_recovery": 0.02203503631813465,
+        "output_sha256": "329fbe61dadfb7f30ba15e78396287f9ff880ffbb6c5ebc68bf28d9a084058bb"
+      },
+      {
+        "cutoff": 3,
+        "emitted": 11905,
+        "correct": 11899,
+        "incorrect": 6,
+        "exact_recovery": 0.7263016541536959,
+        "output_sha256": "827aef1a183712c6f6181b90bc63a92cf7c6f82d8469b37d92046cac4363f6f7"
+      },
+      {
+        "cutoff": 5,
+        "emitted": 15373,
+        "correct": 15373,
+        "incorrect": 0,
+        "exact_recovery": 0.9383507294146372,
+        "output_sha256": "6a8b9f7f963faafe238d01f61d95ce7aaa834b24bd204824b5a432564268321e"
+      },
+      {
+        "cutoff": 8,
+        "emitted": 15012,
+        "correct": 15012,
+        "incorrect": 0,
+        "exact_recovery": 0.9163156930965025,
+        "output_sha256": "6ad8732e0df38a394c81dd1dd5097a1226020bf87d60e3593a4a82b4c315d557"
+      },
+      {
+        "cutoff": 10,
+        "emitted": 14570,
+        "correct": 14570,
+        "incorrect": 0,
+        "exact_recovery": 0.8893365073551852,
+        "output_sha256": "f0b8784861085eca9cff56d1767fd66596e27ab6a6ac4387e7ba981e40b0f387"
+      },
+      {
+        "cutoff": 15,
+        "emitted": 13141,
+        "correct": 13141,
+        "incorrect": 0,
+        "exact_recovery": 0.802111945309162,
+        "output_sha256": "6b4eadc08185acddb356dab3b9d15aaf9ca8a31ca59b285d0c3f0cebc87626eb"
+      },
+      {
+        "cutoff": 20,
+        "emitted": 11472,
+        "correct": 11472,
+        "incorrect": 0,
+        "exact_recovery": 0.700238051638894,
+        "output_sha256": "a0f74936875c1394a7713eefcf3011009d822372e523f12b418975c6cbfebb77"
+      },
+      {
+        "cutoff": 30,
+        "emitted": 8489,
+        "correct": 8489,
+        "incorrect": 0,
+        "exact_recovery": 0.5181590673258866,
+        "output_sha256": "0e959a9fcfec4fac109864c004ca27e13690dbc8172a3fb19f6881c278d8737d"
+      }
+    ]
+  },
+  "file2": {
+    "dbgps_cutoff": 3,
+    "dbgps2_cutoff": 1,
+    "pilot_scores": [
+      {
+        "cutoff": 1,
+        "emitted": 29739,
+        "correct": 29643,
+        "incorrect": 96,
+        "exact_recovery": 0.6031251907465055,
+        "output_sha256": "b6bfb5af917d5c93029f72293acf1016a45190d53f3a431febc2c94e01ee89ee"
+      },
+      {
+        "cutoff": 3,
+        "emitted": 39114,
+        "correct": 39103,
+        "incorrect": 11,
+        "exact_recovery": 0.795601131253942,
+        "output_sha256": "550fe348c105fe2527957fc09f02b64971e90eafb5365075e2d1b5625d5fa592"
+      },
+      {
+        "cutoff": 5,
+        "emitted": 34718,
+        "correct": 34717,
+        "incorrect": 1,
+        "exact_recovery": 0.7063622861095852,
+        "output_sha256": "21326a4a9ebe7d6910981d080ba27567038f2ed682c0af0baab6a6fc042de5d9"
+      },
+      {
+        "cutoff": 8,
+        "emitted": 28104,
+        "correct": 28103,
+        "incorrect": 1,
+        "exact_recovery": 0.57179189810576,
+        "output_sha256": "e58d2e2aabcdcf53769ade37f39b0bdb661878111bbb6329fc48a9e3dad1182b"
+      },
+      {
+        "cutoff": 10,
+        "emitted": 24152,
+        "correct": 24151,
+        "incorrect": 1,
+        "exact_recovery": 0.491383344523795,
+        "output_sha256": "e85b86aaa76e3e4b19fb7f74896321e3294625db74959a85e72363ea3a24ca1e"
+      },
+      {
+        "cutoff": 15,
+        "emitted": 16072,
+        "correct": 16071,
+        "incorrect": 1,
+        "exact_recovery": 0.32698528962949397,
+        "output_sha256": "62bb6d13619869b7ce048e58a09b3e69ec5cfd866e9e13ea622f5cdbcd8003dc"
+      },
+      {
+        "cutoff": 20,
+        "emitted": 10426,
+        "correct": 10425,
+        "incorrect": 1,
+        "exact_recovery": 0.21211011414270892,
+        "output_sha256": "752322100ce8482cb22482cf23687a8f006f0cd270681f6d045962064652bdda"
+      },
+      {
+        "cutoff": 30,
+        "emitted": 4126,
+        "correct": 4126,
+        "incorrect": 0,
+        "exact_recovery": 0.08394880872449083,
+        "output_sha256": "a3d054b1f6cdbeeb262146f206152cc2187b4750630e065fe0b2932cd2c879f1"
+      }
+    ]
+  }
+}

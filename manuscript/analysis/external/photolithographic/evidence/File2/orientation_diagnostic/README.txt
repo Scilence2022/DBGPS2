@@ -1,0 +1,1 @@
+Initial File 2 diagnostic used the deposited design base order directly. Read k-mer overlap established that the deposited File 2/3 sequences must be reversed globally to match sequencing/coding orientation. These preliminary files are excluded from all final metrics. No payload sequence is supplied to reconstruction.

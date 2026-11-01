@@ -1,0 +1,37 @@
+{
+  "diagnostic": "oracle path-existence upper bound, not recovered strands",
+  "k_union": [
+    29,
+    31
+  ],
+  "bounds": [
+    {
+      "cutoff": 0,
+      "either_k_either_direction": 596189
+    },
+    {
+      "cutoff": 1,
+      "either_k_either_direction": 595265
+    },
+    {
+      "cutoff": 2,
+      "either_k_either_direction": 593937
+    },
+    {
+      "cutoff": 3,
+      "either_k_either_direction": 591733
+    },
+    {
+      "cutoff": 4,
+      "either_k_either_direction": 588252
+    },
+    {
+      "cutoff": 5,
+      "either_k_either_direction": 582765
+    },
+    {
+      "cutoff": 6,
+      "either_k_either_direction": 574898
+    }
+  ]
+}

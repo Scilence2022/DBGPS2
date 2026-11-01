@@ -1,0 +1,39 @@
+{
+  "source_runs": [
+    "k31_c0_r2.000_s0",
+    "k29_c0_r1.900_s0",
+    "k29_c0_r1.950_s0",
+    "k29_c1_r1.900_s0"
+  ],
+  "independent_sources_note": "Each parameter/direction supplies at most one vote per body. Sources are correlated, not independent evidence probabilities.",
+  "candidate_selection": "unique maximum votes per 13 nt prefix, then globally fixed vote/agreement/margin/seed-support thresholds; no per-target truth choice",
+  "truth_usage": "global rule evaluation/selection only; predictions never repaired or filtered by matching a reference",
+  "rules_evaluated": 480,
+  "selected": {
+    "maximum_exact": {
+      "minimum_votes": 1,
+      "minimum_agreement": 0.5,
+      "minimum_margin": 1,
+      "minimum_seed_support": 1,
+      "returned": 596069,
+      "exact": 595927,
+      "wrong": 142,
+      "exact_rate": 0.9815152762908672,
+      "precision": 0.9997617725464669,
+      "fasta": "/Users/song/.codex/worktrees/bd05/DBGPS2/experiments/nbt4079/optimization/results/header13.maximum_exact.fa.gz"
+    },
+    "zero_observed_errors": {
+      "minimum_votes": 1,
+      "minimum_agreement": 0.5,
+      "minimum_margin": 1,
+      "minimum_seed_support": 10,
+      "returned": 570444,
+      "exact": 570444,
+      "wrong": 0,
+      "exact_rate": 0.9395437700732933,
+      "precision": 1.0,
+      "fasta": "/Users/song/.codex/worktrees/bd05/DBGPS2/experiments/nbt4079/optimization/results/header13.zero_observed_errors.fa.gz"
+    }
+  },
+  "rs_validation": "not_performed"
+}

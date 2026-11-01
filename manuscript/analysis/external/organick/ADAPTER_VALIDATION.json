@@ -1,0 +1,66 @@
+{
+  "native_k21": {
+    "queries": 40,
+    "exact": 40
+  },
+  "native_k23": {
+    "queries": 40,
+    "exact": 40
+  },
+  "native_k25": {
+    "queries": 40,
+    "exact": 40
+  },
+  "native_k27": {
+    "queries": 40,
+    "exact": 40
+  },
+  "native_k29": {
+    "queries": 40,
+    "exact": 40
+  },
+  "native_k31": {
+    "queries": 40,
+    "exact": 40
+  },
+  "inner_k21": {
+    "queries": 40,
+    "exact": 40
+  },
+  "inner_k23": {
+    "queries": 40,
+    "exact": 40
+  },
+  "inner_k25": {
+    "queries": 40,
+    "exact": 40
+  },
+  "inner_k27": {
+    "queries": 40,
+    "exact": 40
+  },
+  "inner_k29": {
+    "queries": 40,
+    "exact": 40
+  },
+  "inner_k31": {
+    "queries": 40,
+    "exact": 40
+  },
+  "bound_perfect_k29": {
+    "expected": 20,
+    "observed": 20
+  },
+  "bound_systematic_gap_k29": {
+    "expected": 0,
+    "observed": 0
+  },
+  "bound_perfect_k31": {
+    "expected": 20,
+    "observed": 20
+  },
+  "bound_systematic_gap_k31": {
+    "expected": 0,
+    "observed": 0
+  }
+}

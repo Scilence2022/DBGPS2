@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "separate": {
+    "reads": 44581669,
+    "bases": 2768040307,
+    "sha256_record_sum": "3f40f3cf24956146f0064928d59d9761dec89b17e93c46322d5ac5b8433c9e29",
+    "sha256_record_xor": "9c535ce7e9bf7010c859d8095a98589150721c6bc7ea8724b9b8f72706406747"
+  },
+  "rejoined": {
+    "reads": 44581669,
+    "bases": 2768040307,
+    "sha256_record_sum": "3f40f3cf24956146f0064928d59d9761dec89b17e93c46322d5ac5b8433c9e29",
+    "sha256_record_xor": "9c535ce7e9bf7010c859d8095a98589150721c6bc7ea8724b9b8f72706406747"
+  },
+  "note": "The re-pooled control and the twelve separate broad files contain the same full read-name/sequence/quality multiset; all concatenated gzip members were read"
+}

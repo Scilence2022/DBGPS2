@@ -1,0 +1,10 @@
+{
+  "file_id": 22305990,
+  "name": "I18_S3_R1_001.fastq.gz",
+  "bytes": 3150366942,
+  "md5": "3e76a04053fde5c0ee43e81d2c50c807",
+  "expected_md5": "3e76a04053fde5c0ee43e81d2c50c807",
+  "sha256": "f7aee402208bd6d6fcc31d6d303d178ba787f8b12f4be740f28d87616ac8ac31",
+  "url": "https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/22305990/I18_S3_R1_001.fastq.gz",
+  "seconds": 99.660888292
+}

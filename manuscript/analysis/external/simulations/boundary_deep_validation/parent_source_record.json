@@ -1,0 +1,5 @@
+{
+  "parent": "/Users/song/.codex/worktrees/cab4/DBGPS2/output/exploration/2026-10-20/reconstruction_boundary",
+  "parent_profiler_sha256": "ad2a864b0cb2422837d88412cae44bb5a801a0186c55fdde663cbe2db7cddf78",
+  "change": "Record native accepted codewords and truth-independent statuses before reference comparison; no search or count rule changes."
+}

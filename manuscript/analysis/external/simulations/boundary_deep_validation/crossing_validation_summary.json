@@ -1,0 +1,17 @@
+{
+  "new_graphs": 36,
+  "new_operating_points": 864,
+  "new_policy_evaluations": 180,
+  "native_search_comparisons": 4320,
+  "homogeneous_conditions": 252,
+  "compatible_conditions": 252,
+  "fresh_conditions": 36,
+  "fresh_compatible_conditions": 36,
+  "median_original_interval_width": 0.14633396941038174,
+  "median_crossing_interval_width": 0.0786013997322633,
+  "maximum_width_reduction": 0.7794318882208497,
+  "maximum_naive_product_error_pp": 78.7261718312265,
+  "all_source_locks_match": true,
+  "all_new_candidate_scores_match_native": true,
+  "statistical_interval": "Bonferroni Clopper-Pearson; family alpha=0.05 across all homogeneous conditions"
+}

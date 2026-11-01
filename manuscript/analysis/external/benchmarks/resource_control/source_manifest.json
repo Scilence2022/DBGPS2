@@ -1,0 +1,130 @@
+{
+  "src/decode_fountain.py": {
+    "bytes": 4492,
+    "sha256": "3c6958da8a5920cce46484cf5f7d973d472672eeb1d01f869b8b90c1ac4729b4"
+  },
+  "src/legacy-2base.map": {
+    "bytes": 192,
+    "sha256": "d32496632e2c177d4a4f418a3cdd0b670a022bc8370edd3f1fc58eb07d0903c8"
+  },
+  "src/dbgps_strand.h": {
+    "bytes": 1265,
+    "sha256": "a2c86a9de07acc36182afafb337c58bc5ca92a367283a337200816c97142479f"
+  },
+  "src/khashl.h": {
+    "bytes": 14224,
+    "sha256": "4fe9abffbe34bc30bd33ceefa46116a37291034f76b4820f6412c1f9ee347532"
+  },
+  "src/dbgps3_core.h": {
+    "bytes": 7716,
+    "sha256": "f6b6efe6e396fb4aed09370efa2ef8fd241135c71c69c48d20704fba7827a2d5"
+  },
+  "src/kthread.h": {
+    "bytes": 291,
+    "sha256": "ed92aa2bd8692741cbf787adace74ba72583a2bb18a450e07ef03fc9ce1fc9a9"
+  },
+  "src/minjson.h": {
+    "bytes": 3265,
+    "sha256": "4e061afa38dca02bbdd36aedcf32fdf6019cbe2a2b4ad01d3c22d57d1aaa263f"
+  },
+  "src/dbgps_codec.h": {
+    "bytes": 1613,
+    "sha256": "f00a77221362d34a60ff8cd26913c6f9dba04f8c9a00e0e593aa2b1fa48056b3"
+  },
+  "src/inner_select.cpp": {
+    "bytes": 3020,
+    "sha256": "092f489a3be5c065779719d40b3633176bafae3fbf251898299f037edc559e56"
+  },
+  "src/DBGPS2.c": {
+    "bytes": 42419,
+    "sha256": "39dbf9fa2ec338756a3e3599350a4d6805eda0095ccccd6d8141980777de9308"
+  },
+  "src/dbgps_redundancy.c": {
+    "bytes": 14949,
+    "sha256": "3229baff40e31c7b64d7a5c7198ba884ba18af21dc578fba2c4e709c46fec9ef"
+  },
+  "src/fpthread.h": {
+    "bytes": 304,
+    "sha256": "71f54c01b5d97c14150d02fe0e3850a2914ea0c3ff83931cd768e1b5ce915b97"
+  },
+  "src/dbgps_bloom.h": {
+    "bytes": 5668,
+    "sha256": "11ad752e9ac12db18ba2833375b357e5155092050536b57dec167f8b35dddf4e"
+  },
+  "src/dbgps3_server.h": {
+    "bytes": 680,
+    "sha256": "2e9a0e75574ac3d92ccd32b29ad6141fdae5f2949f97cb693e3d809ce68ece66"
+  },
+  "src/ketopt.h": {
+    "bytes": 3969,
+    "sha256": "f1f4aea1e269d7327e87c6bdf536c1008cefb55a4ef102f67d234bba642b985c"
+  },
+  "src/dbgps_strand.c": {
+    "bytes": 2488,
+    "sha256": "1f146a1e861a7bdf838f50b8b197e81eb4fe26f4955d72c9f34f5f1a05295716"
+  },
+  "src/kseq.h": {
+    "bytes": 8782,
+    "sha256": "889a8c0c44e2329b1e7257ee60d0b2d43a3688065a2ad84474982dcadd144a3f"
+  },
+  "src/fountain_DBGPS2.c": {
+    "bytes": 46995,
+    "sha256": "76351ec2e6919d85aba3527614b7543cdc3366dfb41c235fc5d531515ee56b4d"
+  },
+  "src/kthread.c": {
+    "bytes": 4074,
+    "sha256": "d9b18fcb9412a05e2e235274ade871154640366208073577e5a353514e5825fe"
+  },
+  "src/dbgps_bloom_graph.h": {
+    "bytes": 5206,
+    "sha256": "cda7a5341384a07d53cb14a15cbade70dfbbd0cb21a6fc219735552f36925a08"
+  },
+  "src/fountain_common.py": {
+    "bytes": 4456,
+    "sha256": "e5aedbbde99208d1857f54585a97ea78bb51138f368c33e9b6e0fcf8a6a00f99"
+  },
+  "src/dbgps_redundancy.h": {
+    "bytes": 2337,
+    "sha256": "eb61445077eaa80e16a6fb8ae29c27f0377e977a897dfb27ebd35466f096b7a8"
+  },
+  "src/dbgps_codec.c": {
+    "bytes": 8532,
+    "sha256": "b13059e3bb9ca132c0da7e0fc659083f138f53b1a9e321f37e73c04b8d7d679d"
+  },
+  "src/format_graph.c": {
+    "bytes": 6250,
+    "sha256": "12f333bfb5d32457cf14d10e430e46ee36670ab352a0900c3a18ce186152f0e2"
+  },
+  "src/format_graph_bloom.c": {
+    "bytes": 6896,
+    "sha256": "b32a4234dc07e3a942c16269cb02f4272a01083911c39eb50aa9180bdedec0b1"
+  },
+  "bin/format_graph": {
+    "bytes": 90160,
+    "sha256": "3fcc591098dcc1cd64aa613f91251698e517c7e5e8fd1ce0f1e1b1f28e7242e9"
+  },
+  "bin/format_graph_bloom": {
+    "bytes": 90224,
+    "sha256": "b777053cf6cabeb0779efb3833613a25dec9e3040fee235b42b30d04d1833762"
+  },
+  "bin/muscle3": {
+    "bytes": 449304,
+    "sha256": "ad85d398441fa226d29a7f68668dc61cdacfa92449182c29107ab0f70bee3b86"
+  },
+  "msa_pipeline.py": {
+    "bytes": 6258,
+    "sha256": "5b74d1de47c909c996e0643f4ee52a46e0aaf4e877c46a15e81f1611822b5542"
+  },
+  "run_resource_matrix.py": {
+    "bytes": 6970,
+    "sha256": "8b35b055c8a03b3f990bd7800d8f43839b4b366350bf542c95f7b812f13200cd"
+  },
+  "../speed_extension/run_benchmark.py": {
+    "bytes": 6312,
+    "sha256": "7150f9c8438b30b6130d407a868b33c6c06a0b9289cf9fa701dc9430ad880fd5"
+  },
+  "../speed_extension/run_bloom_matrix.py": {
+    "bytes": 4982,
+    "sha256": "d8ec376dfc0a7ff0dacc2052deb859c241a6e136126e1e5c4e834f345b0ac534"
+  }
+}

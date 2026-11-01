@@ -1,0 +1,406 @@
+{
+  "completed_runs": 81,
+  "all_exit_zero": true,
+  "repeat_checks": [
+    {
+      "dataset": "fountain",
+      "case": "cluster_msa_vote",
+      "repeats": 3,
+      "identical": true,
+      "sha256": "62ed6ff3bbf6b33ab4de91b021794bd6239086c640334eb57e8e42ac84282810"
+    },
+    {
+      "dataset": "fountain",
+      "case": "dbgps_rule",
+      "repeats": 3,
+      "identical": true,
+      "sha256": "583e47dbc818ee5a90d7a5dc367d5b4934198e92d39d9b287bd7a9ee5b44b1f2"
+    },
+    {
+      "dataset": "fountain",
+      "case": "dbgps2",
+      "repeats": 3,
+      "identical": true,
+      "sha256": "ae51a754b16bb0a81803073457250460fca18d1121d83577ceba2c1aaa1a9cc2"
+    },
+    {
+      "dataset": "fountain",
+      "case": "dbgps2_alt_c",
+      "repeats": 3,
+      "identical": true,
+      "sha256": "9b14f30ac8f16ba812df6105d439b1427c498b8d2fe71c0c6b37f9ad81c31bbc"
+    },
+    {
+      "dataset": "fountain",
+      "case": "dbgps2_B8",
+      "repeats": 3,
+      "identical": true,
+      "sha256": "ae51a754b16bb0a81803073457250460fca18d1121d83577ceba2c1aaa1a9cc2"
+    },
+    {
+      "dataset": "fountain",
+      "case": "dbgps2_B16",
+      "repeats": 3,
+      "identical": true,
+      "sha256": "ae51a754b16bb0a81803073457250460fca18d1121d83577ceba2c1aaa1a9cc2"
+    },
+    {
+      "dataset": "fountain",
+      "case": "dbgps2_F32",
+      "repeats": 3,
+      "identical": true,
+      "sha256": "9b14f30ac8f16ba812df6105d439b1427c498b8d2fe71c0c6b37f9ad81c31bbc"
+    },
+    {
+      "dataset": "fountain",
+      "case": "dbgps2_F34",
+      "repeats": 3,
+      "identical": true,
+      "sha256": "9b14f30ac8f16ba812df6105d439b1427c498b8d2fe71c0c6b37f9ad81c31bbc"
+    },
+    {
+      "dataset": "fountain",
+      "case": "dbgps2_B12_F34",
+      "repeats": 3,
+      "identical": true,
+      "sha256": "9b14f30ac8f16ba812df6105d439b1427c498b8d2fe71c0c6b37f9ad81c31bbc"
+    },
+    {
+      "dataset": "nbt_file16",
+      "case": "cluster_msa_vote",
+      "repeats": 3,
+      "identical": true,
+      "sha256": "ec3c0270d4486fd66d662c3684823341b240960fa132f606188b927a519c18b3"
+    },
+    {
+      "dataset": "nbt_file16",
+      "case": "dbgps_rule",
+      "repeats": 3,
+      "identical": true,
+      "sha256": "2e6bd74df87ab5b681cb4c7fa5c1e283905cb6fdc39a237bc70d02d6c75bbd19"
+    },
+    {
+      "dataset": "nbt_file16",
+      "case": "dbgps2",
+      "repeats": 3,
+      "identical": true,
+      "sha256": "471b64a54f5c0c0ac55fddf97fb7684d35f762f4d8b276bea90fb44329ee95e7"
+    },
+    {
+      "dataset": "nbt_file16",
+      "case": "dbgps2_alt_c",
+      "repeats": 3,
+      "identical": true,
+      "sha256": "49a4af7004a79a44168a0351a2e6658a4ea6a76126ce4d0f8dc90b5e6e98047d"
+    },
+    {
+      "dataset": "nbt_file16",
+      "case": "dbgps2_B8",
+      "repeats": 3,
+      "identical": true,
+      "sha256": "471b64a54f5c0c0ac55fddf97fb7684d35f762f4d8b276bea90fb44329ee95e7"
+    },
+    {
+      "dataset": "nbt_file16",
+      "case": "dbgps2_B16",
+      "repeats": 3,
+      "identical": true,
+      "sha256": "471b64a54f5c0c0ac55fddf97fb7684d35f762f4d8b276bea90fb44329ee95e7"
+    },
+    {
+      "dataset": "nbt_file16",
+      "case": "dbgps2_F32",
+      "repeats": 3,
+      "identical": true,
+      "sha256": "49a4af7004a79a44168a0351a2e6658a4ea6a76126ce4d0f8dc90b5e6e98047d"
+    },
+    {
+      "dataset": "nbt_file16",
+      "case": "dbgps2_F34",
+      "repeats": 3,
+      "identical": true,
+      "sha256": "49a4af7004a79a44168a0351a2e6658a4ea6a76126ce4d0f8dc90b5e6e98047d"
+    },
+    {
+      "dataset": "nbt_file16",
+      "case": "dbgps2_B12_F34",
+      "repeats": 3,
+      "identical": true,
+      "sha256": "49a4af7004a79a44168a0351a2e6658a4ea6a76126ce4d0f8dc90b5e6e98047d"
+    },
+    {
+      "dataset": "song_ht176",
+      "case": "cluster_msa_vote",
+      "repeats": 3,
+      "identical": true,
+      "sha256": "e57ed2bc01501a80cb05bc0274a769b7fec8ca4ecd095754d2a15fe0e7ff4062"
+    },
+    {
+      "dataset": "song_ht176",
+      "case": "dbgps_rule",
+      "repeats": 3,
+      "identical": true,
+      "sha256": "580e6839853b7b5fe8e12d2625e6a799f2f9ef2ee51dad58cbbd5d6cc18429ce"
+    },
+    {
+      "dataset": "song_ht176",
+      "case": "dbgps2",
+      "repeats": 3,
+      "identical": true,
+      "sha256": "9ce4a4081c9ba2e978983a03c51f0e4043110399564803d633a2fba157fff3b7"
+    },
+    {
+      "dataset": "song_ht176",
+      "case": "dbgps2_alt_c",
+      "repeats": 3,
+      "identical": true,
+      "sha256": "7fca25fceb2b5b88e0fe672490639dfeb2b4bbad2d871b66bda97b8f92273961"
+    },
+    {
+      "dataset": "song_ht176",
+      "case": "dbgps2_B8",
+      "repeats": 3,
+      "identical": true,
+      "sha256": "9ce4a4081c9ba2e978983a03c51f0e4043110399564803d633a2fba157fff3b7"
+    },
+    {
+      "dataset": "song_ht176",
+      "case": "dbgps2_B16",
+      "repeats": 3,
+      "identical": true,
+      "sha256": "9ce4a4081c9ba2e978983a03c51f0e4043110399564803d633a2fba157fff3b7"
+    },
+    {
+      "dataset": "song_ht176",
+      "case": "dbgps2_F32",
+      "repeats": 3,
+      "identical": true,
+      "sha256": "9ce4a4081c9ba2e978983a03c51f0e4043110399564803d633a2fba157fff3b7"
+    },
+    {
+      "dataset": "song_ht176",
+      "case": "dbgps2_F34",
+      "repeats": 3,
+      "identical": true,
+      "sha256": "9ce4a4081c9ba2e978983a03c51f0e4043110399564803d633a2fba157fff3b7"
+    },
+    {
+      "dataset": "song_ht176",
+      "case": "dbgps2_B12_F34",
+      "repeats": 3,
+      "identical": true,
+      "sha256": "9ce4a4081c9ba2e978983a03c51f0e4043110399564803d633a2fba157fff3b7"
+    }
+  ],
+  "query_filters_preserve_outputs": true,
+  "counting_filters_32_34_combined_agree": true,
+  "fountain": [
+    {
+      "case": "cluster_msa_vote",
+      "method": "cluster_msa_vote",
+      "output_sha256": "62ed6ff3bbf6b33ab4de91b021794bd6239086c640334eb57e8e42ac84282810",
+      "decoding_in_timing": false,
+      "command": [
+        "/Users/song/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/src/decode_fountain.py",
+        "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/runs/fountain_cluster_msa_vote_c0_rep1.strands.txt",
+        "--no_screen",
+        "--out",
+        "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/runs/fountain_cluster_msa_vote.decoded.bin"
+      ],
+      "exit_code": 0,
+      "bytes": 2146816,
+      "md5": "8651e90d3a013178b816b63fdbb94b9b",
+      "md5_match": true,
+      "decoded_path": "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/runs/fountain_cluster_msa_vote.decoded.bin",
+      "expected_md5": "8651e90d3a013178b816b63fdbb94b9b",
+      "payload_mismatches_against_reencoded_archive": 0,
+      "independent_rs_reencoding_mismatches": 0,
+      "original_synthesis_seed_list_membership_verified": false
+    },
+    {
+      "case": "dbgps_rule",
+      "method": "dbgps_rule",
+      "output_sha256": "583e47dbc818ee5a90d7a5dc367d5b4934198e92d39d9b287bd7a9ee5b44b1f2",
+      "decoding_in_timing": false,
+      "command": [
+        "/Users/song/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/src/decode_fountain.py",
+        "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/runs/fountain_dbgps_rule_c1_rep1.strands.txt",
+        "--no_screen",
+        "--out",
+        "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/runs/fountain_dbgps_rule.decoded.bin"
+      ],
+      "exit_code": 0,
+      "bytes": 2146816,
+      "md5": "8651e90d3a013178b816b63fdbb94b9b",
+      "md5_match": true,
+      "decoded_path": "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/runs/fountain_dbgps_rule.decoded.bin",
+      "expected_md5": "8651e90d3a013178b816b63fdbb94b9b",
+      "payload_mismatches_against_reencoded_archive": 0,
+      "independent_rs_reencoding_mismatches": 0,
+      "original_synthesis_seed_list_membership_verified": false
+    },
+    {
+      "case": "dbgps2",
+      "method": "dbgps2",
+      "output_sha256": "ae51a754b16bb0a81803073457250460fca18d1121d83577ceba2c1aaa1a9cc2",
+      "decoding_in_timing": false,
+      "command": [
+        "/Users/song/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/src/decode_fountain.py",
+        "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/runs/fountain_dbgps2_c0_rep1.strands.txt",
+        "--no_screen",
+        "--out",
+        "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/runs/fountain_dbgps2.decoded.bin"
+      ],
+      "exit_code": 0,
+      "bytes": 2146816,
+      "md5": "8651e90d3a013178b816b63fdbb94b9b",
+      "md5_match": true,
+      "decoded_path": "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/runs/fountain_dbgps2.decoded.bin",
+      "expected_md5": "8651e90d3a013178b816b63fdbb94b9b",
+      "payload_mismatches_against_reencoded_archive": 0,
+      "independent_rs_reencoding_mismatches": 0,
+      "original_synthesis_seed_list_membership_verified": false
+    },
+    {
+      "case": "dbgps2_alt_c",
+      "method": "dbgps2_alt_c",
+      "output_sha256": "9b14f30ac8f16ba812df6105d439b1427c498b8d2fe71c0c6b37f9ad81c31bbc",
+      "decoding_in_timing": false,
+      "command": [
+        "/Users/song/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/src/decode_fountain.py",
+        "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/runs/fountain_dbgps2_alt_c_c1_rep1.strands.txt",
+        "--no_screen",
+        "--out",
+        "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/runs/fountain_dbgps2_alt_c.decoded.bin"
+      ],
+      "exit_code": 0,
+      "bytes": 2146816,
+      "md5": "8651e90d3a013178b816b63fdbb94b9b",
+      "md5_match": true,
+      "decoded_path": "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/runs/fountain_dbgps2_alt_c.decoded.bin",
+      "expected_md5": "8651e90d3a013178b816b63fdbb94b9b",
+      "payload_mismatches_against_reencoded_archive": 0,
+      "independent_rs_reencoding_mismatches": 0,
+      "original_synthesis_seed_list_membership_verified": false
+    },
+    {
+      "case": "dbgps2_B8",
+      "method": "dbgps2_B8",
+      "output_sha256": "ae51a754b16bb0a81803073457250460fca18d1121d83577ceba2c1aaa1a9cc2",
+      "decoding_in_timing": false,
+      "command": [
+        "/Users/song/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/src/decode_fountain.py",
+        "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/runs/fountain_dbgps2_c0_rep1.strands.txt",
+        "--no_screen",
+        "--out",
+        "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/runs/fountain_dbgps2.decoded.bin"
+      ],
+      "exit_code": 0,
+      "bytes": 2146816,
+      "md5": "8651e90d3a013178b816b63fdbb94b9b",
+      "md5_match": true,
+      "decoded_path": "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/runs/fountain_dbgps2.decoded.bin",
+      "expected_md5": "8651e90d3a013178b816b63fdbb94b9b",
+      "payload_mismatches_against_reencoded_archive": 0,
+      "independent_rs_reencoding_mismatches": 0,
+      "original_synthesis_seed_list_membership_verified": false
+    },
+    {
+      "case": "dbgps2_B16",
+      "method": "dbgps2_B16",
+      "output_sha256": "ae51a754b16bb0a81803073457250460fca18d1121d83577ceba2c1aaa1a9cc2",
+      "decoding_in_timing": false,
+      "command": [
+        "/Users/song/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/src/decode_fountain.py",
+        "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/runs/fountain_dbgps2_c0_rep1.strands.txt",
+        "--no_screen",
+        "--out",
+        "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/runs/fountain_dbgps2.decoded.bin"
+      ],
+      "exit_code": 0,
+      "bytes": 2146816,
+      "md5": "8651e90d3a013178b816b63fdbb94b9b",
+      "md5_match": true,
+      "decoded_path": "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/runs/fountain_dbgps2.decoded.bin",
+      "expected_md5": "8651e90d3a013178b816b63fdbb94b9b",
+      "payload_mismatches_against_reencoded_archive": 0,
+      "independent_rs_reencoding_mismatches": 0,
+      "original_synthesis_seed_list_membership_verified": false
+    },
+    {
+      "case": "dbgps2_F32",
+      "method": "dbgps2_F32",
+      "output_sha256": "9b14f30ac8f16ba812df6105d439b1427c498b8d2fe71c0c6b37f9ad81c31bbc",
+      "decoding_in_timing": false,
+      "command": [
+        "/Users/song/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/src/decode_fountain.py",
+        "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/runs/fountain_dbgps2_alt_c_c1_rep1.strands.txt",
+        "--no_screen",
+        "--out",
+        "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/runs/fountain_dbgps2_alt_c.decoded.bin"
+      ],
+      "exit_code": 0,
+      "bytes": 2146816,
+      "md5": "8651e90d3a013178b816b63fdbb94b9b",
+      "md5_match": true,
+      "decoded_path": "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/runs/fountain_dbgps2_alt_c.decoded.bin",
+      "expected_md5": "8651e90d3a013178b816b63fdbb94b9b",
+      "payload_mismatches_against_reencoded_archive": 0,
+      "independent_rs_reencoding_mismatches": 0,
+      "original_synthesis_seed_list_membership_verified": false
+    },
+    {
+      "case": "dbgps2_F34",
+      "method": "dbgps2_F34",
+      "output_sha256": "9b14f30ac8f16ba812df6105d439b1427c498b8d2fe71c0c6b37f9ad81c31bbc",
+      "decoding_in_timing": false,
+      "command": [
+        "/Users/song/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/src/decode_fountain.py",
+        "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/runs/fountain_dbgps2_alt_c_c1_rep1.strands.txt",
+        "--no_screen",
+        "--out",
+        "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/runs/fountain_dbgps2_alt_c.decoded.bin"
+      ],
+      "exit_code": 0,
+      "bytes": 2146816,
+      "md5": "8651e90d3a013178b816b63fdbb94b9b",
+      "md5_match": true,
+      "decoded_path": "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/runs/fountain_dbgps2_alt_c.decoded.bin",
+      "expected_md5": "8651e90d3a013178b816b63fdbb94b9b",
+      "payload_mismatches_against_reencoded_archive": 0,
+      "independent_rs_reencoding_mismatches": 0,
+      "original_synthesis_seed_list_membership_verified": false
+    },
+    {
+      "case": "dbgps2_B12_F34",
+      "method": "dbgps2_B12_F34",
+      "output_sha256": "9b14f30ac8f16ba812df6105d439b1427c498b8d2fe71c0c6b37f9ad81c31bbc",
+      "decoding_in_timing": false,
+      "command": [
+        "/Users/song/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/src/decode_fountain.py",
+        "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/runs/fountain_dbgps2_alt_c_c1_rep1.strands.txt",
+        "--no_screen",
+        "--out",
+        "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/runs/fountain_dbgps2_alt_c.decoded.bin"
+      ],
+      "exit_code": 0,
+      "bytes": 2146816,
+      "md5": "8651e90d3a013178b816b63fdbb94b9b",
+      "md5_match": true,
+      "decoded_path": "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/runs/fountain_dbgps2_alt_c.decoded.bin",
+      "expected_md5": "8651e90d3a013178b816b63fdbb94b9b",
+      "payload_mismatches_against_reencoded_archive": 0,
+      "independent_rs_reencoding_mismatches": 0,
+      "original_synthesis_seed_list_membership_verified": false
+    }
+  ]
+}

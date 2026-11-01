@@ -1,0 +1,6 @@
+stage,correct_candidates,reference_routing
+Original pooled / 179 settings,6927,False
+Assigned re-pool / matched 10,8734,True
+Separate pools / matched 10,9861,True
+Separate pool / 179 settings,10033,True
+Separate pool / 353 settings,10659,True

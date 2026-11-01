@@ -1,0 +1,52 @@
+[
+  {
+    "path": "/Users/song/.codex/worktrees/bd05/DBGPS2/experiments/nbt4079/data/full.fa",
+    "sha256": "c6f0c4c6793984f1de39bbf202d328c53f67d24e1b974c35924075d2d9dcf4ca",
+    "unchanged": true
+  },
+  {
+    "path": "/Users/song/.codex/worktrees/bd05/DBGPS2/experiments/nbt4079/data/references.fa",
+    "sha256": "17ef90028b66e0d06bec120033fd45fa3d559e290da4585b5d535ef45da5baa4",
+    "unchanged": true
+  },
+  {
+    "path": "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/data/fountain.fa",
+    "sha256": "71f212b323dd8991dee82bd83fb303013698122cd02272da0caca26b70b6ec03",
+    "unchanged": true
+  },
+  {
+    "path": "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/data/fountain.graph.fa",
+    "sha256": "3100a496b087f8b4bbcd373a838fe8a3abf209e99cc0bde1266e5b31280fc5ab",
+    "unchanged": true
+  },
+  {
+    "path": "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/speed_extension/data/song_ht176.fa",
+    "sha256": "14b3210caa40ff0a4bd43306c6c8f8a8c21b7e690c3b26e605861ff24b898bbc",
+    "unchanged": true
+  },
+  {
+    "path": "/Users/song/Documents/123/HT176_FDDP220002706-1a_1.fq.gz",
+    "sha256": "f37f22273be97121c0d83b915586f86ecf87098f6cf6fb9dd2d3658f46713902",
+    "unchanged": true
+  },
+  {
+    "path": "/Users/song/Documents/123/HT176_FDDP220002706-1a_2.fq.gz",
+    "sha256": "5008d8d0e29440cbb7f7e94aa9cae56c43fee1332c668dc167d72099e391f0a9",
+    "unchanged": true
+  },
+  {
+    "path": "/Users/song/Github-Repos/DBGPS2-dnafountain/data/reads/ERR1816980_1.fastq.gz",
+    "sha256": "709c0fe041a2c492eaace7a85ef6e69fe5d457ca2cf1f533a3a3a368eb0ac9cf",
+    "unchanged": true
+  },
+  {
+    "path": "/Users/song/Github-Repos/DBGPS2-dnafountain/data/reads/ERR1816980_2.fastq.gz",
+    "sha256": "a6cb748e7b85b452560c94f02de487531ed3734c7ca92498c34c23f9008e3c9b",
+    "unchanged": true
+  },
+  {
+    "path": "/Users/song/dbgps2_ht/ref.fa",
+    "sha256": "fbfa73ef96a4bbab92b7bd8d11b593113792189ca73b14ea2186db6793112259",
+    "unchanged": true
+  }
+]

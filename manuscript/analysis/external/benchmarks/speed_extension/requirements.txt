@@ -1,0 +1,5 @@
+matplotlib==3.11.2
+numpy==2.3.5
+Pillow==12.3.0
+lxml==6.1.1
+reedsolo==1.7.0

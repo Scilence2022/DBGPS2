@@ -1,0 +1,370 @@
+{
+  "evidence/File1/summary.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/summary.json",
+    "sha256": "944aeec14d24e7de82c61a9925878ed89c724f348e5f7b5cad62d5c5db3fdd72"
+  },
+  "evidence/File1/graph_metrics.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file1_graph_metrics.json",
+    "sha256": "f32da49433cdce13435c8aaf2f1901a243671e9462563472643d10ac9cdbead1"
+  },
+  "evidence/File1/file1_reads.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file1_reads.json",
+    "sha256": "718476cb5e765ebaf5155b62d58172c79bd4de9b36a461178cca26c81c5d8d51"
+  },
+  "evidence/File1/file1_msa.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file1_msa.json",
+    "sha256": "b7feed632657c962e7dcb9cc643e1116b1fe69662e22986ab741e9c095178894"
+  },
+  "evidence/File1/file1_msa_inner.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file1_msa_inner.json",
+    "sha256": "190c3830dc943a5311b03dcab5c2e28af6082a33c1c811da0921295cb98be76d"
+  },
+  "evidence/File1/file1_best_decode.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file1_best_decode.json",
+    "sha256": "b054af7c189466a8ad907d3342a1f2863bc5121e0068031a7b0a9317b6e1371f"
+  },
+  "evidence/File1/source_pins.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/source_pins.json",
+    "sha256": "46f6e09cfcd38cc45cc35db03dc34a086b6681ebd50fd779376f5b942543ffb7"
+  },
+  "evidence/File1/reference_transcoding.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/reference_transcoding.json",
+    "sha256": "607066397e73f23a1509113381e5869f140fd05a96b3eb98fcdbda2954846fa5"
+  },
+  "evidence/File1/reference_outer_validation.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/reference_outer_validation.json",
+    "sha256": "e033079c9d2d7d95ebe03505aa33b924ed42523efc7f965db758ae39b31645ae"
+  },
+  "evidence/File1/reference_raw_validation.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/reference_raw_validation.json",
+    "sha256": "7a66443464916a7ea0058c6986e4292aba2d92459f55de05bed2dd17669b0059"
+  },
+  "evidence/File1/reference_manifest.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/reference_manifest.json",
+    "sha256": "2951324c89914c6c96c005eab80ab1cc04c6a005cccaee922c781270d7cd46cf"
+  },
+  "evidence/File1/fast_gf_validation.txt": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/fast_gf_validation.txt",
+    "sha256": "cc1d19717fe508e936195112a571c3e0b3e7c1fff86a807c3d9fd7e6f7798d31"
+  },
+  "evidence/File1/legacy_random_validation.txt": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/legacy_random_validation.txt",
+    "sha256": "462164b93ae4a367ddcefafa97906f09dc93e04a9f1e4246233270d68fa2699b"
+  },
+  "evidence/File1/file1_notebook.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file1_notebook.json",
+    "sha256": "aa235bbf73d3c9d15ea3d09972dfb524d4da9e0c6b1d5f2df79180860cb64eea"
+  },
+  "evidence/File1/file1_notebook_inner.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file1_notebook_inner.json",
+    "sha256": "1668a4fd2f8090dadd985db56a5606e128e826b8fd0367c8daf1543a293db1c2"
+  },
+  "evidence/File1/file1_notebook_decode.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file1_notebook_decode.json",
+    "sha256": "ac4353ee301fe20eddd1220cb82b1913af2eb345aca4b216346e8e3d8bb95697"
+  },
+  "evidence/File1/reference_blind_check.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/reference_blind_check.json",
+    "sha256": "52cf08764f0beafa02c2e934cdea3a05789dc655ec6722166bc4e91d43ae3940"
+  },
+  "evidence/File1/positive_control.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/positive_control.json",
+    "sha256": "13a17bff9cce5ddc8057ebf0881f87af2646173463332e01362edb02e38fb4c1"
+  },
+  "evidence/File1/stock_real.log": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/stock_real.log",
+    "sha256": "fb145abd85512ec06c83ac1ea60efea14ce280fe951fee7d884885199fe2ec55"
+  },
+  "evidence/File1/stock_perfect_crc.log": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/stock_perfect_crc.log",
+    "sha256": "a6d0386ede2e697252526549ca4ffb454a46c9ccdf4eda570d5aadac00c0ea56"
+  },
+  "evidence/File1/input_verified.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/raw/I16_S2_R1_001.fastq.gz.verified.json",
+    "sha256": "53f61b44f7c9a64487262e3c894f5e9fc79e0340ee70204352bf0e8e66c73fd3"
+  },
+  "evidence/File2/summary.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/summary.json",
+    "sha256": "944aeec14d24e7de82c61a9925878ed89c724f348e5f7b5cad62d5c5db3fdd72"
+  },
+  "evidence/File2/graph_metrics.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file2_graph_metrics.json",
+    "sha256": "f677ab78f38562369387b06ae003fe1fc64b13c85b386b8001d7ab5729c60cfd"
+  },
+  "evidence/File2/file2_reads.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file2_reads.json",
+    "sha256": "f210c68a8df229b3958a0ae934cd099e44465a1e6c4b88c6f1334e439d6b504d"
+  },
+  "evidence/File2/file2_msa.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file2_msa.json",
+    "sha256": "88f37238801442ad3783ed382ad636a4ed0b6bfaefc052057db5c3fc1c1026de"
+  },
+  "evidence/File2/file2_msa_inner.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file2_msa_inner.json",
+    "sha256": "9f5e8719142a66a75c8259c420360485b061f86ce15d71b4381127b842250f84"
+  },
+  "evidence/File2/file2_best_decode.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file2_best_decode.json",
+    "sha256": "427d87870cce2659321ffd58c85e84d760771b6352b32eccdf28c52dcb11f106"
+  },
+  "evidence/File2/source_pins.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/source_pins.json",
+    "sha256": "46f6e09cfcd38cc45cc35db03dc34a086b6681ebd50fd779376f5b942543ffb7"
+  },
+  "evidence/File2/reference_transcoding.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/reference_transcoding.json",
+    "sha256": "607066397e73f23a1509113381e5869f140fd05a96b3eb98fcdbda2954846fa5"
+  },
+  "evidence/File2/reference_outer_validation.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/reference_outer_validation.json",
+    "sha256": "e033079c9d2d7d95ebe03505aa33b924ed42523efc7f965db758ae39b31645ae"
+  },
+  "evidence/File2/reference_raw_validation.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/reference_raw_validation.json",
+    "sha256": "7a66443464916a7ea0058c6986e4292aba2d92459f55de05bed2dd17669b0059"
+  },
+  "evidence/File2/reference_manifest.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/reference_manifest.json",
+    "sha256": "2951324c89914c6c96c005eab80ab1cc04c6a005cccaee922c781270d7cd46cf"
+  },
+  "evidence/File2/fast_gf_validation.txt": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/fast_gf_validation.txt",
+    "sha256": "cc1d19717fe508e936195112a571c3e0b3e7c1fff86a807c3d9fd7e6f7798d31"
+  },
+  "evidence/File2/legacy_random_validation.txt": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/legacy_random_validation.txt",
+    "sha256": "462164b93ae4a367ddcefafa97906f09dc93e04a9f1e4246233270d68fa2699b"
+  },
+  "evidence/File2/orientation_diagnostic/README.txt": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/orientation_diagnostic/README.txt",
+    "sha256": "19a19cca70a36ad102a3256b94ae9814a45582a7d5e0c219ae7c55605cb7fc63"
+  },
+  "evidence/File2/input_verified.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/raw/I18_S3_R1_001.fastq.gz.verified.json",
+    "sha256": "e8c71d6ba0ea6008df3b009994e1be774817857edb3f22130526e6b555449331"
+  },
+  "evidence/File3/summary.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/summary.json",
+    "sha256": "944aeec14d24e7de82c61a9925878ed89c724f348e5f7b5cad62d5c5db3fdd72"
+  },
+  "evidence/File3/graph_metrics.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file3_graph_metrics.json",
+    "sha256": "a038b44969fae5cc83ee5254a72ebd407de6cc709d974652a97565b74c592c12"
+  },
+  "evidence/File3/file3_reads.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file3_reads.json",
+    "sha256": "8339fdd13c3eec95e0b3c75e9307a26ad4db44c5de410037d7cc5a443608bc2d"
+  },
+  "evidence/File3/file3_msa.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file3_msa.json",
+    "sha256": "9cd19425edd164b782ed91f789bc89c9d7a24b5f9848d0810ddfcb0527d3ff27"
+  },
+  "evidence/File3/file3_msa_inner.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file3_msa_inner.json",
+    "sha256": "20d4709bc590974ccf26685ed6cfb94ff0ebbefcc06c9d9c91da33af08f82700"
+  },
+  "evidence/File3/file3_best_decode.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file3_best_decode.json",
+    "sha256": "43f728ceb71a33f2e230b2498b9acb2ffe4bcf45c820fa4a930918536958ad2d"
+  },
+  "evidence/File3/source_pins.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/source_pins.json",
+    "sha256": "46f6e09cfcd38cc45cc35db03dc34a086b6681ebd50fd779376f5b942543ffb7"
+  },
+  "evidence/File3/reference_transcoding.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/reference_transcoding.json",
+    "sha256": "607066397e73f23a1509113381e5869f140fd05a96b3eb98fcdbda2954846fa5"
+  },
+  "evidence/File3/reference_outer_validation.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/reference_outer_validation.json",
+    "sha256": "e033079c9d2d7d95ebe03505aa33b924ed42523efc7f965db758ae39b31645ae"
+  },
+  "evidence/File3/reference_raw_validation.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/reference_raw_validation.json",
+    "sha256": "7a66443464916a7ea0058c6986e4292aba2d92459f55de05bed2dd17669b0059"
+  },
+  "evidence/File3/reference_manifest.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/reference_manifest.json",
+    "sha256": "2951324c89914c6c96c005eab80ab1cc04c6a005cccaee922c781270d7cd46cf"
+  },
+  "evidence/File3/fast_gf_validation.txt": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/fast_gf_validation.txt",
+    "sha256": "cc1d19717fe508e936195112a571c3e0b3e7c1fff86a807c3d9fd7e6f7798d31"
+  },
+  "evidence/File3/legacy_random_validation.txt": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/legacy_random_validation.txt",
+    "sha256": "462164b93ae4a367ddcefafa97906f09dc93e04a9f1e4246233270d68fa2699b"
+  },
+  "evidence/File3/file3_before_ratio_sweep.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file3_before_ratio_sweep.json",
+    "sha256": "20f07e251af3c83d53a06d843356f5d8dc7ba174467f8104257c1cc21aa8637b"
+  },
+  "evidence/File3/file3_ratio_summary.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file3_ratio_summary.json",
+    "sha256": "6a59b1074c4a0563d4a92a9a82425b56eba2b30102512f23c9b75fca782caa45"
+  },
+  "evidence/File3/file3_ratio_validation.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file3_ratio_validation.json",
+    "sha256": "9fadc35d642805242b8cab4473b9e243e45b26c7a0311fc5dc5eb45b5d4d4a94"
+  },
+  "evidence/File3/inner_rs/summary.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/inner_rs/summary.json",
+    "sha256": "b27795c20936cdb42270434c633accb263abdcd80e3ae8bd006145a5e75df354"
+  },
+  "evidence/File3/inner_rs/validation.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/inner_rs/validation.json",
+    "sha256": "2c139ffc5774c7fd112b83cba6fa59cc84d976b3411a9d654cca932a723c810a"
+  },
+  "evidence/File3/inner_rs/file3_candidate_path_bounds.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/inner_rs/file3_candidate_path_bounds.json",
+    "sha256": "cf9372d76f8c5c169bcb37092ef6ac7250a8732fcbfed877e2d00e47f16a7b67"
+  },
+  "evidence/File3/inner_rs/comparison.csv": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/inner_rs/comparison.csv",
+    "sha256": "788ea7f4053c9e1631a5a3ddf8990d8fd5bf2a657833fc22d6fc121fcc8bdcdb"
+  },
+  "evidence/File3/inner_rs/parameter_union/summary.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/inner_rs/parameter_union/summary.json",
+    "sha256": "593cf6755319c36d4c198a30b59c2684bb451c722cfa03b2c152c12540b2ded9"
+  },
+  "evidence/File3/inner_rs/parameter_union/parameters.tsv": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/inner_rs/parameter_union/parameters.tsv",
+    "sha256": "b4efbb28a6ee506d3cf2469484fefe93842168a51a052731b911307a5ef3abfa"
+  },
+  "evidence/File3/inner_rs/parameter_union/per_index.tsv": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/inner_rs/parameter_union/per_index.tsv",
+    "sha256": "d808819d2dab421238aa5384f6e88f57c24534a77cfb7d67d174c25fe3b3770f"
+  },
+  "evidence/File3/inner_rs/parameter_union/candidate_success_matrix.tsv.gz": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/inner_rs/parameter_union/candidate_success_matrix.tsv.gz",
+    "sha256": "4ad207950af97790b415b2f5a616b490430f120122cd8ed609f1ffc218e8a612"
+  },
+  "evidence/File3/inner_rs/parameter_union/validation.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/inner_rs/parameter_union/validation.json",
+    "sha256": "5d30200d38190c0eb53d69b17c1c4e846bc9e27d73b9599f0150479a61e10484"
+  },
+  "evidence/File3/analyzer_block12/summary.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/analyzer_block12/summary.json",
+    "sha256": "49640e1270fc624412c24438c5a3017a60dc191bf0781ac0133b69d57f20c219"
+  },
+  "evidence/File3/analyzer_block12/provenance.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/analyzer_block12/provenance.json",
+    "sha256": "b9998699140ee0fc583edf81c511f5131c0b0b695a8d58c46f22fdfbcb5e2601"
+  },
+  "evidence/File3/analyzer_block12/validation.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/analyzer_block12/validation.json",
+    "sha256": "765c69c4278cd622e79b772891174a98e35570d7f22561021af77647a454c04a"
+  },
+  "evidence/File3/analyzer_block12/all_blocks.tsv": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/analyzer_block12/all_blocks.tsv",
+    "sha256": "fe5cb49245e3fce37dda1f7ad5fc0c36d80c6d64ddc301c882ec04a49082e8fe"
+  },
+  "evidence/File3/analyzer_block12/best_parameter_loss_breakdown.tsv": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/analyzer_block12/best_parameter_loss_breakdown.tsv",
+    "sha256": "cf03db385166b2f523a3adfa1c264d714a6055612c08a824d66732e7227367af"
+  },
+  "evidence/File3/block_decode/summary.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/summary.json",
+    "sha256": "e5871ed7758ccee8d1757398700e4ddd19b84af20f6ec2aa6b5f7b7745234e0f"
+  },
+  "evidence/File3/block_decode/validation.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/validation.json",
+    "sha256": "630e24f8a966977e203b0df05488ac1d3b390bfbc86866a06076f5fbdfa4066a"
+  },
+  "evidence/File3/block_decode/split_provenance.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/split_provenance.json",
+    "sha256": "11949babc615f9135ddef5a6a00d1b18506b0996f9af63256bc18e4928443abd"
+  },
+  "evidence/File3/block_decode/full_fastq_audit.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/full_fastq_audit.json",
+    "sha256": "1f386dbc2ec03076153b2977a5df101394fd72c0f850b84c187fda9c35eb8d8b"
+  },
+  "evidence/File3/block_decode/assigned_pool_audit.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/assigned_pool_audit.json",
+    "sha256": "79579b9f1cb5468c19dba8b108b1e488a3038e83929bd7d1e0bbf3bb9610415a"
+  },
+  "evidence/File3/block_decode/raw_ancillary_scope.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/raw_ancillary_scope.json",
+    "sha256": "f67ee1e827beac31eb83f5c6351c33cf190934c7dd91a230ff61eb4c9df7c584"
+  },
+  "evidence/File3/block_decode/candidate_comparison.tsv": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/candidate_comparison.tsv",
+    "sha256": "2bc60464c5df8126cb86146adf3a7779e4a78ee5cbe401c75309c3a3cf758acb"
+  },
+  "evidence/File3/block_decode/decision_comparison.tsv": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/decision_comparison.tsv",
+    "sha256": "82e41da67f482735823bf622cdec7b0cd61dda2484e57964c672202a426f38e7"
+  },
+  "evidence/File3/block_decode/reads/split_counts.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block_decode/reads/split_counts.json",
+    "sha256": "872a61a7cc7e14d3c46b7339def1f2f40009f572b803dea5c7225c466760c609"
+  },
+  "evidence/File3/block12_small_k/summary.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/summary.json",
+    "sha256": "4983b00781417704d32274ce15f368aa3e5d35b0c00787359e17069ff54a1de1"
+  },
+  "evidence/File3/block12_small_k/plan.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/plan.json",
+    "sha256": "acd80360b9e70d4218a5fe2307a84b53fd045864b302f93583a739c6123d7b55"
+  },
+  "evidence/File3/block12_small_k/validation.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/validation.json",
+    "sha256": "9e5ccc3836dfb866e56da32268cd56e298cc3f947e7e76d66c371945485b93f4"
+  },
+  "evidence/File3/block12_small_k/independent_audit.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/independent_audit.json",
+    "sha256": "8c56c1df85ffd42bcdc2510251a8be0a94400471b92c43838fcc721ebbbe4ef5"
+  },
+  "evidence/File3/block12_small_k/parameters.tsv": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/parameters.tsv",
+    "sha256": "f00292c85ea26c794241c601282ec396d6d2672254204211ac6e2afb90964419"
+  },
+  "evidence/File3/block12_small_k/per_index.tsv": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/per_index.tsv",
+    "sha256": "0ff2eb8d9a665cf2b59f0adaa99b2cd839ccc67e59deac14f97be5ba2e0ca887"
+  },
+  "evidence/File3/block12_small_k/candidate_success_matrix.tsv.gz": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/candidate_success_matrix.tsv.gz",
+    "sha256": "a82be39f73fa7a21fd5f980011948a13cc9ebd2e34d96c49c69eec4de89afe45"
+  },
+  "evidence/File3/block12_small_k/decision_metrics.tsv": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/block12_small_k/decision_metrics.tsv",
+    "sha256": "43b8996d3be385ead3ead4a80a7c6062b050e27cb340745a051639766689bca0"
+  },
+  "evidence/File3/file3_supplement_simulation/summary.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file3_supplement_simulation/summary.json",
+    "sha256": "d74ba1ed9d8d52a0d83c91d02eb7793d3c74f37ff1a8acdd6b5412d6ee8793e7"
+  },
+  "evidence/File3/file3_supplement_simulation/validation.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file3_supplement_simulation/validation.json",
+    "sha256": "85835f8b726803e150802bdd25191c444ec5f114a77d1694bea221fe0e956ee8"
+  },
+  "evidence/File3/file3_supplement_simulation/actual_plus_1019/injected_design_strands.tsv": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file3_supplement_simulation/actual_plus_1019/injected_design_strands.tsv",
+    "sha256": "b02c85d9755069683191d52eac28c365e6430f3cc5e3ab9cfd57af8a5699aea3"
+  },
+  "evidence/File3/file3_supplement_simulation/actual_plus_1019/outer_decode.log": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file3_supplement_simulation/actual_plus_1019/outer_decode.log",
+    "sha256": "91805afcad30be18731fc0d0d79a3770c9b43d20a8b5409259dd73043a8282ce"
+  },
+  "evidence/File3/file3_supplement_simulation/actual_plus_1019/result.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file3_supplement_simulation/actual_plus_1019/result.json",
+    "sha256": "ed9ea5ed0cda09bea7f0b2dd61f528d00bc82ce7d585e61c78556d4701c15557"
+  },
+  "evidence/File3/file3_supplement_simulation/oracle_union_plus_318/injected_design_strands.tsv": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file3_supplement_simulation/oracle_union_plus_318/injected_design_strands.tsv",
+    "sha256": "caeb78ad3c6827ace90c9ac70880e862c1953045a50a1b37320c20e5f9d4b296"
+  },
+  "evidence/File3/file3_supplement_simulation/oracle_union_plus_318/outer_decode.log": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file3_supplement_simulation/oracle_union_plus_318/outer_decode.log",
+    "sha256": "b24052aefc09e820f73fb0a2b2276e00fa4aa09ca2ec64d87d873dc1850f385c"
+  },
+  "evidence/File3/file3_supplement_simulation/oracle_union_plus_318/result.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/results/file3_supplement_simulation/oracle_union_plus_318/result.json",
+    "sha256": "96fcdbcd2cd21da908a11c219206afb5da1972e3f6553dacbebe4c51ed3585e3"
+  },
+  "evidence/File3/input_verified.json": {
+    "source": "/Users/song/.codex/worktrees/9a75/DBGPS2/input/antkowiak2020/raw/File3.fq.gz.verified.json",
+    "sha256": "1fe79c9a419b3ae7941d14bfa3210e8ab4c7789c7c0e7406c0e97606e1906171"
+  }
+}

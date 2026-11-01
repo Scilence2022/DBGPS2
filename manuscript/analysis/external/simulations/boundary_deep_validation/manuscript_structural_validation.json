@@ -1,0 +1,21 @@
+{
+  "source": "/Users/song/.codex/worktrees/cab4/DBGPS2/output/docx/DBGPS2_manuscript_speed_comparison_serial_3workers.docx",
+  "output": "/Users/song/.codex/worktrees/cab4/DBGPS2/output/docx/DBGPS2_manuscript_reconstruction_boundaries.docx",
+  "sha256": "d4937d11beda63259b0ed58f54145e3409bf50ae9f6f6518a30526e50b2c2f6c",
+  "preserved_prior_media": true,
+  "preserved_prior_equations": true,
+  "figures": 16,
+  "tables": 8,
+  "new_simulated_graphs": 366,
+  "new_parameter_points": 8784,
+  "changes": [
+    "title and abstract",
+    "Introduction scope",
+    "exact versus legacy coverage diagnostics",
+    "controlled-boundary Results and Table 8",
+    "error and selection limitations in Discussion",
+    "reproducible models and downcrossing Methods",
+    "Figures 14 to 16",
+    "Code availability"
+  ]
+}

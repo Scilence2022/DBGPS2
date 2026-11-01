@@ -1,0 +1,20 @@
+{
+  "method": "prefix16_muscle3_vote0.4",
+  "reads": 92337721,
+  "truth": 196596,
+  "prefix_length": 16,
+  "min_cluster": 5,
+  "gap_weight": 0.4,
+  "raw_fastq": false,
+  "clusters": 365025,
+  "raw_exact_recovered": 8199,
+  "candidates_generated": 654277,
+  "candidates_60nt": 641449,
+  "exact_candidates": 73500,
+  "recovered": 41564,
+  "recall": 0.2114183401493418,
+  "seed": 20261017,
+  "cluster_seconds": 288.30072770799995,
+  "msa_seconds": 606.92935825,
+  "total_seconds": 895.2302590830001
+}

@@ -1,0 +1,32 @@
+{
+  "command": [
+    "/Users/song/.codex/worktrees/cab4/DBGPS2/output/exploration/2026-10-20/boundary_deep_validation/bin/blind_profile",
+    "-x",
+    "/Users/song/dbgps2_ht/ref.fa",
+    "-M",
+    "/Users/song/.codex/worktrees/cab4/DBGPS2/output/exploration/2026-10-20/boundary_deep_validation/src/legacy-2base.map",
+    "-a",
+    "101010102",
+    "-b",
+    "101295684",
+    "-k",
+    "31",
+    "-t",
+    "3",
+    "-N",
+    "-v",
+    "4093",
+    "-c",
+    "1,3,5",
+    "-r",
+    "1.25,1.5,2,2.55,3,4,8,0",
+    "-o",
+    "/Users/song/.codex/worktrees/cab4/DBGPS2/output/exploration/2026-10-20/boundary_deep_validation/real_HT176_raw",
+    "/Users/song/Documents/123/HT176_FDDP220002706-1a_1.fq.gz",
+    "/Users/song/Documents/123/HT176_FDDP220002706-1a_2.fq.gz"
+  ],
+  "script_sha256": "6a1137ecea1fc486ba4daeb525a23506fe7f5e145e831077f494e8a24b8ff66e",
+  "binary_sha256": "c79ea1d924e9db273b14286fa86cb92fd6fb6b4ccd2f95cbd6279dd7b05e964f",
+  "policies_sha256": "5e99c458e17339ca9a9d9d55cc8d5643b4f678d64ab3a814a48e87d43176cfcf",
+  "interpretation": "Previously inspected real library; not an unseen test set. All queried IDs enter blind objectives, including absent designs."
+}

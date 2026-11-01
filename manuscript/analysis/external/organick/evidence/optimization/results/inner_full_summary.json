@@ -1,0 +1,178 @@
+[
+  {
+    "tag": "k31_c0_r2.000_s0",
+    "k": 31,
+    "cutoff": 0,
+    "ratio": 2.0,
+    "skip": 0,
+    "queries": 3063745,
+    "raw_outputs": 1035243,
+    "search_cpu_seconds": 105.543749,
+    "wall_seconds": 105.68782787500001,
+    "output": "/Users/song/.codex/worktrees/bd05/DBGPS2/experiments/nbt4079/optimization/results/inner_full.k31_c0_r2.000_s0.tsv",
+    "phase": "inner_full",
+    "source_rows_after_nohp": 1035243,
+    "F": {
+      "exact": 595734,
+      "wrong": 179,
+      "wrong_known_address": 61,
+      "unknown_address": 118,
+      "returned": 595913,
+      "conflict_addresses": 0,
+      "precision": 0.9996996205821991,
+      "exact_rate": 0.9811973976776743
+    },
+    "R": {
+      "exact": 439200,
+      "wrong": 78,
+      "wrong_known_address": 57,
+      "unknown_address": 21,
+      "returned": 439278,
+      "conflict_addresses": 26,
+      "precision": 0.9998224359061916,
+      "exact_rate": 0.7233797249444124
+    },
+    "both": {
+      "exact": 595852,
+      "wrong": 202,
+      "wrong_known_address": 74,
+      "unknown_address": 128,
+      "returned": 596054,
+      "conflict_addresses": 36,
+      "precision": 0.9996611045307976,
+      "exact_rate": 0.9813917483323725
+    }
+  },
+  {
+    "tag": "k29_c0_r1.900_s0",
+    "k": 29,
+    "cutoff": 0,
+    "ratio": 1.9,
+    "skip": 0,
+    "queries": 3063745,
+    "raw_outputs": 1036946,
+    "search_cpu_seconds": 81.643145,
+    "wall_seconds": 81.74961008400001,
+    "output": "/Users/song/.codex/worktrees/bd05/DBGPS2/experiments/nbt4079/optimization/results/inner_full.k29_c0_r1.900_s0.tsv",
+    "phase": "inner_full",
+    "source_rows_after_nohp": 1036946,
+    "F": {
+      "exact": 595085,
+      "wrong": 66,
+      "wrong_known_address": 45,
+      "unknown_address": 21,
+      "returned": 595151,
+      "conflict_addresses": 0,
+      "precision": 0.9998891037736641,
+      "exact_rate": 0.9801284690768344
+    },
+    "R": {
+      "exact": 441721,
+      "wrong": 56,
+      "wrong_known_address": 42,
+      "unknown_address": 14,
+      "returned": 441777,
+      "conflict_addresses": 9,
+      "precision": 0.9998732392134493,
+      "exact_rate": 0.7275319113892778
+    },
+    "both": {
+      "exact": 595325,
+      "wrong": 96,
+      "wrong_known_address": 64,
+      "unknown_address": 32,
+      "returned": 595421,
+      "conflict_addresses": 19,
+      "precision": 0.9998387695428949,
+      "exact_rate": 0.9805237585440171
+    }
+  },
+  {
+    "tag": "k29_c0_r1.950_s0",
+    "k": 29,
+    "cutoff": 0,
+    "ratio": 1.95,
+    "skip": 0,
+    "queries": 3063745,
+    "raw_outputs": 1037283,
+    "search_cpu_seconds": 79.885267,
+    "wall_seconds": 79.95099875,
+    "output": "/Users/song/.codex/worktrees/bd05/DBGPS2/experiments/nbt4079/optimization/results/inner_full.k29_c0_r1.950_s0.tsv",
+    "phase": "inner_full",
+    "source_rows_after_nohp": 1037283,
+    "F": {
+      "exact": 595097,
+      "wrong": 66,
+      "wrong_known_address": 45,
+      "unknown_address": 21,
+      "returned": 595163,
+      "conflict_addresses": 0,
+      "precision": 0.9998891060096142,
+      "exact_rate": 0.9801482335501935
+    },
+    "R": {
+      "exact": 442047,
+      "wrong": 55,
+      "wrong_known_address": 42,
+      "unknown_address": 13,
+      "returned": 442102,
+      "conflict_addresses": 9,
+      "precision": 0.9998755943198628,
+      "exact_rate": 0.7280688462488677
+    },
+    "both": {
+      "exact": 595335,
+      "wrong": 95,
+      "wrong_known_address": 64,
+      "unknown_address": 31,
+      "returned": 595430,
+      "conflict_addresses": 19,
+      "precision": 0.9998404514384562,
+      "exact_rate": 0.980540228938483
+    }
+  },
+  {
+    "tag": "k29_c1_r1.900_s0",
+    "k": 29,
+    "cutoff": 1,
+    "ratio": 1.9,
+    "skip": 0,
+    "queries": 3063745,
+    "raw_outputs": 1036565,
+    "search_cpu_seconds": 48.883988,
+    "wall_seconds": 48.926957749999985,
+    "output": "/Users/song/.codex/worktrees/bd05/DBGPS2/experiments/nbt4079/optimization/results/inner_full.k29_c1_r1.900_s0.tsv",
+    "phase": "inner_full",
+    "source_rows_after_nohp": 1036565,
+    "F": {
+      "exact": 594938,
+      "wrong": 5,
+      "wrong_known_address": 4,
+      "unknown_address": 1,
+      "returned": 594943,
+      "conflict_addresses": 0,
+      "precision": 0.9999915958335505,
+      "exact_rate": 0.9798863542781849
+    },
+    "R": {
+      "exact": 441618,
+      "wrong": 4,
+      "wrong_known_address": 3,
+      "unknown_address": 1,
+      "returned": 441622,
+      "conflict_addresses": 0,
+      "precision": 0.9999909424802207,
+      "exact_rate": 0.7273622663262785
+    },
+    "both": {
+      "exact": 595057,
+      "wrong": 8,
+      "wrong_known_address": 6,
+      "unknown_address": 2,
+      "returned": 595065,
+      "conflict_addresses": 0,
+      "precision": 0.9999865560905111,
+      "exact_rate": 0.9800823519723297
+    }
+  }
+]

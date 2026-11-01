@@ -1,0 +1,13 @@
+{
+  "read_fraction": 1.0,
+  "raw_reads": 15719903,
+  "raw_mean_coverage": 25.891300337643088,
+  "graph_source_commit": "f7b1373ec68bc6518af91b7427eda53699a3c73d",
+  "production_source_modified": false,
+  "source_sha256": "39dbf9fa2ec338756a3e3599350a4d6805eda0095ccccd6d8141980777de9308",
+  "screened_configs": 360,
+  "full_confirmed_configs": 5,
+  "elapsed_seconds": 469.630144166,
+  "references_used": "parameter scoring/selection and final exactness assessment only; never candidate generation/repair",
+  "rs_validation": "not_performed"
+}

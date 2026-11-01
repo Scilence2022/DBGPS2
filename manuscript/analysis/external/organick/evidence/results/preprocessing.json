@@ -1,0 +1,34 @@
+{
+  "random_seed": 20261017,
+  "lengths": {
+    "177": 15719903
+  },
+  "samples": {
+    "5x_raw": {
+      "raw_reads": 3034750,
+      "N_bearing_reads": 3203,
+      "anchored_reads": 2663891,
+      "complete_anchored_reads": 2597772,
+      "distinct_seeds": 774557,
+      "mean_raw_coverage": 4.998352960553405
+    },
+    "10x_raw": {
+      "raw_reads": 6072328,
+      "N_bearing_reads": 6399,
+      "anchored_reads": 5330340,
+      "complete_anchored_reads": 5197607,
+      "distinct_seeds": 985204,
+      "mean_raw_coverage": 10.001363748661781
+    },
+    "full": {
+      "raw_reads": 15719903,
+      "N_bearing_reads": 16723,
+      "anchored_reads": 13795118,
+      "complete_anchored_reads": 13450090,
+      "distinct_seeds": 1551224,
+      "mean_raw_coverage": 25.891300337643088
+    }
+  },
+  "elapsed_seconds": 192.38122104200002,
+  "reference_sequences_used_for_seeding": false
+}

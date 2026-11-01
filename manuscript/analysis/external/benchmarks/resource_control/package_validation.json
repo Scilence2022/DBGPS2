@@ -1,0 +1,14 @@
+{
+  "path": "/Users/song/.codex/worktrees/cab4/DBGPS2/output/benchmarks/2026-10-19/DBGPS2_serial_and_3worker_controls.zip",
+  "bytes": 149031772,
+  "sha256": "0c7187a20cf021733c5d48f24b164e3fd177ce48dc68046b97808f89bc41699d",
+  "new_measurements": 162,
+  "unique_output_sets": 12,
+  "excluded": [
+    "raw FASTQ",
+    "processed FASTA",
+    "HT5 measurements",
+    "development runs",
+    "document QA renders"
+  ]
+}

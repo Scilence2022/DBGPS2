@@ -1,0 +1,27 @@
+{
+  "File1_design.fasta": {
+    "bytes": 1146810,
+    "sha256": "784d345f1d21348b2cff607f11ecb759a6347d9763a7638db15a3ca425ec7f1d"
+  },
+  "File2_design.fasta": {
+    "bytes": 3440430,
+    "sha256": "aeb6bdb02a943147d03178a5887a5513a7b6eb8ea3194718620e16a8d4be463b"
+  },
+  "File2_design.normalized.fasta": {
+    "bytes": 3440430,
+    "sha256": "2cbb30b7b9759f07bf4800d40ff84e4003e6b0bdab993d321bed96aa1acf0b94"
+  },
+  "File3_design.fasta": {
+    "bytes": 13761720,
+    "sha256": "d35f25a5ef0e780b553f93cac137b6363c09f8b456b611f37fa2a88f2ec899d2"
+  },
+  "File3_design.normalized.fasta": {
+    "bytes": 13761720,
+    "sha256": "09f98b11c7dc263b6db2ba2426a20d9c537287e96bcdb70d34be5306f5678710"
+  },
+  "normalization": {
+    "File1": "unchanged",
+    "File2": "reverse nucleotide order globally; not reverse complement",
+    "File3": "reverse nucleotide order globally; not reverse complement"
+  }
+}

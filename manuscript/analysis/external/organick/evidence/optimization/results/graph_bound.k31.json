@@ -1,0 +1,50 @@
+{
+  "diagnostic": "oracle graph-path existence; NOT reconstruction",
+  "k": 31,
+  "references": 607150,
+  "bounds": [
+    {
+      "cutoff": 0,
+      "F": 596101,
+      "R": 596168,
+      "either_direction": 596178
+    },
+    {
+      "cutoff": 1,
+      "F": 595164,
+      "R": 595223,
+      "either_direction": 595245
+    },
+    {
+      "cutoff": 2,
+      "F": 593744,
+      "R": 593827,
+      "either_direction": 593869
+    },
+    {
+      "cutoff": 3,
+      "F": 591339,
+      "R": 591506,
+      "either_direction": 591575
+    },
+    {
+      "cutoff": 4,
+      "F": 587487,
+      "R": 587787,
+      "either_direction": 587929
+    },
+    {
+      "cutoff": 5,
+      "F": 581562,
+      "R": 582015,
+      "either_direction": 582241
+    },
+    {
+      "cutoff": 6,
+      "F": 572980,
+      "R": 573723,
+      "either_direction": 574034
+    }
+  ],
+  "wall_seconds": 39.689110959
+}

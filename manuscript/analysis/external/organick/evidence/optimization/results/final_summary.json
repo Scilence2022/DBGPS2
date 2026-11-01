@@ -1,0 +1,81 @@
+{
+  "rows": [
+    {
+      "strategy": "\u524d\u6b21\u5168\u91cf\u57fa\u7ebf",
+      "exact": 594630,
+      "wrong": 25,
+      "returned": 594655,
+      "exact_rate": 0.9793790661286338,
+      "precision": 0.9999579588164565
+    },
+    {
+      "strategy": "\u4ec5\u8c03\u53c2\uff0b\u53cc\u5411",
+      "kind": "native_search",
+      "tag": "k31_c1_r2.000_s4",
+      "exact": 595078,
+      "returned": 595097,
+      "wrong": 19,
+      "exact_rate": 0.9801169398007082,
+      "precision": 0.9999680724318892,
+      "k": 31,
+      "cutoff": 1,
+      "ratio": 2.0,
+      "skip": 4
+    },
+    {
+      "strategy": "\u5185\u7801\u6821\u9a8c\u5355\u914d\u7f6e",
+      "kind": "inner_validated",
+      "tag": "k31_c0_r2.000_s0",
+      "exact": 595768,
+      "returned": 595886,
+      "wrong": 118,
+      "exact_rate": 0.9812533970188586,
+      "precision": 0.9998019755456581,
+      "k": 31,
+      "cutoff": 0,
+      "ratio": 2.0,
+      "skip": 0
+    },
+    {
+      "strategy": "\u7ec4\u5408\uff1a\u6700\u591a\u7cbe\u786e\u6062\u590d",
+      "minimum_votes": 1,
+      "minimum_agreement": 0.67,
+      "minimum_margin": 1,
+      "minimum_seed_support": 1,
+      "returned": 596172,
+      "exact": 596006,
+      "wrong": 166,
+      "exact_rate": 0.9816453924071481,
+      "precision": 0.9997215568661393,
+      "fasta": "/Users/song/.codex/worktrees/bd05/DBGPS2/experiments/nbt4079/optimization/results/refined.header13.maximum_exact.fa.gz"
+    },
+    {
+      "strategy": "\u7ec4\u5408\uff1a\u6b63\u786e\u7387\u226599.99%",
+      "minimum_votes": 4,
+      "minimum_agreement": 0.8,
+      "minimum_margin": 1,
+      "minimum_seed_support": 2,
+      "returned": 595645,
+      "exact": 595587,
+      "wrong": 58,
+      "exact_rate": 0.980955282879025,
+      "precision": 0.9999026265644805,
+      "fasta": "/Users/song/.codex/worktrees/bd05/DBGPS2/experiments/nbt4079/optimization/results/refined.header13.precision_99_99.fa.gz"
+    },
+    {
+      "strategy": "\u7ec4\u5408\uff1a\u89c2\u5bdf\u5230\u96f6\u9519\u8bef",
+      "minimum_votes": 1,
+      "minimum_agreement": 0.5,
+      "minimum_margin": 3,
+      "minimum_seed_support": 9,
+      "returned": 578574,
+      "exact": 578574,
+      "wrong": 0,
+      "exact_rate": 0.9529342007741085,
+      "precision": 1.0,
+      "fasta": "/Users/song/.codex/worktrees/bd05/DBGPS2/experiments/nbt4079/optimization/results/refined.header13.zero_observed_errors.fa.gz"
+    }
+  ],
+  "path_existence_bound": 596189,
+  "rs_validation": "not_performed"
+}

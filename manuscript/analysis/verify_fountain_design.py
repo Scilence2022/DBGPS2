@@ -4,12 +4,10 @@
 Re-runs the encoder (LFSR, robust soliton sampler, XOR, RS(38,36), biochemical
 screen) on the MD5-verified 2,146,816-byte archive until 72,000 droplets pass,
 then scores each output list by exact identity. Validity is tested as zero RS
-syndrome with tables built here, independently of reedsolo: decoding a word and
-comparing the message with its first 36 bytes also accepts words in which only
-the parity needs correction.
+syndrome with tables built here, independently of reedsolo.
 
 Usage: verify_fountain_design.py FOUNTAIN_REPO OUT.csv [RUNS_DIR]
-FOUNTAIN_REPO is the dnafountain-test checkout (branch of DBGPS2) with
+FOUNTAIN_REPO is a checkout of the dnafountain-adapter branch of DBGPS2 with
 analysis/runs/{fullint,tile750k}; RUNS_DIR optionally holds benchmark
 <case>.strands.txt files, one strand per line.
 """
@@ -118,8 +116,6 @@ with open(OUT, "w", newline="") as f:
     w.writerows(rows)
 with open(OUT.replace(".csv", "_summary.csv"), "w") as f:
     f.write("metric,value\n" + "".join(f"{k},{v}\n" for k, v in summary.items()))
-with open(OUT.replace(".csv", "_merge_valid.txt"), "w") as f:
-    f.write("".join(d + "\n" for d in sorted(merge)))
 for r in rows:
     print(r)
 print(summary)

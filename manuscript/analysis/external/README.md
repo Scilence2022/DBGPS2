@@ -19,5 +19,5 @@ and `refs/codex/snapshots/4a7c7f2a833209156dc5eb5d1a3147fec66c46e7` in the local
 
 Not included: raw reads, per-run output directories, decoded archives, compiled files and
 third-party source packages. Tables of 2 MB or more are listed in `skipped_large_files.tsv`.
-The strict `paper_pipeline.py` comparator lives on branch `dnafountain-test`; see
-`../verify_fountain_design.py` for the corrected zero-syndrome test.
+The DNA Fountain adapter, read-merging comparator and decoder live on branch
+`dnafountain-adapter`; `../verify_fountain_design.py` scores their outputs.

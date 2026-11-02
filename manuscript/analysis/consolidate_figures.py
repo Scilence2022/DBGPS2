@@ -130,7 +130,7 @@ for j,(ratio,col,label) in enumerate([(0,ORANGE,'DBGPS rule'),(2.55,BLUE,'DBGPS2
     y=[grids[s][grids[s].r==ratio].correct.max()/2100 for s in SAMPLES];ax[0].bar(x+(j-.5)*w,y,w,color=col,label=label)
 ax[0].set(xticks=x,xticklabels=LABELS,ylim=(0,125),yticks=[0,20,40,60,80,100],ylabel='Exact strands (%)');ax[0].legend(loc='upper right',ncol=2,fontsize=6,frameon=False);title(ax[0],'a','Recovery advantage grows with damage')
 g=grids['HT5'];rs=sorted(g.r.unique(),key=lambda v:(v==0,v));cs=sorted(g.c.unique());mat=np.array([[g[(g.r==r)&(g.c==c)].correct.iloc[0]/2100 for c in cs] for r in rs])
-im=ax[1].imshow(mat,aspect='auto',vmin=0,vmax=100,cmap='Blues',origin='lower');ax[1].set(xticks=range(len(cs)),xticklabels=cs,yticks=range(len(rs)),yticklabels=['Off' if r==0 else f'{r:g}' for r in rs],xlabel='Absolute cutoff c',ylabel='Ratio r');ax[1].tick_params(axis='x',labelrotation=90,labelsize=5.5);fig.colorbar(im,ax=ax[1],fraction=.045,pad=.025,label='Exact (%)');title(ax[1],'b','HT5 has a broad useful ratio range')
+im=ax[1].imshow(mat,aspect='auto',vmin=0,vmax=100,cmap='Blues',origin='lower');ax[1].set(xticks=range(len(cs)),xticklabels=cs,yticks=range(len(rs)),yticklabels=['∞' if r==0 else f'{r:g}' for r in rs],xlabel='Absolute cutoff c',ylabel='Ratio r');ax[1].tick_params(axis='x',labelrotation=90,labelsize=5.5);fig.colorbar(im,ax=ax[1],fraction=.045,pad=.025,label='Exact (%)');title(ax[1],'b','HT5 has a broad useful ratio range')
 cats=[('correct','Exact',BLUE),('no_path','Broken path',LIGHT),('overflow','Overflow',ORANGE),('no_valid','No valid path','#E69F00'),('ambiguous','Ambiguous','#8272B2'),('wrong','Wrong',RED)]
 for i,s in enumerate(SAMPLES):
     for j,r in enumerate([0,2.55]):
@@ -156,7 +156,7 @@ save(fig,3,'degraded_recovery')
 d=js(EXT/'figure_data.json');photo_bench=csv(BENCH/'reconstruction_speed/Table5_reconstruction_speed.csv')
 blk=csv(DATA/'photolith_file3_blocks.csv');pos=csv(DATA/'photolith_file3_position.csv');NEED=10977;PALE='#7BB6DF'
 fig=plt.figure(figsize=(7.2,6.25));gs=fig.add_gridspec(3,6,left=.085,right=.985,top=.95,bottom=.085,hspace=.85,wspace=1.75)
-ax=[fig.add_subplot(g) for g in (gs[0,:3],gs[0,3:],gs[1,:3],gs[1,3:],gs[2,:2],gs[2,2:4],gs[2,4:])]
+ax=[fig.add_subplot(g) for g in (gs[0,:3],gs[0,3:],gs[1,:3],gs[1,3:],gs[2,:2],gs[2,4:],gs[2,2:4])]
 correct=np.array([z['correct']/z['designed']*100 for z in d['photolithographic']]);wrong=np.array([z['wrong']/z['designed']*100 for z in d['photolithographic']]);xx=np.arange(3)
 ax[0].bar(xx,correct,.58,color=BLUE,label='Exact');ax[0].bar(xx,wrong,.58,bottom=correct,color=RED,label='Wrong');ax[0].bar(xx,100-correct-wrong,.58,bottom=correct+wrong,color=LIGHT,label='Missing')
 for i,z in enumerate(d['photolithographic']):ax[0].text(i,correct[i]/2,f'{correct[i]:.2f}%',ha='center',color='white',fontsize=7);ax[0].text(i,103,f"{z['wrong']} wrong",ha='center',fontsize=6)
@@ -176,11 +176,11 @@ ax[4].text(12,float(blk.assigned_reads.iloc[11])/1e6+.15,'1.68',ha='center',font
 px=(pos.block-1+(pos.tenth-.5)/10).to_numpy();py=pos.percent.to_numpy();ax[5].axvspan(11,12,color=RED,alpha=.1,lw=0)
 for b in range(1,12):ax[5].axvline(b,color=LIGHT,lw=.4)
 ax[5].plot(px[:111],py[:111],color=BLUE,lw=.9);ax[5].plot(px[110:],py[110:],color=RED,lw=1.2)
-ax[5].set(xticks=[.5,3.5,7.5,11.5],xticklabels=['1','4','8','12'],xlim=(0,12),ylim=(0,100),xlabel='File 3 block, in index order',ylabel='Correct candidates (%)');title(ax[5],'f','Decline along the index')
+ax[5].set(xticks=[.5,3.5,7.5,11.5],xticklabels=['1','4','8','12'],xlim=(0,12),ylim=(0,100),xlabel='File 3 block, in index order',ylabel='Correct candidates (%)');title(ax[5],'g','Decline along the index')
 show=blk[blk.block.isin([1,6,11,12])];base=np.zeros(4);lab=[str(b) for b in show.block]
 for field,col,name in [('absent_kmer',GRAY,'True k-mer absent'),('singleton_only',LIGHT,'Singleton support'),('overflow',ORANGE,'Path overflow'),('ratio_rejected',BLUE,'Ratio rejected')]:
     ax[6].bar(lab,show[field],.6,bottom=base,color=col,label=name);base+=show[field].to_numpy()
-ax[6].set(ylim=(0,17500),yticks=[0,5000,10000],xlabel='Pooled blocks below bound',ylabel='Indices lacking a candidate');ax[6].yaxis.set_major_formatter(FuncFormatter(lambda x,p:f'{x/1000:.0f}k'));ax[6].legend(ncol=2,loc='upper center',fontsize=4.8,frameon=False,columnspacing=.6,handlelength=.9,handletextpad=.3);title(ax[6],'g','Block 12 lacks evidence')
+ax[6].set(ylim=(0,17500),yticks=[0,5000,10000],xlabel='Pooled blocks below bound',ylabel='Indices lacking a candidate');ax[6].yaxis.set_major_formatter(FuncFormatter(lambda x,p:f'{x/1000:.0f}k'));ax[6].legend(ncol=2,loc='upper center',fontsize=4.8,frameon=False,columnspacing=.6,handlelength=.9,handletextpad=.3);title(ax[6],'f','Block 12 lacks evidence')
 save(fig,4,'high_error_reconstruction')
 
 # Extended Data Figure 1 reports exact DNA Fountain and Organick strands; file recovery is a separate endpoint.

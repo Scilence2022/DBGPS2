@@ -1,7 +1,7 @@
 """Seven main figures from preserved measurements; no new reconstruction runs.
 
-Figures 2-6 and 8. Reads the snapshots in ../data/source_data and writes to ../figures;
-Figure 1 comes from fig1_concept.py and Figure 7 from fig7_ht176.py.
+Figures 2-5 and Extended Data Figures 1 and 2. Reads the snapshots in ../data/source_data and writes to ../figures;
+Figure 1 comes from fig1_concept.py and Figure 6 from fig6_ht176.py.
 """
 from pathlib import Path
 import gzip,hashlib,json,shutil
@@ -45,7 +45,7 @@ def grid(rows=3,cols=2,heights=None):
     fig.subplots_adjust(left=.10,right=.98,top=.94,bottom=.10,hspace=.85,wspace=.43)
     return fig,np.asarray(axs).ravel()
 
-# Figure 6 combines the three simulation figures into six mechanistic panels.
+# Figure 5 combines the three simulation figures into six mechanistic panels.
 p=csv(B/'policy_results.csv');bound=csv(B/'crossing_bounds_validation.csv')
 fig,ax=grid()
 for geom,col,lab in [('regular',BLUE,'Regular'),('bernoulli',GREEN,'Bernoulli')]:
@@ -89,7 +89,7 @@ ax[4].plot(range(3),ceiling,':',color=GRAY,label='Output-support ceiling');ax[4]
 ax[5].set(ylim=(-.15,5.6),ylabel='Erroneous accepted outputs');ax[5].yaxis.set_major_locator(MaxNLocator(integer=True))
 for a in ax[4:]:a.set(xticks=range(3),xticklabels=['1,024','8,192','65,536'],xlabel='Designs per library')
 title(ax[4],'e','Blind tuning increases correct yield');title(ax[5],'f','CRC agreement retains false paths')
-save(fig,6,'simulation_boundaries')
+save(fig,5,'simulation_boundaries')
 
 # Figure 2 connects physical fragmentation, graph interference and rescued strands.
 fig,ax=grid()
@@ -183,7 +183,7 @@ for field,col,name in [('absent_kmer',GRAY,'True k-mer absent'),('singleton_only
 ax[6].set(ylim=(0,17500),yticks=[0,5000,10000],xlabel='Pooled blocks below bound',ylabel='Indices lacking a candidate');ax[6].yaxis.set_major_formatter(FuncFormatter(lambda x,p:f'{x/1000:.0f}k'));ax[6].legend(ncol=2,loc='upper center',fontsize=4.8,frameon=False,columnspacing=.6,handlelength=.9,handletextpad=.3);title(ax[6],'g','Block 12 lacks evidence')
 save(fig,4,'high_error_reconstruction')
 
-# Figure 5 reports exact DNA Fountain and Organick strands; file recovery is a separate endpoint.
+# Extended Data Figure 1 reports exact DNA Fountain and Organick strands; file recovery is a separate endpoint.
 fig=plt.figure(figsize=(7.2,4.5));gs=fig.add_gridspec(2,2,height_ratios=[1,.45],hspace=.65,wspace=.45);fig.subplots_adjust(left=.10,right=.98,top=.93,bottom=.06)
 a=fig.add_subplot(gs[0,0]);bax=fig.add_subplot(gs[0,1]);cax=fig.add_subplot(gs[1,:]);xx=np.arange(2)
 for shift,key,col,label in [(-.17,'merge',ORANGE,'Read merging'),(.17,'DBGPS2',BLUE,'DBGPS2')]:
@@ -196,9 +196,9 @@ bax.set(xlim=(95,98.5),ylim=(-8,190),xlabel='Exact 110-nt bodies / all designs (
 cax.axis('off');title(cax,'c','File validation remains a separate endpoint')
 cax.text(0,.65,'DNA Fountain',fontweight='bold',fontsize=8);cax.text(.30,.65,'71,990 exact strands; 2,146,816-byte archive, published MD5 matched',color=GREEN,fontsize=7.5)
 cax.text(0,.18,'Organick File 16',fontweight='bold',fontsize=8);cax.text(.30,.18,'Outer-code decoding and original-file recovery not tested',color=INK,fontsize=7.5)
-save(fig,5,'format_transfer')
+save(fig,'ED1','format_transfer')
 
-# Figure 8 replaces six partly overlapping performance figures with four panels.
+# Extended Data Figure 2 replaces six partly overlapping performance figures with four panels.
 rc=csv(BENCH/'resource_control/all_configurations_summary.csv');mem=csv(BENCH/'speed_extension/Table6_configuration_comparison.csv')
 ds=['fountain','nbt_file16','song_ht176'];dl=['DNA\nFountain','Organick\nFile 16','HT176']
 cases=['dbgps_rule','dbgps2','dbgps2_alt_c','dbgps2_B8','dbgps2_B16','dbgps2_F32','dbgps2_F34','dbgps2_B12_F34']
@@ -222,6 +222,6 @@ for dd,prefix,col,lab in zip(ds,['F','O','H'],[BLUE,ORANGE,GREEN],['Fountain','O
         ax[3].annotate(tag,(row.wall_speedup,row.cpu_ratio_vs_msa),xytext=offsets[tag],textcoords='offset points',fontsize=6)
 ax[3].plot([0,35],[0,35],color=GRAY,ls=':',lw=.8);ax[3].set(xlim=(0,35),ylim=(0,35),xlabel='MSA wall time / DBGPS2 wall time',ylabel='MSA CPU time / DBGPS2 CPU time');ax[3].legend(loc='lower right',fontsize=6,frameon=False);title(ax[3],'d','Wall and CPU time gains differ')
 fig.subplots_adjust(left=.21,right=.98,wspace=.93,hspace=.45,top=.94,bottom=.10)
-save(fig,8,'speed_and_bloom')
+save(fig,'ED2','speed_and_bloom')
 
 print('SEVEN_MAIN_FIGURES_COMPLETE',flush=True)

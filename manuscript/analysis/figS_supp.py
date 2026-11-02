@@ -4,13 +4,11 @@ import os, glob, json
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from matplotlib.colors import LinearSegmentedColormap
 import figstyle as fs
 
 fs.setup()
 FULL = os.path.join(fs.RESULTS, "full")
 N = 210000
-cmap = LinearSegmentedColormap.from_list("blu", ["#f5f9fe", "#9ec5f4", "#3987e5", "#184f95", "#0d366b"])
 
 # ---- Supplementary Fig. 1: recovery landscapes (r x c), all samples, k = 31 ----
 fig, axs = plt.subplots(2, 4, figsize=(fs.DOUBLE, 92 * fs.MM), sharex=True, sharey=True)
@@ -20,12 +18,7 @@ for ax, s in zip(axs.flat, fs.ALL):
     g = pd.read_csv(f"{FULL}/{s}.grid.tsv", sep="\t")
     rs = sorted(g.r.unique(), key=lambda v: (v == 0, v)); cs = sorted(g.c.unique())
     mat = np.array([[g[(g.r == r) & (g.c == c)].correct.iloc[0] / N * 100 for c in cs] for r in rs])
-    im = ax.imshow(mat, aspect="auto", cmap=cmap, vmin=0, vmax=100, origin="lower")
-    for i in range(mat.shape[0]):
-        for j in range(mat.shape[1]):
-            if j % 3 == 0:
-                ax.text(j, i, f"{mat[i, j]:.0f}", ha="center", va="center", fontsize=3.2,
-                        color="white" if mat[i, j] > 55 else fs.INK)
+    im = ax.imshow(mat, aspect="auto", cmap="Blues", vmin=0, vmax=100, origin="lower")
     ax.set_title(fs.LABEL[s], fontsize=6.3, pad=2)
     ax.set_xticks(range(len(cs)), [str(c) for c in cs], rotation=90, fontsize=5)
     ax.set_yticks(range(len(rs)), [("∞" if r == 0 else f"{r:g}") for r in rs], fontsize=5.5)

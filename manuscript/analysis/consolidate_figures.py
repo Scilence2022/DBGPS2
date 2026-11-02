@@ -68,7 +68,7 @@ for geom,col in [('regular',BLUE),('bernoulli',GREEN)]:
     ax[1].errorbar(100*mid,100*z.empirical,xerr=np.vstack([100*(mid-z.model_lower),100*(z.model_upper-mid)]),fmt='o',ms=2.4,lw=.4,color=col,alpha=.55)
 ax[1].plot([0,100],[0,100],color=GRAY,lw=.7);ax[1].set(xlim=(-2,102),ylim=(-2,102),xlabel='Dependent window probability bounds (%)',ylabel='Observed complete support (%)');title(ax[1],'b','Bounds account for shared support')
 for q,col in [(1,BLUE),(.05,'#E69F00')]:
-    z=s[s.recovery==q];ax[2].scatter(100*z.naive_product,100*z.empirical,s=10,color=col,alpha=.65,label=f'q = {q:g}')
+    z=s[s.recovery==q];ax[2].scatter(100*z.naive_product,100*z.empirical,s=10,color=col,alpha=.65,label=f'$q$ = {q:g}')
 ax[2].plot([0,100],[0,100],color=GRAY,lw=.7);ax[2].set(xlim=(-2,102),ylim=(-2,102),xlabel='Product of marginal probabilities (%)',ylabel='Observed complete support (%)');ax[2].legend();title(ax[2],'c','Independent windows misstate availability')
 err=p[(p.cohort=='error_structure')&(p.policy=='default')]
 for channel,col,lab in [('substitution',BLUE,'Independent'),('burst',GREEN,'Bursty'),('persistent',PURPLE,'Persistent')]:
@@ -76,7 +76,7 @@ for channel,col,lab in [('substitution',BLUE,'Independent'),('burst',GREEN,'Burs
         z=err[(err.channel==channel)&(err.k==k)].groupby('depth').correct_pct.agg(['mean','std']).loc[[30,100]]
         ax[3].errorbar(range(2),z['mean'],yerr=z['std'],color=col,marker=marker,mfc=col if k==21 else 'white',ls=ls,ms=3.5,capsize=2,label=lab if k==21 else None)
 ax[3].set(xticks=[0,1],xticklabels=['30×','100×'],ylim=(-2,105),xlabel='Target retained-base depth',ylabel='Correct strands (%)');ax[3].legend(loc='center right',fontsize=6);title(ax[3],'d','Error correlation shifts recovery')
-policies={'default':('Fixed r = 2.55',BLUE,'o'), 'global_crc_r':('CRC-count choice','#E69F00','s'),'union_consensus':('Consensus union',GREEN,'^'),'two_support_consensus':('Two-setting support',PURPLE,'D')}
+policies={'default':('Fixed $r$ = 2.55',BLUE,'o'), 'global_crc_r':('CRC-count choice','#E69F00','s'),'union_consensus':('Consensus union',GREEN,'^'),'two_support_consensus':('Two-setting support',PURPLE,'D')}
 sc=p[(p.cohort=='scale')&(p.k==21)]
 for name,(lab,col,mk) in policies.items():
     z=sc[sc.policy==name];v=z.groupby('n').agg({'correct_pct':['mean','std'],'false_accepted':['mean']}).loc[[1024,8192,65536]]
@@ -105,15 +105,15 @@ for samp in ['HT_con','HT5']:
     for field,ls,label in [('ref','-', 'true'),('noise','--','noise')]:ax[2].plot(spec['cov'],spec[field],color=HC[samp],ls=ls,label=f'{dict(zip(SAMPLES,LABELS))[samp]} {label}')
     rh=csv(T/f'full/{samp}.ratiohist.tsv',f'thermal_{samp}.ratiohist.tsv',sep='\t')
     for field,ls in [('true','-'),('alt_ge2','--')]:ax[3].plot(rh.log2_ratio_lo+.025,rh[field]/rh[field].sum()*100,color=HC[samp],ls=ls)
-ax[2].set(xscale='log',yscale='log',xlim=(1,3000),ylim=(1,2e9),xlabel='k-mer coverage',ylabel='Distinct k-mers');ax[2].legend(fontsize=5.9);title(ax[2],'c','Absolute counts overlap with noise')
+ax[2].set(xscale='log',yscale='log',xlim=(1,3000),ylim=(1,2e9),xlabel='$k$-mer coverage',ylabel='Distinct $k$-mers');ax[2].legend(fontsize=5.9);title(ax[2],'c','Absolute counts overlap with noise')
 for v in [-np.log2(2.55),np.log2(2.55)]:ax[3].axvline(v,color=BLUE,lw=.7)
 ax[3].set(yscale='log',xlim=(-10,3),ylim=(1e-4,3000),xlabel='log₂(child count / parent count)',ylabel='Transitions (%)');ax[3].text(.97,.97,'Solid: true transitions\nDashed: eligible noise',transform=ax[3].transAxes,ha='right',va='top',fontsize=6);title(ax[3],'d','Local ratios separate true transitions')
 stats=csv(T/'full/HT5.strandstats.tsv','thermal_HT5.strandstats.tsv.gz',sep='\t')
 trace=csv(T/'full/HT5.trace.tsv','thermal_HT5.trace.tsv',sep='\t');ss=stats.set_index('id');cand=[i for i in trace.id.unique() if ss.loc[i,'min_cov']>=3 and ss.loc[i,'n_alt_ge2']>=3];ex=cand[0] if cand else trace.id.iloc[0];tr=trace[trace.id==ex]
-ax[4].plot(tr.step,tr.true_cov,color=INK,label='True path');ax[4].fill_between(tr.step,tr.parent_cov/2.55,tr.parent_cov*2.55,color=BLUE,alpha=.15,label='r = 2.55 window')
+ax[4].plot(tr.step,tr.true_cov,color=INK,label='True path');ax[4].fill_between(tr.step,tr.parent_cov/2.55,tr.parent_cov*2.55,color=BLUE,alpha=.15,label='$r$ = 2.55 window')
 for i,c in enumerate(['alt1','alt2','alt3']):
     m=tr[c]>0;ax[4].scatter(tr.step[m],tr[c][m],s=5,color=ORANGE,label='Noise' if i==0 else None)
-ax[4].set(yscale='log',ylim=(.7,3000),xlabel='Extension step',ylabel='k-mer coverage');ax[4].legend(fontsize=5.8);title(ax[4],'e','Local windows follow a weak true path')
+ax[4].set(yscale='log',ylim=(.7,3000),xlabel='Extension step',ylabel='$k$-mer coverage');ax[4].legend(fontsize=5.8);title(ax[4],'e','Local windows follow a weak true path')
 out=snapshot(T/'full/HT5.outcomes.tsv','thermal_HT5.outcomes.tsv.gz');hdr=gzip.open(out,'rt').readline().strip().split('\t')[1:];oc=pd.read_csv(out,sep='\t',skiprows=1,header=None,names=['id','o'])
 g=csv(T/'full/HT5.grid.tsv','thermal_HT5.grid.tsv',sep='\t');d=g[g.r==0].sort_values('correct',ascending=False).iloc[0]
 o1=oc.o.str[hdr.index(f'c{int(d.c)}_r0')].to_numpy();o2=oc.o.str[hdr.index('c1_r2.55')].to_numpy();mc=ss.loc[oc.id,'min_cov'].to_numpy()
@@ -130,7 +130,7 @@ for j,(ratio,col,label) in enumerate([(0,ORANGE,'DBGPS rule'),(2.55,BLUE,'DBGPS2
     y=[grids[s][grids[s].r==ratio].correct.max()/2100 for s in SAMPLES];ax[0].bar(x+(j-.5)*w,y,w,color=col,label=label)
 ax[0].set(xticks=x,xticklabels=LABELS,ylim=(0,125),yticks=[0,20,40,60,80,100],ylabel='Exact strands (%)');ax[0].legend(loc='upper right',ncol=2,fontsize=6,frameon=False);title(ax[0],'a','Recovery advantage grows with damage')
 g=grids['HT5'];rs=sorted(g.r.unique(),key=lambda v:(v==0,v));cs=sorted(g.c.unique());mat=np.array([[g[(g.r==r)&(g.c==c)].correct.iloc[0]/2100 for c in cs] for r in rs])
-im=ax[1].imshow(mat,aspect='auto',vmin=0,vmax=100,cmap='Blues',origin='lower');ax[1].set(xticks=range(len(cs)),xticklabels=cs,yticks=range(len(rs)),yticklabels=['∞' if r==0 else f'{r:g}' for r in rs],xlabel='Absolute cutoff c',ylabel='Ratio r');ax[1].tick_params(axis='x',labelrotation=90,labelsize=5.5);fig.colorbar(im,ax=ax[1],fraction=.045,pad=.025,label='Exact (%)');title(ax[1],'b','HT5 has a broad useful ratio range')
+im=ax[1].imshow(mat,aspect='auto',vmin=0,vmax=100,cmap='Blues',origin='lower');ax[1].set(xticks=range(len(cs)),xticklabels=cs,yticks=range(len(rs)),yticklabels=['∞' if r==0 else f'{r:g}' for r in rs],xlabel='Absolute cutoff $c$',ylabel='Ratio $r$');ax[1].tick_params(axis='x',labelrotation=90,labelsize=5.5);fig.colorbar(im,ax=ax[1],fraction=.045,pad=.025,label='Exact (%)');title(ax[1],'b','HT5 has a broad useful ratio range')
 cats=[('correct','Exact',BLUE),('no_path','Broken path',LIGHT),('overflow','Overflow',ORANGE),('no_valid','No valid path','#E69F00'),('ambiguous','Ambiguous','#8272B2'),('wrong','Wrong',RED)]
 for i,s in enumerate(SAMPLES):
     for j,r in enumerate([0,2.55]):
@@ -140,13 +140,13 @@ for i,s in enumerate(SAMPLES):
 ax[2].set(xticks=x*2.5+.5,xticklabels=LABELS,ylim=(0,102),ylabel='Designed strands (%)');ax[2].legend(loc='lower center',bbox_to_anchor=(.5,1.20),ncol=3,fontsize=5.6,handlelength=.8,frameon=False);title(ax[2],'c','Local pruning suppresses path overflow')
 for s in SAMPLES:
     z=kt[kt['sample']==s].sort_values('k');ax[3].plot(z.k,z.dbgps2/2100,color=HC[s],marker='o',ms=2.5,label=dict(zip(SAMPLES,LABELS))[s])
-ax[3].set(xticks=[17,19,21,23,25,27,31],xlabel='k-mer size',ylabel='Exact strands by DBGPS2 (%)');ax[3].legend(ncol=3,fontsize=5.6,loc='lower center');title(ax[3],'d','Shorter windows improve continuity')
-for r,k,col,ls,label in [(0,31,ORANGE,'-','DBGPS k31'),(2.55,31,BLUE,'-','DBGPS2 k31'),(2.55,21,BLUE,'--','DBGPS2 k21')]:
+ax[3].set(xticks=[17,19,21,23,25,27,31],xlabel='$k$-mer size',ylabel='Exact strands by DBGPS2 (%)');ax[3].legend(ncol=3,fontsize=5.6,loc='lower center');title(ax[3],'d','Shorter windows improve continuity')
+for r,k,col,ls,label in [(0,31,ORANGE,'-','DBGPS $k$ = 31'),(2.55,31,BLUE,'-','DBGPS2 $k$ = 31'),(2.55,21,BLUE,'--','DBGPS2 $k$ = 21')]:
     z=dep[(dep['sample']=='HT5')&(dep.r==r)&(dep.k==k)].sort_values('pct');reads=z.pct*2*58.64*1e6/100/210000
     ax[4].plot(reads,z.best/2100,color=col,ls=ls,marker='o',ms=2.2,label=label)
 ax[4].set(xscale='log',ylim=(0,102),xlabel='Reads per designed strand',ylabel='Exact strands (%)');ax[4].legend(loc='upper left',fontsize=5.7);title(ax[4],'e','HT5 recovery increases with read depth')
 for j,(lab,col) in enumerate([('DBGPS k31',ORANGE),('DBGPS2 k31',BLUE),('DBGPS2 k21','#7BB6DF')]):
-    vals=np.array([need[(need['sample']==name)&(need.method==lab)].reads_per_strand_for_95pct.iloc[0] for name in LABELS]);ax[5].bar(x+(j-1)*.25,np.nan_to_num(vals),.24,color=col,label=lab)
+    vals=np.array([need[(need['sample']==name)&(need.method==lab)].reads_per_strand_for_95pct.iloc[0] for name in LABELS]);ax[5].bar(x+(j-1)*.25,np.nan_to_num(vals),.24,color=col,label=lab.replace(' k',' $k$ = '))
     for xx,v in zip(x+(j-1)*.25,vals):
         if np.isnan(v):ax[5].text(xx,1.2,'n.r.',rotation=90,ha='center',fontsize=5)
 ax[5].set(yscale='log',ylim=(1,8000),xticks=x,xticklabels=LABELS,ylabel='Reads per strand for 95% recovery');ax[5].legend(ncol=3,fontsize=5.6,loc='upper center',columnspacing=.8,handlelength=1,frameon=False);title(ax[5],'f','Lower sequencing requirement')
@@ -178,7 +178,7 @@ for b in range(1,12):ax[5].axvline(b,color=LIGHT,lw=.4)
 ax[5].plot(px[:111],py[:111],color=BLUE,lw=.9);ax[5].plot(px[110:],py[110:],color=RED,lw=1.2)
 ax[5].set(xticks=[.5,3.5,7.5,11.5],xticklabels=['1','4','8','12'],xlim=(0,12),ylim=(0,100),xlabel='File 3 block, in index order',ylabel='Correct candidates (%)');title(ax[5],'g','Decline along the index')
 show=blk[blk.block.isin([1,6,11,12])];base=np.zeros(4);lab=[str(b) for b in show.block]
-for field,col,name in [('absent_kmer',GRAY,'True k-mer absent'),('singleton_only',LIGHT,'Singleton support'),('overflow',ORANGE,'Path overflow'),('ratio_rejected',BLUE,'Ratio rejected')]:
+for field,col,name in [('absent_kmer',GRAY,'True $k$-mer absent'),('singleton_only',LIGHT,'Singleton support'),('overflow',ORANGE,'Path overflow'),('ratio_rejected',BLUE,'Ratio rejected')]:
     ax[6].bar(lab,show[field],.6,bottom=base,color=col,label=name);base+=show[field].to_numpy()
 ax[6].set(ylim=(0,17500),yticks=[0,5000,10000],xlabel='Pooled blocks below bound',ylabel='Indices lacking a candidate');ax[6].yaxis.set_major_formatter(FuncFormatter(lambda x,p:f'{x/1000:.0f}k'));ax[6].legend(ncol=2,loc='upper center',fontsize=4.8,frameon=False,columnspacing=.6,handlelength=.9,handletextpad=.3);title(ax[6],'f','Block 12 lacks evidence')
 save(fig,4,'high_error_reconstruction')
@@ -202,7 +202,7 @@ save(fig,'ED1','format_transfer')
 rc=csv(BENCH/'resource_control/all_configurations_summary.csv');mem=csv(BENCH/'speed_extension/Table6_configuration_comparison.csv')
 ds=['fountain','nbt_file16','song_ht176'];dl=['DNA\nFountain','Organick\nFile 16','HT176']
 cases=['dbgps_rule','dbgps2','dbgps2_alt_c','dbgps2_B8','dbgps2_B16','dbgps2_F32','dbgps2_F34','dbgps2_B12_F34']
-names=['DBGPS rule','DBGPS2 primary c','DBGPS2 alternate c','Query B8','Query B16','Counting F32','Counting F34','B12 and F34']
+names=['DBGPS rule','DBGPS2 primary $c$','DBGPS2 alternate $c$','Query B8','Query B16','Counting F32','Counting F34','B12 and F34']
 get=lambda frame,w,ds,c:frame[(frame.workers==w)&(frame.dataset==ds)&(frame.case==c)].iloc[0]
 fig,ax=grid(2,2)
 for a,w,letter in [(ax[0],1,'a'),(ax[1],3,'b')]:

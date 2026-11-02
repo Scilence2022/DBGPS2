@@ -31,9 +31,9 @@ for ax, s in zip(axs.flat, fs.ALL):
     ax.set_yticks(range(len(rs)), [("∞" if r == 0 else f"{r:g}") for r in rs], fontsize=5.5)
     ax.spines[:].set_visible(False); ax.tick_params(length=0)
 for ax in axs[1]:
-    ax.set_xlabel("Coverage cutoff c")
+    ax.set_xlabel("Coverage cutoff $c$")
 for ax in axs[:, 0]:
-    ax.set_ylabel("Ratio bound r")
+    ax.set_ylabel("Ratio bound $r$")
 cax = fig.add_axes([0.93, 0.25, 0.01, 0.5])
 cb = fig.colorbar(im, cax=cax); cb.set_label("Strands recovered (%)", fontsize=6)
 cb.ax.tick_params(labelsize=5.5, length=1.5); cb.outline.set_linewidth(0.4)

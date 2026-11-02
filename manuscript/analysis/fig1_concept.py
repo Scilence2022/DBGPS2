@@ -71,27 +71,35 @@ for x, w, c, label, lx in [(78, 6, PALE, "primer", 81), (84, 7, "#b9c4cf", "inde
     ax.text(lx, 26.8, label, fontsize=5, **CENTRE)
 ax.plot([81, 81, 91, 91], [34.2, 35, 35, 34.2], color=fs.INK, lw=0.8)
 ax.text(86, 37.2, "seed $k$-mer", fontsize=5.3, **CENTRE)
-ax.plot([112, 148], [31, 31], color=fs.INK, lw=1.1, solid_capstyle="butt")
-ax.plot([119, 127, 147], [31, 38, 38], color=ERR, lw=0.8)
-ax.plot([129, 137, 147], [31, 24, 24], color=ERR, lw=0.8)
-ax.plot([140, 145], [31, 36], color=PALE, lw=0.8, ls=(0, (2, 1)))
-ax.plot([145], [36], marker="x", ms=2.8, mew=0.7, color=MID)
-ax.plot([112], [31], marker="o", ms=2.8, color=fs.INK)
 ax.text(130, 41.6, "one base at a time, up to the path budget", fontsize=5.3, **CENTRE)
-for y, valid in [(38, False), (31, True), (24, False)]:
+# one extension step: the parent sets a window, and the child outside it is pruned
+ax.plot([112, 148], [31, 31], color=fs.INK, lw=1.1, solid_capstyle="butt", zorder=1)
+ax.plot([112], [31], marker="o", ms=2.8, color=fs.INK)
+ax.add_patch(FancyBboxPatch((132, 25.8), 8, 11, boxstyle="round,pad=0,rounding_size=0.8", fc=NEWBG, ec=NEW, lw=0.8, zorder=1))
+ax.text(136, 38.4, "$r$-fold window 15–102", fontsize=5.3, **CENTRE)
+ax.plot([124.3, 133.2], [29.2, 21.6], color=ERR, lw=0.8, zorder=1)
+ax.plot([139.2, 153.4], [20, 20], color=ERR, lw=0.8, ls=(0, (2, 1.2)), zorder=1)
+graph_node(122, 31, 40)
+graph_node(136, 31, 38)
+graph_node(136, 20, 6, ERR)
+ax.plot([128.7], [25.4], marker="x", ms=6, mew=1, color=NEW, zorder=4)
+ax.text(122, 35.5, "parent", fontsize=5.3, **CENTRE)
+ax.text(146.2, 22.1, "DBGPS: kept", fontsize=5, **CENTRE)
+ax.text(146.2, 17.9, "DBGPS2: pruned", fontsize=5, **CENTRE)
+for y, valid in [(31, True), (20, False)]:
     ax.plot([154, 160], [y, y], color=fs.INK if valid else ERR, lw=1.1 if valid else 0.8, solid_capstyle="butt")
     ax.text(163, y, "code valid" if valid else "invalid", fontsize=5.3, ha="left", va="center")
-ax.text(167, 19.5, "accepted only if one\ndistinct sequence remains", fontsize=5.3, linespacing=1.1, **CENTRE)
+ax.text(167, 13.6, "accepted only if one\ndistinct sequence remains", fontsize=5.3, linespacing=1.1, **CENTRE)
 ax.text(3, 15.5, "Added in\nDBGPS2", fontsize=6, fontweight="bold", ha="left", va="center", linespacing=1.05)
-for x, tip, name, note, core in [(41, 16.6, "-F two-pass singleton filter", "optional, less memory", False),
-                                 (107, 28.6, "-B query prefilter", "optional, fewer lookups", False),
-                                 (142, 22, "-r local coverage ratio", "core algorithmic change", True)]:
+for x, tipx, tip, name, note, core in [(41, 41, 16.6, "-F two-pass singleton filter", "optional, less memory", False),
+                                       (109, 120, 27.4, "-B query prefilter", "optional, fewer lookups", False),
+                                       (142, 136, 16.6, "-r local coverage ratio", "core algorithmic change", True)]:
     w = 32 if core else 30
     ax.add_patch(FancyBboxPatch((x - w / 2, 1.2), w, 8.6, boxstyle="round,pad=0,rounding_size=0.8", fc=NEWBG, ec=NEW,
                                 lw=1.1 if core else 0.6))
     ax.text(x, 7.2, name, fontsize=5.6, fontweight="bold" if core else "normal", **CENTRE)
     ax.text(x, 3.8, note, fontsize=5.3, **CENTRE)
-    arrow(ax, x if not name.startswith("-r") else 134, 9.8, 113 if name.startswith("-B") else (134 if core else x), tip, color=NEW, lw=0.8)
+    arrow(ax, tipx, 9.8, tipx, tip, color=NEW, lw=0.8)
 fs.panel(ax, "a", x=0.004, y=0.93)
 
 # b: DBGPS path search on a schematic graph

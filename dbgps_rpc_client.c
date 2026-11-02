@@ -1,13 +1,13 @@
 /*
- * dbgps3-client - Interactive CLI client for DBGPS3 server
+ * dbgps2-rpc-client - Interactive CLI client for DBGPS2-RPC server
  *
- * Connects to a DBGPS3 server via TCP and sends JSON-RPC 2.0 requests.
+ * Connects to a DBGPS2-RPC server via TCP and sends JSON-RPC 2.0 requests.
  * Supports both interactive (REPL) and one-shot command modes.
  *
  * Usage:
- *   dbgps3-client [-h host] [-p port]                   # interactive mode
- *   echo '{"jsonrpc":"2.0","method":"graph/info",...}' | dbgps3-client -h host -p port
- *   dbgps3-client -h host -p port -c 'graph/info'      # shortcut command mode
+ *   dbgps2-rpc-client [-h host] [-p port]                   # interactive mode
+ *   echo '{"jsonrpc":"2.0","method":"graph/info",...}' | dbgps2-rpc-client -h host -p port
+ *   dbgps2-rpc-client -h host -p port -c 'graph/info'      # shortcut command mode
  */
 
 #include <stdio.h>
@@ -161,8 +161,8 @@ static int send_shortcut(int fd, const char *cmd, int id)
 
 static void print_usage(void)
 {
-    fprintf(stderr, "dbgps3-client - Interactive CLI for DBGPS3 server\n\n");
-    fprintf(stderr, "Usage: dbgps3-client [options]\n");
+    fprintf(stderr, "dbgps2-rpc-client - Interactive CLI for DBGPS2-RPC server\n\n");
+    fprintf(stderr, "Usage: dbgps2-rpc-client [options]\n");
     fprintf(stderr, "Options:\n");
     fprintf(stderr, "  -h HOST   Server hostname (default: %s)\n", DEFAULT_HOST);
     fprintf(stderr, "  -p PORT   Server port (default: %d)\n", DEFAULT_PORT);
@@ -205,7 +205,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    fprintf(stderr, "Connected to DBGPS3 server at %s:%d\n", host, port);
+    fprintf(stderr, "Connected to DBGPS2-RPC server at %s:%d\n", host, port);
 
     int rc = 0;
 
@@ -231,13 +231,13 @@ int main(int argc, char *argv[])
     }
 
     /* Interactive REPL mode */
-    printf("DBGPS3 Client - type 'help' for commands, 'quit' to exit\n\n");
+    printf("DBGPS2-RPC Client - type 'help' for commands, 'quit' to exit\n\n");
 
     char input[BUF_SIZE];
     int req_id = 1;
 
     while (1) {
-        printf("dbgps3> ");
+        printf("dbgps2-rpc> ");
         fflush(stdout);
 
         if (!fgets(input, sizeof(input), stdin)) break;

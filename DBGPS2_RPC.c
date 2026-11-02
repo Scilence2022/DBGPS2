@@ -5,8 +5,8 @@
 #include <time.h>
 #include "ketopt.h"
 #include "dbgps_bloom.h"
-#include "dbgps3_core.h"
-#include "dbgps3_server.h"
+#include "dbgps_core.h"
+#include "dbgps_rpc_server.h"
 
 /* ketopt implements required short-option arguments only. Consume -S's
    optional port explicitly so -S never swallows the input filename or -P. */
@@ -16,7 +16,7 @@ static int optional_server_port(ketopt_t *o, int argc, char **argv, int *port)
     int attached = o->pos != 0;
     if (o->i >= argc) return 0;
     const char *text = argv[o->i] + (attached ? o->pos : 0);
-    if (dbgps3_parse_index(text, &value) < 0) return attached ? -1 : 0;
+    if (dbgps_parse_index(text, &value) < 0) return attached ? -1 : 0;
     if (value < 1 || value > 65535) return -1;
     *port = (int)value;
     if (o->n_args) ketopt_permute(argv, o->i, o->n_args);
@@ -28,7 +28,7 @@ static int optional_server_port(ketopt_t *o, int argc, char **argv, int *port)
 
 int main(int argc, char *argv[])
 {
-    int c=1, k = 31, p = DBGPS3_KC_BITS, block_size = 10000000, n_thread = 3;
+    int c=1, k = 31, p = DBGPS_KC_BITS, block_size = 10000000, n_thread = 3;
     int min_cov = 1, index_len = 16, payload_len = 140, path_len;
     double max_cov_ratio = 2.55;
     double max_r = 0;
@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     int index_byte_num;
     unsigned int max_cov = 0;
     const char *mapping_file = NULL;
-    const char *redundancy_spec = DBGPS3_DEFAULT_REDUNDANCY;
+    const char *redundancy_spec = DBGPS_DEFAULT_REDUNDANCY;
     uint64_t pr_uint64;
 
     char p1[] = "CCTGCAGAGTAGCATGTC";
@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
         else if (c == 'c') min_cov = atoi(o.arg);
         else if (c == 'C') max_cov = atoi(o.arg);
         else if (c == 'a' || c == 'b') {
-            if (dbgps3_parse_index(o.arg, c == 'a' ? &min_index : &max_index) < 0) {
+            if (dbgps_parse_index(o.arg, c == 'a' ? &min_index : &max_index) < 0) {
                 fprintf(stderr, "ERROR: -%c requires an unsigned decimal index\n", c);
                 return 1;
             }
@@ -104,11 +104,11 @@ int main(int argc, char *argv[])
     if (argc - o.ind < 1) {
         fprintf(stderr, "\n************************************************************************\n");
         fprintf(stderr, "**                                                                    **\n");
-        fprintf(stderr, "**  DBGPS v2 - De Bruijn Graph based strand assembler for DNA data storage  **\n");
+        fprintf(stderr, "**  DBGPS2-RPC - De Bruijn Graph based strand assembler for DNA data storage  **\n");
         fprintf(stderr, "**     Version 2.0 (2025-05-14)  Author: Lifu Song lifu.song@outlook.com      **\n");
         fprintf(stderr, "**                                                                    **\n");
         fprintf(stderr, "************************************************************************\n\n");
-        fprintf(stderr, "Usage: DBGPS3 [options] <input file> \n");
+        fprintf(stderr, "Usage: DBGPS2-RPC [options] <input file> \n");
         fprintf(stderr, "                       [Supporting formats: *fq, *fa, *fq.gz, *fa.gz]\n");
         fprintf(stderr, "Options:\n");
         fprintf(stderr, "  -k INT     k-mer size [%d]\n", k);
@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "  -s INT     Number of initial positions to skip ratio checks for [%d]\n", skip_ratios);
         fprintf(stderr, "  -o STR     Output prefix for log file [none]\n");
         fprintf(stderr, "  -M FILE    Custom DNA/bit mapping [none; built-in A=00,C=01,G=10,T=11]\n");
-        fprintf(stderr, "  -E CODE    Redundancy: " DBGPS_REDUNDANCY_OPTIONS " [" DBGPS3_DEFAULT_REDUNDANCY "]\n");
+        fprintf(stderr, "  -E CODE    Redundancy: " DBGPS_REDUNDANCY_OPTIONS " [" DBGPS_DEFAULT_REDUNDANCY "]\n");
         fprintf(stderr, "  -B INT     Bloom query prefilter bits/key (1..64; 0 disables) [0]\n");
         fprintf(stderr, "  -F INT     Two-pass singleton filter log2 bits (23..40; 0 disables) [0]\n");
         fprintf(stderr, "  -S [PORT]  Start in server mode (default port: %d)\n", server_port);
@@ -133,21 +133,21 @@ int main(int argc, char *argv[])
         fprintf(stderr, "\n");
         return 1;
     }
-    if (p != DBGPS3_KC_BITS) {
-        fprintf(stderr, "ERROR: -p must be %d\n", DBGPS3_KC_BITS);
+    if (p != DBGPS_KC_BITS) {
+        fprintf(stderr, "ERROR: -p must be %d\n", DBGPS_KC_BITS);
         return 1;
     }
 
-    dbgps3_graph_t config = {0};
+    dbgps_graph_t config = {0};
     config.k = k;
     config.index_len = index_len;
     config.path_len = payload_len;
     char mapping_error[512];
-    if (dbgps3_set_mapping(&config, mapping_file, mapping_error, sizeof(mapping_error)) < 0) {
+    if (dbgps_set_mapping(&config, mapping_file, mapping_error, sizeof(mapping_error)) < 0) {
         fprintf(stderr, "ERROR: %s\n", mapping_error);
         return 1;
     }
-    if (dbgps3_set_redundancy(&config, redundancy_spec, mapping_error, sizeof(mapping_error)) < 0) {
+    if (dbgps_set_redundancy(&config, redundancy_spec, mapping_error, sizeof(mapping_error)) < 0) {
         fprintf(stderr, "ERROR: %s\n", mapping_error);
         dbgps_codec_destroy(&config.codec);
         return 1;
@@ -158,21 +158,84 @@ int main(int argc, char *argv[])
     dbgps_strand_layout(config.codec.bases ? &config.codec : NULL, &config.redundancy,
                          index_len, payload_len, &layout);
     uint64_t encoded_max;
-    if (dbgps3_validate_layout(&config, index_len, payload_len, &index_byte_num) < 0 ||
+    if (dbgps_validate_layout(&config, index_len, payload_len, &index_byte_num) < 0 ||
         k - index_len > pr_len ||
         (!server_mode && (min_index > max_index ||
-                         dbgps3_encode_index(&config, max_index, index_len, &encoded_max) < 0))) {
+                         dbgps_encode_index(&config, max_index, index_len, &encoded_max) < 0))) {
         fprintf(stderr, "ERROR: incompatible strand layout or index range; index and payload must\n"
                         "       contain whole mapping blocks and whole bytes, index must fit k,\n"
-                        "       k-index must fit the primer, and payload must be <= %d bp\n", DBGPS3_MAX_PATH_LEN);
+                        "       k-index must fit the primer, total strand length must be < %d bp,\n"
+                        "       and redundancy must fit its codeword capacity (RS: data + parity <= 255 bytes)\n", DBGPS_MAX_PATH_LEN);
         dbgps_codec_destroy(&config.codec);
         return 1;
     }
     if(max_cov < min_cov){max_cov = min_cov;}
-    pr_uint64 = dbgps3_primer_uint64(p1, pr_len, index_len, k);
+    pr_uint64 = dbgps_primer_uint64(p1, pr_len, index_len, k);
     path_len = payload_len;
     if (config.codec.bases || 2 * pr_len + (int)layout.total_bases > read_len)
         read_len = 2 * pr_len + layout.total_bases;
+
+    /* ---- Batch output, opened and reported before counting as in DBGPS2 ---- */
+    FILE *log_file = NULL;
+    FILE *strands_file = NULL;
+    int exit_status = 0;
+
+    #define PRINT_BOTH(format, ...) do { \
+        fprintf(stdout, format, ##__VA_ARGS__); \
+        if (log_file != NULL) fprintf(log_file, format, ##__VA_ARGS__); \
+    } while(0)
+
+    if (!server_mode) {
+        if (output_prefix != NULL) {
+            char log_filename[1024];
+            sprintf(log_filename, "%s.log", output_prefix);
+            log_file = fopen(log_filename, "w");
+            if (log_file == NULL) {
+                fprintf(stderr, "Warning: Could not open log file %s for writing\n", log_filename);
+            } else {
+                fprintf(stderr, "Writing parameters to log file: %s\n", log_filename);
+            }
+
+            char strands_filename[1024];
+            sprintf(strands_filename, "%s.strands", output_prefix);
+            strands_file = fopen(strands_filename, "w");
+            if (strands_file == NULL) {
+                fprintf(stderr, "Warning: Could not open strands file %s for writing\n", strands_filename);
+            } else {
+                fprintf(stderr, "Will write assembled strands to: %s\n", strands_filename);
+            }
+        }
+
+        PRINT_BOTH("========== DBGPS Parameters ==========\n");
+        PRINT_BOTH("k-mer size (-k): %d\n", k);
+        PRINT_BOTH("Prefix length (-p): %d\n", p);
+        PRINT_BOTH("Number of threads (-t): %d\n", n_thread);
+        PRINT_BOTH("Bloom counting filter (-F): %d (0 disables; singletons removed when enabled)\n", count_bloom_shift);
+        PRINT_BOTH("Minimum coverage cutoff (-c): %d\n", min_cov);
+        PRINT_BOTH("Maximum coverage for testing (-C): %d\n", max_cov);
+        PRINT_BOTH("Index length (-i): %d bp\n", index_len);
+        PRINT_BOTH("Data encoding length (-l): %d bp\n", payload_len);
+        PRINT_BOTH("Read length for k-mer counting: %d\n", read_len);
+        PRINT_BOTH("Skip ratio checks for first (-s): %d positions\n", skip_ratios);
+        PRINT_BOTH("Initial index (-a): %"PRIu64"\n", min_index);
+        PRINT_BOTH("End index (-b): %"PRIu64"\n", max_index);
+        PRINT_BOTH("Maximum coverage ratio (-r): %.2f\n", max_cov_ratio);
+        PRINT_BOTH("Ratio range upper bound (-R): %.2f\n", max_r);
+        PRINT_BOTH("Memory test mode: %s\n", mem_test ? "enabled" : "disabled");
+        PRINT_BOTH("Path length (payload + redundancy): %u\n", layout.path_bases);
+        PRINT_BOTH("Index byte number: %d\n", index_byte_num);
+        if (mapping_file) {
+            PRINT_BOTH("Mapping: %s (%u bases <-> %u bits; %s)\n", mapping_file,
+                       config.codec.bases, config.codec.bits,
+                       config.codec.byte_fast ? "byte lookup" : "block lookup");
+        } else {
+            PRINT_BOTH("Mapping: none (built-in A=00,C=01,G=10,T=11; direct 2-bit packing)\n");
+        }
+        PRINT_BOTH("Redundancy (-E): %s; %u parity bytes; %u bp; zero padding: %u bits\n",
+                   redundancy_label, layout.parity_bytes, layout.parity_bases, layout.padding_bits);
+        PRINT_BOTH("Output prefix: %s\n", output_prefix ? output_prefix : "none");
+        PRINT_BOTH("======================================\n");
+    }
 
     /* ---- Load the de Bruijn graph ---- */
     clock_t start, end;
@@ -181,116 +244,62 @@ int main(int argc, char *argv[])
     fprintf(stderr, "Counting k-mers ......\n");
     start = clock();
 
-    dbgps3_graph_t *g = dbgps3_load_filtered(k, p, n_thread, block_size, read_len,
+    dbgps_graph_t *g = dbgps_load_filtered(k, p, n_thread, block_size, read_len,
                                       argc - o.ind, argv + o.ind, count_bloom_shift);
     if (!g) {
         fprintf(stderr, "ERROR: failed to load input files or allocate graph/filter memory\n");
         dbgps_codec_destroy(&config.codec);
-        return 1;
+        exit_status = 1;
+        goto cleanup;
     }
     g->codec = config.codec; /* Transfer ownership to the graph. */
     g->redundancy = config.redundancy;
-    if (dbgps3_set_bloom(g, bloom_bits_per_key) < 0) {
+    if (dbgps_set_bloom(g, bloom_bits_per_key) < 0) {
         fprintf(stderr, "ERROR: failed to allocate Bloom query filter\n");
-        dbgps3_destroy(g);
-        return 1;
+        exit_status = 1;
+        goto cleanup;
     }
-    if (bloom_bits_per_key)
-        fprintf(stderr, "Bloom query filter: %d bits/key; %zu bitmap bytes\n",
-                bloom_bits_per_key, dbgps3_bloom_bytes(g));
-
-    if (count_bloom_shift)
-        fprintf(stderr, "Bloom counting filter: 2^%d bits; singletons removed\n", count_bloom_shift);
 
     /* Override graph parameters set during loading */
     g->index_len = index_len;
     g->index_byte_num = index_byte_num;
     g->path_len = path_len;
 
+    if (!server_mode)
+        PRINT_BOTH("Bloom query filter (-B): %d bits/key; %zu bitmap bytes\n",
+                   bloom_bits_per_key, dbgps_bloom_bytes(g));
+
     end = clock();
     kc_dur = (double)(end - start);
 
     /* ---- Server mode ---- */
     if (server_mode) {
+        if (bloom_bits_per_key)
+            fprintf(stderr, "Bloom query filter: %d bits/key; %zu bitmap bytes\n",
+                    bloom_bits_per_key, dbgps_bloom_bytes(g));
+        if (count_bloom_shift)
+            fprintf(stderr, "Bloom counting filter: 2^%d bits; singletons removed\n", count_bloom_shift);
         if (mapping_file)
             fprintf(stderr, "Mapping: %s (%u bases <-> %u bits)\n", mapping_file, g->codec.bases, g->codec.bits);
         else fprintf(stderr, "Mapping: none (built-in A=00,C=01,G=10,T=11; direct 2-bit packing)\n");
         fprintf(stderr, "Redundancy (-E): %s; %u parity bytes; %u bp; zero padding: %u bits\n",
                 redundancy_label, layout.parity_bytes, layout.parity_bases, layout.padding_bits);
         fprintf(stderr, "\nK-mer counting time: %f seconds\n", (kc_dur/CLOCKS_PER_SEC));
-        fprintf(stderr, "Starting DBGPS3 server on port %d (max clients: %d)...\n",
+        fprintf(stderr, "Starting DBGPS2-RPC server on port %d (max clients: %d)...\n",
                 server_port, max_clients);
 
-        dbgps3_server_t srv;
+        dbgps_rpc_server_t srv;
         srv.graph = g;
         srv.port = server_port;
         srv.max_clients = max_clients;
         srv.running = 0;
 
-        int rc = dbgps3_server_start(&srv);
-        dbgps3_destroy(g);
+        int rc = dbgps_rpc_server_start(&srv);
+        dbgps_destroy(g);
         return rc;
     }
 
-    /* ---- Batch CLI mode (original behavior) ---- */
-    FILE *log_file = NULL;
-    FILE *strands_file = NULL;
-    if (output_prefix != NULL) {
-        char log_filename[1024];
-        sprintf(log_filename, "%s.log", output_prefix);
-        log_file = fopen(log_filename, "w");
-        if (log_file == NULL) {
-            fprintf(stderr, "Warning: Could not open log file %s for writing\n", log_filename);
-        } else {
-            fprintf(stderr, "Writing parameters to log file: %s\n", log_filename);
-        }
-
-        char strands_filename[1024];
-        sprintf(strands_filename, "%s.strands", output_prefix);
-        strands_file = fopen(strands_filename, "w");
-        if (strands_file == NULL) {
-            fprintf(stderr, "Warning: Could not open strands file %s for writing\n", strands_filename);
-        } else {
-            fprintf(stderr, "Will write assembled strands to: %s\n", strands_filename);
-        }
-    }
-
-    #define PRINT_BOTH(format, ...) do { \
-        fprintf(stdout, format, ##__VA_ARGS__); \
-        if (log_file != NULL) fprintf(log_file, format, ##__VA_ARGS__); \
-    } while(0)
-
-    PRINT_BOTH("========== DBGPS Parameters ==========\n");
-    PRINT_BOTH("k-mer size (-k): %d\n", k);
-    PRINT_BOTH("Prefix length (-p): %d\n", p);
-    PRINT_BOTH("Number of threads (-t): %d\n", n_thread);
-    PRINT_BOTH("Bloom counting filter (-F): %d (0 disables; singletons removed when enabled)\n", count_bloom_shift);
-    PRINT_BOTH("Bloom query filter (-B): %d bits/key; %zu bitmap bytes\n",
-               bloom_bits_per_key, dbgps3_bloom_bytes(g));
-    PRINT_BOTH("Minimum coverage cutoff (-c): %d\n", min_cov);
-    PRINT_BOTH("Maximum coverage for testing (-C): %d\n", max_cov);
-    PRINT_BOTH("Index length (-i): %d bp\n", index_len);
-    PRINT_BOTH("Data encoding length (-l): %d bp\n", payload_len);
-    PRINT_BOTH("Read length for k-mer counting: %d\n", read_len);
-    PRINT_BOTH("Skip ratio checks for first (-s): %d positions\n", skip_ratios);
-    PRINT_BOTH("Initial index (-a): %"PRIu64"\n", min_index);
-    PRINT_BOTH("End index (-b): %"PRIu64"\n", max_index);
-    PRINT_BOTH("Maximum coverage ratio (-r): %.2f\n", max_cov_ratio);
-    PRINT_BOTH("Ratio range upper bound (-R): %.2f\n", max_r);
-    PRINT_BOTH("Memory test mode: %s\n", mem_test ? "enabled" : "disabled");
-    PRINT_BOTH("Path length (payload + redundancy): %u\n", layout.path_bases);
-    PRINT_BOTH("Redundancy (-E): %s; %u parity bytes; %u bp; zero padding: %u bits\n",
-               redundancy_label, layout.parity_bytes, layout.parity_bases, layout.padding_bits);
-    PRINT_BOTH("Index byte number: %d\n", index_byte_num);
-    if (mapping_file) {
-        PRINT_BOTH("Mapping: %s (%u bases <-> %u bits; %s)\n", mapping_file,
-                   g->codec.bases, g->codec.bits, g->codec.byte_fast ? "byte lookup" : "block lookup");
-    } else {
-        PRINT_BOTH("Mapping: none (built-in A=00,C=01,G=10,T=11; direct 2-bit packing)\n");
-    }
-    PRINT_BOTH("Output prefix: %s\n", output_prefix ? output_prefix : "none");
-    PRINT_BOTH("======================================\n");
-
+    /* ---- Batch CLI mode ---- */
     PRINT_BOTH("\nK-mer counting time: %f seconds\n",(kc_dur/CLOCKS_PER_SEC));
 
     if(mem_test){
@@ -306,7 +315,7 @@ int main(int argc, char *argv[])
     int dec_strand_num = 0;
     double dec_dur;
 
-    char result_buf[DBGPS3_MAX_PATH_LEN + 128]; /* enough for any single path result */
+    char result_buf[DBGPS_MAX_PATH_LEN + 128]; /* enough for any single path result */
 
     if (max_r <= 0 || max_r <= max_cov_ratio) {
         /* Original behavior - use only the specified max_cov_ratio */
@@ -316,13 +325,11 @@ int main(int argc, char *argv[])
 
             uint64_t eid;
             for(id=min_index; id<=max_index; id++) {
-                fprintf(stderr, "Processing index: %"PRIu64"\t", id);
-                if (dbgps3_encode_index(g, id, index_len, &eid) < 0) continue;
-                c_index = dbgps3_find_path(g, pr_uint64 | (uint64_t)eid,
+                if (dbgps_encode_index(g, id, index_len, &eid) < 0) continue;
+                c_index = dbgps_find_path(g, pr_uint64 | (uint64_t)eid,
                                            cov_cut, max_cov_ratio, skip_ratios,
                                            path_len, index_byte_num,
                                            result_buf, sizeof(result_buf));
-                fprintf(stderr, "c_index: %u\n", (unsigned)c_index);
 
                 if(c_index > -1) {
                     dec_strand_num++;
@@ -349,9 +356,8 @@ int main(int argc, char *argv[])
 
                 uint64_t eid;
                 for(id=min_index; id<=max_index; id++) {
-                    fprintf(stderr, "Processing index: %"PRIu64"\r", id);
-                    if (dbgps3_encode_index(g, id, index_len, &eid) < 0) continue;
-                    c_index = dbgps3_find_path(g, pr_uint64 | (uint64_t)eid,
+                    if (dbgps_encode_index(g, id, index_len, &eid) < 0) continue;
+                    c_index = dbgps_find_path(g, pr_uint64 | (uint64_t)eid,
                                                cov_cut, r, skip_ratios,
                                                path_len, index_byte_num,
                                                result_buf, sizeof(result_buf));
@@ -374,11 +380,12 @@ int main(int argc, char *argv[])
         }
     }
 
-    dbgps3_destroy(g);
+cleanup:
+    dbgps_destroy(g);
 
     if (log_file != NULL) fclose(log_file);
     if (strands_file != NULL) fclose(strands_file);
 
     #undef PRINT_BOTH
-    return 0;
+    return exit_status;
 }

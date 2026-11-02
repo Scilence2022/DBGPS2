@@ -35,8 +35,8 @@ def arrow(ax, x0, y0, x1, y1, color=fs.INK2, ls="-", lw=0.7, zorder=1):
 # a: the shared framework, with the DBGPS2 additions attached to the stage they act on
 ax = fig.add_subplot(gs[0, :])
 ax.set_xlim(-0.004, 1.004); ax.set_ylim(0, 1); ax.axis("off")
-steps = ["Sequencing\nreads", "Count k-mers\ninto a graph with\nk-mer coverage", "Build a seed\nfor each index",
-         "Extend candidate paths\nthrough admissible\nchild k-mers", "Validate\ncomplete paths\nwith the code",
+steps = ["Sequencing\nreads", "Count $k$-mers\ninto a graph with\n$k$-mer coverage", "Build a seed\nfor each index",
+         "Extend candidate paths\nthrough admissible\nchild $k$-mers", "Validate\ncomplete paths\nwith the code",
          "Accept the strand\nif one valid\nsequence remains"]
 widths = [0.085, 0.145, 0.105, 0.31, 0.11, 0.135]
 gap = (1 - sum(widths)) / (len(steps) - 1)
@@ -72,9 +72,9 @@ for x0, L, t, c in segs:
     ax.text(x0 + L / 2, 0.925, t, ha="center", va="center", fontsize=5.3)
 ax.annotate("", xy=(7.5, 0.825), xytext=(18, 0.825),
             arrowprops=dict(arrowstyle="|-|,widthA=0.18,widthB=0.18", lw=0.6, color=fs.INK2, shrinkA=0, shrinkB=0))
-ax.text(12.75, 0.75, "seed k-mer", ha="center", va="center", fontsize=5.2, color=fs.INK2)
+ax.text(12.75, 0.75, "seed $k$-mer", ha="center", va="center", fontsize=5.2, color=fs.INK2)
 arrow(ax, 19, 0.825, 71, 0.825, color=fs.INK2, lw=0.6)
-ax.text(45, 0.755, "one base per step; four possible children, kept if cov(child) > c (here c = 2)",
+ax.text(45, 0.755, "one base per step; four possible children, kept if cov(child) > $c$ (here $c$ = 2)",
         ha="center", va="center", fontsize=5.3, color=fs.INK2)
 
 
@@ -93,7 +93,7 @@ for i, (x, n) in enumerate(zip(true_x, true_n)):
 # a low-count error child is dropped
 arrow(ax, 23.3, yt - 0.05, 29.6, yd + 0.05, color=REJECT, ls="--", lw=0.7)
 node(ax, 31, yd, 1, color=REJECT, tc=fs.INK2)
-ax.text(31, yd - 0.135, "cov ≤ c: dropped", ha="center", va="center", fontsize=5.2, color=fs.INK2)
+ax.text(31, yd - 0.135, "cov ≤ $c$: dropped", ha="center", va="center", fontsize=5.2, color=fs.INK2)
 # a stronger error child passes the cutoff and becomes a second candidate
 ex = [49, 58, 67]
 arrow(ax, 41.3, yt - 0.05, 47.6, yd + 0.05, color=fs.DBGPS_C, lw=0.8)
@@ -101,7 +101,7 @@ for a, b in zip(ex[:-1], ex[1:]):
     arrow(ax, a + 1.6, ye, b - 1.6, ye, color=fs.DBGPS_C, lw=0.8)
 for x, n in zip(ex, [6, 5, 6]):
     node(ax, x, ye, n, color=fs.DBGPS_C)
-ax.text(58, ye - 0.135, "error branch with cov > c: kept as a second candidate", ha="center", va="center",
+ax.text(58, ye - 0.135, "error branch with cov > $c$: kept as a second candidate", ha="center", va="center",
         fontsize=5.2, color=fs.DBGPS_C)
 arrow(ax, 68.8, yt, 74.8, yt, color=fs.INK, lw=0.7)
 arrow(ax, 68.8, ye, 74.8, ye, color=fs.DBGPS_C, lw=0.7)
@@ -131,7 +131,7 @@ def cartoon(ax, title, sub, ylabel=True):
     ax.set_xticks([0, 50, 100, 149]); ax.set_xticklabels(["0", "50", "100", "149"])
     ax.set_xlabel("Extension step")
     if ylabel:
-        ax.set_ylabel("k-mer coverage")
+        ax.set_ylabel("$k$-mer coverage")
     ax.set_title(title, fontsize=6.2, pad=11, fontweight="bold")
     ax.text(0.5, 1.02, sub, transform=ax.transAxes, ha="center", va="bottom", fontsize=5.1, color=fs.INK2)
 
@@ -139,25 +139,25 @@ def cartoon(ax, title, sub, ylabel=True):
 ax = fig.add_subplot(gs[2, 0])
 cartoon(ax, "DBGPS, low cutoff", "error branches kept, search overflows")
 ax.axhline(2, color=fs.DBGPS_C, lw=0.8, ls="--")
-ax.text(147, 2.15, "c", ha="right", va="bottom", fontsize=6)
+ax.text(147, 2.15, "$c$", ha="right", va="bottom", fontsize=6)
 ax.legend(loc="upper center", fontsize=5.0, handletextpad=0.4)
 fs.panel(ax, "c", x=-0.3, y=1.1)
 
 ax = fig.add_subplot(gs[2, 1])
 cartoon(ax, "DBGPS, high cutoff", "true path broken, strand lost", ylabel=False)
 ax.axhline(9, color=fs.DBGPS_C, lw=0.8, ls="--")
-ax.text(147, 9.6, "c", ha="right", va="bottom", fontsize=6)
+ax.text(147, 9.6, "$c$", ha="right", va="bottom", fontsize=6)
 lowm = true < 9
 ax.scatter(steps_[lowm], true[lowm], s=3, color=fs.INK, marker="x", lw=0.5, zorder=4)
 fs.panel(ax, "d", x=-0.2, y=1.1)
 
 ax = fig.add_subplot(gs[2, 2])
-cartoon(ax, "DBGPS2, local window", "child must stay within r-fold of its parent", ylabel=False)
+cartoon(ax, "DBGPS2, local window", "child must stay within $r$-fold of its parent", ylabel=False)
 r = 2.55
 band = ax.fill_between(steps_[1:], np.maximum(true[:-1] / r, 2), np.minimum(true[:-1] * r, 80),
                        color=fs.DBGPS2_C, alpha=0.18, lw=0)
 ax.axhline(2, color=fs.DBGPS_C, lw=0.6, ls="--")
-ax.text(147, 2.15, "c", ha="right", va="bottom", fontsize=6)
+ax.text(147, 2.15, "$c$", ha="right", va="bottom", fontsize=6)
 ax.legend([band], ["Window"], loc="upper center", fontsize=5.0, handletextpad=0.4)
 fs.panel(ax, "e", x=-0.2, y=1.1)
 
@@ -178,9 +178,9 @@ ax.axvline(child, color=fs.INK2, lw=0.4, ls=":", zorder=0)
 ax.set_xscale("log"); ax.set_xlim(1, 400); ax.set_ylim(-0.55, 1.55)
 ax.set_xticks([1, 10, 100]); ax.set_xticklabels(["1", "10", "100"])
 ax.set_yticks([]); ax.spines["left"].set_visible(False)
-ax.set_xlabel("k-mer coverage")
+ax.set_xlabel("$k$-mer coverage")
 ax.set_title("Same count, opposite decision", fontsize=6.2, pad=11, fontweight="bold")
-ax.text(0.5, 1.02, "integer window at r = 2.55, c = 1", transform=ax.transAxes, ha="center", va="bottom",
+ax.text(0.5, 1.02, "integer window at $r$ = 2.55, $c$ = 1", transform=ax.transAxes, ha="center", va="bottom",
         fontsize=5.1, color=fs.INK2)
 fs.panel(ax, "f", x=-0.09, y=1.1)
 

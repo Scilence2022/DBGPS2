@@ -43,18 +43,18 @@ for s, col, lab in CMP:
     v = np.sort(np.maximum(st.min_cov.values, 0.5))
     ax.plot(v, np.arange(1, len(v) + 1) / len(v) * 100, color=col, lw=1.1)
 ax.set_xscale("log"); ax.set_xlim(0.5, 2000)
-ax.set_xlabel("Minimum k-mer coverage along strand path"); ax.set_ylabel("Strands (cumulative %)")
+ax.set_xlabel("Minimum $k$-mer coverage along strand path"); ax.set_ylabel("Strands (cumulative %)")
 fs.panel(ax, "b")
 
 # c: recovery versus cutoff
 ax = fig.add_subplot(gs[0, 2])
 g31 = grid(31)
-for (g, r, col, ls, lab) in [(g31, 0, fs.DBGPS_C, "-", "DBGPS, k = 31"), (g31, R_DEF, fs.DBGPS2_C, "-", "DBGPS2, k = 31")] + \
-        ([(grid(21), R_DEF, fs.DBGPS2_C, (0, (2, 1)), "DBGPS2, k = 21")] if 21 in ks_list else []):
+for (g, r, col, ls, lab) in [(g31, 0, fs.DBGPS_C, "-", "DBGPS, $k$ = 31"), (g31, R_DEF, fs.DBGPS2_C, "-", "DBGPS2, $k$ = 31")] + \
+        ([(grid(21), R_DEF, fs.DBGPS2_C, (0, (2, 1)), "DBGPS2, $k$ = 21")] if 21 in ks_list else []):
     d = g[g.r == r].sort_values("c")
     ax.plot(d.c, d.correct / N * 100, color=col, ls=ls, lw=1.1, marker="o", ms=2, mec="white", mew=0.3, label=lab)
 ax.set_xscale("log"); ax.set_ylim(0, 102)
-ax.set_xlabel("Coverage cutoff c"); ax.set_ylabel("Strands recovered (%)")
+ax.set_xlabel("Coverage cutoff $c$"); ax.set_ylabel("Strands recovered (%)")
 ax.legend(loc="lower right", fontsize=5.2)
 fs.panel(ax, "c")
 
@@ -62,8 +62,8 @@ fs.panel(ax, "c")
 ax = fig.add_subplot(gs[1, 0])
 cats = [("no_path", "Path broken", "#b9b8b3"), ("overflow", "Path overflow", "#eb6834"),
         ("no_valid", "No CRC-valid path", "#eda100"), ("ambiguous", "Ambiguous", "#6250d6"), ("wrong", "Wrong strand", "#e34948")]
-bars = [("DBGPS\nk = 31", g31[g31.r == 0]), ("DBGPS2\nk = 31", g31[g31.r == R_DEF])] + \
-       ([("DBGPS2\nk = 21", grid(21)[grid(21).r == R_DEF])] if 21 in ks_list else [])
+bars = [("DBGPS\n$k$ = 31", g31[g31.r == 0]), ("DBGPS2\n$k$ = 31", g31[g31.r == R_DEF])] + \
+       ([("DBGPS2\n$k$ = 21", grid(21)[grid(21).r == R_DEF])] if 21 in ks_list else [])
 for i, (lab, d) in enumerate(bars):
     row = d.loc[d.correct.idxmax()]
     bottom = 0
@@ -96,8 +96,8 @@ for k in (31, 21):
             rows.append(dict(k=k, pct=100, r=r, best=g[g.r == r].correct.max()))
 dep = pd.DataFrame(rows)
 dep.to_csv(os.path.join(fs.DATADIR, "ht176_depth_series.csv"), index=False)
-for (r, k), col, ls, lab in [((0, 31), fs.DBGPS_C, "-", "DBGPS, k = 31"), ((R_DEF, 31), fs.DBGPS2_C, "-", "DBGPS2, k = 31"),
-                              ((R_DEF, 21), fs.DBGPS2_C, (0, (2, 1)), "DBGPS2, k = 21")]:
+for (r, k), col, ls, lab in [((0, 31), fs.DBGPS_C, "-", "DBGPS, $k$ = 31"), ((R_DEF, 31), fs.DBGPS2_C, "-", "DBGPS2, $k$ = 31"),
+                              ((R_DEF, 21), fs.DBGPS2_C, (0, (2, 1)), "DBGPS2, $k$ = 21")]:
     d = dep[(dep.r == r) & (dep.k == k)].sort_values("pct") if len(dep) else []
     if len(d):
         ax.plot(d.pct * 2 * READS[S] / 100 / N, d.best / N * 100, color=col, ls=ls, lw=1.1, marker="o", ms=2.2,
@@ -122,7 +122,7 @@ if len(kt):
     ax.plot(kt.k, kt.dbgps2 / N * 100, color=fs.DBGPS2_C, marker="o", ms=2.6, mec="white", mew=0.3, lw=1.1, label="DBGPS2")
     ax.set_xticks(kt.k)
 ax.set_ylim(0, 102)
-ax.set_xlabel("k-mer size k"); ax.set_ylabel("Best strand recovery (%)")
+ax.set_xlabel("$k$-mer size $k$"); ax.set_ylabel("Best strand recovery (%)")
 ax.legend(loc="center right", fontsize=5.2)
 fs.panel(ax, "f")
 

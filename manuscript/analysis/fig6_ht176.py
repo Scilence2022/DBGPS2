@@ -55,13 +55,13 @@ for (g, r, col, ls, lab) in [(g31, 0, fs.DBGPS_C, "-", "DBGPS, $k$ = 31"), (g31,
     ax.plot(d.c, d.correct / N * 100, color=col, ls=ls, lw=1.1, marker="o", ms=2, mec="white", mew=0.3, label=lab)
 ax.set_xscale("log"); ax.set_ylim(0, 102)
 ax.set_xlabel("Coverage cutoff $c$"); ax.set_ylabel("Strands recovered (%)")
-ax.legend(loc="lower right", fontsize=5.2)
+ax.legend(loc="lower right")
 fs.panel(ax, "c")
 
 # d: strands that are not recovered, by cause
 ax = fig.add_subplot(gs[1, 0])
-cats = [("no_path", "Path broken", "#b9b8b3"), ("overflow", "Path overflow", "#eb6834"),
-        ("no_valid", "No CRC-valid path", "#eda100"), ("ambiguous", "Ambiguous", "#6250d6"), ("wrong", "Wrong strand", "#e34948")]
+cats = [(f, l, fs.OUTCOME[f]) for f, l in [("no_path", "Broken path"), ("overflow", "Overflow"), ("no_valid", "No valid path"),
+                                           ("ambiguous", "Ambiguous"), ("wrong", "Wrong")]]
 bars = [("DBGPS\n$k$ = 31", g31[g31.r == 0]), ("DBGPS2\n$k$ = 31", g31[g31.r == R_DEF])] + \
        ([("DBGPS2\n$k$ = 21", grid(21)[grid(21).r == R_DEF])] if 21 in ks_list else [])
 for i, (lab, d) in enumerate(bars):
@@ -74,7 +74,7 @@ for i, (lab, d) in enumerate(bars):
     ax.text(i, bottom + 0.05, f"{bottom:.2f}%", ha="center", fontsize=5.2, color=fs.INK2)
 ax.set_xticks(range(len(bars)), [b[0] for b in bars]); ax.set_ylim(0, 3.2)
 ax.set_ylabel("Strands not recovered (%)")
-ax.legend(loc="upper right", fontsize=4.9, handlelength=0.9, labelspacing=0.3)
+ax.legend(loc="upper right", fontsize=5.5, handlelength=0.9, labelspacing=0.3)
 fs.panel(ax, "d")
 
 # e: sequencing depth
@@ -102,7 +102,8 @@ for (r, k), col, ls, lab in [((0, 31), fs.DBGPS_C, "-", "DBGPS, $k$ = 31"), ((R_
     if len(d):
         ax.plot(d.pct * 2 * READS[S] / 100 / N, d.best / N * 100, color=col, ls=ls, lw=1.1, marker="o", ms=2.2,
                 mec="white", mew=0.3, label=lab)
-ax.axhline(95, color=fs.GRID, lw=0.7, zorder=0)
+ax.axhline(95, color=fs.GRAY, lw=0.5, ls=":", zorder=0)
+ax.legend(loc="lower right")
 ax.set_xscale("log"); ax.set_ylim(0, 102)
 ax.set_xlabel("Reads per designed strand"); ax.set_ylabel("Strands recovered (%)")
 fs.panel(ax, "e")
@@ -123,7 +124,7 @@ if len(kt):
     ax.set_xticks(kt.k)
 ax.set_ylim(0, 102)
 ax.set_xlabel("$k$-mer size $k$"); ax.set_ylabel("Best strand recovery (%)")
-ax.legend(loc="center right", fontsize=5.2)
+ax.legend(loc="center right")
 fs.panel(ax, "f")
 
 fs.save(fig, "Fig6_HT176")

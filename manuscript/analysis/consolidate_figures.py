@@ -1,7 +1,7 @@
 """Main and Extended Data figures from preserved measurements; no new reconstruction runs.
 
-Figures 2-6 and Extended Data Figure 2. Reads the snapshots in ../data/source_data and writes to ../figures;
-Figure 1 comes from fig1_concept.py and Extended Data Figure 1 from fig6_ht176.py.
+Figures 2-5 and 7 and Extended Data Figure 1. Reads the snapshots in ../data/source_data and writes to ../figures;
+Figure 1 comes from fig1_concept.py and Figure 6 from fig6_ht176.py.
 """
 from pathlib import Path
 import gzip,hashlib,json,shutil
@@ -108,7 +108,7 @@ save(fig,2,'simulation_boundaries')
 
 # Figure 3 connects physical fragmentation, graph interference and rescued strands.
 fig,ax=grid()
-for samp,lab in zip(SAMPLES+['HT176'],LABELS+['HT176']):
+for samp,lab in zip(SAMPLES,LABELS):
     fr=csv(T/f'qc/{samp}.frag.tsv',f'thermal_{samp}.frag.tsv',sep='\t').to_numpy();h=fr[:,1]
     ax[0].step(fr[:,0],np.cumsum(h)/h.sum()*100,where='post',color=HC[samp],label=lab)
     pos=sum(csv(T/f'qc/{samp}_{mate}.pos.tsv',f'thermal_{samp}_{mate}.pos.tsv',sep='\t').to_numpy(dtype=float) for mate in [1,2]);pos[:,0]/=2
@@ -137,12 +137,12 @@ for lab,mask,col in [('Both',(o1=='S')&(o2=='S'),SKY),('DBGPS2 only',(o1!='S')&(
 ax[5].axvline(float(d.c)+.5,color=ORANGE,ls='--',lw=.8);ax[5].set(xscale='log',xlim=(.5,300),ylim=(0,102),xlabel='Minimum reference-path count',ylabel='Strands in group (cumulative %)');ax[5].legend(loc='lower right');title(ax[5],'f')
 save(fig,3,'degradation_mechanism')
 
-# Figure 4 combines recovery, parameter choice, sequencing requirement and the cutoff dependence, with HT176.
-SA=SAMPLES+['HT176'];LA=LABELS+['HT176'];xa=np.r_[np.arange(6),6.6]
+# Figure 4 combines recovery, parameter choice, sequencing requirement and the cutoff dependence.
+SA=SAMPLES;LA=LABELS;xa=np.arange(6)
 grids={s:csv(T/f'full/{s}.grid.tsv',f'thermal_{s}.grid.tsv',sep='\t') for s in SA}
 kt=csv(TD/'ksize_sweep.csv','thermal_ksize_sweep.csv');dep=csv(TD/'depth_series.csv','thermal_depth_series.csv');need=csv(TD/'depth_needed_95.csv','thermal_depth_needed_95.csv')
 fig,ax=grid(4,2);x=xa;w=.36
-for j,(ratio,col,label) in enumerate([(0,ORANGE,'DBGPS rule'),(2.55,BLUE,'DBGPS2')]):
+for j,(ratio,col,label) in enumerate([(0,ORANGE,'DBGPS'),(2.55,BLUE,'DBGPS2')]):
     y=[grids[s][grids[s].r==ratio].correct.max()/2100 for s in SA];ax[0].bar(x+(j-.5)*w,y,w,color=col,label=label)
 ax[0].set(xticks=x,xticklabels=LA,ylim=(0,125),yticks=[0,20,40,60,80,100],ylabel='Exact strands (%)');ax[0].legend(loc='upper right',ncol=2,frameon=False);title(ax[0],'a')
 g=grids['HT5'];rs=sorted(g.r.unique(),key=lambda v:(v==0,v));cs=sorted(g.c.unique());mat=np.array([[g[(g.r==r)&(g.c==c)].correct.iloc[0]/2100 for c in cs] for r in rs])
@@ -156,23 +156,18 @@ for i,s in enumerate(SA):
 ax[2].set(xticks=xa*2.5+.5,xticklabels=LA,ylim=(0,102),ylabel='Designed strands (%)');ax[2].legend(loc='lower center',bbox_to_anchor=(.5,1.0),ncol=6,handlelength=.8,columnspacing=.7,handletextpad=.3,frameon=False);title(ax[2],'c')
 for s in SAMPLES:
     z=kt[kt['sample']==s].sort_values('k');ax[3].plot(z.k,z.dbgps2/2100,color=HC[s],marker='o',ms=2.5,label=dict(zip(SAMPLES,LABELS))[s])
-k176=csv(TD/'ht176_ksize.csv','thermal_ht176_ksize.csv').sort_values('k');ax[3].plot(k176.k,k176.dbgps2/2100,color=HC['HT176'],marker='o',ms=2.5,label='HT176')
-ax[3].set(xticks=[17,19,21,23,25,27,31],xlabel='$k$-mer size',ylabel='Exact strands by DBGPS2 (%)');ax[3].legend(ncol=4,loc='lower center');title(ax[3],'d')
+ax[3].set(xticks=[17,19,21,23,25,27,31],xlabel='$k$-mer size',ylabel='Exact strands by DBGPS2 (%)');ax[3].legend(ncol=3,loc='lower center');title(ax[3],'d')
 for r,k,col,ls,label in [(0,31,ORANGE,'-','DBGPS $k$ = 31'),(2.55,31,BLUE,'-','DBGPS2 $k$ = 31'),(2.55,21,BLUE,'--','DBGPS2 $k$ = 21')]:
     z=dep[(dep['sample']=='HT5')&(dep.r==r)&(dep.k==k)].sort_values('pct');reads=z.pct*2*58.64*1e6/100/210000
     ax[4].plot(reads,z.best/2100,color=col,ls=ls,marker='o',ms=2.2,label=label)
 ax[4].set(xscale='log',ylim=(0,102),xlabel='Reads per designed strand',ylabel='Exact strands (%)');ax[4].legend(loc='upper left');title(ax[4],'e')
-d176=csv(TD/'ht176_depth_series.csv','thermal_ht176_depth_series.csv')
-def need176(k,r):  # same log-linear interpolation as for the series; 60,642,860 read pairs
-    z=d176[(d176.k==k)&(d176.r==r)].sort_values('pct');xs=z.pct.values*2*60642860/100/210000;ys=z.best.values/210000
-    i=np.where(ys>=.95)[0][0];t=(.95-ys[i-1])/(ys[i]-ys[i-1]);return float(np.exp(np.log(xs[i-1])+t*(np.log(xs[i])-np.log(xs[i-1]))))
-for j,(lab,col,mk,kr) in enumerate([('DBGPS k31',ORANGE,'s',(31,0)),('DBGPS2 k31',BLUE,'o',(31,2.55)),('DBGPS2 k21',SKY,'^',(21,2.55))]):
-    vals=np.array([need[(need['sample']==name)&(need.method==lab)].reads_per_strand_for_95pct.iloc[0] for name in LABELS]+[need176(*kr)]);ax[5].scatter(x+(j-1)*.2,vals,s=13,marker=mk,color=col,label=lab.replace(' k',' $k$ = '),zorder=3)
+for j,(lab,col,mk) in enumerate([('DBGPS k31',ORANGE,'s'),('DBGPS2 k31',BLUE,'o'),('DBGPS2 k21',SKY,'^')]):
+    vals=np.array([need[(need['sample']==name)&(need.method==lab)].reads_per_strand_for_95pct.iloc[0] for name in LABELS]);ax[5].scatter(x+(j-1)*.2,vals,s=13,marker=mk,color=col,label=lab.replace(' k',' $k$ = '),zorder=3)
     for xx,v in zip(x+(j-1)*.2,vals):
         if np.isnan(v):ax[5].text(xx,13,'n.r.',rotation=90,ha='center',va='bottom',fontsize=5)
-ax[5].set(yscale='log',ylim=(10,6000),xticks=x,xticklabels=LA,xlim=(-.5,7.1),ylabel='Reads per strand\nfor 95% recovery');ax[5].legend(ncol=3,loc='upper center',columnspacing=.8,handletextpad=.2,frameon=False);title(ax[5],'f')
+ax[5].set(yscale='log',ylim=(10,6000),xticks=x,xticklabels=LA,xlim=(-.5,5.5),ylabel='Reads per strand\nfor 95% recovery');ax[5].legend(ncol=3,loc='upper center',columnspacing=.8,handletextpad=.2,frameon=False);title(ax[5],'f')
 for a,ratio,lab in [(ax[6],0,'DBGPS'),(ax[7],2.55,'DBGPS2')]:
-    for s in ['HT_con','HT4','HT5','HT176']:
+    for s in ['HT_con','HT3','HT4','HT5']:
         z=grids[s][grids[s].r==ratio].sort_values('c');a.plot(z.c,z.correct/2100,color=HC[s],marker='o',ms=2.2,label=dict(zip(SA,LA))[s])
     a.set(xscale='log',ylim=(0,102),xlabel='Absolute cutoff $c$',ylabel=f'Exact strands, {lab} (%)')
 ax[7].legend(loc='lower left');title(ax[6],'g');title(ax[7],'h')
@@ -187,7 +182,7 @@ correct=np.array([z['correct']/z['designed']*100 for z in d['photolithographic']
 ax[0].bar(xx,correct,.58,color=BLUE,label='Exact');ax[0].bar(xx,wrong,.58,bottom=correct,color=RED,label='Wrong');ax[0].bar(xx,100-correct-wrong,.58,bottom=correct+wrong,color=LIGHT,label='Missing')
 for i,z in enumerate(d['photolithographic']):ax[0].text(i,correct[i]/2,f'{correct[i]:.2f}%',ha='center',color='white',fontsize=7);ax[0].text(i,103,f"{z['wrong']} wrong",ha='center',fontsize=6)
 ax[0].set(xticks=xx,xticklabels=['File 1\nfile recovered','File 2\nfile recovered','File 3\nfile incomplete'],ylim=(0,130),yticks=[0,25,50,75,100],ylabel='Designed strands (%)');ax[0].legend(ncol=3,loc='upper center',bbox_to_anchor=(.5,1.04),frameon=False);title(ax[0],'a')
-for j,(method,col,label) in enumerate([('cluster_msa_vote',GRAY,'MSA'),('dbgps_rule',ORANGE,'DBGPS rule'),('dbgps2',BLUE,'DBGPS2')]):
+for j,(method,col,label) in enumerate([('cluster_msa_vote',GRAY,'MSA'),('dbgps_rule',ORANGE,'DBGPS'),('dbgps2',BLUE,'DBGPS2')]):
     z=photo_bench[photo_bench.method==method].sort_values('dataset');ax[1].bar(np.arange(2)+(j-1)*.24,z.exact_recovery*100,.23,color=col,label=label)
 ax[1].set(xticks=[0,1],xticklabels=['File 1','File 2'],ylim=(0,125),yticks=[0,25,50,75,100],ylabel='Exact strands (%)');ax[1].legend(ncol=3,loc='upper center',frameon=False);title(ax[1],'b')
 total=[12*NEED,int(blk.pooled_correct.sum()),int(blk.routed_correct.sum())];ys=[2,1,0]
@@ -209,7 +204,7 @@ for field,col,name in [('absent_kmer',GRAY,'True $k$-mer absent'),('singleton_on
 ax[6].set(ylim=(0,17500),yticks=[0,5000,10000],xlabel='Pooled blocks below bound',ylabel='Indices lacking a candidate');ax[6].yaxis.set_major_formatter(KILO);ax[6].legend(ncol=2,loc='upper center',fontsize=5,frameon=False,columnspacing=.6,handlelength=.9,handletextpad=.3);title(ax[6],'f')
 save(fig,5,'high_error_reconstruction')
 
-# Extended Data Figure 2 reports exact DNA Fountain and Organick strands; file recovery is stated in its legend.
+# Extended Data Figure 1 reports exact DNA Fountain and Organick strands; file recovery is stated in its legend.
 fig=plt.figure(figsize=(fs.DOUBLE,2.75));gs=fig.add_gridspec(1,2,wspace=.3,left=.075,right=.985,top=.92,bottom=.15)
 a=fig.add_subplot(gs[0,0]);bax=fig.add_subplot(gs[0,1]);xx=np.arange(2)
 for shift,key,col,label in [(-.17,'merge',ORANGE,'Read merging'),(.17,'DBGPS2',BLUE,'DBGPS2')]:
@@ -221,19 +216,19 @@ place=[(-6,5,'right'),(-6,-8,'right'),(-6,-2,'right'),(-6,-2,'right'),(-6,-2,'ri
 for row,name,(ox,oy,ha) in zip(d['organick'],ops,place):
     bax.scatter(row['recovery_pct'],row['wrong'],color=BLUE,s=18,zorder=3);bax.annotate(name,(row['recovery_pct'],row['wrong']),xytext=(ox,oy),textcoords='offset points',ha=ha,fontsize=6)
 bax.set(xlim=(95,98.5),ylim=(-12,190),xlabel='Exact 110-nt bodies / all designs (%)',ylabel='Incorrect outputs');title(bax,'b')
-save(fig,'ED2','format_transfer')
+save(fig,'ED1','format_transfer')
 
-# Figure 6 reports reconstruction time across all five inputs, the resource controls and graph memory.
+# Figure 7 reports reconstruction time across all five inputs, the resource controls and graph memory.
 rc=csv(BENCH/'resource_control/all_configurations_summary.csv');mem=csv(BENCH/'speed_extension/Table6_configuration_comparison.csv')
 ds=['fountain','nbt_file16','song_ht176'];dl=['DNA\nFountain','Organick\nFile 16','HT176']
 cases=['dbgps_rule','dbgps2','dbgps2_alt_c','dbgps2_B8','dbgps2_B16','dbgps2_F32','dbgps2_F34','dbgps2_B12_F34']
-names=['DBGPS rule','DBGPS2 primary $c$','DBGPS2 alternate $c$','Query B8','Query B16','Counting F32','Counting F34','B12 and F34']
+names=['DBGPS','DBGPS2 primary $c$','DBGPS2 alternate $c$','Query B8','Query B16','Counting F32','Counting F34','B12 and F34']
 get=lambda frame,w,ds,c:frame[(frame.workers==w)&(frame.dataset==ds)&(frame.case==c)].iloc[0]
 fig=plt.figure(figsize=(fs.DOUBLE,7.0));gsp=fig.add_gridspec(3,2,height_ratios=[.75,1,1])
 top=fig.add_subplot(gsp[0,:]);ax=[fig.add_subplot(gsp[i,j]) for i,j in [(1,1),(2,0),(1,0),(2,1)]]  # serial, three workers, memory, wall vs CPU
 t5=csv(BENCH/'reconstruction_speed/Table5_reconstruction_speed.csv','Table5_reconstruction_speed.csv')
 inputs=[('file1','Photolithographic\nFile 1'),('file2','Photolithographic\nFile 2'),('fountain','DNA\nFountain'),('nbt_file16','Organick\nFile 16'),('song_ht176','HT176')]
-for j,(case,col,mk,lab) in enumerate([('cluster_msa_vote',GRAY,'D','Conventional baseline'),('dbgps_rule',ORANGE,'s','DBGPS rule'),('dbgps2',BLUE,'o','DBGPS2')]):
+for j,(case,col,mk,lab) in enumerate([('cluster_msa_vote',GRAY,'D','Conventional baseline'),('dbgps_rule',ORANGE,'s','DBGPS'),('dbgps2',BLUE,'o','DBGPS2')]):
     m,s=[],[]
     for dd,_ in inputs:
         photo=dd.startswith('file');row=(t5[(t5.dataset==dd)&(t5.method==case)] if photo else mem[(mem.dataset==dd)&(mem.case==case)]).iloc[0]
@@ -257,6 +252,6 @@ for dd,prefix,col,lab in zip(ds,['F','O','H'],[BLUE,ORANGE,GREEN],['Fountain','O
         ax[3].annotate(tag,(row.wall_speedup,row.cpu_ratio_vs_msa),xytext=offsets[tag],textcoords='offset points',fontsize=6,arrowprops={'arrowstyle':'-','lw':.3,'color':GRAY,'shrinkA':0,'shrinkB':2})
 ax[3].plot([0,35],[0,35],color=GRAY,ls=':',lw=.8);ax[3].set(xlim=(0,35),ylim=(0,35),xlabel='Baseline wall time / DBGPS2 wall time',ylabel='Baseline CPU time / DBGPS2 CPU time');ax[3].legend(loc='lower right',frameon=False);title(ax[3],'e')
 fig.subplots_adjust(left=.14,right=.955,wspace=.75,hspace=.42,top=.965,bottom=.075)
-save(fig,6,'speed_and_memory')
+save(fig,7,'speed_and_memory')
 
 print('FIGURES_COMPLETE',flush=True)

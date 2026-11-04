@@ -1,7 +1,7 @@
 /*
  * minjson - Minimal JSON parser/builder for JSON-RPC 2.0
  * 
- * This is a lightweight JSON library specifically designed for the DBGPS3
+ * This is a lightweight JSON library specifically designed for the DBGPS2-RPC
  * server's JSON-RPC protocol. It supports:
  *   - Parsing JSON objects, arrays, strings, numbers, booleans, null
  *   - Building JSON values programmatically

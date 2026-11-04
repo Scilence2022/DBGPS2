@@ -1,7 +1,7 @@
 # Redundancy and error correction
 
-DBGPS2 and DBGPS3 share the same byte-level protection module and the same
-`-E CODE` option. Both default to `crc16`. For DBGPS3 inputs without a checksum,
+DBGPS2 and DBGPS2-RPC share the same byte-level protection module and the same
+`-E CODE` option. Both default to `crc16`. For DBGPS2-RPC inputs without a checksum,
 explicitly select `-E none` to retain unprotected path search. No new runtime
 library is required.
 
@@ -19,10 +19,10 @@ Examples (the input must have been encoded with the selected protection):
 ```bash
 ./DBGPS2 -E rs:8B -a 1000 -b 1001 -o assembled reads.fa
 ./DBGPS2 -E crc32c -a 1000 -b 1001 -o assembled reads.fa
-./DBGPS3 -E rs:8B -a 1000 -b 1001 -o assembled reads.fa
-./DBGPS3 -E none -a 1000 -b 1001 -o assembled reads.fa
-./DBGPS3 -S -E hamming reads.fa
-./DBGPS3 -S -E rs:4B -M examples/3base-5bit.map -i 24 -l 120 reads.fa
+./DBGPS2-RPC -E rs:8B -a 1000 -b 1001 -o assembled reads.fa
+./DBGPS2-RPC -E none -a 1000 -b 1001 -o assembled reads.fa
+./DBGPS2-RPC -S -E hamming reads.fa
+./DBGPS2-RPC -S -E rs:4B -M examples/3base-5bit.map -i 24 -l 120 reads.fa
 ```
 
 Use uppercase `B` to specify bytes: `rs:8B` means eight parity bytes (64 bits).
@@ -48,9 +48,8 @@ P trailer bytes require `ceil(8P/M) * B` extra bases. The final mapping padding
 must be zero and is excluded from protection. Hamming also has its own zero
 padding inside the trailer, which is validated separately.
 
-DBGPS2 requires `index + payload + redundancy` to be shorter than 300 bases.
-DBGPS3 permits `payload + redundancy` up to 300 bases, plus the index. Both
-validate lengths and codeword capacities before counting reads. The read
+DBGPS2 and DBGPS2-RPC require `index + payload + redundancy` to be shorter than
+300 bases. Both validate lengths and codeword capacities before counting reads. The read
 counting limit grows to include the complete strand and both 18-base primers
 when necessary, including canonical mappings.
 
@@ -109,7 +108,7 @@ byte with zero bits. This systematic trailer packing is part of DBGPS's wire
 format and must match the writer. A single error in any of the thirteen bits
 is corrected; any double error within that word is rejected.
 
-## DBGPS3 server and C API
+## DBGPS2-RPC server and C API
 
 `-E` selects immutable protection shared by all queries. `graph/info` exposes
 `redundancy.code`, `spec`, `parity_bytes`, `parity_bases`, `padding_bits`, and
@@ -126,10 +125,10 @@ extension. With `none`, the original arbitrary-k-mer behavior is unchanged.
 `graph/load` preserves both mapping and redundancy configuration.
 
 For C callers, configure `g->index_len` and `g->path_len`, then call
-`dbgps3_set_mapping()` and `dbgps3_set_redundancy()` before serving queries.
+`dbgps_set_mapping()` and `dbgps_set_redundancy()` before serving queries.
 Both setters preserve the previous configuration on failure. A zero-initialized
-`dbgps_redundancy_t` selects `none`; graphs created by `dbgps3_load()` or
-`dbgps3_load_filtered()` explicitly initialize protection to `crc16`. The byte API in `dbgps_redundancy.h` can
+`dbgps_redundancy_t` selects `none`; graphs created by `dbgps_load()` or
+`dbgps_load_filtered()` explicitly initialize protection to `crc16`. The byte API in `dbgps_redundancy.h` can
 also encode input data and validate/correct complete codewords independently
 of the graph. Decode failures leave its input unchanged. DNA encoding and
 decoding use `dbgps_codec.h`, and `dbgps_strand.h` composes both layers.

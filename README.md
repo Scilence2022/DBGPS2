@@ -7,7 +7,7 @@ DBGPS2 is a collection of tools for DNA data storage analysis and processing, wi
 This project provides software tools for analyzing and reconstructing DNA sequences from data storage systems. The main components are:
 
 - **DBGPS2**: A read-length constrained sequence assembler with dynamic coverage ratio support (formerly DBGPS-dy2-rl)
-- **DBGPS3**: Next-generation de Bruijn graph assembler with interactive server mode support
+- **DBGPS2-RPC**: The DBGPS2 assembler with the same options and batch output, plus a JSON-RPC server for interactive queries
 
 ## Installation
 
@@ -30,8 +30,8 @@ To build individual components:
 
 ```
 make DBGPS2
-make DBGPS3
-make dbgps3-client
+make DBGPS2-RPC
+make dbgps2-rpc-client
 ```
 
 To build all targets:
@@ -46,9 +46,10 @@ Run `make test` (requires Python 3) to check missing k-mer lookups, bounded path
 searches, CRC ambiguity, allocation cleanup, and exact strand reconstruction
 across repeated CLI runs, thread counts, coverage cutoffs, and ratio sweeps.
 They also check all 72 supported codec block widths, custom mapping reconstruction,
-forbidden words, CRC padding, malformed codebooks, and larger indices. DBGPS3's
+forbidden words, CRC padding, malformed codebooks, and larger indices. DBGPS2-RPC's
 live JSON-RPC checks cover mapping metadata, exact large indices, invalid layouts,
-and the interactive client's index shortcut. Bloom regressions cover exact
+and the interactive client's index shortcut. `tests/test_rpc_parity.py` requires
+DBGPS2-RPC to match DBGPS2's batch output and serve the same strands over JSON-RPC. Bloom regressions cover exact
 query fallback, forced false positives, two-pass singleton removal, cross-file
 repeats, saturated counts, concurrent queries during reload, malformed inputs,
 and reconstruction with both filters enabled. Redundancy checks cover CRC vectors,
@@ -100,16 +101,16 @@ Options:
 Both assemblers accept `-E none|crc16|crc32|crc32c|rs[:NB]|hamming`.
 `rs:8B` explicitly means eight parity bytes; legacy `rs:8` remains accepted,
 and lowercase `rs:8b` is rejected. Logs always show the canonical `rs:NB` form.
-Both DBGPS2 and DBGPS3 default to `crc16`; use `-E none` for unprotected input. CRC modes detect errors. RS corrects
+Both DBGPS2 and DBGPS2-RPC default to `crc16`; use `-E none` for unprotected input. CRC modes detect errors. RS corrects
 up to `floor(N/2)` byte errors per strand, with 16 parity bytes if N is omitted.
 Hamming SECDED corrects one bit and detects two bits per 13-bit codeword.
 The selected code protects index and payload bytes before DNA mapping.
 
 ```bash
 ./DBGPS2 -E rs:8B -a 1000 -b 1001 -o assembled reads.fa
-./DBGPS3 -E crc32c -a 1000 -b 1001 -o assembled reads.fa
-./DBGPS3 -E none -a 1000 -b 1001 -o assembled reads.fa
-./DBGPS3 -S -E rs:8B reads.fa
+./DBGPS2-RPC -E crc32c -a 1000 -b 1001 -o assembled reads.fa
+./DBGPS2-RPC -E none -a 1000 -b 1001 -o assembled reads.fa
+./DBGPS2-RPC -S -E rs:8B reads.fa
 ```
 
 `-l` always specifies payload bases; redundancy is calculated and appended to
@@ -121,7 +122,7 @@ server semantics, the byte encoding API, and how to add further codes.
 
 #### Optional Bloom filters
 
-Both DBGPS2 and DBGPS3 support two independent Bloom options, disabled by default:
+Both DBGPS2 and DBGPS2-RPC support two independent Bloom options, disabled by default:
 
 - `-B 12` builds a query prefilter after counting. Absent k-mers can skip the
   exact hash lookup; positive probes still use the exact table. Coverage and
@@ -135,14 +136,14 @@ Both DBGPS2 and DBGPS3 support two independent Bloom options, disabled by defaul
 
 ```bash
 ./DBGPS2 -B 12 -F 27 -a 1000 -b 1001 -o assembled reads.fq.gz
-./DBGPS3 -S -B 12 -F 27 reads.fq.gz
+./DBGPS2-RPC -S -B 12 -F 27 reads.fq.gz
 ```
 
 The backend is adapted from the pure-C blocked Bloom filter in `lh3/yak`.
 See [BLOOM_FILTER.md](BLOOM_FILTER.md) for the GitHub implementation comparison,
 provenance, memory tuning, exactness guarantees, API usage, and a reproducible
 synthetic benchmark. Two-pass mode requires regular input files that remain
-available and unchanged for replay; DBGPS3 `graph/load` rebuilds from the full
+available and unchanged for replay; DBGPS2-RPC `graph/load` rebuilds from the full
 input history in this mode.
 
 #### Custom base-to-bit mappings
@@ -153,7 +154,7 @@ Without `-M`, DBGPS2 uses the same built-in encoding as its k-mers:
 `A=00, C=01, G=10, T=11`. Index bits are used directly as packed DNA, and CRC
 validation reads the reconstructed bytes directly, without a mapping table or
 an extra conversion. For example, the byte `00011011` is the DNA word `ACGT`.
-DBGPS2 and DBGPS3 share this default and the same codebook format.
+DBGPS2 and DBGPS2-RPC share this default and the same codebook format.
 
 **Default behavior change:** strands encoded with the original special two-base
 permutation now require `-M examples/legacy-2base.map` explicitly.
@@ -189,11 +190,11 @@ make DBGPS2
 ./DBGPS2 -a 1000 -b 1001 -o assembled reads.fq.gz # Built-in canonical encoding
 ./DBGPS2 -M examples/legacy-2base.map -a 1000 -b 1001 -o assembled reads.fq.gz
 ./DBGPS2 -M examples/3base-5bit.map -i 24 -l 120 -a 0 -b 1000 -o assembled reads.fq.gz
-./DBGPS3 -M examples/3base-5bit.map -i 24 -l 120 -a 0 -b 1000 -o assembled reads.fq.gz
+./DBGPS2-RPC -M examples/3base-5bit.map -i 24 -l 120 -a 0 -b 1000 -o assembled reads.fq.gz
 ```
 
 Use the codebook that was used to encode the input strands. With the default
-**DBGPS2/DBGPS3 `-E crc16`**, the encoded strand has this layout, with the same mapping
+**DBGPS2/DBGPS2-RPC `-E crc16`**, the encoded strand has this layout, with the same mapping
 applied to all sections:
 
 ```text
@@ -220,9 +221,9 @@ An empty index (`-i 0 -a 0 -b 0`) is supported if the primer covers the k-mer.
 When necessary, the read counting limit adjusts to the full strand plus the
 two existing 18-base primers.
 
-**DBGPS3** also defaults to CRC16 and validates index plus payload bytes using
+**DBGPS2-RPC** also defaults to CRC16 and validates index plus payload bytes using
 its following CRC trailer. The `-l` value remains the payload length in bases;
-payload plus redundancy can be up to 300 bases, in addition to the index.
+index, payload, and redundancy together must be shorter than 300 bases, as in DBGPS2.
 Select `-E none` to search only the index and payload, validate codebook words,
 and require a unique path without checksum screening. A following CRC is outside
 the requested path in that mode. Other `-E` modes select their corresponding
@@ -250,9 +251,10 @@ than allocating tables exponential in an unrestricted block size. Runtime
 depends mainly on graph branching and candidate count; the byte fast path does
 not imply identical assembly times for different codebooks or code rates.
 
-### DBGPS3
+### DBGPS2-RPC
 
-A next-generation de Bruijn graph assembler for DNA data storage with an interactive server mode.
+The DBGPS2 algorithm behind an interactive JSON-RPC interface. It takes the same options as
+DBGPS2 and, without `-S`, produces the same batch output.
 The `-M` option uses the same codebooks as DBGPS2. Omitting it uses direct
 `A=00,C=01,G=10,T=11` encoding; the original two-base permutation requires
 `-M examples/legacy-2base.map`.
@@ -260,7 +262,7 @@ The `-M` option uses the same codebooks as DBGPS2. Omitting it uses direct
 #### Command-Line Mode
 
 ```
-DBGPS3 [options] <input file>
+DBGPS2-RPC [options] <input file>
                   [Supporting formats: *fq, *fa, *fq.gz, *fa.gz]
 
 Options:
@@ -284,23 +286,23 @@ Options:
 
 #### Server Mode
 
-DBGPS3 can also run as a TCP server, allowing remote clients to interactively query the de Bruijn graph using the JSON-RPC 2.0 protocol.
+DBGPS2-RPC can also run as a TCP server, allowing remote clients to interactively query the de Bruijn graph using the JSON-RPC 2.0 protocol.
 
 ```bash
 # Start server (default port 9300)
-./DBGPS3 -S input.fq.gz
+./DBGPS2-RPC -S input.fq.gz
 
 # Start on custom port with max 20 clients
-./DBGPS3 -S 8080 -L 20 input.fq.gz
+./DBGPS2-RPC -S 8080 -L 20 input.fq.gz
 
 # Start with a custom codebook and compatible default query lengths
-./DBGPS3 -S -M examples/3base-5bit.map -i 24 -l 120 input.fq.gz
+./DBGPS2-RPC -S -M examples/3base-5bit.map -i 24 -l 120 input.fq.gz
 
 # Connect with the interactive client
-./dbgps3-client -h 127.0.0.1 -p 8080
+./dbgps2-rpc-client -h 127.0.0.1 -p 8080
 ```
 
-For complete server mode documentation, including the JSON-RPC API reference, see [DBGPS3_SERVER.md](DBGPS3_SERVER.md).
+For complete server mode documentation, including the JSON-RPC API reference, see [DBGPS2_RPC.md](DBGPS2_RPC.md).
 
 **Server Options:**
 
@@ -310,7 +312,7 @@ For complete server mode documentation, including the JSON-RPC API reference, se
 | `-P INT` | Server TCP port | 9300 |
 | `-L INT` | Max concurrent clients | 10 |
 
-Query-time parameters (coverage cutoff, path length, index length, etc.) are provided per-request by the client, not at server startup. See [DBGPS3_SERVER.md](DBGPS3_SERVER.md) for details.
+Query-time parameters (coverage cutoff, path length, index length, etc.) are provided per-request by the client, not at server startup. See [DBGPS2_RPC.md](DBGPS2_RPC.md) for details.
 
 ## License
 

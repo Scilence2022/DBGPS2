@@ -1,7 +1,7 @@
 CFLAGS=-g -Wall -O3
 CXXFLAGS=$(CFLAGS) -std=c++11
 LIBS=-lz
-PROG=DBGPS2 DBGPS3 dbgps3-client
+PROG=DBGPS2 DBGPS2-RPC dbgps2-rpc-client
 STRAND_SRC=dbgps_codec.c dbgps_redundancy.c dbgps_strand.c
 STRAND_HDR=dbgps_codec.h dbgps_redundancy.h dbgps_strand.h
 
@@ -19,14 +19,14 @@ test:
 	@set -eu; test_dir=$$(mktemp -d); trap 'rm -rf "$$test_dir"' EXIT; \
 	$(CC) $(CFLAGS) -I. -o "$$test_dir/bloom" tests/test_bloom.c $(LIBS); \
 	"$$test_dir/bloom"; \
-	for source in DBGPS2.c dbgps3_core.c; do \
-		defs=; if [ "$$source" = dbgps3_core.c ]; then defs=-DTEST_DBGPS3; fi; \
+	for source in DBGPS2.c dbgps_core.c; do \
+		defs=; if [ "$$source" = dbgps_core.c ]; then defs=-DTEST_DBGPS2_RPC; fi; \
 		$(CC) $(CFLAGS) -I. $$defs -DTEST_SOURCE=\"$$source\" -o "$$test_dir/cov" tests/test_kmer_cov.c $(STRAND_SRC) kthread.c $(LIBS) -lpthread; \
 		"$$test_dir/cov"; \
 		$(CC) $(CFLAGS) -I. $$defs -DTEST_SOURCE=\"$$source\" -o "$$test_dir/count-bloom" tests/test_bloom_count.c $(STRAND_SRC) kthread.c $(LIBS) -lpthread; \
 		"$$test_dir/count-bloom" "$$test_dir"; \
 	done; \
-	for defs in '' '-DTEST_DBGPS3'; do \
+	for defs in '' '-DTEST_DBGPS2_RPC'; do \
 		$(CC) $(CFLAGS) -I. $$defs -o "$$test_dir/paths" tests/test_paths.c $(STRAND_SRC) kthread.c $(LIBS) -lpthread; \
 		"$$test_dir/paths"; \
 	done; \
@@ -35,15 +35,16 @@ test:
 	$(CC) $(CFLAGS) -I. -o "$$test_dir/redundancy" tests/test_redundancy.c $(STRAND_SRC); \
 	"$$test_dir/redundancy"; \
 	$(CC) $(CFLAGS) -o "$$test_dir/DBGPS2" DBGPS2.c $(STRAND_SRC) kthread.c $(LIBS) -lpthread; \
-	$(CC) $(CFLAGS) -o "$$test_dir/DBGPS3" DBGPS3.c dbgps3_core.c dbgps3_server.c $(STRAND_SRC) minjson.c kthread.c $(LIBS) -lpthread; \
-	$(CC) $(CFLAGS) -o "$$test_dir/dbgps3-client" dbgps3_client.c minjson.c $(LIBS); \
-	python3 tests/test_cli.py "$$test_dir/DBGPS2" "$$test_dir/DBGPS3"; \
-	python3 tests/test_bloom_io.py "$$test_dir/DBGPS2" "$$test_dir/DBGPS3"; \
+	$(CC) $(CFLAGS) -o "$$test_dir/DBGPS2-RPC" DBGPS2_RPC.c dbgps_core.c dbgps_rpc_server.c $(STRAND_SRC) minjson.c kthread.c $(LIBS) -lpthread; \
+	$(CC) $(CFLAGS) -o "$$test_dir/dbgps2-rpc-client" dbgps_rpc_client.c minjson.c $(LIBS); \
+	python3 tests/test_cli.py "$$test_dir/DBGPS2" "$$test_dir/DBGPS2-RPC"; \
+	python3 tests/test_bloom_io.py "$$test_dir/DBGPS2" "$$test_dir/DBGPS2-RPC"; \
 	python3 tests/test_mapping_cli.py "$$test_dir/DBGPS2"; \
-	python3 tests/test_mapping_cli.py "$$test_dir/DBGPS3"; \
-	python3 tests/test_redundancy_cli.py "$$test_dir/DBGPS2" "$$test_dir/DBGPS3"; \
-	python3 tests/test_mapping_server.py "$$test_dir/DBGPS3" "$$test_dir/dbgps3-client"; \
-	python3 tests/test_mapping_server.py "$$test_dir/DBGPS3" "$$test_dir/dbgps3-client" -B 12 -F 23
+	python3 tests/test_mapping_cli.py "$$test_dir/DBGPS2-RPC"; \
+	python3 tests/test_redundancy_cli.py "$$test_dir/DBGPS2" "$$test_dir/DBGPS2-RPC"; \
+	python3 tests/test_rpc_parity.py "$$test_dir/DBGPS2" "$$test_dir/DBGPS2-RPC"; \
+	python3 tests/test_mapping_server.py "$$test_dir/DBGPS2-RPC" "$$test_dir/dbgps2-rpc-client"; \
+	python3 tests/test_mapping_server.py "$$test_dir/DBGPS2-RPC" "$$test_dir/dbgps2-rpc-client" -B 12 -F 23
 
 # DBGPS2: Read-Length constrained version with dynamic coverage ratio support
 # Previously DBGPS-dy2-rl
@@ -55,18 +56,18 @@ test:
 DBGPS2:DBGPS2.c $(STRAND_SRC) $(STRAND_HDR) dbgps_bloom.h dbgps_bloom_graph.h khashl.h ketopt.h kseq.h kthread.h
 	$(CC) $(CFLAGS) -o $@ DBGPS2.c $(STRAND_SRC) kthread.c $(LIBS) -lpthread
 
-# DBGPS3: Modular version with CLI + server mode
+# DBGPS2-RPC: DBGPS2 with the same batch output plus a JSON-RPC server
 # Features:
-# - Refactored into dbgps3_core (graph engine) + dbgps3_server (JSON-RPC server)
+# - Refactored into dbgps_core (graph engine) + dbgps_rpc_server (JSON-RPC server)
 # - Server mode via -S flag with JSON-RPC 2.0 over TCP
 # - Thread-per-connection concurrency model
 # - minjson: lightweight JSON parser/builder for JSON-RPC protocol
-DBGPS3:DBGPS3.c dbgps3_core.c dbgps3_server.c $(STRAND_SRC) $(STRAND_HDR) dbgps_bloom.h dbgps_bloom_graph.h minjson.c khashl.h ketopt.h kseq.h kthread.h dbgps3_core.h dbgps3_server.h minjson.h
-	$(CC) $(CFLAGS) -o $@ DBGPS3.c dbgps3_core.c dbgps3_server.c $(STRAND_SRC) minjson.c kthread.c $(LIBS) -lpthread
+DBGPS2-RPC:DBGPS2_RPC.c dbgps_core.c dbgps_rpc_server.c $(STRAND_SRC) $(STRAND_HDR) dbgps_bloom.h dbgps_bloom_graph.h minjson.c khashl.h ketopt.h kseq.h kthread.h dbgps_core.h dbgps_rpc_server.h minjson.h
+	$(CC) $(CFLAGS) -o $@ DBGPS2_RPC.c dbgps_core.c dbgps_rpc_server.c $(STRAND_SRC) minjson.c kthread.c $(LIBS) -lpthread
 
-# dbgps3-client: Interactive CLI client for DBGPS3 server
-dbgps3-client:dbgps3_client.c minjson.c minjson.h
-	$(CC) $(CFLAGS) -o $@ dbgps3_client.c minjson.c $(LIBS)
+# dbgps2-rpc-client: Interactive CLI client for DBGPS2-RPC server
+dbgps2-rpc-client:dbgps_rpc_client.c minjson.c minjson.h
+	$(CC) $(CFLAGS) -o $@ dbgps_rpc_client.c minjson.c $(LIBS)
 
 clean:
 	rm -fr *.dSYM $(PROG)

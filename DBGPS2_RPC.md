@@ -1,27 +1,27 @@
-# DBGPS3 Server Mode
+# DBGPS2-RPC Server Mode
 
-DBGPS3 supports a **server mode** that exposes the de Bruijn graph engine over a TCP interface using the **JSON-RPC 2.0** protocol. This allows remote clients to interactively query k-mer coverage, find paths, load additional data, and retrieve graph information without restarting the process.
+DBGPS2-RPC supports a **server mode** that exposes the de Bruijn graph engine over a TCP interface using the **JSON-RPC 2.0** protocol. This allows remote clients to interactively query k-mer coverage, find paths, load additional data, and retrieve graph information without restarting the process.
 
 ## Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                       DBGPS3 Server                      │
+│                       DBGPS2-RPC Server                      │
 │                                                          │
 │  ┌─────────────────────────────────────────────────────┐ │
-│  │              dbgps3_core (Graph Engine)              │ │
+│  │              dbgps_core (Graph Engine)              │ │
 │  │                                                      │ │
-│  │  • dbgps3_load()          – Build de Bruijn graph   │ │
-│  │  • dbgps3_kmer_cov()      – Query k-mer coverage    │ │
-│  │  • dbgps3_find_path()     – Decode DNA path         │ │
-│  │  • dbgps3_load_more()     – Hot-load more data      │ │
-│  │  • dbgps3_destroy()       – Free all memory         │ │
+│  │  • dbgps_load()          – Build de Bruijn graph   │ │
+│  │  • dbgps_kmer_cov()      – Query k-mer coverage    │ │
+│  │  • dbgps_find_path()     – Decode DNA path         │ │
+│  │  • dbgps_load_more()     – Hot-load more data      │ │
+│  │  • dbgps_destroy()       – Free all memory         │ │
 │  └─────────────────────────────────────────────────────┘ │
 │                          ▲                               │
 │                          │ thread-safe                   │
 │                          ▼                               │
 │  ┌─────────────────────────────────────────────────────┐ │
-│  │           dbgps3_server (JSON-RPC 2.0)               │ │
+│  │           dbgps_rpc_server (JSON-RPC 2.0)               │ │
 │  │                                                      │ │
 │  │  • Multi-client support (configurable)              │ │
 │  │  • One thread per client                            │ │
@@ -32,7 +32,7 @@ DBGPS3 supports a **server mode** that exposes the de Bruijn graph engine over a
 └──────────────────────────┼───────────────────────────────┘
                            │
               ┌────────────┴────────────┐
-              │     dbgps3-client       │
+              │     dbgps2-rpc-client       │
               │   (interactive CLI)     │
               └─────────────────────────┘
 ```
@@ -41,7 +41,7 @@ DBGPS3 supports a **server mode** that exposes the de Bruijn graph engine over a
 
 | Aspect | Design |
 |--------|--------|
-| **No global state** | All graph data is in `dbgps3_graph_t *`, enabling concurrent client access |
+| **No global state** | All graph data is in `dbgps_graph_t *`, enabling concurrent client access |
 | **Thread safety** | `find_paths` allocates per-call buffers; the hash table is read-only after build |
 | **Output abstraction** | Results are written into a caller-provided buffer, not directly to `stdout`/`stderr` |
 | **JSON-RPC 2.0** | Standard protocol with `id`, `method`, `params`, `result`, `error` fields |
@@ -52,34 +52,34 @@ DBGPS3 supports a **server mode** that exposes the de Bruijn graph engine over a
 ### Build
 
 ```bash
-make DBGPS3
+make DBGPS2-RPC
 ```
 
 ### Launch
 
 ```bash
 # Basic server (default port 9300, CRC16 protection)
-./DBGPS3 -S input.fq.gz
+./DBGPS2-RPC -S input.fq.gz
 
 # Input without a checksum
-./DBGPS3 -S -E none input.fq.gz
+./DBGPS2-RPC -S -E none input.fq.gz
 
 # Specify port
-./DBGPS3 -S 8080 input.fq.gz
+./DBGPS2-RPC -S 8080 input.fq.gz
 # or
-./DBGPS3 -S -P 8080 input.fq.gz
+./DBGPS2-RPC -S -P 8080 input.fq.gz
 
 # Max concurrent clients (default: 10)
-./DBGPS3 -S -P 8080 -L 20 input.fq.gz
+./DBGPS2-RPC -S -P 8080 -L 20 input.fq.gz
 
 # With graph build options
-./DBGPS3 -S -k 31 -t 4 input.fq.gz
+./DBGPS2-RPC -S -k 31 -t 4 input.fq.gz
 
 # Custom mapping shared by every query (same format as DBGPS2)
-./DBGPS3 -S -M examples/3base-5bit.map -i 24 -l 120 input.fq.gz
+./DBGPS2-RPC -S -M examples/3base-5bit.map -i 24 -l 120 input.fq.gz
 
 # Enable Reed–Solomon correction (input must use matching RS parameters)
-./DBGPS3 -S -E rs:8B input.fq.gz
+./DBGPS2-RPC -S -E rs:8B input.fq.gz
 ```
 
 ### Server-Specific Options
@@ -113,11 +113,11 @@ codebook filename parameter.
 All DBGPS2 codebook widths are supported: 1–8 bases to 1–16 bits, with at most
 two bits per base. Index and payload lengths must contain complete mapping
 blocks and decode to whole bytes. For a 3-base/5-bit code, `-i 24` is a 40-bit
-index and `-l 120` is a 200-bit payload. By default (`-E crc16`), DBGPS3
+index and `-l 120` is a 200-bit payload. By default (`-E crc16`), DBGPS2-RPC
 extends the search to include the CRC16 trailer and checks index plus payload
 bytes. Explicit `-E none` searches only the index and payload without checksum
-screening. Other `-E` modes use their corresponding trailers and validation/correction. `pathLen` always excludes redundancy. The payload plus trailer must
-fit within 300 bases. Different candidates corrected to the same DNA count as
+screening. Other `-E` modes use their corresponding trailers and validation/correction. `pathLen` always excludes redundancy. Index, payload and trailer
+together must be shorter than 300 bases. Different candidates corrected to the same DNA count as
 one result; distinct corrected strands are rejected as ambiguous. See
 [REDUNDANCY.md](REDUNDANCY.md) for exact wire formats and correction limits.
 
@@ -139,41 +139,41 @@ set the default index and payload lengths for requests that omit them:
 ### Build
 
 ```bash
-make dbgps3-client
+make dbgps2-rpc-client
 ```
 
 ### Interactive Mode
 
 ```bash
-./dbgps3-client
+./dbgps2-rpc-client
 # or specify host/port
-./dbgps3-client -h 192.168.1.100 -p 8080
+./dbgps2-rpc-client -h 192.168.1.100 -p 8080
 ```
 
 ```
-dbgps3> graph/info
+dbgps2-rpc> graph/info
 [Response...]
 
-dbgps3> kmer/cov ACGTACGT...
+dbgps2-rpc> kmer/cov ACGTACGT...
 [Response...]
 
-dbgps3> find 101010102
+dbgps2-rpc> find 101010102
 [Response...]
 
-dbgps3> exit
+dbgps2-rpc> exit
 ```
 
 ### Shortcut Command Mode
 
 ```bash
 # One-shot shortcut command
-./dbgps3-client -c 'graph/info'
-./dbgps3-client -c 'kmer/cov ACGTACGTACGTACGTACGTACGT'
-./dbgps3-client -c 'find 101010102'
-./dbgps3-client -c 'findKmer 101010102 5 2.5 0'
+./dbgps2-rpc-client -c 'graph/info'
+./dbgps2-rpc-client -c 'kmer/cov ACGTACGTACGTACGTACGTACGT'
+./dbgps2-rpc-client -c 'find 101010102'
+./dbgps2-rpc-client -c 'findKmer 101010102 5 2.5 0'
 
 # Pipe raw JSON
-echo '{"jsonrpc":"2.0","method":"graph/info","id":1}' | ./dbgps3-client
+echo '{"jsonrpc":"2.0","method":"graph/info","id":1}' | ./dbgps2-rpc-client
 ```
 
 ### Client Options
@@ -501,7 +501,7 @@ Any language that supports TCP sockets can be used as a client. Here's a Python 
 import socket
 import json
 
-def dbgps3_request(method, params=None, host="127.0.0.1", port=9300):
+def dbgps_request(method, params=None, host="127.0.0.1", port=9300):
     request = {
         "jsonrpc": "2.0",
         "method": method,
@@ -521,25 +521,25 @@ def dbgps3_request(method, params=None, host="127.0.0.1", port=9300):
         return json.loads(response.decode())
 
 # Example usage
-result = dbgps3_request("graph/info")
+result = dbgps_request("graph/info")
 print(f"K-mer count: {result['result']['kmer_count']}")
 
-result = dbgps3_request("kmer/cov", {"kmer": "ACGT" * 8})
+result = dbgps_request("kmer/cov", {"kmer": "ACGT" * 8})
 print(f"Coverage: {result['result']['coverage']}")
 ```
 
 ## Programmatic C API
 
-For embedding the DBGPS3 engine into other C applications:
+For embedding the DBGPS2-RPC engine into other C applications:
 
 ```c
-#include "dbgps3_core.h"
-#include "dbgps3_server.h"
+#include "dbgps_core.h"
+#include "dbgps_rpc_server.h"
 #include <stdio.h>
 
 /* Build graph (CRC16 protection by default; configure "none" explicitly
-   with dbgps3_set_redundancy() for input without a checksum). */
-dbgps3_graph_t *g = dbgps3_load(31, 14, 3, 10000000, 200, 1, &input_file);
+   with dbgps_set_redundancy() for input without a checksum). */
+dbgps_graph_t *g = dbgps_load(31, 14, 3, 10000000, 200, 1, &input_file);
 if (!g) return 1;
 
 /* Optional custom mapping: set compatible defaults before configuring it.
@@ -547,33 +547,33 @@ if (!g) return 1;
 g->index_len = 24;
 g->path_len = 120;
 char error[512];
-if (dbgps3_set_mapping(g, "examples/3base-5bit.map", error, sizeof(error)) < 0) {
+if (dbgps_set_mapping(g, "examples/3base-5bit.map", error, sizeof(error)) < 0) {
     fprintf(stderr, "%s\n", error);
-    dbgps3_destroy(g);
+    dbgps_destroy(g);
     return 1;
 }
 
 uint64_t encoded_index;
-dbgps3_encode_index(g, 1000, g->index_len, &encoded_index);
-uint64_t start_kmer = dbgps3_primer_uint64("CCTGCAGAGTAGCATGTC", 18, g->index_len, g->k)
+dbgps_encode_index(g, 1000, g->index_len, &encoded_index);
+uint64_t start_kmer = dbgps_primer_uint64("CCTGCAGAGTAGCATGTC", 18, g->index_len, g->k)
                       | encoded_index;
 
 /* Query k-mer coverage */
-uint64_t key = dbgps3_actgkmer_hashkey("ACGTACGTACGTACGTACGTACGTACGTACG", 31);
-unsigned short cov = dbgps3_kmer_cov(g, key);
+uint64_t key = dbgps_actgkmer_hashkey("ACGTACGTACGTACGTACGTACGTACGTACG", 31);
+unsigned short cov = dbgps_kmer_cov(g, key);
 
 /* Find a path (path_len and index_byte_num are explicit per-query params) */
-char buf[DBGPS3_MAX_PATH_LEN + 128];
-int rc = dbgps3_find_path(g, start_kmer, 1, 2.55, 0,
+char buf[DBGPS_MAX_PATH_LEN + 128];
+int rc = dbgps_find_path(g, start_kmer, 1, 2.55, 0,
                           g->path_len, g->index_byte_num,
                           buf, sizeof(buf));
 
 /* Start server */
-dbgps3_server_t srv = { .graph = g, .port = 9300, .max_clients = 10 };
-dbgps3_server_start(&srv);
+dbgps_rpc_server_t srv = { .graph = g, .port = 9300, .max_clients = 10 };
+dbgps_rpc_server_start(&srv);
 
 /* Cleanup */
-dbgps3_destroy(g);
+dbgps_destroy(g);
 ```
 
 ## Performance Considerations

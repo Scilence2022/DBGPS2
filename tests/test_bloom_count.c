@@ -6,9 +6,9 @@
 #include TEST_SOURCE
 #undef main
 
-#ifdef TEST_DBGPS3
-#define KC_BITS DBGPS3_KC_BITS
-#define KC_MAX DBGPS3_KC_MAX
+#ifdef TEST_DBGPS2_RPC
+#define KC_BITS DBGPS_KC_BITS
+#define KC_MAX DBGPS_KC_MAX
 #define query_cov kmer_cov_internal
 #else
 #define query_cov kmer_cov
@@ -43,7 +43,7 @@ static void compare_counts(kc_c4x_t *exact, kc_c4x_t *filtered, uint64_t mask)
     printf("counting: %zu retained k-mers counted exactly; %zu singletons removed\n", retained, singletons);
 }
 
-#ifdef TEST_DBGPS3
+#ifdef TEST_DBGPS2_RPC
 static void test_load_more(char **files, const char *missing)
 {
     FILE *fp = fopen(files[0], "w");
@@ -56,35 +56,35 @@ static void test_load_more(char **files, const char *missing)
     assert(fp);
     fprintf(fp, ">reverse\nTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT\n");
     fclose(fp);
-    dbgps3_graph_t *g = dbgps3_load_filtered(31, KC_BITS, 3, 40, 80, 1, files, 23);
-    assert(g && dbgps3_set_bloom(g, 12) == 0);
+    dbgps_graph_t *g = dbgps_load_filtered(31, KC_BITS, 3, 40, 80, 1, files, 23);
+    assert(g && dbgps_set_bloom(g, 12) == 0);
     assert(!strcmp(dbgps_redundancy_name(&g->redundancy), "crc16"));
-    uint64_t a = dbgps3_actgkmer_hashkey("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", 31);
-    uint64_t c = dbgps3_actgkmer_hashkey("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", 31);
-    assert(dbgps3_kmer_cov(g, a) == 0 && dbgps3_kmer_cov(g, c) == 2);
-    assert(dbgps3_load_more(g, 1, files + 1) == 0);
+    uint64_t a = dbgps_actgkmer_hashkey("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", 31);
+    uint64_t c = dbgps_actgkmer_hashkey("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", 31);
+    assert(dbgps_kmer_cov(g, a) == 0 && dbgps_kmer_cov(g, c) == 2);
+    assert(dbgps_load_more(g, 1, files + 1) == 0);
     assert(!strcmp(dbgps_redundancy_name(&g->redundancy), "crc16"));
-    assert(dbgps3_kmer_cov(g, a) == 2 && dbgps3_kmer_cov(g, c) == 2);
-    assert(g->bloom_bits_per_key == 12 && dbgps3_bloom_bytes(g) > 0);
+    assert(dbgps_kmer_cov(g, a) == 2 && dbgps_kmer_cov(g, c) == 2);
+    assert(g->bloom_bits_per_key == 12 && dbgps_bloom_bytes(g) > 0);
     void *before = g->_h;
     char *bad_files[] = {files[1], (char*)missing};
-    assert(dbgps3_load_more(g, 2, bad_files) == -1 && g->_h == before);
-    assert(dbgps3_kmer_cov(g, a) == 2 && dbgps3_kmer_cov(g, c) == 2);
-    dbgps3_destroy(g);
+    assert(dbgps_load_more(g, 2, bad_files) == -1 && g->_h == before);
+    assert(dbgps_kmer_cov(g, a) == 2 && dbgps_kmer_cov(g, c) == 2);
+    dbgps_destroy(g);
 
     /* Ordinary counting also preserves singleton counts under query filtering.
      * A failed partial append must disable the stale filter and keep g usable. */
-    g = dbgps3_load(31, KC_BITS, 1, 40, 80, 1, files);
-    assert(g && dbgps3_set_bloom(g, 12) == 0);
+    g = dbgps_load(31, KC_BITS, 1, 40, 80, 1, files);
+    assert(g && dbgps_set_bloom(g, 12) == 0);
     assert(!strcmp(dbgps_redundancy_name(&g->redundancy), "crc16"));
-    assert(dbgps3_set_redundancy(g, "none", NULL, 0) == 0);
-    assert(dbgps3_kmer_cov(g, a) == 1);
-    assert(dbgps3_load_more(g, 2, bad_files) == -1);
-    assert(dbgps3_kmer_cov(g, a) == 2 && !dbgps3_bloom_bytes(g));
-    assert(dbgps3_load_more(g, 1, files + 1) == 0);
+    assert(dbgps_set_redundancy(g, "none", NULL, 0) == 0);
+    assert(dbgps_kmer_cov(g, a) == 1);
+    assert(dbgps_load_more(g, 2, bad_files) == -1);
+    assert(dbgps_kmer_cov(g, a) == 2 && !dbgps_bloom_bytes(g));
+    assert(dbgps_load_more(g, 1, files + 1) == 0);
     assert(!dbgps_redundancy_enabled(&g->redundancy));
-    assert(dbgps3_kmer_cov(g, a) == 3 && dbgps3_bloom_bytes(g));
-    dbgps3_destroy(g);
+    assert(dbgps_kmer_cov(g, a) == 3 && dbgps_bloom_bytes(g));
+    dbgps_destroy(g);
     puts("counting API: append restores prior singletons; rebuild and failure ownership passed");
 }
 #endif
@@ -144,7 +144,7 @@ int main(int argc, char **argv)
     c4x_prune_singletons(h);
     assert(kh_size(h->h[0]) == 0);
     c4x_destroy(h);
-#ifdef TEST_DBGPS3
+#ifdef TEST_DBGPS2_RPC
     test_load_more(files, missing);
 #endif
     puts("counting: two files, thread counts, reverse complements, Ns, saturation and Bloom false positives passed");

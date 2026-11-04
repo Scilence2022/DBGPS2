@@ -41,10 +41,10 @@ static void tracked_free(void *p)
 #define realloc tracked_realloc
 #define free tracked_free
 #define main tool_main
-#ifdef TEST_DBGPS3
-#include "dbgps3_core.c"
-#define KC_BITS DBGPS3_KC_BITS
-#define canonical dbgps3_min_hash_key
+#ifdef TEST_DBGPS2_RPC
+#include "dbgps_core.c"
+#define KC_BITS DBGPS_KC_BITS
+#define canonical dbgps_min_hash_key
 #else
 #include "DBGPS2.c"
 #define canonical min_hash_key
@@ -82,21 +82,21 @@ static void destroy_table(kc_c4x_t *h)
     assert(live_allocations == 0);
 }
 
-#ifdef TEST_DBGPS3
+#ifdef TEST_DBGPS2_RPC
 static int query(kc_c4x_t *h, uint64_t root, int path_len, int skip, double ratio,
                  char *out, size_t out_size)
 {
-    dbgps3_graph_t g = {0};
+    dbgps_graph_t g = {0};
     g._h = h;
     g.k = test_k;
     g.mask = test_mask;
-    return dbgps3_find_path(&g, root, 1, ratio, skip, path_len, 0, out, (int)out_size);
+    return dbgps_find_path(&g, root, 1, ratio, skip, path_len, 0, out, (int)out_size);
 }
 
 static void test_unique_and_ambiguous(void)
 {
     kc_c4x_t *h = c4x_init(KC_BITS);
-    uint64_t root = dbgps3_actgkmer_uint64("CCTGCAGAGTAGCATGTCACGATCTGACGTAC", test_k);
+    uint64_t root = dbgps_actgkmer_uint64("CCTGCAGAGTAGCATGTCACGATCTGACGTAC", test_k);
     /* A splits into two dead ends before C is visited. Writing the next
        generation over the current one used to discard C's surviving path. */
     add_path(h, root, "AA");
@@ -128,14 +128,14 @@ static void test_unique_and_ambiguous(void)
 
 static void test_mapped_paths(void)
 {
-    dbgps3_graph_t g = {0};
+    dbgps_graph_t g = {0};
     g.k = test_k;
     g.mask = test_mask;
     uint64_t index;
-    assert(dbgps3_index_encode(0x0123456789abULL, 24) == 0x0123456789abULL);
-    assert(dbgps3_encode_index(&g, 0x0123456789abULL, 24, &index) == 0);
+    assert(dbgps_index_encode(0x0123456789abULL, 24) == 0x0123456789abULL);
+    assert(dbgps_encode_index(&g, 0x0123456789abULL, 24, &index) == 0);
     assert(index == 0x0123456789abULL);
-    assert(dbgps3_encode_index(&g, 1ULL << 48, 24, &index) == -1);
+    assert(dbgps_encode_index(&g, 1ULL << 48, 24, &index) == -1);
 
     g.codec.bases = 3;
     g.codec.bits = 5;
@@ -144,8 +144,8 @@ static void test_mapped_paths(void)
     assert(g.codec.encode && g.codec.decode);
     for (unsigned i = 0; i < 64; ++i) g.codec.decode[i] = i < 32 ? i : UINT32_MAX;
     for (unsigned i = 0; i < 32; ++i) g.codec.encode[i] = i;
-    assert(dbgps3_encode_index(&g, 0x0123456789ULL, 24, &index) == 0);
-    uint64_t root = dbgps3_actgkmer_uint64("CCTGCAGAGTAGCATGTCACGATCTGACGTAC", test_k);
+    assert(dbgps_encode_index(&g, 0x0123456789ULL, 24, &index) == 0);
+    uint64_t root = dbgps_actgkmer_uint64("CCTGCAGAGTAGCATGTCACGATCTGACGTAC", test_k);
     root = (root & ~((1ULL << 48) - 1)) | index;
     kc_c4x_t *h = c4x_init(KC_BITS);
     g._h = h;
@@ -164,17 +164,17 @@ static void test_mapped_paths(void)
     add_path(h, root, forbidden);
 
     char expected[49], out[64];
-    dbgps3_uint64_acgt(index, expected, 24);
+    dbgps_uint64_acgt(index, expected, 24);
     memcpy(expected + 24, suffix, 24);
     expected[48] = '\0';
     size_t baseline = live_allocations;
     strcpy(out, "unchanged");
-    assert(dbgps3_find_path(&g, root, 1, 2.55, 0, 24, 5, out, 48) == -1);
+    assert(dbgps_find_path(&g, root, 1, 2.55, 0, 24, 5, out, 48) == -1);
     assert(!strcmp(out, "unchanged"));
     assert(live_allocations == baseline);
     for (int repeat = 0; repeat < 10; ++repeat) {
         strcpy(out, "unchanged");
-        assert(dbgps3_find_path(&g, root, 1, 2.55, 0, 24, 5, out, sizeof(out)) == 0);
+        assert(dbgps_find_path(&g, root, 1, 2.55, 0, 24, 5, out, sizeof(out)) == 0);
         assert(!strcmp(out, expected));
         assert(live_allocations == baseline);
     }
@@ -182,7 +182,7 @@ static void test_mapped_paths(void)
     add_path(h, root, suffix);
     baseline = live_allocations;
     strcpy(out, "unchanged");
-    assert(dbgps3_find_path(&g, root, 1, 2.55, 0, 24, 5, out, sizeof(out)) == -1);
+    assert(dbgps_find_path(&g, root, 1, 2.55, 0, 24, 5, out, sizeof(out)) == -1);
     assert(!strcmp(out, "unchanged"));
     assert(live_allocations == baseline);
     free(g.codec.encode);
@@ -338,14 +338,14 @@ static void test_builtin_encoding(void)
 static int protected_query(kc_c4x_t *h, uint64_t root, const dbgps_redundancy_t *c,
                            const unsigned char *expected, unsigned length)
 {
-#ifdef TEST_DBGPS3
-    dbgps3_graph_t g = {0};
+#ifdef TEST_DBGPS2_RPC
+    dbgps_graph_t g = {0};
     g._h = h;
     g.k = test_k;
     g.mask = test_mask;
     g.redundancy = *c;
     char out[160] = "unchanged";
-    int rc = dbgps3_find_path(&g, root, 1, 2.55, 0, 24, 4, out, sizeof(out));
+    int rc = dbgps_find_path(&g, root, 1, 2.55, 0, 24, 4, out, sizeof(out));
     if (rc == 0) {
         assert(strlen(out) == length * 4);
         for (unsigned i = 0; i < length * 4; ++i)
@@ -416,16 +416,16 @@ static void test_protected_paths(void)
         assert(live_allocations == baseline);
         destroy_table(h);
     }
-#ifdef TEST_DBGPS3
-    dbgps3_graph_t g = {0};
+#ifdef TEST_DBGPS2_RPC
+    dbgps_graph_t g = {0};
     g.k = 31; g.index_len = 16; g.path_len = 140;
     char error[256];
-    assert(dbgps3_set_redundancy(&g, "rs:4", error, sizeof(error)) == 0);
-    assert(dbgps3_set_redundancy(&g, "rs:254", error, sizeof(error)) == -1);
+    assert(dbgps_set_redundancy(&g, "rs:4", error, sizeof(error)) == 0);
+    assert(dbgps_set_redundancy(&g, "rs:254", error, sizeof(error)) == -1);
     assert(g.redundancy.parity == 4);
-    assert(dbgps3_set_redundancy(&g, "bad", error, sizeof(error)) == -1);
+    assert(dbgps_set_redundancy(&g, "bad", error, sizeof(error)) == -1);
     assert(g.redundancy.parity == 4);
-    assert(dbgps3_set_redundancy(&g, "none", error, sizeof(error)) == 0);
+    assert(dbgps_set_redundancy(&g, "none", error, sizeof(error)) == 0);
 #endif
 }
 
@@ -444,7 +444,7 @@ static void test_branch_limit(void)
     }
     size_t baseline = live_allocations;
     for (int skip = 0; skip <= 8; skip += 8) {
-#ifdef TEST_DBGPS3
+#ifdef TEST_DBGPS2_RPC
         char out[64] = "unchanged";
         assert(query(h, root, 8, skip, 2.55, out, sizeof(out)) == -1);
         assert(strcmp(out, "unchanged") == 0);
@@ -461,7 +461,7 @@ static void test_branch_limit(void)
 int main(void)
 {
     test_unique_and_ambiguous();
-#ifndef TEST_DBGPS3
+#ifndef TEST_DBGPS2_RPC
     test_builtin_encoding();
     test_custom_ambiguity();
 #else

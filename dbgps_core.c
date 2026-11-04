@@ -10,13 +10,13 @@
 KSEQ_INIT(gzFile, gzread)
 #include "khashl.h"
 #include "kthread.h"
-#include "dbgps3_core.h"
+#include "dbgps_core.h"
 #include "dbgps_bloom.h"
 
 /* ---- Internal hash table types ---- */
 
-#define kc_c4_eq(a, b) ((a)>>DBGPS3_KC_BITS == (b)>>DBGPS3_KC_BITS)
-#define kc_c4_hash(a) ((a)>>DBGPS3_KC_BITS)
+#define kc_c4_eq(a, b) ((a)>>DBGPS_KC_BITS == (b)>>DBGPS_KC_BITS)
+#define kc_c4_hash(a) ((a)>>DBGPS_KC_BITS)
 
 KHASHL_SET_INIT(, kc_c4_t, kc_c4, uint64_t, kc_c4_hash, kc_c4_eq)
 
@@ -26,7 +26,7 @@ KHASHL_SET_INIT(, kc_c4_t, kc_c4, uint64_t, kc_c4_hash, kc_c4_eq)
 
 /* ---- Translation tables (extern-declared in header) ---- */
 
-const unsigned char dbgps3_seq_nt4_table[256] = {
+const unsigned char dbgps_seq_nt4_table[256] = {
     0, 1, 2, 3,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
     4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
     4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
@@ -45,7 +45,7 @@ const unsigned char dbgps3_seq_nt4_table[256] = {
     4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4
 };
 
-const unsigned char dbgps3_nt4_seq_table[4] = { 'A', 'C', 'G', 'T' };
+const unsigned char dbgps_nt4_seq_table[4] = { 'A', 'C', 'G', 'T' };
 
 /* ---- Internal hash functions ---- */
 
@@ -76,8 +76,8 @@ static inline uint64_t hash64i(uint64_t key, uint64_t mask)
 
 /* ---- Partitioned hash table ---- */
 
-#define DBGPS_COUNT_BITS DBGPS3_KC_BITS
-#define DBGPS_COUNT_MAX DBGPS3_KC_MAX
+#define DBGPS_COUNT_BITS DBGPS_KC_BITS
+#define DBGPS_COUNT_MAX DBGPS_KC_MAX
 #include "dbgps_bloom_graph.h"
 
 typedef struct {
@@ -101,7 +101,7 @@ static void count_seq_buf(buf_c4_t *buf, int k, int p, int len, const char *seq)
     int i, l;
     uint64_t x[2], mask = (1ULL<<k*2) - 1, shift = (k - 1) * 2;
     for (i = l = 0, x[0] = x[1] = 0; i < len; ++i) {
-        int c = dbgps3_seq_nt4_table[(uint8_t)seq[i]];
+        int c = dbgps_seq_nt4_table[(uint8_t)seq[i]];
         if (c < 4) {
             x[0] = (x[0] << 2 | c) & mask;
             x[1] = x[1] >> 2 | (uint64_t)(3 - c) << shift;
@@ -249,12 +249,12 @@ static unsigned short kmer_cov_internal(uint64_t kmer, uint64_t mask, const kc_c
     unsigned short cov = 0;
     uint64_t hash_key = hash64(kmer, mask);
     if (h->bloom && !dbgps_bloom_contains(h->bloom, hash_key)) return 0;
-    j = hash_key & ((1<<DBGPS3_KC_BITS) - 1);
+    j = hash_key & ((1<<DBGPS_KC_BITS) - 1);
     if (kh_size(h->h[j]) < 1) return 0;
-    hash_key = hash_key >> DBGPS3_KC_BITS << DBGPS3_KC_BITS;
+    hash_key = hash_key >> DBGPS_KC_BITS << DBGPS_KC_BITS;
     x = kc_c4_get(h->h[j], hash_key);
     if (x != kh_end(h->h[j]) && kh_exist(h->h[j], x)) {
-        cov = kh_key(h->h[j], x) & DBGPS3_KC_MAX;
+        cov = kh_key(h->h[j], x) & DBGPS_KC_MAX;
     }
     return cov;
 }
@@ -328,28 +328,28 @@ static void nodes_path_packed(path_node_t *node, unsigned char *out,
 }
 
 /* ---- Graph struct definition ---- */
-/* The full definition is in dbgps3_core.h; here we just use it directly. */
+/* The full definition is in dbgps_core.h; here we just use it directly. */
 /* The internal hash table is accessed via (kc_c4x_t*)g->_h */
 
 /* ============================================================ */
 /* Public API implementations                                    */
 /* ============================================================ */
 
-dbgps3_graph_t *dbgps3_load(int k, int p, int n_thread, int block_size,
+dbgps_graph_t *dbgps_load(int k, int p, int n_thread, int block_size,
                              int read_len, int n_files, char **files)
 {
-    return dbgps3_load_filtered(k, p, n_thread, block_size, read_len, n_files, files, 0);
+    return dbgps_load_filtered(k, p, n_thread, block_size, read_len, n_files, files, 0);
 }
 
-dbgps3_graph_t *dbgps3_load_filtered(int k, int p, int n_thread, int block_size,
+dbgps_graph_t *dbgps_load_filtered(int k, int p, int n_thread, int block_size,
                                      int read_len, int n_files, char **files,
                                      int count_bloom_shift)
 {
-    if (n_files < 1 || !files || k < 1 || k > 31 || p != DBGPS3_KC_BITS) return NULL;
+    if (n_files < 1 || !files || k < 1 || k > 31 || p != DBGPS_KC_BITS) return NULL;
     if (count_bloom_shift && (count_bloom_shift < p + 9 || count_bloom_shift > 40)) return NULL;
     for (int i = 0; i < n_files; ++i) if (!files[i]) return NULL;
 
-    dbgps3_graph_t *g;
+    dbgps_graph_t *g;
     CALLOC(g, 1);
     if (!g) return NULL;
     g->k = k;
@@ -364,7 +364,7 @@ dbgps3_graph_t *dbgps3_load_filtered(int k, int p, int n_thread, int block_size,
     g->index_len = 16;
     g->index_byte_num = g->index_len >> 2;
     g->path_len = 140; /* default payload_len */
-    if (dbgps_redundancy_init(&g->redundancy, DBGPS3_DEFAULT_REDUNDANCY, NULL, 0) < 0) {
+    if (dbgps_redundancy_init(&g->redundancy, DBGPS_DEFAULT_REDUNDANCY, NULL, 0) < 0) {
         free(g);
         return NULL;
     }
@@ -373,16 +373,16 @@ dbgps3_graph_t *dbgps3_load_filtered(int k, int p, int n_thread, int block_size,
         g->_h = count_files_filtered(n_files, files, k, p, block_size, n_thread,
                                      read_len, count_bloom_shift);
         g->_source_files = (char**)calloc(n_files, sizeof(*g->_source_files));
-        if (!g->_h || !g->_source_files) { dbgps3_destroy(g); return NULL; }
+        if (!g->_h || !g->_source_files) { dbgps_destroy(g); return NULL; }
         for (int i = 0; i < n_files; ++i) {
             g->_source_files[i] = strdup(files[i]);
-            if (!g->_source_files[i]) { dbgps3_destroy(g); return NULL; }
+            if (!g->_source_files[i]) { dbgps_destroy(g); return NULL; }
             ++g->_n_source_files;
         }
         return g;
     }
 
-    fprintf(stderr, "[dbgps3_core] Counting k-mers from file 1 ......\n");
+    fprintf(stderr, "Counting NGS file 1 ......\n");
     g->_h = count_file(files[0], k, p, block_size, n_thread, read_len);
     if (!g->_h) {
         free(g);
@@ -391,9 +391,9 @@ dbgps3_graph_t *dbgps3_load_filtered(int k, int p, int n_thread, int block_size,
 
     int i;
     for (i = 1; i < n_files; i++) {
-        fprintf(stderr, "[dbgps3_core] Counting k-mers from file %d ......\n", i+1);
+        fprintf(stderr, "Counting NGS file %d ......\n", i+1);
         if (!count_file2(files[i], (kc_c4x_t*)g->_h, k, p, block_size, n_thread, read_len)) {
-            dbgps3_destroy(g);
+            dbgps_destroy(g);
             return NULL;
         }
     }
@@ -401,7 +401,7 @@ dbgps3_graph_t *dbgps3_load_filtered(int k, int p, int n_thread, int block_size,
     return g;
 }
 
-int dbgps3_load_more(dbgps3_graph_t *g, int n_files, char **files)
+int dbgps_load_more(dbgps_graph_t *g, int n_files, char **files)
 {
     if (!g || !g->_h || n_files < 1 || !files) return -1;
     if (g->count_bloom_shift) {
@@ -411,12 +411,12 @@ int dbgps3_load_more(dbgps3_graph_t *g, int n_files, char **files)
         if (!all) return -1;
         for (int i = 0; i < g->_n_source_files; ++i) all[i] = g->_source_files[i];
         for (int i = 0; i < n_files; ++i) all[g->_n_source_files + i] = files[i];
-        dbgps3_graph_t *replacement = dbgps3_load_filtered(g->k, g->p, g->n_thread,
+        dbgps_graph_t *replacement = dbgps_load_filtered(g->k, g->p, g->n_thread,
                 g->block_size, g->read_len, total, all, g->count_bloom_shift);
         free(all);
         if (!replacement) return -1;
-        if (dbgps3_set_bloom(replacement, g->bloom_bits_per_key) < 0) {
-            dbgps3_destroy(replacement);
+        if (dbgps_set_bloom(replacement, g->bloom_bits_per_key) < 0) {
+            dbgps_destroy(replacement);
             return -1;
         }
         /* Keep query layout and codec ownership in g; retire only old data. */
@@ -429,34 +429,34 @@ int dbgps3_load_more(dbgps3_graph_t *g, int n_files, char **files)
         replacement->_h = old_h;
         replacement->_source_files = old_files;
         replacement->_n_source_files = old_n;
-        dbgps3_destroy(replacement);
+        dbgps_destroy(replacement);
         return 0;
     }
     int bits_per_key = g->bloom_bits_per_key;
     c4x_set_bloom((kc_c4x_t*)g->_h, 0);
     int i;
     for (i = 0; i < n_files; i++) {
-        fprintf(stderr, "[dbgps3_core] Loading additional file %d ......\n", i+1);
+        fprintf(stderr, "[dbgps_core] Loading additional file %d ......\n", i+1);
         if (!count_file2(files[i], (kc_c4x_t*)g->_h, g->k, g->p,
                          g->block_size, g->n_thread, g->read_len)) return -1;
     }
-    return dbgps3_set_bloom(g, bits_per_key);
+    return dbgps_set_bloom(g, bits_per_key);
 }
 
-int dbgps3_set_bloom(dbgps3_graph_t *g, int bits_per_key)
+int dbgps_set_bloom(dbgps_graph_t *g, int bits_per_key)
 {
     if (!g || c4x_set_bloom((kc_c4x_t*)g->_h, bits_per_key) < 0) return -1;
     g->bloom_bits_per_key = bits_per_key;
     return 0;
 }
 
-size_t dbgps3_bloom_bytes(const dbgps3_graph_t *g)
+size_t dbgps_bloom_bytes(const dbgps_graph_t *g)
 {
     const kc_c4x_t *h = g ? (const kc_c4x_t*)g->_h : NULL;
     return h && h->bloom ? h->bloom->n_bytes : 0;
 }
 
-void dbgps3_destroy(dbgps3_graph_t *g)
+void dbgps_destroy(dbgps_graph_t *g)
 {
     if (!g) return;
     c4x_destroy((kc_c4x_t*)g->_h);
@@ -466,16 +466,16 @@ void dbgps3_destroy(dbgps3_graph_t *g)
     free(g);
 }
 
-int dbgps3_set_mapping(dbgps3_graph_t *g, const char *filename,
+int dbgps_set_mapping(dbgps_graph_t *g, const char *filename,
                        char *error, size_t error_size)
 {
     if (!g) return -1;
     dbgps_codec_t replacement = {0};
     if (filename && dbgps_codec_load(&replacement, filename, error, error_size) < 0) return -1;
-    dbgps3_graph_t proposed = *g;
+    dbgps_graph_t proposed = *g;
     proposed.codec = replacement;
     int index_bytes;
-    if (dbgps3_validate_layout(&proposed, g->index_len, g->path_len, &index_bytes) < 0) {
+    if (dbgps_validate_layout(&proposed, g->index_len, g->path_len, &index_bytes) < 0) {
         if (error && error_size)
             snprintf(error, error_size, "index/payload lengths are incompatible with the selected mapping/redundancy");
         dbgps_codec_destroy(&replacement);
@@ -487,13 +487,13 @@ int dbgps3_set_mapping(dbgps3_graph_t *g, const char *filename,
     return 0;
 }
 
-int dbgps3_set_redundancy(dbgps3_graph_t *g, const char *spec,
+int dbgps_set_redundancy(dbgps_graph_t *g, const char *spec,
                           char *error, size_t error_size)
 {
     if (!g) return -1;
-    dbgps3_graph_t proposed = *g;
+    dbgps_graph_t proposed = *g;
     if (dbgps_redundancy_init(&proposed.redundancy, spec, error, error_size) < 0) return -1;
-    if (dbgps3_validate_layout(&proposed, g->index_len, g->path_len, NULL) < 0) {
+    if (dbgps_validate_layout(&proposed, g->index_len, g->path_len, NULL) < 0) {
         if (error && error_size) snprintf(error, error_size, "redundancy exceeds strand or codeword capacity");
         return -1;
     }
@@ -501,35 +501,35 @@ int dbgps3_set_redundancy(dbgps3_graph_t *g, const char *spec,
     return 0;
 }
 
-int dbgps3_validate_layout(const dbgps3_graph_t *g, int index_len, int path_len,
+int dbgps_validate_layout(const dbgps_graph_t *g, int index_len, int path_len,
                            int *index_bytes)
 {
     if (!g || g->k < 1 || g->k > 31 || index_len < 0 || index_len > g->k ||
-        path_len < 0 || path_len > DBGPS3_MAX_PATH_LEN) return -1;
+        path_len < 0 || path_len >= DBGPS_MAX_PATH_LEN) return -1;
     dbgps_strand_layout_t layout;
     if (dbgps_strand_layout(g->codec.bases ? &g->codec : NULL, &g->redundancy,
                             index_len, path_len, &layout) < 0 ||
-        layout.path_bases > DBGPS3_MAX_PATH_LEN) return -1;
+        layout.total_bases >= DBGPS_MAX_PATH_LEN) return -1;
     if (index_bytes) *index_bytes = layout.index_bytes;
     return 0;
 }
 
-int dbgps3_encode_index(const dbgps3_graph_t *g, uint64_t index, int index_len,
+int dbgps_encode_index(const dbgps_graph_t *g, uint64_t index, int index_len,
                         uint64_t *encoded)
 {
     int bytes;
     if (!g || !encoded) return -1;
-    dbgps3_graph_t unprotected = *g;
+    dbgps_graph_t unprotected = *g;
     memset(&unprotected.redundancy, 0, sizeof(unprotected.redundancy));
-    if (dbgps3_validate_layout(&unprotected, index_len, 0, &bytes) < 0 ||
+    if (dbgps_validate_layout(&unprotected, index_len, 0, &bytes) < 0 ||
         index >> (bytes * 8)) return -1;
     if (g->codec.bases)
         return dbgps_codec_encode_index(&g->codec, index, index_len, encoded);
-    *encoded = dbgps3_index_encode(index, index_len);
+    *encoded = dbgps_index_encode(index, index_len);
     return 0;
 }
 
-int dbgps3_parse_index(const char *text, uint64_t *index)
+int dbgps_parse_index(const char *text, uint64_t *index)
 {
     char *end;
     if (!text || !index || *text < '0' || *text > '9') return -1;
@@ -538,13 +538,13 @@ int dbgps3_parse_index(const char *text, uint64_t *index)
     return errno || *end ? -1 : 0;
 }
 
-unsigned short dbgps3_kmer_cov(const dbgps3_graph_t *g, uint64_t kmer)
+unsigned short dbgps_kmer_cov(const dbgps_graph_t *g, uint64_t kmer)
 {
     if (!g) return 0;
     return kmer_cov_internal(kmer, g->mask, (const kc_c4x_t*)g->_h);
 }
 
-int dbgps3_find_path(const dbgps3_graph_t *g, uint64_t start_kmer,
+int dbgps_find_path(const dbgps_graph_t *g, uint64_t start_kmer,
                      int cut_cov, double max_cov_ratio, int skip_ratios,
                      int path_len, int index_byte_num,
                      char *result_buf, int result_buf_len)
@@ -554,10 +554,10 @@ int dbgps3_find_path(const dbgps3_graph_t *g, uint64_t start_kmer,
     const dbgps_codec_t *codec = g->codec.bases ? &g->codec : NULL;
     unsigned bases = codec ? codec->bases : 1, bits = codec ? codec->bits : 2;
     if (index_byte_num < 0 || index_byte_num > 7 || (index_byte_num * 8) % bits ||
-        cut_cov < 0 || cut_cov >= DBGPS3_KC_MAX ||
+        cut_cov < 0 || cut_cov >= DBGPS_KC_MAX ||
         !isfinite(max_cov_ratio) || max_cov_ratio < 1.0) return -1;
     int index_len = index_byte_num * 8 / bits * bases;
-    if (dbgps3_validate_layout(g, index_len, path_len, NULL) < 0) return -1;
+    if (dbgps_validate_layout(g, index_len, path_len, NULL) < 0) return -1;
 
     int k = g->k;
     uint64_t mask = g->mask;
@@ -573,11 +573,11 @@ int dbgps3_find_path(const dbgps3_graph_t *g, uint64_t start_kmer,
 
     /* Allocate workspace locally — no global variables, thread-safe */
     path_node_t *all_nodes = (path_node_t *)malloc(
-        DBGPS3_MAX_PATH_NUM * DBGPS3_MAX_PATH_LEN * sizeof(path_node_t));
+        DBGPS_MAX_PATH_NUM * DBGPS_MAX_PATH_LEN * sizeof(path_node_t));
     path_node_t **term_nodes = (path_node_t **)malloc(
-        DBGPS3_MAX_PATH_NUM * sizeof(path_node_t *));
+        DBGPS_MAX_PATH_NUM * sizeof(path_node_t *));
     path_node_t **next_term_nodes = (path_node_t **)malloc(
-        DBGPS3_MAX_PATH_NUM * sizeof(path_node_t *));
+        DBGPS_MAX_PATH_NUM * sizeof(path_node_t *));
     int ret = -1;
     if (!all_nodes || !term_nodes || !next_term_nodes) {
         free(all_nodes);
@@ -588,7 +588,7 @@ int dbgps3_find_path(const dbgps3_graph_t *g, uint64_t start_kmer,
 
     all_nodes[0].pre_node = NULL;
     all_nodes[0].kmer = start_kmer;
-    all_nodes[0].cov = kmer_cov_internal(dbgps3_min_hash_key(start_kmer, k), mask, h);
+    all_nodes[0].cov = kmer_cov_internal(dbgps_min_hash_key(start_kmer, k), mask, h);
 
     term_nodes[0] = &all_nodes[0];
     int term_node_num = 1, all_node_num = 1, p = 0;
@@ -607,7 +607,7 @@ int dbgps3_find_path(const dbgps3_graph_t *g, uint64_t start_kmer,
             p_node = term_nodes[n_p];
             int a_cov = p_node->cov / max_cov_ratio;
             double upper_cov = p_node->cov * max_cov_ratio;
-            int b_cov = upper_cov > DBGPS3_KC_MAX ? DBGPS3_KC_MAX : (int)upper_cov;
+            int b_cov = upper_cov > DBGPS_KC_MAX ? DBGPS_KC_MAX : (int)upper_cov;
             if(a_cov < cut_cov + 1) a_cov = cut_cov + 1;
 
             next_nodes[0].kmer = ((*p_node).kmer<<2) & mask;
@@ -615,10 +615,10 @@ int dbgps3_find_path(const dbgps3_graph_t *g, uint64_t start_kmer,
             next_nodes[2].kmer = (((*p_node).kmer<<2) + 2) & mask;
             next_nodes[3].kmer = (((*p_node).kmer<<2) + 3) & mask;
 
-            next_nodes[0].cov = kmer_cov_internal(dbgps3_min_hash_key(next_nodes[0].kmer, k), mask, h);
-            next_nodes[1].cov = kmer_cov_internal(dbgps3_min_hash_key(next_nodes[1].kmer, k), mask, h);
-            next_nodes[2].cov = kmer_cov_internal(dbgps3_min_hash_key(next_nodes[2].kmer, k), mask, h);
-            next_nodes[3].cov = kmer_cov_internal(dbgps3_min_hash_key(next_nodes[3].kmer, k), mask, h);
+            next_nodes[0].cov = kmer_cov_internal(dbgps_min_hash_key(next_nodes[0].kmer, k), mask, h);
+            next_nodes[1].cov = kmer_cov_internal(dbgps_min_hash_key(next_nodes[1].kmer, k), mask, h);
+            next_nodes[2].cov = kmer_cov_internal(dbgps_min_hash_key(next_nodes[2].kmer, k), mask, h);
+            next_nodes[3].cov = kmer_cov_internal(dbgps_min_hash_key(next_nodes[3].kmer, k), mask, h);
 
             for(i=0; i<4; i++){
                 int eligible = p < skip_ratios
@@ -626,8 +626,8 @@ int dbgps3_find_path(const dbgps3_graph_t *g, uint64_t start_kmer,
                     : next_nodes[i].cov >= a_cov && next_nodes[i].cov <= b_cov;
                 if (eligible) {
                     /* Stop before writing either workspace past its capacity. */
-                    if (new_term_node_num >= DBGPS3_MAX_PATH_NUM ||
-                        all_node_num >= DBGPS3_MAX_PATH_NUM * DBGPS3_MAX_PATH_LEN)
+                    if (new_term_node_num >= DBGPS_MAX_PATH_NUM ||
+                        all_node_num >= DBGPS_MAX_PATH_NUM * DBGPS_MAX_PATH_LEN)
                         goto cleanup;
                     all_nodes[all_node_num].pre_node = p_node;
                     all_nodes[all_node_num].kmer = next_nodes[i].kmer;
@@ -645,10 +645,7 @@ int dbgps3_find_path(const dbgps3_graph_t *g, uint64_t start_kmer,
     }
 
     /* Only distinct validated/corrected strands create ambiguity. */
-    int check_words = codec && codec->bits < 2 * codec->bases;
-    int protected = dbgps_redundancy_enabled(&g->redundancy);
-    if (term_node_num != 1 && !check_words && !protected) goto cleanup;
-    unsigned char candidate[(DBGPS3_MAX_PATH_LEN + 31 + 3) / 4];
+    unsigned char candidate[(DBGPS_MAX_PATH_LEN + 31 + 3) / 4];
     unsigned char selected[sizeof(candidate)], corrected[sizeof(candidate)], raw[sizeof(candidate)];
     int found = 0;
     for (int i = 0; i < term_node_num; ++i) {
@@ -666,7 +663,7 @@ int dbgps3_find_path(const dbgps3_graph_t *g, uint64_t start_kmer,
     }
     if (found) {
         for (int i = 0; i < total_bases; ++i)
-            result_buf[i] = dbgps3_nt4_seq_table[(selected[i / 4] >> (6 - 2 * (i % 4))) & 3];
+            result_buf[i] = dbgps_nt4_seq_table[(selected[i / 4] >> (6 - 2 * (i % 4))) & 3];
         result_buf[total_bases] = '\0';
         ret = 0;
     }
@@ -680,7 +677,7 @@ cleanup:
 
 /* ---- Utility function implementations ---- */
 
-uint64_t dbgps3_comp_rev(uint64_t x, unsigned char km_len)
+uint64_t dbgps_comp_rev(uint64_t x, unsigned char km_len)
 {
     uint64_t y = 0;
     int i, c;
@@ -693,18 +690,18 @@ uint64_t dbgps3_comp_rev(uint64_t x, unsigned char km_len)
     return y;
 }
 
-uint64_t dbgps3_min_hash_key(uint64_t x, unsigned char km_len)
+uint64_t dbgps_min_hash_key(uint64_t x, unsigned char km_len)
 {
-    uint64_t y = dbgps3_comp_rev(x, km_len);
+    uint64_t y = dbgps_comp_rev(x, km_len);
     return (x < y) ? x : y;
 }
 
-uint64_t dbgps3_actgkmer_uint64(const char *seq, int km_len)
+uint64_t dbgps_actgkmer_uint64(const char *seq, int km_len)
 {
     int i;
     uint64_t x, mask = (1ULL<<km_len*2) - 1;
     for (i = 0, x = 0; i < km_len; ++i) {
-        int c = dbgps3_seq_nt4_table[(uint8_t)seq[i]];
+        int c = dbgps_seq_nt4_table[(uint8_t)seq[i]];
         if (c < 4) {
             x = (x << 2 | c) & mask;
         } else x = 0;
@@ -712,12 +709,12 @@ uint64_t dbgps3_actgkmer_uint64(const char *seq, int km_len)
     return x;
 }
 
-uint64_t dbgps3_actgkmer_hashkey(const char *seq, int km_len)
+uint64_t dbgps_actgkmer_hashkey(const char *seq, int km_len)
 {
     int i;
     uint64_t x[2], y, shift = (km_len - 1) * 2, mask = (1ULL<<km_len*2) - 1;
     for (i = 0, x[0] = x[1] = 0; i < km_len; ++i) {
-        int c = dbgps3_seq_nt4_table[(uint8_t)seq[i]];
+        int c = dbgps_seq_nt4_table[(uint8_t)seq[i]];
         if (c < 4) {
             x[0] = (x[0] << 2 | c) & mask;
             x[1] = x[1] >> 2 | (uint64_t)(3 - c) << shift;
@@ -727,7 +724,7 @@ uint64_t dbgps3_actgkmer_hashkey(const char *seq, int km_len)
     return y;
 }
 
-uint64_t dbgps3_primer_uint64(const char *pr, int pr_len, int index_len, int km_len)
+uint64_t dbgps_primer_uint64(const char *pr, int pr_len, int index_len, int km_len)
 {
     unsigned char *seq;
     uint64_t pr_int64;
@@ -746,37 +743,37 @@ uint64_t dbgps3_primer_uint64(const char *pr, int pr_len, int index_len, int km_
         j++;
     }
 
-    pr_int64 = dbgps3_actgkmer_uint64((const char *)seq, km_len);
+    pr_int64 = dbgps_actgkmer_uint64((const char *)seq, km_len);
     free(seq);
     return pr_int64;
 }
 
-uint64_t dbgps3_index_encode(uint64_t index, unsigned int index_len)
+uint64_t dbgps_index_encode(uint64_t index, unsigned int index_len)
 {
     return index_len >= 32 ? index : index & ((1ULL << (index_len * 2)) - 1);
 }
 
-void dbgps3_uint64_acgt(uint64_t key, char *seq, int km_len)
+void dbgps_uint64_acgt(uint64_t key, char *seq, int km_len)
 {
     int p = km_len - 1;
     while (p >= 0){
         int n = key % 4;
         key = key >> 2;
-        seq[p] = dbgps3_nt4_seq_table[n];
+        seq[p] = dbgps_nt4_seq_table[n];
         p = p - 1;
     }
 }
 
 /* ---- Graph accessors ---- */
 
-int dbgps3_get_k(const dbgps3_graph_t *g) { return g ? g->k : 0; }
-uint64_t dbgps3_get_mask(const dbgps3_graph_t *g) { return g ? g->mask : 0; }
-int dbgps3_get_index_len(const dbgps3_graph_t *g) { return g ? g->index_len : 0; }
-int dbgps3_get_index_byte_num(const dbgps3_graph_t *g) { return g ? g->index_byte_num : 0; }
-int dbgps3_get_path_len(const dbgps3_graph_t *g) { return g ? g->path_len : 0; }
-int dbgps3_get_p(const dbgps3_graph_t *g) { return g ? g->p : 0; }
+int dbgps_get_k(const dbgps_graph_t *g) { return g ? g->k : 0; }
+uint64_t dbgps_get_mask(const dbgps_graph_t *g) { return g ? g->mask : 0; }
+int dbgps_get_index_len(const dbgps_graph_t *g) { return g ? g->index_len : 0; }
+int dbgps_get_index_byte_num(const dbgps_graph_t *g) { return g ? g->index_byte_num : 0; }
+int dbgps_get_path_len(const dbgps_graph_t *g) { return g ? g->path_len : 0; }
+int dbgps_get_p(const dbgps_graph_t *g) { return g ? g->p : 0; }
 
-long dbgps3_get_kmer_count(const dbgps3_graph_t *g)
+long dbgps_get_kmer_count(const dbgps_graph_t *g)
 {
     if (!g || !g->_h) return 0;
     const kc_c4x_t *h = (const kc_c4x_t*)g->_h;

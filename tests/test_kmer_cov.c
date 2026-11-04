@@ -6,8 +6,8 @@
 #include TEST_SOURCE
 #undef main
 
-#ifdef TEST_DBGPS3
-#define KC_BITS DBGPS3_KC_BITS
+#ifdef TEST_DBGPS2_RPC
+#define KC_BITS DBGPS_KC_BITS
 #define query_cov kmer_cov_internal
 #else
 #define query_cov kmer_cov

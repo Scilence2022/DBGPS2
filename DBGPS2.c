@@ -838,11 +838,11 @@ int main(int argc, char *argv[])
     if (argc - o.ind < 1) {
         fprintf(stderr, "\n************************************************************************\n");
         fprintf(stderr, "**                                                                    **\n");
-        fprintf(stderr, "**  DBGPS v2 - De Bruijn Graph based strand assembller for DNA data storage  **\n");
+        fprintf(stderr, "**  DBGPS v2 - De Bruijn Graph based strand assembler for DNA data storage  **\n");
         fprintf(stderr, "**     Version 2.0 (2025-05-14)  Author: Lifu Song lifu.song@outlook.com      **\n");
         fprintf(stderr, "**                                                                    **\n");
         fprintf(stderr, "************************************************************************\n\n");
-        fprintf(stderr, "Usage: DBGPS [options] <input file> \n");
+        fprintf(stderr, "Usage: DBGPS2 [options] <input file> \n");
         fprintf(stderr, "                       [Supporting formats: *fq, *fa, *fq.gz, *fa.gz]\n");
         fprintf(stderr, "Options:\n");
         fprintf(stderr, "  -k INT     k-mer size [%d]\n", k);

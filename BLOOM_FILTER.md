@@ -40,7 +40,7 @@ The graph hash contains only `2*k` useful bits, so the backend remixes it across
 64 bits before choosing a block and probe positions. This matters for small k.
 Four probes touch one aligned 512-bit block. Queries do not modify filter bits.
 
-`dbgps_bloom_graph.h` shares the graph integration between DBGPS2 and DBGPS3.
+`dbgps_bloom_graph.h` shares the graph integration between DBGPS2 and DBGPS2-RPC.
 The existing partition workers give each first-pass filter a single writer.
 
 ## Query option: `-B INT`
@@ -102,20 +102,20 @@ return an error instead of publishing an incomplete filtered graph.
 ./DBGPS2 -B 12 -a 1000 -b 1001 reads.fq.gz
 
 # Singleton removal only: lower graph memory when singleton noise dominates.
-./DBGPS3 -F 27 -a 1000 -b 1001 reads.fq.gz
+./DBGPS2-RPC -F 27 -a 1000 -b 1001 reads.fq.gz
 
 # Both, including server mode.
-./DBGPS3 -S -B 12 -F 27 reads1.fq.gz reads2.fq.gz
+./DBGPS2-RPC -S -B 12 -F 27 reads1.fq.gz reads2.fq.gz
 
 # Explicitly keep both disabled.
 ./DBGPS2 -B 0 -F 0 -a 1000 -b 1001 reads.fq.gz
 ```
 
-The original `dbgps3_load(...)` API keeps its defaults. For two-pass counting,
-use `dbgps3_load_filtered(..., count_bloom_shift)`, whose final argument is zero
-or the `-F` exponent. `dbgps3_set_bloom(g, 12)` builds/replaces the query filter;
+The original `dbgps_load(...)` API keeps its defaults. For two-pass counting,
+use `dbgps_load_filtered(..., count_bloom_shift)`, whose final argument is zero
+or the `-F` exponent. `dbgps_set_bloom(g, 12)` builds/replaces the query filter;
 zero disables it. It returns -1 on error while preserving the previous filter.
-`dbgps3_bloom_bytes(g)` reports allocated query bitmap bytes.
+`dbgps_bloom_bytes(g)` reports allocated query bitmap bytes.
 
 API callers must stop queries while configuring filters or loading data. The
 server uses a read/write lock: ordinary queries share read access, and
@@ -152,7 +152,7 @@ To reproduce the optional benchmark outside the checkout:
 ```bash
 mkdir -p /tmp/dbgps-bloom-benchmark
 cc -O3 -Wall -I. -o /tmp/dbgps-bloom-benchmark/bench tests/bench_bloom.c \
-  dbgps3_core.c dbgps_codec.c kthread.c -lz -lpthread
+  dbgps_core.c dbgps_codec.c kthread.c -lz -lpthread
 /tmp/dbgps-bloom-benchmark/bench generate /tmp/dbgps-bloom-benchmark/reads.fa
 /usr/bin/time -l /tmp/dbgps-bloom-benchmark/bench /tmp/dbgps-bloom-benchmark/reads.fa 0 0
 /usr/bin/time -l /tmp/dbgps-bloom-benchmark/bench /tmp/dbgps-bloom-benchmark/reads.fa 12 0

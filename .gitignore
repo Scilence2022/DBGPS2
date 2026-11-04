@@ -18,5 +18,5 @@ DBGPS-seq-filter
 input/
 DBGPS-analyzer
 *.dSYM/
-DBGPS3
-dbgps3-client
+DBGPS2-RPC
+dbgps2-rpc-client
